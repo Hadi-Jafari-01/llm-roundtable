@@ -4,148 +4,7 @@
  * chronological turn transcript, and milestone consensus ledger.
  */
 
-export const COGNITIVE_PERSONAS = {
-  architect: {
-    id: 'architect',
-    title: 'The Architect (معمار سیستم و زیرساخت)',
-    badge: '🏛️ Architecture',
-    color: '#818cf8',
-    directive: 'شما «معمار ارشد سیستم» هستید. اولویت نخست شما انسجام ساختاری، تفکیک وظایف (Separation of Concerns)، ماژولار بودن، مقیاس‌پذیری افقی و عمودی، قابلیت نگهداری بلندمدت و طراحی الگوهای مهندسی پایدار است. با دید عمیق تریدآف‌های فنی و معماری بنیادین را به چالش بکشید.'
-  },
-  devils_advocate: {
-    id: 'devils_advocate',
-    title: "Devil's Advocate (وکیل مدافع شیطان و نقاد بی‌رحم)",
-    badge: '⚔️ Adversary',
-    color: '#f43f5e',
-    directive: "شما «وکیل مدافع شیطان» و منتقد ارشد هستید. وظیفه شما به چالش کشیدن بی‌رحمانه اجماع‌های ظاهری، شکار فرضیات پنهانِ اثبات‌نشده، حمله به نقاط ضعف و آسیب‌پذیری‌ها، کشف لبه‌های فاجعه‌بار (Catastrophic Edge Cases) و ارائه ضد-فرضیه‌های جدی است."
-  },
-  physicist: {
-    id: 'physicist',
-    title: 'First-Principles Physicist (دانشمند فیزیک و اصول اولیه)',
-    badge: '⚛️ Axioms',
-    color: '#38bdf8',
-    directive: 'شما «دانشمند فیزیک و اصول اولیه» هستید. اصطلاحات مبهم، تشبیه‌های نادقیق و باورهای رایج را کنار بگذارید. مسئله را به اصول اولیه و بدیهیات غیرقابل‌انکار و قوانین پایه‌ای تقلیل دهید و استدلال خود را صرفاً از پایین به بالا و بر مبنای حقیقت عینی بسازید.'
-  },
-  cynic: {
-    id: 'cynic',
-    title: 'Pragmatic Cynic (عمل‌گرای دیرباور و مهندس اجرایی)',
-    badge: '🛠️ Pragmatism',
-    color: '#fb923c',
-    directive: 'شما «عمل‌گرای دیرباور» هستید. رویاپردازی‌های تئوریک را به واقعیت‌های خشن مهندسی گره بزنید: محدودیت‌های سخت‌افزاری، تاخیر شبکه (Latency)، هزینه‌های زیرساخت ابری، اصطکاک رفتاری انسان‌ها و بدهی‌های فنی را بی‌پروا یادآوری کنید.'
-  },
-  synthesizer: {
-    id: 'synthesizer',
-    title: 'The Synthesizer (ترکیب‌گر و پیونددهنده کل‌نگر)',
-    badge: '👑 Synthesis',
-    color: '#f59e0b',
-    directive: 'شما «ترکیب‌گر و پیونددهنده کل‌نگر» هستید. میان دیدگاه‌های به ظاهر متناقض پل بزنید، هسته حقیقت را از دل اصطکاک آراء استخراج کنید و چارچوب‌های اجماعی یکپارچه، پیشرفته و فراتر از دیدگاه‌های تک‌بعدی خلق نمایید.'
-  },
-  innovator: {
-    id: 'innovator',
-    title: 'Visionary Innovator (نوآور تحول‌آفرین و آینده‌پژوه)',
-    badge: '✨ Innovator',
-    color: '#ec4899',
-    directive: 'شما «نوآور تحول‌آفرین» هستید. از بهینه‌سازی‌های تدریجی و خسته‌کننده عبور کنید. راه‌حل‌های غیرخطی، پارادایم‌های کاملاً نوین، جهش‌های بین‌رشته‌ای و الگوهایی که مرزهای وضع موجود را بازتعریف می‌کنند پیشنهاد دهید.'
-  },
-  empiricist: {
-    id: 'empiricist',
-    title: 'Empirical Scientist (تجربه‌گرای شواهد‌محور و داده‌گرا)',
-    badge: '🔬 Empiricism',
-    color: '#34d399',
-    directive: 'شما «دانشمند تجربه‌گرا» هستید. به شهود ذهنی بسنده نکنید؛ معیارهای قابل‌اندازه‌گیری، آزمون‌های تجربی تکرارپذیر، ابطال‌پذیری کارل پوپر و داده‌های مستند را شرط پذیرش هر فرضیه قرار دهید.'
-  },
-  ethicist: {
-    id: 'ethicist',
-    title: 'Ethicist & AI Safety (فیلسوف اخلاق و هم‌راستایی هوش مصنوعی)',
-    badge: '⚖️ Alignment',
-    color: '#a78bfa',
-    directive: 'شما «فیلسوف اخلاق و متخصص هم‌راستایی هوش مصنوعی» هستید. پیامدهای وجودی، خطرات اخلاقی، تعارض منافع، برابری، حفظ شأن انسانی و آسیب‌های خواسته یا ناخواسته بلندمدت تصمیمات را تحلیل کنید.'
-  },
-  code_auditor: {
-    id: 'code_auditor',
-    title: 'Code Auditor & Security Critic (ممیز ارشد کد و امنیت سایبری)',
-    badge: '🛡️ Security',
-    color: '#10b981',
-    directive: 'شما «ممیز کد و متخصص امنیت سایبری» هستید. به خطوط کد، باگ‌های همزمانی (Race Conditions)، قفل‌های دیتابیس، آسیب‌پذیری‌های امنیتی (OWASP)، مصرف حافظه و نشت منابع حساسیت حداکثری نشان دهید.'
-  },
-  socratic_inq: {
-    id: 'socratic_inq',
-    title: 'Socratic Inquirer (پرسشگر سقراطی و موشکاف منطق)',
-    badge: '❓ Dialectic',
-    color: '#c084fc',
-    directive: 'شما «پرسشگر سقراطی» هستید. خطابه نخوانید؛ با پرسیدن سوالات دقیق، موشکافانه و بازتابی، تناقضات درونی استدلال‌های سایر حاضران را آشکار کرده و آنان را به بازاندیشی در تعاریف بنیادین وادارید.'
-  },
-  strategist: {
-    id: 'strategist',
-    title: 'Product & Value Strategist (استراتژیست ارزش، بازار و ROI)',
-    badge: '📈 Strategy',
-    color: '#fde047',
-    directive: 'شما «استراتژیست محصول و بازار» هستید. روی نیاز واقعی کاربر نهایی، تناسب محصول با بازار (Product-Market Fit)، اقتصاد واحد (Unit Economics)، ارزش تجاری و بازگشت سرمایه تمرکز نمایید.'
-  },
-  logician: {
-    id: 'logician',
-    title: 'Mathematical Logician (منطق‌دان ریاضی و برهان صوری)',
-    badge: '📐 Logic',
-    color: '#60a5fa',
-    directive: 'شما «منطق‌دان صوری و ریاضی» هستید. گزاره‌ها را بر اساس قواعد استنتاج منطقی، برهان خلف، قیاس صوری و نظریه مجموعه‌ها بررسی کنید. مغالطات آماری و منطقی را بدون مسامحه نام‌گذاری و رد نمایید.'
-  },
-  economist: {
-    id: 'economist',
-    title: 'Tokenomics & Game Theorist (اقتصاددان و نظریه‌پرداز بازی‌ها)',
-    badge: '💰 Economics',
-    color: '#facc15',
-    directive: 'شما «اقتصاددان و نظریه‌پرداز بازی‌ها» هستید. ساختار مشوق‌ها (Incentive Alignment)، تعادل نش، پیامدهای ناخواسته اقتصادی، تورم، حراجی‌ها و رفتار بازیگران در شرایط اطلاعات نامتقارن را شبیه‌سازی کنید.'
-  },
-  ux_ergonomist: {
-    id: 'ux_ergonomist',
-    title: 'UX & Cognitive Ergonomist (طراح تجربه و ارگونومی شناختی)',
-    badge: '🧠 Ergonomics',
-    color: '#f472b6',
-    directive: 'شما «طراح ارگونومی شناختی و تجربه کاربری» هستید. بار شناختی کاربر، مدل‌های ذهنی، خطاهای رایج ادراکی و سادگی بصری و تعاملی را به عنوان پیش‌شرط حیاتی هر سیستم فنی مطرح کنید.'
-  },
-  systems_theorist: {
-    id: 'systems_theorist',
-    title: 'Systems Dynamics & Complexity Theorist (نظریه‌پرداز سیستم‌های پیچیده)',
-    badge: '🌀 Complexity',
-    color: '#2dd4bf',
-    directive: 'شما «نظریه‌پرداز سیستم‌های پویا و پیچیده» هستید. حلقه‌های بازخورد مثبت و منفی (Feedback Loops)، رفتارهای نوظهور (Emergence)، حساسیت به شرایط اولیه و پدیده‌های غیرخطی را کانون توجه قرار دهید.'
-  },
-  historian: {
-    id: 'historian',
-    title: 'Historian & Epistemologist (تاریخ‌نگار و فیلسوف شناخت)',
-    badge: '📜 Episteme',
-    color: '#fdba74',
-    directive: 'شما «تاریخ‌نگار تکنولوژی و فیلسوف شناخت» هستید. درس‌های تاریخی دهه‌های گذشته، الگوهای چرخه‌ای اختراعات و اشتباهات تکرارشده در سیستم‌های پیشین را بازخوانی کنید.'
-  },
-  red_teamer: {
-    id: 'red_teamer',
-    title: 'Red Team Adversary & Threat Modeler (تیم قرمز و شکارچی آسیب‌پذیری)',
-    badge: '🎯 Red Team',
-    color: '#e11d48',
-    directive: 'شما «مهاجم تیم قرمز» هستید. فرض را بر این بگذارید که سیستم مورد بحث در معرض حمله قرار دارد. راه‌های شکستن فرضیات، دور زدن فیلترها و مهندسی معکوس برای اثبات ناتوانی رویکرد پیشنهادی را فرموله کنید.'
-  },
-  simplifier: {
-    id: 'simplifier',
-    title: 'Radical Simplifier & Occam\'s Razor (ساده‌ساز رادیکال و تیغ اوکام)',
-    badge: '✂️ Simplicity',
-    color: '#a3e635',
-    directive: 'شما مدافع «تیغ اوکام و ساده‌سازی رادیکال» هستید. هرگونه پیچیدگی تصادفی و معماری اضافه (Over-engineering) را ببرید و کوتاه‌ترین، تمیزترین و کم‌ریسک‌ترین مسیر ممکن را پیشنهاد دهید.'
-  },
-  cryptographer: {
-    id: 'cryptographer',
-    title: 'Data Privacy & Cryptographer (رمزنگار و مدافع حریم خصوصی)',
-    badge: '🔐 Cryptography',
-    color: '#06b6d4',
-    directive: 'شما «رمزنگار و متخصص حریم خصوصی» هستید. پروتکل‌های دانش صفر (Zero-Knowledge)، رمزنگاری سرتاسری، استقلال داده‌ها و عدم نیاز به اعتماد (Trustless) را ملاک ارزیابی فنی قرار دهید.'
-  },
-  polymath: {
-    id: 'polymath',
-    title: 'Interdisciplinary Polymath (علامه میان‌رشته‌ای و کل‌نگر)',
-    badge: '🌐 Polymath',
-    color: '#d946ef',
-    directive: 'شما «علامه و دانشمند میان‌رشته‌ای» هستید. از زیست‌شناسی، زبان‌شناسی، معماری شهری و هوش مصنوعی استعاره‌ها و راه‌حل‌های تطبیقی استخراج کرده و پیوندهای بکر میان علوم گوناگون بسازید.'
-  }
-};
+export const COGNITIVE_PERSONAS = {};
 
 /* ── الگوهای متنوع و کامل فرمول‌های پرومپت (Turn-Injection Dialectic Templates) ── */
 export const DIALECTIC_PROMPT_TEMPLATES = {
@@ -388,105 +247,8 @@ export const USER_ROLE_PRESETS = {
   }
 };
 
-/* ── سناریوهای آماده کل میزگرد (Complete Symposium Setup Scenarios) ── */
-export const SYMPOSIUM_SCENARIOS = {
-  software_architecture: {
-    id: 'software_architecture',
-    title: 'نبرد معماری نرم‌افزار و سیستم‌های توزیع‌شده',
-    description: 'مناظره عمیق مهندسی پیرامون مقیاس‌پذیری، الگوهای مایکروسرویس، کش، همزمانی و پایگاه‌های داده',
-    badge: '🏛️ Architecture',
-    color: '#818cf8',
-    debateMode: 'manual',
-    templateKey: 'adr_architecture',
-    globalDirectiveKey: 'deep_technical_code',
-    recommendedPersonas: ['architect', 'code_auditor', 'cynic', 'devils_advocate', 'synthesizer'],
-    initialPrompt: 'چگونه یک معماری توزیع‌شده برای پردازش بلادرنگ میلیون‌ها تراکنش در ثانیه با حداقل تاخیر و تضمین پایداری بدون Single Point of Failure طراحی کنیم؟'
-  },
-  red_team_audit: {
-    id: 'red_team_audit',
-    title: 'تیم قرمز و کالبدشکافی آسیب‌پذیری و امنیت',
-    description: 'شکار باگ‌های منطقی، نقاط نفوذ، خطرات همزمانی و تحلیل فاجعه‌بارترین لبه‌های شکست سیستم',
-    badge: '🎯 Red Team',
-    color: '#e11d48',
-    debateMode: 'manual',
-    templateKey: 'red_team',
-    globalDirectiveKey: 'risk_matrix',
-    recommendedPersonas: ['red_teamer', 'code_auditor', 'devils_advocate', 'cryptographer', 'cynic'],
-    initialPrompt: 'حمله به فرضیات امنیتی، کشف خطاهای منطقی احراز هویت و یافتن راه‌های نفوذ به این سناریوی مهندسی...'
-  },
-  ai_alignment_ethics: {
-    id: 'ai_alignment_ethics',
-    title: 'هم‌راستایی هوش مصنوعی، اخلاق و مدل‌های زبانی',
-    description: 'تحلیل ابعاد فلسفی، خطرات وجودی، ایمنی عامل‌های خودمختار و ارزش‌های بشری',
-    badge: '⚖️ AI Safety',
-    color: '#a78bfa',
-    debateMode: 'socratic',
-    templateKey: 'socratic',
-    globalDirectiveKey: 'persian_academic',
-    recommendedPersonas: ['ethicist', 'physicist', 'socratic_inq', 'synthesizer', 'polymath'],
-    initialPrompt: 'در طراحی مدل‌های شناختی نسل بعد، چگونه می‌توان بدون محدود کردن توانمندی استنتاجی، هم‌راستایی قطعی با اخلاق انسانی را ریاضیاتی کرد؟'
-  },
-  product_pmf_strategy: {
-    id: 'product_pmf_strategy',
-    title: 'استراتژی محصول، اقتصاد واحد و ورود به بازار',
-    description: 'تحلیل تناسب محصول با بازار، ارزش پیشنهادی، هزینه‌های جذب و خندق‌های رقابتی',
-    badge: '📈 Product Strategy',
-    color: '#fde047',
-    debateMode: 'manual',
-    templateKey: 'executive_digest',
-    globalDirectiveKey: 'zero_fluff_bullets',
-    recommendedPersonas: ['strategist', 'economist', 'ux_ergonomist', 'cynic', 'innovator'],
-    initialPrompt: 'استراتژی ورود به بازار، اقتصاد واحد (Unit Economics) و اعتبارسنجی فرضیات اصلی این ایده تجاری...'
-  },
-  scientific_discovery: {
-    id: 'scientific_discovery',
-    title: 'فرضیه‌آزمایی تجربی و فلسفه علم',
-    description: 'بررسی صحت شواهد، طراحی آزمایش‌های ابطال‌پذیر و استخراج قواعد پایه‌ای حقیقت',
-    badge: '🔬 Science',
-    color: '#34d399',
-    debateMode: 'socratic',
-    templateKey: 'first_principles',
-    globalDirectiveKey: 'first_principles',
-    recommendedPersonas: ['empiricist', 'physicist', 'logician', 'simplifier', 'synthesizer'],
-    initialPrompt: 'کالبدشکافی یک فرضیه پیچیده علمی، طراحی آزمایش ابطال‌پذیر و سنجش شواهد عینی...'
-  },
-  socratic_philosophy: {
-    id: 'socratic_philosophy',
-    title: 'دیالکتیک سقراطی و تشکیک در بنیادها',
-    description: 'موشکافی مفاهیم بنیادین، آشکارسازی تناقضات درونی و شفاف‌سازی تعاریف',
-    badge: '❓ Socratic Court',
-    color: '#c084fc',
-    debateMode: 'socratic',
-    templateKey: 'socratic',
-    globalDirectiveKey: 'steelmanning',
-    recommendedPersonas: ['socratic_inq', 'devils_advocate', 'historian', 'logician', 'synthesizer'],
-    initialPrompt: 'تعریف دقیق عدالت، آگاهی و حقیقت، و کشف تعارضات درونی در پاسخ‌های رایج...'
-  },
-  creative_moonshot: {
-    id: 'creative_moonshot',
-    title: 'طوفان فکری پروژه‌های بزرگ و نوآوری سنتزگرا',
-    description: 'ایده‌پردازی پرسرعت، جهش‌های بین‌رشته‌ای و ترکیب ایده‌های نامتجانس برای خلق ارزش جدید',
-    badge: '✨ Moonshot',
-    color: '#ec4899',
-    debateMode: 'manual',
-    templateKey: 'creative_lateral',
-    globalDirectiveKey: 'persian_academic',
-    recommendedPersonas: ['innovator', 'polymath', 'ux_ergonomist', 'architect', 'synthesizer'],
-    initialPrompt: 'طراحی یک نوآوری پارادایم‌شکن با بهره‌گیری از علوم نامرتبط که مساله‌ای حل‌نشده را برای همیشه حل کند...'
-  },
-  tokenomics_web3: {
-    id: 'tokenomics_web3',
-    title: 'اقتصاد شبکه، طراحی توکنومیکس و نظریه بازی‌ها',
-    description: 'هم‌راستایی مشوق‌های اقتصادی، امنیت سازوکارها، پایداری جریان نقدینگی و مقاومت در برابر حملات تبانی',
-    badge: '💰 Tokenomics',
-    color: '#f59e0b',
-    debateMode: 'manual',
-    templateKey: 'delphi_consensus',
-    globalDirectiveKey: 'risk_matrix',
-    recommendedPersonas: ['economist', 'cryptographer', 'systems_theorist', 'cynic', 'devils_advocate'],
-    initialPrompt: 'طراحی ساختار توکنومیکس پایدار و مدل‌سازی تعادل نش برای پلتفرمی با سهامداران و انگیزه‌های متضاد...'
-  }
-};
+/* ── مخزن سناریوهای جامع (ایجاد و مدیریت توسط خود کاربر) ── */
+export const SYMPOSIUM_SCENARIOS = {};
 
 export class SymposiumState {
   constructor() {
@@ -497,10 +259,13 @@ export class SymposiumState {
     this.activeSpeakerIndex = 0;
     this.recommendedNextSpeakerIndex = 0;
     this.isSpeakerStreaming = false;
-    this.activeScenarioKey = 'software_architecture';
+    this.activeScenarioKey = '';
 
     // Custom user-defined persona presets (Templates)
     this.customPersonas = {};
+
+    // Custom user-defined scenarios
+    this.customScenarios = {};
 
     // Per-card persistent customization cache (cardId -> CustomizationObject)
     this.seatCustomizations = {};
@@ -512,7 +277,7 @@ export class SymposiumState {
       personaKey: 'maestro',
       personaTitle: 'Lead Architect & Maestro (رهبر ارکستر و معمار ارشد)',
       personaBadge: '👑 Maestro',
-      personaDirective: USER_ROLE_PRESETS.maestro.directive,
+      personaDirective: USER_ROLE_PRESETS.maestro ? USER_ROLE_PRESETS.maestro.directive : '',
       color: '#f59e0b',
       weight: 120
     };
@@ -559,11 +324,51 @@ export class SymposiumState {
   }
 
   getScenarios() {
-    return { ...SYMPOSIUM_SCENARIOS };
+    return {
+      ...SYMPOSIUM_SCENARIOS,
+      ...(this.customScenarios || {})
+    };
+  }
+
+  saveCustomScenario(scenarioData) {
+    if (!scenarioData || !scenarioData.title) return null;
+    const id = scenarioData.id || `scenario_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+    const newScenario = {
+      id,
+      title: scenarioData.title.trim(),
+      description: scenarioData.description ? scenarioData.description.trim() : '',
+      badge: scenarioData.badge ? scenarioData.badge.trim() : '🏛️ سناریو',
+      color: scenarioData.color || '#f59e0b',
+      debateMode: scenarioData.debateMode || 'manual',
+      templateKey: scenarioData.templateKey || 'manual_conductor',
+      globalDirectiveKey: scenarioData.globalDirectiveKey || '',
+      initialPrompt: scenarioData.initialPrompt ? scenarioData.initialPrompt.trim() : '',
+      recommendedPersonas: scenarioData.recommendedPersonas || [],
+      isCustom: true,
+      lastModified: Date.now()
+    };
+
+    if (!this.customScenarios) this.customScenarios = {};
+    this.customScenarios[id] = newScenario;
+    this.persistConfig();
+    return newScenario;
+  }
+
+  deleteCustomScenario(id) {
+    if (this.customScenarios && this.customScenarios[id]) {
+      delete this.customScenarios[id];
+      if (this.activeScenarioKey === id) {
+        this.activeScenarioKey = '';
+      }
+      this.persistConfig();
+      return true;
+    }
+    return false;
   }
 
   applyScenario(scenarioKey) {
-    const scenario = SYMPOSIUM_SCENARIOS[scenarioKey];
+    const scenarios = this.getScenarios();
+    const scenario = scenarios[scenarioKey];
     if (!scenario) return false;
 
     this.activeScenarioKey = scenarioKey;
@@ -583,21 +388,25 @@ export class SymposiumState {
       this.userCorePrompt = scenario.initialPrompt;
     }
 
-    // Apply recommended cognitive personas to current active AI seats
+    // Apply recommended cognitive personas if available
     const allPersonas = this.getAllPersonas();
     const personasToAssign = scenario.recommendedPersonas || [];
     const aiSeats = this.seats.filter(s => !s.isUser);
 
     aiSeats.forEach((seat, idx) => {
-      const personaKey = personasToAssign[idx % personasToAssign.length] || 'architect';
-      const persona = allPersonas[personaKey] || COGNITIVE_PERSONAS.architect;
-      this.updateSeat(this.seats.indexOf(seat), {
-        personaKey,
-        personaTitle: persona.title,
-        personaBadge: persona.badge,
-        personaDirective: persona.directive,
-        isCustomized: true
-      });
+      if (personasToAssign.length > 0) {
+        const personaKey = personasToAssign[idx % personasToAssign.length];
+        const persona = allPersonas[personaKey];
+        if (persona) {
+          this.updateSeat(this.seats.indexOf(seat), {
+            personaKey,
+            personaTitle: persona.title,
+            personaBadge: persona.badge,
+            personaDirective: persona.directive,
+            isCustomized: true
+          });
+        }
+      }
     });
 
     this.persistConfig();
@@ -762,8 +571,8 @@ export class SymposiumState {
         };
       }
 
-      const assignedKey = personaKeys[idx % personaKeys.length] || 'architect';
-      const persona = allPersonas[assignedKey] || COGNITIVE_PERSONAS.architect;
+      const assignedKey = personaKeys.length > 0 ? personaKeys[idx % personaKeys.length] : null;
+      const persona = assignedKey ? allPersonas[assignedKey] : null;
 
       return {
         id: `seat_ai_${card.id}`,
@@ -771,10 +580,10 @@ export class SymposiumState {
         cardId: card.id,
         name: card.title || card.name || 'AI Intelligence',
         color: card.color || '#c084fc',
-        personaKey: assignedKey,
-        personaTitle: persona.title,
-        personaBadge: persona.badge,
-        personaDirective: persona.directive,
+        personaKey: assignedKey || 'custom',
+        personaTitle: persona?.title || (card.title || card.name || 'AI Intelligence'),
+        personaBadge: persona?.badge || '🤖 AI',
+        personaDirective: persona?.directive || '',
         customPromptTemplate: '',
         isCustomized: false,
         weight: 100,
@@ -799,7 +608,8 @@ export class SymposiumState {
   }
 
   createUserSeatObject() {
-    const persona = COGNITIVE_PERSONAS[this.userParticipant.personaKey] || COGNITIVE_PERSONAS.innovator;
+    const allPersonas = this.getAllPersonas();
+    const persona = allPersonas[this.userParticipant.personaKey];
     return {
       id: 'seat_user_maestro',
       isUser: true,
@@ -807,9 +617,9 @@ export class SymposiumState {
       name: this.userParticipant.name || 'You',
       color: this.userParticipant.color || '#f59e0b',
       personaKey: this.userParticipant.personaKey,
-      personaTitle: this.userParticipant.personaTitle || persona.title,
-      personaBadge: this.userParticipant.personaBadge || '👑 You',
-      personaDirective: this.userParticipant.personaDirective || persona.directive,
+      personaTitle: this.userParticipant.personaTitle || persona?.title || 'Human Maestro',
+      personaBadge: this.userParticipant.personaBadge || persona?.badge || '👑 You',
+      personaDirective: this.userParticipant.personaDirective || persona?.directive || '',
       weight: this.userParticipant.weight || 120,
       status: 'idle',
       isMuted: false,
@@ -820,10 +630,11 @@ export class SymposiumState {
   setUserParticipation(isSeated, customMeta = {}) {
     this.userParticipant.isSeated = Boolean(isSeated);
     if (customMeta.name) this.userParticipant.name = customMeta.name;
-    if (customMeta.personaKey && COGNITIVE_PERSONAS[customMeta.personaKey]) {
+    const allPersonas = this.getAllPersonas();
+    if (customMeta.personaKey && allPersonas[customMeta.personaKey]) {
       this.userParticipant.personaKey = customMeta.personaKey;
-      this.userParticipant.personaTitle = COGNITIVE_PERSONAS[customMeta.personaKey].title;
-      this.userParticipant.personaDirective = COGNITIVE_PERSONAS[customMeta.personaKey].directive;
+      this.userParticipant.personaTitle = allPersonas[customMeta.personaKey].title;
+      this.userParticipant.personaDirective = allPersonas[customMeta.personaKey].directive;
     }
     if (customMeta.weight) this.userParticipant.weight = customMeta.weight;
 
@@ -971,7 +782,9 @@ export class SymposiumState {
         config: this.config,
         userParticipant: this.userParticipant,
         customPersonas: this.customPersonas,
-        seatCustomizations: this.seatCustomizations
+        customScenarios: this.customScenarios,
+        seatCustomizations: this.seatCustomizations,
+        activeScenarioKey: this.activeScenarioKey
       };
       localStorage.setItem('omni_symposium_state_v2', JSON.stringify(payload));
     } catch (_) {}
@@ -987,6 +800,12 @@ export class SymposiumState {
         if (parsed.userParticipant) Object.assign(this.userParticipant, parsed.userParticipant);
         if (parsed.customPersonas && typeof parsed.customPersonas === 'object') {
           this.customPersonas = parsed.customPersonas;
+        }
+        if (parsed.customScenarios && typeof parsed.customScenarios === 'object') {
+          this.customScenarios = parsed.customScenarios;
+        }
+        if (parsed.activeScenarioKey) {
+          this.activeScenarioKey = parsed.activeScenarioKey;
         }
         if (parsed.seatCustomizations && typeof parsed.seatCustomizations === 'object') {
           this.seatCustomizations = parsed.seatCustomizations;

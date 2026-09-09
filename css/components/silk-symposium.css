@@ -69,29 +69,30 @@
   opacity: 0.2;
 }
 
-/* ── 3. Top Master Navigation Bar (46px) ── */
+/* ── 3. Top Master Navigation Bar (Haute 3-Capsule Horizon Architecture) ── */
 .symposium-header-bar {
   position: relative;
   z-index: 30;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  padding: 8px 20px;
-  height: 46px;
-  background: rgba(18, 14, 30, 0.82);
+  gap: 12px;
+  padding: 6px 18px;
+  height: 48px;
+  background: rgba(14, 11, 25, 0.85);
   border-bottom: 1px solid rgba(251, 207, 232, 0.14);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(32px) saturate(210%);
+  -webkit-backdrop-filter: blur(32px) saturate(210%);
+  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.5);
   flex-shrink: 0;
   box-sizing: border-box;
 }
 
-.symposium-brand-cluster {
+/* Capsule 1: Left Brand & Active Scenario Gateway */
+.symposium-header-capsule.left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
 }
 
 .symposium-gem-icon {
@@ -135,45 +136,109 @@
   letter-spacing: 0.02em;
 }
 
-/* Topology & Session Status Capsule */
-.symposium-topology-pill {
+/* Interactive Active Scenario Capsule Pill */
+.active-scenario-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(251, 207, 232, 0.22);
+  border-radius: 16px;
+  color: #fed7aa;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.active-scenario-pill:hover {
+  background: rgba(254, 215, 170, 0.14);
+  border-color: rgba(254, 215, 170, 0.5);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.25);
+  transform: translateY(-1px);
+}
+
+.active-scenario-pill .scenario-gem-dot {
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 50%;
+  background: #f59e0b;
+  box-shadow: 0 0 7px #f59e0b;
+}
+
+/* Capsule 2: Center Dialectic Conductor Island */
+.symposium-header-capsule.center {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  padding: 3px 10px;
-  border-radius: 18px;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  padding: 3px 8px;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
 }
 
 .topology-mode-badge {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 600;
   color: #fde68a;
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 3px 8px;
+  border-radius: 14px;
 }
 
 .topology-mode-badge .dot {
-  width: 6px;
-  height: 6px;
+  width: 6.5px;
+  height: 6.5px;
   border-radius: 50%;
   background: #f59e0b;
   box-shadow: 0 0 8px #f59e0b;
 }
 
 .round-counter-badge {
-  font-size: 9.5px;
-  color: #cbd5e1;
-  background: rgba(255, 255, 255, 0.06);
-  padding: 1px 6px;
-  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #c084fc;
+  background: rgba(192, 132, 252, 0.14);
+  border: 1px solid rgba(192, 132, 252, 0.3);
+  padding: 2px 7px;
+  border-radius: 10px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
-/* Header Tools */
-.symposium-header-tools {
+.btn-header-play-pause {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 26px;
+  padding: 0 9px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: #f1f5f9;
+  font-size: 10.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-header-play-pause:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(192, 132, 252, 0.5);
+  color: #ffffff;
+}
+
+.btn-header-play-pause.active {
+  background: linear-gradient(135deg, rgba(244, 114, 182, 0.25) 0%, rgba(192, 132, 252, 0.28) 100%);
+  border-color: rgba(192, 132, 252, 0.65);
+  box-shadow: 0 0 12px rgba(192, 132, 252, 0.3);
+}
+
+/* Capsule 3: Right Action Cluster */
+.symposium-header-capsule.right {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -184,9 +249,9 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  height: 28px;
+  height: 30px;
   padding: 0 10px;
-  border-radius: 7px;
+  border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.04);
   color: #cbd5e1;
@@ -199,8 +264,8 @@
 }
 
 .symposium-tool-btn svg {
-  width: 13px;
-  height: 13px;
+  width: 13.5px;
+  height: 13.5px;
 }
 
 .symposium-tool-btn:hover {
@@ -231,10 +296,10 @@
 }
 
 .symposium-tool-btn.btn-close {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   padding: 0;
-  font-size: 13px;
+  font-size: 13.5px;
 }
 
 /* ── 4. Main Body Workspace Layout ── */
@@ -977,14 +1042,6 @@
   transform: scale(0.96);
 }
 
-.composer-disclaimer {
-  text-align: center;
-  font-size: 10px;
-  color: #64748b;
-  margin-top: 4px;
-  user-select: none;
-}
-
 /* ── 8. Collapsible Milestone Consensus Ledger (Right-Tray) ── */
 .symposium-ledger-tray {
   width: 310px;
@@ -1115,20 +1172,299 @@
   background: rgba(192, 132, 252, 0.07);
 }
 
-/* ── 9. The Logic Sanctum Drawer ── */
+/* ── 9. Contextual Inline Seat Inspector (Floating Amethyst Frosted Popover) ── */
+.seat-inline-inspector {
+  position: fixed;
+  z-index: 1500;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  background: linear-gradient(175deg, rgba(20, 16, 36, 0.97) 0%, rgba(11, 8, 22, 0.99) 100%);
+  backdrop-filter: blur(44px) saturate(230%);
+  -webkit-backdrop-filter: blur(44px) saturate(230%);
+  border: 1px solid rgba(192, 132, 252, 0.38);
+  border-radius: 18px;
+  box-shadow: 0 24px 65px -8px rgba(0, 0, 0, 0.92),
+              0 0 35px rgba(192, 132, 252, 0.25),
+              inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 18px;
+  color: #f8fafc;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.96) translateY(6px);
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.seat-inline-inspector.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1) translateY(0);
+}
+
+.inspector-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.inspector-model-identity {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.inspector-avatar-gem {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  background: radial-gradient(circle, var(--inspector-color, #c084fc) 30%, rgba(13, 10, 22, 0.9) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 12px var(--inspector-color, #c084fc);
+}
+
+.inspector-title-info h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.inspector-title-info p {
+  font-size: 10px;
+  color: #a5b4fc;
+  margin: 1px 0 0 0;
+}
+
+.inspector-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.inspector-autosave-badge {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  padding: 2px 7px;
+  border-radius: 10px;
+  transition: opacity 0.2s ease;
+  opacity: 0;
+}
+
+.inspector-autosave-badge.saving {
+  color: #fde68a;
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.35);
+  opacity: 1;
+}
+
+.inspector-autosave-badge.saved {
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.35);
+  opacity: 1;
+}
+
+.btn-close-inspector {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  font-size: 11px;
+  transition: all 0.15s ease;
+}
+
+.btn-close-inspector:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+/* Quick Persona Chips Carousel */
+.inspector-chips-carousel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 2px 0 6px 0;
+  scrollbar-width: none;
+}
+
+.inspector-chips-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.persona-quick-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #cbd5e1;
+  font-size: 10.5px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+
+.persona-quick-chip:hover {
+  background: rgba(192, 132, 252, 0.16);
+  border-color: rgba(192, 132, 252, 0.4);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.persona-quick-chip.active {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(244, 114, 182, 0.28) 100%);
+  border-color: rgba(192, 132, 252, 0.7);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(192, 132, 252, 0.28);
+}
+
+/* Textarea & Inputs in Inspector */
+.inspector-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.inspector-field-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.inspector-directive-textarea {
+  width: 100%;
+  height: 95px;
+  max-height: 180px;
+  background: rgba(8, 6, 16, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #f8fafc;
+  outline: none;
+  resize: vertical;
+  box-sizing: border-box;
+  transition: all 0.18s ease;
+}
+
+.inspector-directive-textarea:focus {
+  border-color: #c084fc;
+  box-shadow: 0 0 14px rgba(192, 132, 252, 0.3);
+}
+
+/* Weight Slider & Controls Cluster */
+.inspector-slider-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+
+.inspector-range-input {
+  flex: 1;
+  accent-color: #c084fc;
+  cursor: pointer;
+}
+
+.inspector-weight-value {
+  font-size: 11px;
+  font-weight: 600;
+  color: #c084fc;
+  font-family: ui-monospace, monospace;
+  min-width: 38px;
+  text-align: right;
+}
+
+/* Inspector Footer Action Buttons */
+.inspector-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.btn-inspector-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: #cbd5e1;
+  font-size: 10.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-family: inherit;
+}
+
+.btn-inspector-action:hover {
+  background: rgba(192, 132, 252, 0.2);
+  border-color: rgba(192, 132, 252, 0.5);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn-inspector-action.mute-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+}
+
+/* ── 10. The Re-engineered 3-Zone Logic Sanctum Atelier Drawer ── */
 .logic-sanctum-drawer {
   position: fixed;
   top: 0;
   right: 0;
-  width: 520px;
-  max-width: 100vw;
+  width: 580px;
+  max-width: calc(100vw - 20px);
   height: 100vh;
   z-index: 1400;
-  background: linear-gradient(175deg, rgba(17, 13, 29, 0.98) 0%, rgba(9, 7, 17, 0.99) 100%);
-  backdrop-filter: blur(48px) saturate(220%);
-  -webkit-backdrop-filter: blur(48px) saturate(220%);
-  border-left: 1px solid rgba(254, 215, 170, 0.3);
-  box-shadow: -32px 0 85px rgba(0, 0, 0, 0.92);
+  background: linear-gradient(175deg, rgba(16, 12, 28, 0.98) 0%, rgba(9, 7, 18, 0.99) 100%);
+  backdrop-filter: blur(48px) saturate(230%);
+  -webkit-backdrop-filter: blur(48px) saturate(230%);
+  border-left: 1px solid rgba(254, 215, 170, 0.35);
+  box-shadow: -32px 0 85px rgba(0, 0, 0, 0.94),
+              -12px 0 40px rgba(192, 132, 252, 0.16);
   display: flex;
   flex-direction: column;
   transform: translateX(100%);
@@ -1143,7 +1479,7 @@
 .sanctum-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(6, 4, 12, 0.65);
+  background: rgba(6, 4, 12, 0.68);
   backdrop-filter: blur(6px);
   z-index: 1390;
   opacity: 0;
@@ -1160,50 +1496,63 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 20px;
+  padding: 14px 22px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 100%);
 }
 
-.sanctum-nav-tabs {
-  display: flex;
-  align-items: center;
+/* 4-Zone Master Switcher Tabs */
+.sanctum-zones-nav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 6px;
   padding: 8px 18px;
-  background: rgba(0, 0, 0, 0.28);
+  background: rgba(0, 0, 0, 0.3);
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  overflow-x: auto;
   flex-shrink: 0;
 }
 
-.sanctum-tab-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 11px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
-  color: #94a3b8;
-  font-size: 11px;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-  font-family: inherit;
+.sanctum-form-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 13px;
+  background: rgba(22, 18, 38, 0.88);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 18px rgba(245, 158, 11, 0.12);
+  margin-bottom: 8px;
+  animation: sanctumFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.sanctum-tab-btn:hover {
-  background: rgba(255, 255, 255, 0.09);
+.sanctum-zone-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 8px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.035);
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.sanctum-zone-tab:hover {
+  background: rgba(255, 255, 255, 0.08);
   color: #f1f5f9;
 }
 
-.sanctum-tab-btn.active {
+.sanctum-zone-tab.active {
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(192, 132, 252, 0.25) 100%);
   border-color: rgba(245, 158, 11, 0.55);
   color: #ffffff;
-  font-weight: 600;
-  box-shadow: 0 0 14px rgba(245, 158, 11, 0.22);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
 }
 
 .sanctum-drawer-body {
@@ -1215,8 +1564,11 @@
   gap: 16px;
 }
 
-.sanctum-tab-section {
-  animation: sanctumFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+.sanctum-zone-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: sanctumFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes sanctumFadeIn {
@@ -1224,11 +1576,57 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-.sanctum-action-buttons-stack {
+/* Zone 2: Visual Dais Floor Plan & User Seat */
+.dais-floor-plan-card {
   display: flex;
   flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dais-interactive-circle {
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  margin-top: 4px;
+  padding: 6px 0;
+}
+
+.dais-floor-chair-node {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.dais-floor-chair-node:hover {
+  background: rgba(192, 132, 252, 0.18);
+  border-color: rgba(192, 132, 252, 0.45);
+  transform: translateY(-1px);
+}
+
+.dais-floor-chair-node .chair-dot {
+  width: 7.5px;
+  height: 7.5px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+}
+
+/* Royal Human Maestro Card */
+.royal-maestro-seat-card {
+  border-color: rgba(245, 158, 11, 0.45) !important;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(236, 72, 153, 0.07) 50%, rgba(192, 132, 252, 0.06) 100%) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45), 0 0 24px rgba(245, 158, 11, 0.15) !important;
 }
 
 /* Scenarios Grid & Cards */

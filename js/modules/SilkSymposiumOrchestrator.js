@@ -1,6 +1,6 @@
 /**
  * OmniAI Hub — The Silk Symposium Orchestrator (تالار هم‌اندیشی و میزگرد زنده انسان و هوش مصنوعی‌ها)
-* Lean Master Coordinator & Event Gateway (ChatGPT UI/UX Paradigm × Left-Rail Dais)
+ * Lean Master Coordinator & Event Gateway (ChatGPT UI/UX Paradigm × Contextual Inline Inspector)
  * Wires together SymposiumState, TurnSequencer, SymposiumDais, SymposiumTranscript, and ConsensusLedger.
  */
 
@@ -25,7 +25,7 @@ export class SilkSymposiumOrchestrator {
     this.stateStore = stateStore;
     this.isOpen = false;
 
-    // Micro-Module Initialization
+    // Core State & Sequencer Initialization
     this.symposiumState = new SymposiumState();
     this.turnSequencer = new TurnSequencer(this.symposiumState, {
       onSeatDispatched: (data) => this.handleSeatDispatched(data),
@@ -38,12 +38,12 @@ export class SilkSymposiumOrchestrator {
       onSessionWaitingForMaestro: () => this.updateHeaderStats()
     });
 
-    this.activeSanctumSeatIndex = 0;
-    this.currentSanctumTab = 'scenarios';
+    this.currentSanctumZone = 'scenarios';
     this.toastTimer = null;
 
     this.initElements();
     this.initSubModules();
+    this.setupInspectorDebounce();
     this.bindEvents();
   }
 
@@ -55,8 +55,9 @@ export class SilkSymposiumOrchestrator {
     this.btnToggleLedger = document.getElementById('btn-symposium-toggle-ledger');
     this.btnToggleUserSeat = document.getElementById('btn-symposium-toggle-user-seat');
     this.btnOpenSanctum = document.getElementById('btn-symposium-open-sanctum');
-    this.btnOpenPersonas = document.getElementById('btn-symposium-open-personas');
     this.btnExportBriefing = document.getElementById('btn-symposium-export-briefing');
+    this.btnSwitchScenarioPill = document.getElementById('btn-header-switch-scenario');
+    this.activeScenarioTitle = document.getElementById('header-active-scenario-title');
     this.topologyBadge = document.getElementById('symposium-topology-badge');
     this.roundCounter = document.getElementById('symposium-round-counter');
 
@@ -73,53 +74,65 @@ export class SilkSymposiumOrchestrator {
     // Left Rail Container
     this.leftRail = document.getElementById('symposium-dais-container');
 
-    // Logic Sanctum Drawer & Tabs
+    // ── Floating Contextual Inline Seat Inspector ──
+    this.seatInspector = document.getElementById('seat-inline-inspector');
+    this.inspectorAvatar = document.getElementById('inspector-model-avatar');
+    this.inspectorModelName = document.getElementById('inspector-model-name');
+    this.inspectorPersonaSubtitle = document.getElementById('inspector-persona-subtitle');
+    this.inspectorSaveBadge = document.getElementById('inspector-autosave-badge');
+    this.btnCloseInspector = document.getElementById('btn-close-seat-inspector');
+    this.inspectorChipsCarousel = document.getElementById('inspector-chips-carousel');
+    this.inspectorDirective = document.getElementById('inspector-directive-input');
+    this.inspectorWeightSlider = document.getElementById('inspector-weight-slider');
+    this.inspectorWeightDisplay = document.getElementById('inspector-weight-display');
+    this.btnInspectorApplyAll = document.getElementById('btn-inspector-apply-all');
+    this.btnInspectorSavePreset = document.getElementById('btn-inspector-save-preset');
+    this.btnInspectorMute = document.getElementById('btn-inspector-mute');
+
+    // ── Re-engineered 4-Zone Logic Sanctum ──
     this.sanctumDrawer = document.getElementById('logic-sanctum-drawer');
     this.sanctumBackdrop = document.getElementById('sanctum-backdrop');
     this.btnCloseSanctum = document.getElementById('btn-close-sanctum');
-    this.sanctumTabBtns = document.querySelectorAll('.sanctum-tab-btn');
-    this.sanctumSections = {
-      scenarios: document.getElementById('sanctum-section-scenarios'),
-      personas: document.getElementById('sanctum-section-personas'),
-      presets: document.getElementById('sanctum-section-presets'),
-      protocols: document.getElementById('sanctum-section-protocols'),
-      userRole: document.getElementById('sanctum-section-user')
+    this.sanctumZoneTabs = document.querySelectorAll('.sanctum-zone-tab');
+    this.sanctumPanels = {
+      scenarios: document.getElementById('sanctum-zone-scenarios'),
+      personas: document.getElementById('sanctum-zone-personas'),
+      daisFloor: document.getElementById('sanctum-zone-dais-floor'),
+      engine: document.getElementById('sanctum-zone-engine')
     };
 
-    // Scenarios Grid
+    // Zone 1: Scenarios Grid & Builder Form
     this.scenariosGrid = document.getElementById('sanctum-scenarios-grid');
+    this.btnShowCreateScenario = document.getElementById('btn-show-create-scenario');
+    this.scenarioFormCard = document.getElementById('sanctum-scenario-form-card');
+    this.scenarioFormHeading = document.getElementById('scenario-form-heading');
+    this.scenarioFormId = document.getElementById('scenario-form-id');
+    this.scenarioFormTitle = document.getElementById('scenario-form-title');
+    this.scenarioFormDesc = document.getElementById('scenario-form-desc');
+    this.scenarioFormBadge = document.getElementById('scenario-form-badge');
+    this.scenarioFormMode = document.getElementById('scenario-form-mode');
+    this.scenarioFormColor = document.getElementById('scenario-form-color');
+    this.scenarioFormPrompt = document.getElementById('scenario-form-prompt');
+    this.btnSaveScenarioForm = document.getElementById('btn-save-scenario-form');
+    this.btnCancelScenarioForm = document.getElementById('btn-cancel-scenario-form');
+    this.btnDismissScenarioForm = document.getElementById('btn-dismiss-scenario-form');
 
-    // Tab 1: Model Personas & Directives Form Fields
-    this.sanctumSeatPicker = document.getElementById('sanctum-seat-picker-select');
-    this.sanctumPresetPicker = document.getElementById('sanctum-persona-preset-select');
-    this.sanctumSeatTitleInput = document.getElementById('sanctum-seat-title');
-    this.sanctumSeatBadgeInput = document.getElementById('sanctum-seat-badge');
-    this.sanctumSeatDirectiveTextarea = document.getElementById('sanctum-seat-directive');
-    this.sanctumSeatWeightInput = document.getElementById('sanctum-seat-weight');
-    this.sanctumSeatMuteCheck = document.getElementById('sanctum-seat-mute-check');
-    this.sanctumSeatCustomTemplateTextarea = document.getElementById('sanctum-seat-custom-template');
-    this.sanctumGlobalDirectivePresetPicker = document.getElementById('sanctum-global-directive-preset-select');
-    this.sanctumGlobalDirectiveTextarea = document.getElementById('sanctum-global-directive');
+    // Zone 2: Personas Library & Builder Form
+    this.personasGrid = document.getElementById('sanctum-personas-grid');
+    this.btnShowCreatePersona = document.getElementById('btn-show-create-persona');
+    this.personaFormCard = document.getElementById('sanctum-persona-form-card');
+    this.personaFormHeading = document.getElementById('persona-form-heading');
+    this.personaFormId = document.getElementById('persona-form-id');
+    this.personaFormTitle = document.getElementById('persona-form-title');
+    this.personaFormBadge = document.getElementById('persona-form-badge');
+    this.personaFormColor = document.getElementById('persona-form-color');
+    this.personaFormDirective = document.getElementById('persona-form-directive');
+    this.btnSavePersonaForm = document.getElementById('btn-save-persona-form');
+    this.btnCancelPersonaForm = document.getElementById('btn-cancel-persona-form');
+    this.btnDismissPersonaForm = document.getElementById('btn-dismiss-persona-form');
 
-    this.btnSaveSeatSettings = document.getElementById('btn-save-seat-settings');
-    this.btnApplySeatToAll = document.getElementById('btn-apply-seat-to-all');
-    this.btnSaveAsNewPreset = document.getElementById('btn-save-as-new-preset');
-
-    // Tab 2: Presets Library
-    this.presetsListContainer = document.getElementById('sanctum-presets-list');
-    this.btnCreateNewPreset = document.getElementById('btn-create-new-preset');
-    this.btnResetFactoryPresets = document.getElementById('btn-reset-factory-presets');
-
-    // Tab 3: Protocols
-    this.topologySelect = document.getElementById('sanctum-topology-select');
-    this.promptTemplatePresetPicker = document.getElementById('sanctum-prompt-template-preset-select');
-    this.maxRoundsInput = document.getElementById('sanctum-max-rounds');
-    this.distillSelect = document.getElementById('sanctum-distill-select');
-    this.templateTextarea = document.getElementById('sanctum-template-textarea');
-    this.macroChipsContainer = document.getElementById('sanctum-macro-chips');
-    this.btnSaveProtocols = document.getElementById('btn-save-protocols');
-
-    // Tab 4: User Seat Sanctum Inputs
+    // Zone 3: Dais Floor Plan & User Maestro Seat
+    this.daisFloorCircle = document.getElementById('dais-interactive-floor-circle');
     this.sanctumUserSeatedCheck = document.getElementById('sanctum-user-seated-check');
     this.sanctumUserNameInput = document.getElementById('sanctum-user-name');
     this.sanctumUserRolePresetPicker = document.getElementById('sanctum-user-role-preset-select');
@@ -127,6 +140,17 @@ export class SilkSymposiumOrchestrator {
     this.sanctumUserWeightInput = document.getElementById('sanctum-user-weight');
     this.sanctumUserDirectiveTextarea = document.getElementById('sanctum-user-directive');
     this.btnSaveUserRole = document.getElementById('btn-save-user-role');
+
+    // Zone 4: Dialectic Engine & Templates
+    this.topologySelect = document.getElementById('sanctum-topology-select');
+    this.promptTemplatePresetPicker = document.getElementById('sanctum-prompt-template-preset-select');
+    this.maxRoundsInput = document.getElementById('sanctum-max-rounds');
+    this.distillSelect = document.getElementById('sanctum-distill-select');
+    this.templateTextarea = document.getElementById('sanctum-template-textarea');
+    this.macroChipsContainer = document.getElementById('sanctum-macro-chips');
+    this.sanctumGlobalDirectivePresetPicker = document.getElementById('sanctum-global-directive-preset-select');
+    this.sanctumGlobalDirectiveTextarea = document.getElementById('sanctum-global-directive');
+    this.btnSaveProtocols = document.getElementById('btn-save-protocols');
   }
 
   initSubModules() {
@@ -134,7 +158,8 @@ export class SilkSymposiumOrchestrator {
     const daisRibbon = document.getElementById('symposium-dais-ribbon');
     this.dais = new SymposiumDais(daisContainer, daisRibbon, {
       onPassBaton: (idx) => this.turnSequencer.passBaton(idx),
-      onConfigureSeat: (idx) => this.openSanctum('personas', idx),
+      onOpenInspector: (idx, rect) => this.openSeatInspector(idx, rect),
+      onConfigureSeat: (idx) => this.openSeatInspector(idx),
       onToggleMute: (idx) => this.handleToggleSeatMute(idx)
     });
 
@@ -152,6 +177,11 @@ export class SilkSymposiumOrchestrator {
         this.ledgerView.render(this.symposiumState.ledger);
       }
     });
+  }
+
+  setupInspectorDebounce() {
+    this.inspectorDebounceTimer = null;
+    this.activeInspectorSeatIndex = null;
   }
 
   bindEvents() {
@@ -181,38 +211,62 @@ export class SilkSymposiumOrchestrator {
     });
 
     this.btnOpenSanctum?.addEventListener('click', () => this.openSanctum('scenarios'));
-    this.btnOpenPersonas?.addEventListener('click', () => this.openSanctum('personas'));
+    this.btnSwitchScenarioPill?.addEventListener('click', () => this.openSanctum('scenarios'));
     this.btnCloseSanctum?.addEventListener('click', () => this.closeSanctum());
     this.sanctumBackdrop?.addEventListener('click', () => this.closeSanctum());
 
-    // Tab switcher in Sanctum
-    this.sanctumTabBtns?.forEach(btn => {
+    // 4-Zone switcher in Sanctum
+    this.sanctumZoneTabs?.forEach(btn => {
       btn.addEventListener('click', () => {
-        const tab = btn.dataset.tab;
-        this.switchSanctumTab(tab);
+        const zone = btn.dataset.zone;
+        this.switchSanctumZone(zone);
       });
     });
 
-    // Seat picker dropdown change
-    this.sanctumSeatPicker?.addEventListener('change', () => {
-      const idx = parseInt(this.sanctumSeatPicker.value, 10);
-      if (!isNaN(idx)) {
-        this.loadSeatIntoEditor(idx);
+    // Inline Seat Inspector listeners
+    this.btnCloseInspector?.addEventListener('click', () => this.closeSeatInspector());
+
+    // Auto-save on typing in inspector directive
+    this.inspectorDirective?.addEventListener('input', () => {
+      this.syncTextareaDirection(this.inspectorDirective);
+      this.triggerInspectorAutoSave();
+    });
+
+    // Auto-save on weight slider change
+    this.inspectorWeightSlider?.addEventListener('input', () => {
+      if (this.inspectorWeightDisplay) {
+        this.inspectorWeightDisplay.textContent = `${this.inspectorWeightSlider.value}%`;
+      }
+      this.triggerInspectorAutoSave();
+    });
+
+    // Mute button in inspector
+    this.btnInspectorMute?.addEventListener('click', () => {
+      if (this.activeInspectorSeatIndex !== null) {
+        this.handleToggleSeatMute(this.activeInspectorSeatIndex);
+        this.updateInspectorMuteButton();
       }
     });
 
-    // Preset selector change -> auto-fills editor with chosen preset
-    this.sanctumPresetPicker?.addEventListener('change', () => {
-      const presetKey = this.sanctumPresetPicker.value;
-      if (!presetKey) return;
-      const persona = this.symposiumState.getPersona(presetKey);
-      if (persona) {
-        if (this.sanctumSeatTitleInput) this.sanctumSeatTitleInput.value = persona.title || '';
-        if (this.sanctumSeatBadgeInput) this.sanctumSeatBadgeInput.value = persona.badge || '';
-        if (this.sanctumSeatDirectiveTextarea) {
-          this.sanctumSeatDirectiveTextarea.value = persona.directive || '';
-          this.syncTextareaDirection(this.sanctumSeatDirectiveTextarea);
-        }
+    // Apply to all models from inspector
+    this.btnInspectorApplyAll?.addEventListener('click', () => {
+      if (this.activeInspectorSeatIndex !== null) {
+        this.applySeatToAll(this.activeInspectorSeatIndex);
+      }
+    });
+
+    // Save as preset from inspector
+    this.btnInspectorSavePreset?.addEventListener('click', () => {
+      if (this.activeInspectorSeatIndex !== null) {
+        this.saveCurrentInspectorAsPreset();
+      }
+    });
+
+    // Dismiss inspector on click outside
+    document.addEventListener('pointerdown', (e) => {
+      if (!this.seatInspector?.classList.contains('open')) return;
+      if (!e.target.closest('#seat-inline-inspector') && !e.target.closest('.symposium-seat-card')) {
+        this.closeSeatInspector();
       }
     });
 
@@ -224,44 +278,11 @@ export class SilkSymposiumOrchestrator {
     });
 
     // Auto text direction detection on custom directive textareas
-    this.sanctumSeatDirectiveTextarea?.addEventListener('input', () => {
-      this.syncTextareaDirection(this.sanctumSeatDirectiveTextarea);
-    });
     this.sanctumGlobalDirectiveTextarea?.addEventListener('input', () => {
       this.syncTextareaDirection(this.sanctumGlobalDirectiveTextarea);
     });
     this.sanctumUserDirectiveTextarea?.addEventListener('input', () => {
       this.syncTextareaDirection(this.sanctumUserDirectiveTextarea);
-    });
-
-    // Save active seat configuration
-    this.btnSaveSeatSettings?.addEventListener('click', () => {
-      this.saveActiveSeatFromEditor();
-    });
-
-    // Apply active seat's persona and directive to all models
-    this.btnApplySeatToAll?.addEventListener('click', () => {
-      this.applyActiveSeatToAllModels();
-    });
-
-    // Save active seat's settings as a new reusable preset template
-    this.btnSaveAsNewPreset?.addEventListener('click', () => {
-      this.saveActiveSeatAsNewPreset();
-    });
-
-    // Create a new preset template directly from library tab
-    this.btnCreateNewPreset?.addEventListener('click', () => {
-      this.promptCreateNewPreset();
-    });
-
-    // Reset factory presets
-    this.btnResetFactoryPresets?.addEventListener('click', () => {
-      if (confirm('آیا مایلید تمام الگوهای سفارشی حذف و الگوهای پیش‌فرض کارخانه بازنشانی شوند؟')) {
-        this.symposiumState.resetPersonaPresets();
-        this.renderPresetsDropdown();
-        this.renderPresetsLibrary();
-        this.showToast('الگوهای پیش‌فرض کارخانه بازنشانی شدند ✓');
-      }
     });
 
     // Preset choosers for global directive, user roles, and prompt templates
@@ -299,6 +320,34 @@ export class SilkSymposiumOrchestrator {
     // Save user role
     this.btnSaveUserRole?.addEventListener('click', () => {
       this.saveUserRoleConfig();
+    });
+
+    // Scenario Builder Form Toggles & Actions
+    this.btnShowCreateScenario?.addEventListener('click', () => {
+      this.openScenarioForm();
+    });
+    this.btnCancelScenarioForm?.addEventListener('click', () => {
+      this.closeScenarioForm();
+    });
+    this.btnDismissScenarioForm?.addEventListener('click', () => {
+      this.closeScenarioForm();
+    });
+    this.btnSaveScenarioForm?.addEventListener('click', () => {
+      this.handleSaveScenarioForm();
+    });
+
+    // Persona Builder Form Toggles & Actions
+    this.btnShowCreatePersona?.addEventListener('click', () => {
+      this.openPersonaForm();
+    });
+    this.btnCancelPersonaForm?.addEventListener('click', () => {
+      this.closePersonaForm();
+    });
+    this.btnDismissPersonaForm?.addEventListener('click', () => {
+      this.closePersonaForm();
+    });
+    this.btnSavePersonaForm?.addEventListener('click', () => {
+      this.handleSavePersonaForm();
     });
 
     // Send and Next Turn Baton Handlers
@@ -358,14 +407,16 @@ export class SilkSymposiumOrchestrator {
   open() {
     this.isOpen = true;
     this.overlayEl?.classList.add('open');
+    this.activeInspectorSeatIndex = null;
     this.syncSeats();
     this.renderAll();
     this.renderScenariosGrid();
-    this.renderPresetsDropdown();
-    this.renderPresetsLibrary();
+    this.renderPersonasGrid();
+    this.renderDaisFloorPlan();
     this.renderPromptTemplatesDropdown();
     this.renderGlobalDirectivesDropdown();
     this.renderUserRolesDropdown();
+    this.updateScenarioHeaderBadge();
     requestAnimationFrame(() => this.inputPrompt?.focus());
     globalBus.emit('SILK_SYMPOSIUM_OPENED');
   }
@@ -373,6 +424,7 @@ export class SilkSymposiumOrchestrator {
   close() {
     this.isOpen = false;
     this.turnSequencer.pause();
+    this.closeSeatInspector();
     this.overlayEl?.classList.remove('open');
     this.closeSanctum();
     globalBus.emit('SILK_SYMPOSIUM_CLOSED');
@@ -386,21 +438,8 @@ export class SilkSymposiumOrchestrator {
   syncSeats() {
     const cards = this.stateStore?.getCards() || [];
     this.symposiumState.syncWithCanvasCards(cards);
-    this.updateSanctumSeatSelector();
     this.updateUserSeatButtonUI();
     this.updateComposerSpeakerHint();
-  }
-
-  updateSanctumSeatSelector() {
-    if (!this.sanctumSeatPicker) return;
-    this.sanctumSeatPicker.innerHTML = '';
-    this.symposiumState.seats.forEach((seat, idx) => {
-      const opt = document.createElement('option');
-      opt.value = idx;
-      opt.textContent = `${seat.isUser ? '👑 [User]' : '🤖'} ${seat.name} — ${seat.personaTitle}`;
-      if (idx === this.activeSanctumSeatIndex) opt.selected = true;
-      this.sanctumSeatPicker.appendChild(opt);
-    });
   }
 
   handleToggleSeatMute(seatIndex) {
@@ -460,10 +499,18 @@ export class SilkSymposiumOrchestrator {
     }
     if (this.btnAutoplayToggle) {
       const isActive = this.symposiumState.sessionStatus === 'ACTIVE';
-      this.btnAutoplayToggle.textContent = isActive ? '⏸️ توقف جریان' : '▶️ شروع جریان خودکار';
+      this.btnAutoplayToggle.textContent = isActive ? '⏸️ توقف' : '▶️ خودکار';
       this.btnAutoplayToggle.classList.toggle('active', isActive);
     }
+    this.updateScenarioHeaderBadge();
     this.updateComposerSpeakerHint();
+  }
+
+  updateScenarioHeaderBadge() {
+    if (!this.activeScenarioTitle) return;
+    const scenarios = this.symposiumState.getScenarios();
+    const current = scenarios[this.symposiumState.activeScenarioKey];
+    this.activeScenarioTitle.textContent = current ? current.title.split(' و ')[0].trim() : 'سناریوهای میزگرد';
   }
 
   updateComposerSpeakerHint() {
@@ -651,7 +698,6 @@ export class SilkSymposiumOrchestrator {
   }
 
   handleTurnFinished({ seat, text }) {
-    // Extract automated consensus/divergence markers into Ledger
     const signals = this.ledgerView.extractSignalsFromText(text, seat.name);
     if (signals) {
       if (signals.agreement) this.symposiumState.addLedgerItem('agreements', signals.agreement);
@@ -668,7 +714,6 @@ export class SilkSymposiumOrchestrator {
   }
 
   composeSeatPrompt(seat, immediateContext = '') {
-    // Custom prompt template per seat, or global template
     const template = (seat.customPromptTemplate && seat.customPromptTemplate.trim())
       ? seat.customPromptTemplate.trim()
       : this.symposiumState.config.promptTemplate;
@@ -690,7 +735,6 @@ export class SilkSymposiumOrchestrator {
       contextBrief += `\n\nDIRECT INJECTION / DIRECTIVE:\n"${immediateContext}"`;
     }
 
-    // Incorporate individual directive and optional global directive
     let directive = seat.personaDirective || '';
     if (this.symposiumState.config.globalDirective && this.symposiumState.config.globalDirective.trim()) {
       directive = `[GLOBAL SYMPOSIUM MANDATE]:\n${this.symposiumState.config.globalDirective.trim()}\n\n[YOUR SPECIFIC ARCHETYPE & DIRECTIVE]:\n${directive}`;
@@ -742,30 +786,234 @@ export class SilkSymposiumOrchestrator {
     this.turnSequencer.dispatchTurn(targetIdx, directive);
   }
 
-  // ── Logic Sanctum & Persona Customizer Engine ──
+  // ── 1. Contextual Inline Seat Inspector Engine (Zero Context-Switch) ──
 
-  openSanctum(tab = 'scenarios', seatIndex = null) {
-    this.sanctumDrawer?.classList.add('open');
-    this.sanctumBackdrop?.classList.add('open');
+  openSeatInspector(seatIndex, anchorRect = null) {
+    const seat = this.symposiumState.seats[seatIndex];
+    if (!seat || !this.seatInspector) return;
 
-    this.updateSanctumSeatSelector();
-    this.renderScenariosGrid();
-    this.renderPresetsDropdown();
-    this.renderPresetsLibrary();
-    this.renderPromptTemplatesDropdown();
-    this.renderGlobalDirectivesDropdown();
-    this.renderUserRolesDropdown();
+    this.activeInspectorSeatIndex = seatIndex;
 
-    if (typeof seatIndex === 'number' && this.symposiumState.seats[seatIndex]) {
-      this.activeSanctumSeatIndex = seatIndex;
-      if (this.sanctumSeatPicker) this.sanctumSeatPicker.value = seatIndex;
+    // Anchor positioning immediately adjacent to left rail seat pod
+    if (anchorRect) {
+      const top = Math.max(56, Math.min(anchorRect.top - 20, window.innerHeight - 380));
+      this.seatInspector.style.top = `${top}px`;
+      this.seatInspector.style.left = '76px';
+    } else {
+      this.seatInspector.style.top = '70px';
+      this.seatInspector.style.left = '76px';
     }
 
-    this.loadSeatIntoEditor(this.activeSanctumSeatIndex);
+    // Set model identity & color styling
+    this.seatInspector.style.setProperty('--inspector-color', seat.color || '#c084fc');
+    if (this.inspectorAvatar) {
+      this.inspectorAvatar.textContent = seat.personaBadge?.slice(0, 2) || '🤖';
+    }
+    if (this.inspectorModelName) {
+      this.inspectorModelName.textContent = seat.name;
+    }
+    if (this.inspectorPersonaSubtitle) {
+      this.inspectorPersonaSubtitle.textContent = seat.personaTitle || 'AI Chair';
+    }
+
+    // Directive textarea
+    if (this.inspectorDirective) {
+      this.inspectorDirective.value = seat.personaDirective || '';
+      this.syncTextareaDirection(this.inspectorDirective);
+    }
+
+    // Weight slider
+    if (this.inspectorWeightSlider) {
+      this.inspectorWeightSlider.value = seat.weight ?? 100;
+    }
+    if (this.inspectorWeightDisplay) {
+      this.inspectorWeightDisplay.textContent = `${seat.weight ?? 100}%`;
+    }
+
+    this.updateInspectorMuteButton();
+    this.renderInspectorPersonaChips(seat);
+
+    this.seatInspector.classList.add('open');
+    requestAnimationFrame(() => this.inspectorDirective?.focus());
+  }
+
+  closeSeatInspector() {
+    this.seatInspector?.classList.remove('open');
+    this.activeInspectorSeatIndex = null;
+  }
+
+  updateInspectorMuteButton() {
+    if (!this.btnInspectorMute || this.activeInspectorSeatIndex === null) return;
+    const seat = this.symposiumState.seats[this.activeInspectorSeatIndex];
+    if (!seat) return;
+    this.btnInspectorMute.textContent = seat.isMuted ? '🔇 Unmute' : '🔊 Mute';
+  }
+
+  renderInspectorPersonaChips(seat) {
+    if (!this.inspectorChipsCarousel) return;
+    this.inspectorChipsCarousel.innerHTML = '';
+
+    const allPersonas = this.symposiumState.getAllPersonas();
+    const personaKeys = Object.keys(allPersonas);
+
+    if (personaKeys.length === 0) {
+      const emptySpan = document.createElement('span');
+      emptySpan.style.cssText = 'font-size:10.5px;color:#94a3b8;font-style:italic;padding:4px 6px;';
+      emptySpan.textContent = 'هنوز پرسونایی تعریف نشده است.';
+      this.inspectorChipsCarousel.appendChild(emptySpan);
+    } else {
+      personaKeys.forEach(key => {
+        const p = allPersonas[key];
+        const isSelected = seat.personaKey === key;
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = `persona-quick-chip ${isSelected ? 'active' : ''}`;
+        chip.dataset.personaKey = key;
+        chip.innerHTML = `<span>${p.badge || '🎭'}</span> <span>${p.title.split('(')[0].trim()}</span>`;
+
+        chip.addEventListener('click', () => {
+          this.inspectorChipsCarousel.querySelectorAll('.persona-quick-chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+
+          if (this.inspectorPersonaSubtitle) this.inspectorPersonaSubtitle.textContent = p.title;
+          if (this.inspectorDirective) {
+            this.inspectorDirective.value = p.directive;
+            this.syncTextareaDirection(this.inspectorDirective);
+          }
+
+          // Apply immediately to seat
+          this.symposiumState.updateSeat(this.activeInspectorSeatIndex, {
+            personaKey: key,
+            personaTitle: p.title,
+            personaBadge: p.badge,
+            personaDirective: p.directive,
+            isCustomized: true
+          });
+
+          this.showInspectorSavedBadge();
+          this.dais.render(
+            this.symposiumState.seats,
+            this.symposiumState.activeSpeakerIndex,
+            this.symposiumState.sessionStatus === 'WAITING_FOR_USER',
+            this.symposiumState.recommendedNextSpeakerIndex,
+            this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO'
+          );
+          this.updateComposerSpeakerHint();
+        });
+
+        this.inspectorChipsCarousel.appendChild(chip);
+      });
+    }
+
+    // Add + New Persona button inside carousel
+    const addPersonaBtn = document.createElement('button');
+    addPersonaBtn.type = 'button';
+    addPersonaBtn.className = 'persona-quick-chip';
+    addPersonaBtn.style.borderStyle = 'dashed';
+    addPersonaBtn.style.color = '#fde68a';
+    addPersonaBtn.innerHTML = `<span>+ ساخت پرسونا</span>`;
+    addPersonaBtn.addEventListener('click', () => {
+      this.closeSeatInspector();
+      this.openSanctum('personas');
+      this.openPersonaForm();
+    });
+    this.inspectorChipsCarousel.appendChild(addPersonaBtn);
+  }
+
+  triggerInspectorAutoSave() {
+    if (this.activeInspectorSeatIndex === null) return;
+    const seatIndex = this.activeInspectorSeatIndex;
+
+    if (this.inspectorSaveBadge) {
+      this.inspectorSaveBadge.className = 'inspector-autosave-badge saving';
+      this.inspectorSaveBadge.textContent = 'در حال ذخیره...';
+    }
+
+    clearTimeout(this.inspectorDebounceTimer);
+    this.inspectorDebounceTimer = setTimeout(() => {
+      const directive = this.inspectorDirective?.value?.trim() || '';
+      const weight = parseInt(this.inspectorWeightSlider?.value, 10) || 100;
+
+      this.symposiumState.updateSeat(seatIndex, {
+        personaDirective: directive,
+        weight,
+        isCustomized: true
+      });
+      this.symposiumState.persistConfig();
+
+      this.showInspectorSavedBadge();
+      this.dais.render(
+        this.symposiumState.seats,
+        this.symposiumState.activeSpeakerIndex,
+        this.symposiumState.sessionStatus === 'WAITING_FOR_USER',
+        this.symposiumState.recommendedNextSpeakerIndex,
+        this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO'
+      );
+    }, 280);
+  }
+
+  showInspectorSavedBadge() {
+    if (!this.inspectorSaveBadge) return;
+    this.inspectorSaveBadge.className = 'inspector-autosave-badge saved';
+    this.inspectorSaveBadge.textContent = 'ذخیره شد ✓';
+    setTimeout(() => {
+      if (this.inspectorSaveBadge && this.inspectorSaveBadge.classList.contains('saved')) {
+        this.inspectorSaveBadge.style.opacity = '0';
+      }
+    }, 1600);
+  }
+
+  applySeatToAll(sourceIndex) {
+    const source = this.symposiumState.seats[sourceIndex];
+    if (!source) return;
+
+    if (!confirm(`آیا مایلید پرسونا و پرومپت "${source.name}" به تمام صندلی‌های هوش مصنوعی اعمال شود؟`)) return;
+
+    this.symposiumState.applySeatPersonaToAll(sourceIndex);
+    this.dais.render(
+      this.symposiumState.seats,
+      this.symposiumState.activeSpeakerIndex,
+      this.symposiumState.sessionStatus === 'WAITING_FOR_USER',
+      this.symposiumState.recommendedNextSpeakerIndex,
+      this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO'
+    );
+    this.showToast('پرسونا و پرومپت به تمام صندلی‌های میزگرد اعمال شد ✓');
+  }
+
+  saveCurrentInspectorAsPreset() {
+    if (this.activeInspectorSeatIndex === null) return;
+    const seat = this.symposiumState.seats[this.activeInspectorSeatIndex];
+    if (!seat) return;
+
+    const title = prompt('عنوان الگوی جدید:', seat.personaTitle || seat.name);
+    if (!title) return;
+
+    const newPreset = this.symposiumState.saveCustomPersona({
+      title,
+      badge: seat.personaBadge || '🎭 Custom',
+      directive: this.inspectorDirective?.value?.trim() || seat.personaDirective
+    });
+
+    if (newPreset) {
+      this.showToast(`الگوی "${newPreset.title}" در کتابخانه ذخیره شد ✓`);
+      this.renderInspectorPersonaChips(seat);
+    }
+  }
+
+  // ── 2. The 4-Zone Logic Sanctum Atelier Engine ──
+
+  openSanctum(zone = 'scenarios') {
+    this.sanctumDrawer?.classList.add('open');
+    this.sanctumBackdrop?.classList.add('open');
+    this.closeSeatInspector();
+
+    this.renderScenariosGrid();
+    this.renderPersonasGrid();
+    this.renderDaisFloorPlan();
     this.loadProtocolsIntoEditor();
     this.loadUserRoleIntoEditor();
 
-    this.switchSanctumTab(tab);
+    this.switchSanctumZone(zone);
   }
 
   closeSanctum() {
@@ -773,40 +1021,135 @@ export class SilkSymposiumOrchestrator {
     this.sanctumBackdrop?.classList.remove('open');
   }
 
-  switchSanctumTab(tabKey) {
-    this.currentSanctumTab = tabKey;
-    this.sanctumTabBtns?.forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.tab === tabKey);
+  switchSanctumZone(zoneKey) {
+    this.currentSanctumZone = zoneKey;
+    this.sanctumZoneTabs?.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.zone === zoneKey);
     });
 
-    if (this.sanctumSections.scenarios) this.sanctumSections.scenarios.style.display = tabKey === 'scenarios' ? 'flex' : 'none';
-    if (this.sanctumSections.personas) this.sanctumSections.personas.style.display = tabKey === 'personas' ? 'flex' : 'none';
-    if (this.sanctumSections.presets) this.sanctumSections.presets.style.display = tabKey === 'presets' ? 'flex' : 'none';
-    if (this.sanctumSections.protocols) this.sanctumSections.protocols.style.display = tabKey === 'protocols' ? 'flex' : 'none';
-    if (this.sanctumSections.userRole) this.sanctumSections.userRole.style.display = tabKey === 'user-role' ? 'flex' : 'none';
+    if (this.sanctumPanels.scenarios) this.sanctumPanels.scenarios.style.display = zoneKey === 'scenarios' ? 'flex' : 'none';
+    if (this.sanctumPanels.personas) this.sanctumPanels.personas.style.display = zoneKey === 'personas' ? 'flex' : 'none';
+    if (this.sanctumPanels.daisFloor) this.sanctumPanels.daisFloor.style.display = zoneKey === 'dais-floor' ? 'flex' : 'none';
+    if (this.sanctumPanels.engine) this.sanctumPanels.engine.style.display = zoneKey === 'engine' ? 'flex' : 'none';
+
+    if (zoneKey === 'scenarios') {
+      this.renderScenariosGrid();
+    } else if (zoneKey === 'personas') {
+      this.renderPersonasGrid();
+    }
+  }
+
+  // ── Scenario Creation & Management ──
+
+  openScenarioForm(scenario = null) {
+    if (!this.scenarioFormCard) return;
+    this.scenarioFormCard.style.display = 'flex';
+
+    if (scenario) {
+      if (this.scenarioFormHeading) this.scenarioFormHeading.textContent = 'ویرایش سناریو';
+      if (this.scenarioFormId) this.scenarioFormId.value = scenario.id;
+      if (this.scenarioFormTitle) this.scenarioFormTitle.value = scenario.title || '';
+      if (this.scenarioFormDesc) this.scenarioFormDesc.value = scenario.description || '';
+      if (this.scenarioFormBadge) this.scenarioFormBadge.value = scenario.badge || '🏛️ سناریو';
+      if (this.scenarioFormMode) this.scenarioFormMode.value = scenario.debateMode || 'manual';
+      if (this.scenarioFormColor) this.scenarioFormColor.value = scenario.color || '#f59e0b';
+      if (this.scenarioFormPrompt) this.scenarioFormPrompt.value = scenario.initialPrompt || '';
+    } else {
+      if (this.scenarioFormHeading) this.scenarioFormHeading.textContent = 'ساخت سناریوی جدید';
+      if (this.scenarioFormId) this.scenarioFormId.value = '';
+      if (this.scenarioFormTitle) this.scenarioFormTitle.value = '';
+      if (this.scenarioFormDesc) this.scenarioFormDesc.value = '';
+      if (this.scenarioFormBadge) this.scenarioFormBadge.value = '🏛️ سناریو';
+      if (this.scenarioFormMode) this.scenarioFormMode.value = 'manual';
+      if (this.scenarioFormColor) this.scenarioFormColor.value = '#f59e0b';
+      if (this.scenarioFormPrompt) this.scenarioFormPrompt.value = '';
+    }
+
+    requestAnimationFrame(() => this.scenarioFormTitle?.focus());
+  }
+
+  closeScenarioForm() {
+    if (this.scenarioFormCard) {
+      this.scenarioFormCard.style.display = 'none';
+    }
+  }
+
+  handleSaveScenarioForm() {
+    const title = this.scenarioFormTitle?.value?.trim();
+    if (!title) {
+      alert('لطفاً عنوان سناریو را وارد نمایید.');
+      this.scenarioFormTitle?.focus();
+      return;
+    }
+
+    const id = this.scenarioFormId?.value || undefined;
+    const desc = this.scenarioFormDesc?.value?.trim() || '';
+    const badge = this.scenarioFormBadge?.value?.trim() || '🏛️ سناریو';
+    const mode = this.scenarioFormMode?.value || 'manual';
+    const color = this.scenarioFormColor?.value || '#f59e0b';
+    const prompt = this.scenarioFormPrompt?.value?.trim() || '';
+
+    const saved = this.symposiumState.saveCustomScenario({
+      id,
+      title,
+      description: desc,
+      badge,
+      debateMode: mode,
+      color,
+      initialPrompt: prompt
+    });
+
+    if (saved) {
+      this.closeScenarioForm();
+      this.renderScenariosGrid();
+      this.showToast(`سناریوی "${saved.title}" ذخیره شد ✓`);
+    }
   }
 
   renderScenariosGrid() {
     if (!this.scenariosGrid) return;
     const scenarios = this.symposiumState.getScenarios();
+    const scenarioKeys = Object.keys(scenarios);
     this.scenariosGrid.innerHTML = '';
 
-    Object.keys(scenarios).forEach(key => {
+    if (scenarioKeys.length === 0) {
+      this.scenariosGrid.innerHTML = `
+        <div style="grid-column: 1 / -1; padding: 24px 16px; text-align: center; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.15);">
+          <div style="font-size: 24px; margin-bottom: 6px;">🏛️</div>
+          <div style="font-size: 12px; color: #f1f5f9; font-weight: 600;">هنوز هیچ سناریویی ساخته نشده است</div>
+          <p style="font-size: 11px; color: #94a3b8; margin: 4px 0 12px;">با کلیک روی دکمه «+ ساخت سناریوی جدید»، اولین سناریوی اختصاصی خود را طراحی کنید.</p>
+          <button type="button" class="btn-load-scenario" style="width: auto; padding: 6px 16px; margin: 0 auto;" id="btn-empty-create-scenario">
+            <span>+ ساخت سناریوی جدید</span>
+          </button>
+        </div>
+      `;
+      document.getElementById('btn-empty-create-scenario')?.addEventListener('click', () => {
+        this.openScenarioForm();
+      });
+      return;
+    }
+
+    scenarioKeys.forEach(key => {
       const sc = scenarios[key];
       const card = document.createElement('div');
       card.className = `symposium-scenario-card ${this.symposiumState.activeScenarioKey === key ? 'active' : ''}`;
       card.innerHTML = `
         <div class="scenario-card-top">
-          <span class="scenario-badge-pill" style="background:${sc.color}25;color:${sc.color};border:1px solid ${sc.color}50;">
-            ${sc.badge}
+          <span class="scenario-badge-pill" style="background:${sc.color || '#f59e0b'}25;color:${sc.color || '#f59e0b'};border:1px solid ${sc.color || '#f59e0b'}50;">
+            ${sc.badge || '🏛️'}
           </span>
-          <span style="font-size:10px;color:#94a3b8;text-transform:uppercase;">${sc.debateMode}</span>
+          <span style="font-size:10px;color:#94a3b8;text-transform:uppercase;">${sc.debateMode || 'manual'}</span>
         </div>
         <h4 class="scenario-card-title">${this.escapeHtml(sc.title)}</h4>
-        <p class="scenario-card-desc">${this.escapeHtml(sc.description)}</p>
-        <button type="button" class="btn-load-scenario" data-scenario-key="${key}">
-          <span>اجرا و بارگذاری این سناریو ⚡</span>
-        </button>
+        <p class="scenario-card-desc">${this.escapeHtml(sc.description || 'سناریوی اختصاصی تعریف‌شده توسط کاربر')}</p>
+        
+        <div style="display:flex;align-items:center;gap:6px;margin-top:auto;padding-top:4px;">
+          <button type="button" class="btn-load-scenario" style="flex:1;" data-scenario-key="${key}">
+            <span>اجرا و بارگذاری ⚡</span>
+          </button>
+          <button type="button" class="btn-utility-ghost btn-edit-scenario" title="ویرایش سناریو">✏️</button>
+          <button type="button" class="btn-utility-ghost btn-del-scenario" style="color:#f87171;" title="حذف سناریو">🗑️</button>
+        </div>
       `;
 
       card.querySelector('.btn-load-scenario')?.addEventListener('click', (e) => {
@@ -818,10 +1161,175 @@ export class SilkSymposiumOrchestrator {
           this.inputPrompt.value = sc.initialPrompt;
         }
         this.closeSanctum();
-        this.showToast(`سناریوی "${sc.title}" بارگذاری و بر شورا اعمال شد ✓`);
+        this.showToast(`سناریوی "${sc.title}" فعال شد ✓`);
+      });
+
+      card.querySelector('.btn-edit-scenario')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.openScenarioForm(sc);
+      });
+
+      card.querySelector('.btn-del-scenario')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (confirm(`آیا از حذف سناریوی "${sc.title}" اطمینان دارید؟`)) {
+          this.symposiumState.deleteCustomScenario(key);
+          this.renderScenariosGrid();
+          this.updateScenarioHeaderBadge();
+          this.showToast(`سناریوی "${sc.title}" حذف شد.`);
+        }
       });
 
       this.scenariosGrid.appendChild(card);
+    });
+  }
+
+  // ── Persona Creation & Management ──
+
+  openPersonaForm(persona = null) {
+    if (!this.personaFormCard) return;
+    this.personaFormCard.style.display = 'flex';
+
+    if (persona) {
+      if (this.personaFormHeading) this.personaFormHeading.textContent = 'ویرایش پرسونا';
+      if (this.personaFormId) this.personaFormId.value = persona.id;
+      if (this.personaFormTitle) this.personaFormTitle.value = persona.title || '';
+      if (this.personaFormBadge) this.personaFormBadge.value = persona.badge || '🎭 پرسونا';
+      if (this.personaFormColor) this.personaFormColor.value = persona.color || '#c084fc';
+      if (this.personaFormDirective) {
+        this.personaFormDirective.value = persona.directive || '';
+        this.syncTextareaDirection(this.personaFormDirective);
+      }
+    } else {
+      if (this.personaFormHeading) this.personaFormHeading.textContent = 'ساخت پرسونای جدید';
+      if (this.personaFormId) this.personaFormId.value = '';
+      if (this.personaFormTitle) this.personaFormTitle.value = '';
+      if (this.personaFormBadge) this.personaFormBadge.value = '🎭 پرسونا';
+      if (this.personaFormColor) this.personaFormColor.value = '#c084fc';
+      if (this.personaFormDirective) this.personaFormDirective.value = '';
+    }
+
+    requestAnimationFrame(() => this.personaFormTitle?.focus());
+  }
+
+  closePersonaForm() {
+    if (this.personaFormCard) {
+      this.personaFormCard.style.display = 'none';
+    }
+  }
+
+  handleSavePersonaForm() {
+    const title = this.personaFormTitle?.value?.trim();
+    if (!title) {
+      alert('لطفاً عنوان پرسونا را وارد نمایید.');
+      this.personaFormTitle?.focus();
+      return;
+    }
+
+    const directive = this.personaFormDirective?.value?.trim();
+    if (!directive) {
+      alert('لطفاً دستورالعمل سیستمی پرسونا را وارد نمایید.');
+      this.personaFormDirective?.focus();
+      return;
+    }
+
+    const id = this.personaFormId?.value || undefined;
+    const badge = this.personaFormBadge?.value?.trim() || '🎭 پرسونا';
+    const color = this.personaFormColor?.value || '#c084fc';
+
+    const saved = this.symposiumState.saveCustomPersona({
+      id,
+      title,
+      badge,
+      color,
+      directive
+    });
+
+    if (saved) {
+      this.closePersonaForm();
+      this.renderPersonasGrid();
+      this.showToast(`پرسونای "${saved.title}" در کتابخانه ذخیره شد ✓`);
+    }
+  }
+
+  renderPersonasGrid() {
+    if (!this.personasGrid) return;
+    const allPersonas = this.symposiumState.getAllPersonas();
+    const personaKeys = Object.keys(allPersonas);
+    this.personasGrid.innerHTML = '';
+
+    if (personaKeys.length === 0) {
+      this.personasGrid.innerHTML = `
+        <div style="padding: 24px 16px; text-align: center; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.15);">
+          <div style="font-size: 24px; margin-bottom: 6px;">🎭</div>
+          <div style="font-size: 12px; color: #f1f5f9; font-weight: 600;">هنوز هیچ پرسونایی تعریف نشده است</div>
+          <p style="font-size: 11px; color: #94a3b8; margin: 4px 0 12px;">پرسوناهای شناختی اختصاصی خود را با اهداف و دستورالعمل‌های دلخواه تعریف نمایید.</p>
+          <button type="button" class="btn-load-scenario" style="width: auto; padding: 6px 16px; margin: 0 auto; background: rgba(192, 132, 252, 0.25); border-color: rgba(192, 132, 252, 0.6); color: #e9d5ff;" id="btn-empty-create-persona">
+            <span>+ ساخت پرسونای جدید</span>
+          </button>
+        </div>
+      `;
+      document.getElementById('btn-empty-create-persona')?.addEventListener('click', () => {
+        this.openPersonaForm();
+      });
+      return;
+    }
+
+    personaKeys.forEach(key => {
+      const p = allPersonas[key];
+      const card = document.createElement('div');
+      card.className = 'persona-preset-card is-custom';
+      card.innerHTML = `
+        <div class="preset-card-top">
+          <div class="preset-identity">
+            <span class="preset-badge">${p.badge || '🎭'}</span>
+            <span class="preset-title" style="color: ${p.color || '#ffffff'};">${this.escapeHtml(p.title)}</span>
+          </div>
+          <div class="preset-card-actions">
+            <button type="button" class="btn-preset-use btn-edit-persona" title="ویرایش پرسونا">✏️ ویرایش</button>
+            <button type="button" class="btn-preset-del btn-del-persona" title="حذف پرسونا">✕</button>
+          </div>
+        </div>
+        <div class="preset-directive-preview" dir="auto">${this.escapeHtml(p.directive)}</div>
+      `;
+
+      card.querySelector('.btn-edit-persona')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.openPersonaForm(p);
+      });
+
+      card.querySelector('.btn-del-persona')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (confirm(`آیا از حذف پرسونای "${p.title}" اطمینان دارید؟`)) {
+          this.symposiumState.deleteCustomPersona(key);
+          this.renderPersonasGrid();
+          this.showToast(`پرسونای "${p.title}" حذف شد.`);
+        }
+      });
+
+      this.personasGrid.appendChild(card);
+    });
+  }
+
+  renderDaisFloorPlan() {
+    if (!this.daisFloorCircle) return;
+    this.daisFloorCircle.innerHTML = '';
+
+    this.symposiumState.seats.forEach((seat, idx) => {
+      const node = document.createElement('div');
+      node.className = 'dais-floor-chair-node';
+      node.title = `کلیک برای بازرسی و ویرایش سریع ${seat.name}`;
+      node.innerHTML = `
+        <span class="chair-dot" style="background:${seat.color || '#c084fc'};color:${seat.color || '#c084fc'};"></span>
+        <span>${this.escapeHtml(seat.name)}</span>
+        <span style="font-size:9.5px;color:#94a3b8;">(${seat.personaBadge || 'Chair'})</span>
+      `;
+
+      node.addEventListener('click', () => {
+        this.closeSanctum();
+        this.openSeatInspector(idx);
+      });
+
+      this.daisFloorCircle.appendChild(node);
     });
   }
 
@@ -870,223 +1378,6 @@ export class SilkSymposiumOrchestrator {
     });
   }
 
-  renderPresetsDropdown() {
-    if (!this.sanctumPresetPicker) return;
-    const allPersonas = this.symposiumState.getAllPersonas();
-    this.sanctumPresetPicker.innerHTML = '<option value="">-- انتخاب از الگوهای آماده (Preset Templates) --</option>';
-
-    Object.keys(allPersonas).forEach(key => {
-      const p = allPersonas[key];
-      const opt = document.createElement('option');
-      opt.value = key;
-      opt.textContent = `${p.badge || '🎭'} ${p.title} ${p.isCustom ? '★ (سفارشی)' : ''}`;
-      this.sanctumPresetPicker.appendChild(opt);
-    });
-  }
-
-  renderPresetsLibrary() {
-    if (!this.presetsListContainer) return;
-    const allPersonas = this.symposiumState.getAllPersonas();
-    this.presetsListContainer.innerHTML = '';
-
-    Object.keys(allPersonas).forEach(key => {
-      const p = allPersonas[key];
-      const card = document.createElement('div');
-      card.className = `persona-preset-card ${p.isCustom ? 'is-custom' : ''}`;
-      card.innerHTML = `
-        <div class="preset-card-top">
-          <div class="preset-identity">
-            <span class="preset-badge">${p.badge || '🎭'}</span>
-            <span class="preset-title">${this.escapeHtml(p.title)}</span>
-          </div>
-          <div class="preset-card-actions">
-            <button type="button" class="btn-preset-use" data-preset-key="${key}" title="اعمال این الگو برای مدل انتخاب‌شده">
-              استفاده ⚡
-            </button>
-            ${p.isCustom ? `
-              <button type="button" class="btn-preset-del" data-preset-key="${key}" title="حذف این الگوی سفارشی">✕</button>
-            ` : ''}
-          </div>
-        </div>
-        <div class="preset-directive-preview" dir="auto">
-          ${this.escapeHtml(p.directive || '')}
-        </div>
-      `;
-
-      card.querySelector('.btn-preset-use')?.addEventListener('click', () => {
-        this.applyPresetToActiveEditor(key);
-        this.switchSanctumTab('personas');
-      });
-
-      card.querySelector('.btn-preset-del')?.addEventListener('click', () => {
-        if (confirm(`آیا از حذف الگوی "${p.title}" اطمینان دارید؟`)) {
-          this.symposiumState.deleteCustomPersona(key);
-          this.renderPresetsDropdown();
-          this.renderPresetsLibrary();
-          this.showToast('الگوی سفارشی حذف شد ✓');
-        }
-      });
-
-      this.presetsListContainer.appendChild(card);
-    });
-  }
-
-  applyPresetToActiveEditor(presetKey) {
-    const p = this.symposiumState.getPersona(presetKey);
-    if (!p) return;
-
-    if (this.sanctumSeatTitleInput) this.sanctumSeatTitleInput.value = p.title || '';
-    if (this.sanctumSeatBadgeInput) this.sanctumSeatBadgeInput.value = p.badge || '';
-    if (this.sanctumSeatDirectiveTextarea) {
-      this.sanctumSeatDirectiveTextarea.value = p.directive || '';
-      this.syncTextareaDirection(this.sanctumSeatDirectiveTextarea);
-    }
-    if (this.sanctumPresetPicker) this.sanctumPresetPicker.value = presetKey;
-    this.showToast(`الگوی "${p.title}" در ویرایشگر بارگذاری شد ✓`);
-  }
-
-  loadSeatIntoEditor(seatIndex) {
-    this.activeSanctumSeatIndex = seatIndex;
-    const seat = this.symposiumState.seats[seatIndex];
-    if (!seat) return;
-
-    if (this.sanctumSeatTitleInput) this.sanctumSeatTitleInput.value = seat.personaTitle || '';
-    if (this.sanctumSeatBadgeInput) this.sanctumSeatBadgeInput.value = seat.personaBadge || '';
-    if (this.sanctumSeatDirectiveTextarea) {
-      this.sanctumSeatDirectiveTextarea.value = seat.personaDirective || '';
-      this.syncTextareaDirection(this.sanctumSeatDirectiveTextarea);
-    }
-    if (this.sanctumSeatWeightInput) this.sanctumSeatWeightInput.value = seat.weight ?? 100;
-    if (this.sanctumSeatMuteCheck) this.sanctumSeatMuteCheck.checked = Boolean(seat.isMuted);
-    if (this.sanctumSeatCustomTemplateTextarea) this.sanctumSeatCustomTemplateTextarea.value = seat.customPromptTemplate || '';
-    if (this.sanctumGlobalDirectiveTextarea) {
-      this.sanctumGlobalDirectiveTextarea.value = this.symposiumState.config.globalDirective || '';
-      this.syncTextareaDirection(this.sanctumGlobalDirectiveTextarea);
-    }
-
-    if (this.sanctumPresetPicker) {
-      this.sanctumPresetPicker.value = seat.personaKey || '';
-    }
-  }
-
-  saveActiveSeatFromEditor() {
-    const seatIndex = this.activeSanctumSeatIndex;
-    const seat = this.symposiumState.seats[seatIndex];
-    if (!seat) return;
-
-    const title = this.sanctumSeatTitleInput?.value?.trim() || seat.personaTitle || 'AI Chair';
-    const badge = this.sanctumSeatBadgeInput?.value?.trim() || seat.personaBadge || '🎭 Custom';
-    const directive = this.sanctumSeatDirectiveTextarea?.value?.trim() || '';
-    const weight = parseInt(this.sanctumSeatWeightInput?.value, 10) || 100;
-    const isMuted = Boolean(this.sanctumSeatMuteCheck?.checked);
-    const customPromptTemplate = this.sanctumSeatCustomTemplateTextarea?.value?.trim() || '';
-
-    // Save global directive if modified
-    if (this.sanctumGlobalDirectiveTextarea) {
-      this.symposiumState.config.globalDirective = this.sanctumGlobalDirectiveTextarea.value.trim();
-    }
-
-    this.symposiumState.updateSeat(seatIndex, {
-      personaTitle: title,
-      personaBadge: badge,
-      personaDirective: directive,
-      weight,
-      isMuted,
-      customPromptTemplate,
-      isCustomized: true
-    });
-
-    this.symposiumState.persistConfig();
-    this.dais.render(
-      this.symposiumState.seats,
-      this.symposiumState.activeSpeakerIndex,
-      this.symposiumState.sessionStatus === 'WAITING_FOR_USER',
-      this.symposiumState.recommendedNextSpeakerIndex,
-      this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO'
-    );
-    this.updateSanctumSeatSelector();
-    this.updateComposerSpeakerHint();
-    this.showToast(`تنظیمات و پرومپت "${seat.name}" با موفقیت ذخیره شد ✓`);
-  }
-
-  applyActiveSeatToAllModels() {
-    const seatIndex = this.activeSanctumSeatIndex;
-    const seat = this.symposiumState.seats[seatIndex];
-    if (!seat) return;
-
-    const title = this.sanctumSeatTitleInput?.value?.trim() || seat.personaTitle;
-    const badge = this.sanctumSeatBadgeInput?.value?.trim() || seat.personaBadge;
-    const directive = this.sanctumSeatDirectiveTextarea?.value?.trim() || seat.personaDirective;
-    const customPromptTemplate = this.sanctumSeatCustomTemplateTextarea?.value?.trim() || '';
-
-    if (!confirm('آیا مایلید این شخصیت و دستورات سیستمی به تمام مدل‌های هوش مصنوعی در میزگرد اعمال شود؟')) return;
-
-    this.symposiumState.seats.forEach((s, idx) => {
-      if (!s.isUser) {
-        this.symposiumState.updateSeat(idx, {
-          personaTitle: title,
-          personaBadge: badge,
-          personaDirective: directive,
-          customPromptTemplate,
-          isCustomized: true
-        });
-      }
-    });
-
-    this.symposiumState.persistConfig();
-    this.dais.render(
-      this.symposiumState.seats,
-      this.symposiumState.activeSpeakerIndex,
-      this.symposiumState.sessionStatus === 'WAITING_FOR_USER',
-      this.symposiumState.recommendedNextSpeakerIndex,
-      this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO'
-    );
-    this.showToast('شخصیت و دستورات به تمام مدل‌های میزگرد اعمال شد ✓');
-  }
-
-  saveActiveSeatAsNewPreset() {
-    const title = this.sanctumSeatTitleInput?.value?.trim();
-    const badge = this.sanctumSeatBadgeInput?.value?.trim() || '🎭 Custom';
-    const directive = this.sanctumSeatDirectiveTextarea?.value?.trim();
-
-    if (!title || !directive) {
-      alert('لطفاً عنوان شخصیت و متن پرومپت سیستمی را پر کنید.');
-      return;
-    }
-
-    const newPreset = this.symposiumState.saveCustomPersona({
-      title,
-      badge,
-      directive
-    });
-
-    if (newPreset) {
-      this.renderPresetsDropdown();
-      this.renderPresetsLibrary();
-      if (this.sanctumPresetPicker) this.sanctumPresetPicker.value = newPreset.id;
-      this.showToast(`الگوی آماده "${newPreset.title}" با موفقیت ایجاد و ذخیره شد ✓`);
-    }
-  }
-
-  promptCreateNewPreset() {
-    const title = prompt('عنوان الگوی جدید (مثلاً: "منتقد ارشد امنیتی"):');
-    if (!title) return;
-    const badge = prompt('آیکون یا نشان کوتاه (مثلاً: "🛡️ Security"):') || '🎭 Template';
-    const directive = prompt('دستورالعمل سیستمی و پرومپت الگو:') || '';
-
-    const newPreset = this.symposiumState.saveCustomPersona({
-      title,
-      badge,
-      directive
-    });
-
-    if (newPreset) {
-      this.renderPresetsDropdown();
-      this.renderPresetsLibrary();
-      this.showToast(`الگوی "${newPreset.title}" اضافه شد ✓`);
-    }
-  }
-
   loadProtocolsIntoEditor() {
     if (this.topologySelect) this.topologySelect.value = this.symposiumState.debateMode;
     if (this.maxRoundsInput) this.maxRoundsInput.value = this.symposiumState.config.maxRounds;
@@ -1099,6 +1390,10 @@ export class SilkSymposiumOrchestrator {
     if (this.maxRoundsInput) this.symposiumState.config.maxRounds = parseInt(this.maxRoundsInput.value, 10) || 10;
     if (this.distillSelect) this.symposiumState.config.contextDistillation = this.distillSelect.value;
     if (this.templateTextarea) this.symposiumState.config.promptTemplate = this.templateTextarea.value.trim() || DEFAULT_DIALECTIC_TEMPLATE;
+
+    if (this.sanctumGlobalDirectiveTextarea) {
+      this.symposiumState.config.globalDirective = this.sanctumGlobalDirectiveTextarea.value.trim();
+    }
 
     this.symposiumState.persistConfig();
     this.updateHeaderStats();
@@ -1118,14 +1413,24 @@ export class SilkSymposiumOrchestrator {
     if (this.sanctumUserPersonaSelect) {
       this.sanctumUserPersonaSelect.innerHTML = '';
       const allPersonas = this.symposiumState.getAllPersonas();
-      Object.keys(allPersonas).forEach(key => {
-        const p = allPersonas[key];
+      const personaKeys = Object.keys(allPersonas);
+
+      if (personaKeys.length === 0) {
         const opt = document.createElement('option');
-        opt.value = key;
-        opt.textContent = `${p.badge || '👑'} ${p.title}`;
-        if (key === u.personaKey) opt.selected = true;
+        opt.value = 'maestro';
+        opt.textContent = '👑 Lead Maestro';
+        opt.selected = true;
         this.sanctumUserPersonaSelect.appendChild(opt);
-      });
+      } else {
+        personaKeys.forEach(key => {
+          const p = allPersonas[key];
+          const opt = document.createElement('option');
+          opt.value = key;
+          opt.textContent = `${p.badge || '👑'} ${p.title}`;
+          if (key === u.personaKey) opt.selected = true;
+          this.sanctumUserPersonaSelect.appendChild(opt);
+        });
+      }
     }
   }
 

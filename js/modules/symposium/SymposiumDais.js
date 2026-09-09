@@ -62,7 +62,7 @@ export class SymposiumDais {
           </span>
         </div>
         <div class="seat-hover-actions">
-          <button type="button" class="btn-seat-quick-action btn-seat-edit" title="Configure Persona & Directives">⚙️</button>
+          <button type="button" class="btn-seat-quick-action btn-seat-edit" title="بازرسی و تنظیم سریع پرسونا (Inline Inspector)">⚙️</button>
           ${!isUserSeat ? `
             <button type="button" class="btn-seat-quick-action btn-seat-mute ${seat.isMuted ? 'muted' : ''}" title="${seat.isMuted ? 'Unmute' : 'Mute'}">
               ${seat.isMuted ? '🔇' : '🔊'}
@@ -72,10 +72,15 @@ export class SymposiumDais {
         </div>
       `;
 
-      // 1. Configure Seat
+      // 1. Contextual Inline Inspector trigger via Gear
       seatCard.querySelector('.btn-seat-edit')?.addEventListener('click', (e) => {
         e.stopPropagation();
-        this.callbacks.onConfigureSeat(idx);
+        const rect = seatCard.getBoundingClientRect();
+        if (typeof this.callbacks.onOpenInspector === 'function') {
+          this.callbacks.onOpenInspector(idx, rect);
+        } else {
+          this.callbacks.onConfigureSeat(idx);
+        }
       });
 
       // 2. Mute / Unmute
@@ -90,7 +95,17 @@ export class SymposiumDais {
         this.callbacks.onPassBaton(idx);
       });
 
-      // 4. Clicking the Pod passes the speaking baton or targets the seat
+      // 4. Clicking the avatar or pod opens the quick inline inspector if not dragging
+      seatCard.querySelector('.seat-jewel-avatar')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const rect = seatCard.getBoundingClientRect();
+        if (typeof this.callbacks.onOpenInspector === 'function') {
+          this.callbacks.onOpenInspector(idx, rect);
+        } else {
+          this.callbacks.onConfigureSeat(idx);
+        }
+      });
+
       seatCard.addEventListener('click', () => {
         this.callbacks.onPassBaton(idx);
       });
