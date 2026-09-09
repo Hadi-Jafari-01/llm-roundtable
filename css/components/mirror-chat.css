@@ -1,36 +1,38 @@
 /* ==========================================================================
    OmniAI Hub — The Silk Mirror Sanctuary (Native Unified Chat Studio)
-   Haute Digital Aesthetic: Obsidian Rose & Frosted Silk
+   Haute Digital Aesthetic: Obsidian Rose & Frosted Silk Glass
+   Spatial Kinematics • VisionOS Translucency • Bioluminescent Sheen
    ========================================================================== */
 
 .mirror-chat-studio {
   position: fixed;
   top: 50px;
-  right: 16px;
-  bottom: 16px;
-  width: 540px;
+  right: 18px;
+  bottom: 18px;
+  width: 560px;
   min-width: 420px;
-  max-width: calc(100vw - 32px);
+  max-width: calc(100vw - 36px);
   z-index: 1050;
-  background: linear-gradient(175deg, rgba(14, 17, 28, 0.96) 0%, rgba(9, 10, 17, 0.98) 100%);
-  backdrop-filter: blur(36px) saturate(190%);
-  -webkit-backdrop-filter: blur(36px) saturate(190%);
-  border: 1px solid rgba(192, 132, 252, 0.25);
-  border-radius: 18px;
-  box-shadow: 0 28px 70px -10px rgba(0, 0, 0, 0.88),
-              0 0 0 1px rgba(255, 255, 255, 0.06) inset,
-              0 10px 36px rgba(129, 140, 248, 0.16);
+  background: var(--bg-mirror-studio);
+  backdrop-filter: blur(44px) saturate(220%);
+  -webkit-backdrop-filter: blur(44px) saturate(220%);
+  border: 1px solid rgba(192, 132, 252, 0.32);
+  border-radius: 20px;
+  box-shadow: 0 32px 85px -12px rgba(0, 0, 0, 0.92),
+              inset 0 1px 1px rgba(255, 255, 255, 0.15),
+              inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+              0 12px 42px rgba(129, 140, 248, 0.2);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   box-sizing: border-box;
-  color: #f1f5f9;
+  color: #f8fafc;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
-  transform: translateX(120%);
+  transform: translateX(125%);
   opacity: 0;
   pointer-events: none;
-  transition: transform 0.36s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.28s ease,
+  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.3s ease,
               width 0.2s ease;
 }
 
@@ -45,18 +47,37 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 6px;
+  width: 8px;
   height: 100%;
   cursor: ew-resize;
   background: transparent;
-  transition: background 0.2s ease;
-  z-index: 10;
+  transition: all 0.2s ease;
+  z-index: 15;
+}
+
+.mirror-resize-handle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 40px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  transition: all 0.2s ease;
+}
+
+.mirror-resize-handle:hover::after,
+.mirror-resize-handle.resizing::after {
+  height: 60px;
+  background: #c084fc;
+  box-shadow: 0 0 10px #c084fc;
 }
 
 .mirror-resize-handle:hover,
 .mirror-resize-handle.resizing {
-  background: rgba(192, 132, 252, 0.5);
-  box-shadow: 0 0 12px rgba(192, 132, 252, 0.6);
+  background: rgba(192, 132, 252, 0.12);
 }
 
 /* Header Area */
@@ -77,21 +98,27 @@
 }
 
 .mirror-spark-badge {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, rgba(244, 114, 182, 0.25) 0%, rgba(192, 132, 252, 0.25) 100%);
-  border: 1px solid rgba(244, 114, 182, 0.4);
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(244, 114, 182, 0.3) 0%, rgba(192, 132, 252, 0.35) 100%);
+  border: 1px solid rgba(244, 114, 182, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #f472b6;
-  box-shadow: 0 0 12px rgba(244, 114, 182, 0.3);
+  color: #fbcfe8;
+  box-shadow: 0 0 16px rgba(244, 114, 182, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  animation: badgeBreathe 4s infinite ease-in-out alternate;
+}
+
+@keyframes badgeBreathe {
+  0% { transform: scale(0.96); filter: drop-shadow(0 0 4px rgba(244, 114, 182, 0.3)); }
+  100% { transform: scale(1.04); filter: drop-shadow(0 0 12px rgba(192, 132, 252, 0.6)); }
 }
 
 .mirror-spark-badge svg {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
 }
 
 .mirror-title-text h3 {
@@ -263,18 +290,18 @@
   margin: 0;
 }
 
-/* Message Rows & Bubbles */
+/* Message Rows & Bubbles (Haute Digital Obsidian Rose Architecture) */
 .mirror-message-turn {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  max-width: 90%;
-  animation: turnPopIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  gap: 5px;
+  max-width: 88%;
+  animation: turnPopIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes turnPopIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .mirror-message-turn.user {
@@ -290,9 +317,11 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 9.5px;
+  font-size: 10px;
+  font-weight: 500;
   color: #64748b;
-  padding: 0 4px;
+  padding: 0 6px;
+  letter-spacing: 0.02em;
 }
 
 .mirror-message-turn.user .mirror-turn-meta {
@@ -300,69 +329,204 @@
 }
 
 .mirror-bubble-card {
-  padding: 12px 15px;
-  border-radius: 14px;
-  font-size: 13px;
-  line-height: 1.6;
+  padding: 13px 17px;
+  border-radius: 16px;
+  font-size: 13.5px;
+  line-height: 1.65;
   box-sizing: border-box;
   word-break: break-word;
   user-select: text;
+  transition: all 0.2s ease;
+  unicode-bidi: plaintext;
+  text-align: start;
 }
 
+/* RTL Specific Typography & Layout Rules */
+.mirror-bubble-card[dir="rtl"],
+.mirror-bubble-card.is-rtl {
+  direction: rtl !important;
+  text-align: right !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "Segoe UI", Tahoma, Roboto, sans-serif;
+  line-height: 1.82;
+  letter-spacing: normal !important;
+}
+
+.mirror-bubble-card[dir="ltr"],
+.mirror-bubble-card.is-ltr {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* User Bubble: Rich Cashmere Amethyst & Rose Sheen */
 .mirror-message-turn.user .mirror-bubble-card {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(168, 85, 247, 0.25) 100%);
-  border: 1px solid rgba(192, 132, 252, 0.35);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.32) 0%, rgba(168, 85, 247, 0.36) 50%, rgba(236, 72, 153, 0.28) 100%);
+  border: 1px solid rgba(192, 132, 252, 0.45);
   color: #ffffff;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.25);
   border-top-right-radius: 4px;
 }
 
+/* Assistant Bubble: Velvet Frosted Dark Silk with Adaptive Directional Border */
 .mirror-message-turn.assistant .mirror-bubble-card {
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-left: 3px solid #818cf8;
-  color: #f1f5f9;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  background: rgba(18, 22, 38, 0.76);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-left: 3px solid #c084fc;
+  color: #f8fafc;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.07);
   border-top-left-radius: 4px;
+}
+
+.mirror-message-turn.assistant .mirror-bubble-card[dir="rtl"],
+.mirror-message-turn.assistant .mirror-bubble-card.is-rtl {
+  border-left: 1px solid rgba(255, 255, 255, 0.09);
+  border-right: 3px solid #c084fc;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 4px;
 }
 
 /* Markdown Rendering Inside Assistant Bubbles */
 .mirror-markdown-content p {
   margin: 0 0 10px 0;
+  unicode-bidi: plaintext;
+  text-align: start;
 }
 .mirror-markdown-content p:last-child {
   margin-bottom: 0;
 }
 
+.mirror-markdown-content p[dir="rtl"],
+.mirror-markdown-content .is-rtl {
+  direction: rtl !important;
+  text-align: right !important;
+  letter-spacing: normal !important;
+  line-height: 1.82;
+}
+
+.mirror-markdown-content p[dir="ltr"],
+.mirror-markdown-content .is-ltr {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* Bidirectional Headings & Lists */
+.mirror-markdown-content h3[dir="rtl"],
+.mirror-markdown-content h4[dir="rtl"],
+.mirror-markdown-content h5[dir="rtl"] {
+  direction: rtl !important;
+  text-align: right !important;
+  letter-spacing: normal !important;
+}
+
+.mirror-markdown-content ul,
+.mirror-markdown-content ol {
+  margin: 8px 0;
+  padding-inline-start: 22px;
+}
+
+.mirror-markdown-content li[dir="rtl"] {
+  direction: rtl !important;
+  text-align: right !important;
+  letter-spacing: normal !important;
+  line-height: 1.75;
+}
+
+/* Inline Code: Strict LTR Isolation */
 .mirror-markdown-content code.inline-code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+  display: inline-block;
+  vertical-align: baseline;
+  text-align: left !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
   font-size: 11.5px;
   padding: 2px 6px;
+  margin: 0 2px;
   border-radius: 5px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #f472b6;
 }
 
+/* Blockquote Bidirectional Formatting */
+.mirror-markdown-content blockquote {
+  margin: 8px 0;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border-inline-start: 3px solid rgba(192, 132, 252, 0.5);
+  border-radius: 4px;
+  color: #cbd5e1;
+}
+
+.mirror-markdown-content blockquote[dir="rtl"] {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+/* Code Blocks: Strict LTR Isolation with Haute Studio Finish */
 .mirror-code-block {
-  margin: 10px 0;
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+  text-align: left !important;
+  margin: 12px 0;
   border-radius: 10px;
-  background: #090b12;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #080a14 !important;
+  border: 1px solid rgba(192, 132, 252, 0.22) !important;
   overflow: hidden;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6) !important;
 }
 
 .mirror-code-header {
+  direction: ltr !important;
+  text-align: left !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 11px;
+  color: #a5b4fc;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.code-lang-tag {
+  font-weight: 600;
+  text-transform: lowercase;
+  letter-spacing: 0.03em;
+  color: #c084fc;
+}
+
+.mirror-code-body {
+  padding: 12px 14px;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  font-size: 12px;
+  line-height: 1.55;
+  color: #e2e8f0;
+  margin: 0;
+  white-space: pre;
+  tab-size: 2;
+}
+
+.btn-copy-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
   font-size: 10.5px;
-  color: #94a3b8;
-  font-family: ui-monospace, monospace;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.btn-copy-code:hover {
+  background: rgba(192, 132, 252, 0.2);
+  color: #ffffff;
+  border-color: rgba(192, 132, 252, 0.45);
 }
 
 .btn-copy-code {
@@ -403,13 +567,14 @@
   border-radius: 4px;
 }
 
-/* DeepSeek / o1 / o3 Reasoning Fold */
+/* DeepSeek / o1 / o3 Reasoning Fold (Amethyst Glow Accordion) */
 .mirror-reasoning-fold {
-  margin-bottom: 10px;
-  border-radius: 8px;
-  background: rgba(192, 132, 252, 0.06);
-  border: 1px solid rgba(192, 132, 252, 0.2);
+  margin-bottom: 12px;
+  border-radius: 10px;
+  background: rgba(192, 132, 252, 0.07);
+  border: 1px solid rgba(192, 132, 252, 0.28);
   overflow: hidden;
+  box-shadow: 0 4px 14px rgba(192, 132, 252, 0.08);
 }
 
 .reasoning-fold-trigger {
@@ -417,22 +582,38 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 10px;
-  background: transparent;
+  padding: 7px 12px;
+  background: rgba(192, 132, 252, 0.04);
   border: none;
-  color: #c084fc;
-  font-size: 11px;
-  font-weight: 500;
+  color: #d8b4fe;
+  font-size: 11.5px;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.reasoning-fold-trigger:hover {
+  background: rgba(192, 132, 252, 0.12);
+  color: #ffffff;
 }
 
 .reasoning-fold-body {
-  padding: 8px 10px;
-  border-top: 1px solid rgba(192, 132, 252, 0.12);
-  font-size: 11.5px;
-  color: #94a3b8;
-  line-height: 1.5;
+  padding: 10px 14px;
+  border-top: 1px solid rgba(192, 132, 252, 0.15);
+  font-size: 12px;
+  color: #cbd5e1;
+  line-height: 1.55;
   font-style: italic;
+  unicode-bidi: plaintext;
+}
+
+.reasoning-fold-body[dir="rtl"],
+.reasoning-fold-body.is-rtl {
+  direction: rtl !important;
+  text-align: right !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "Segoe UI", Tahoma, Roboto, sans-serif;
+  line-height: 1.75;
+  letter-spacing: normal !important;
 }
 
 /* Real-Time Live Streaming Pulse */
@@ -486,42 +667,46 @@
   color: #64748b;
 }
 
-/* Anti-Bot Stealth Badge in Mirror Sanctuary Dock */
+/* Anti-Bot Stealth Badge in Mirror Sanctuary Dock (Crystal Glow Pill) */
 .mirror-stealth-badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 2px 7px;
-  border-radius: 12px;
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  color: #34d399;
-  font-size: 9.5px;
-  font-weight: 500;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #6ee7b7;
+  font-size: 10px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: inherit;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
 }
 
 .mirror-stealth-badge:hover {
-  background: rgba(16, 185, 129, 0.22);
-  border-color: rgba(16, 185, 129, 0.5);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.28) 0%, rgba(5, 150, 105, 0.2) 100%);
+  border-color: rgba(16, 185, 129, 0.7);
   color: #ffffff;
+  box-shadow: 0 0 18px rgba(16, 185, 129, 0.4);
+  transform: translateY(-1px);
 }
 
 .mirror-stealth-badge .stealth-dot {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: #34d399;
-  box-shadow: 0 0 6px #34d399;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
   animation: stealthPulse 2s infinite ease-in-out alternate;
 }
 
 .mirror-stealth-badge.disabled {
   background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.12);
   color: #94a3b8;
+  box-shadow: none;
 }
 
 .mirror-stealth-badge.disabled .stealth-dot {
@@ -531,8 +716,8 @@
 }
 
 @keyframes stealthPulse {
-  0% { transform: scale(0.85); opacity: 0.6; }
-  100% { transform: scale(1.15); opacity: 1; }
+  0% { transform: scale(0.85); box-shadow: 0 0 4px #10b981; }
+  100% { transform: scale(1.25); box-shadow: 0 0 12px #34d399; }
 }
 
 .btn-stop-streaming-jewel {
@@ -585,12 +770,28 @@
   border: none;
   outline: none;
   color: #f8fafc;
-  font-family: inherit;
+  font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
   font-size: 13px;
   line-height: 1.5;
   resize: none;
   padding: 2px;
   box-sizing: border-box;
+  unicode-bidi: plaintext;
+  text-align: start;
+}
+
+.mirror-textarea[dir="rtl"],
+.mirror-textarea.is-rtl {
+  direction: rtl !important;
+  text-align: right !important;
+  line-height: 1.75;
+  letter-spacing: normal !important;
+}
+
+.mirror-textarea[dir="rtl"]::placeholder,
+.mirror-textarea.is-rtl::placeholder {
+  direction: rtl !important;
+  text-align: right !important;
 }
 
 .mirror-textarea::placeholder {

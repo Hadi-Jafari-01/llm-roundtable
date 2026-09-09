@@ -662,6 +662,7 @@ class OmniApp {
 
         const focusedDriver = focusedCard.url ? domDriverRegistry.getDriverForUrl(focusedCard.url) : domDriverRegistry.getDrivers().generic;
 
+        let delivered = false;
         if (targetIframe && targetIframe.contentWindow) {
           try {
             targetIframe.contentWindow.postMessage({
@@ -671,32 +672,35 @@ class OmniApp {
               targetCardId: focusedCard.id,
               driver: focusedDriver
             }, '*');
+            delivered = true;
           } catch (err) {
             console.warn('[OmniAI Hub] Direct postMessage failed:', err);
           }
         }
 
-        // 2. Also send via runtime relay specifying targetCardId and targetHost
-        let targetHost = '';
-        try {
-          if (focusedCard.url) {
-            targetHost = new URL(focusedCard.url).hostname;
+        // ارسال رله پس‌زمینه تنها در صورت ناموفق بودن ارتباط مستقیم
+        if (!delivered) {
+          let targetHost = '';
+          try {
+            if (focusedCard.url) {
+              targetHost = new URL(focusedCard.url).hostname;
+            }
+          } catch (_) {}
+
+          const runtimeApi = (typeof browser !== 'undefined' && browser.runtime) 
+            ? browser.runtime 
+            : (typeof chrome !== 'undefined' && chrome.runtime ? chrome.runtime : null);
+
+          if (runtimeApi?.sendMessage) {
+            runtimeApi.sendMessage({
+              action: 'RELAY_PROMPT',
+              prompt: text,
+              messageId: messageId,
+              targetCardId: focusedCard.id,
+              targetHost: targetHost,
+              scope: 'focused'
+            });
           }
-        } catch (_) {}
-
-        const runtimeApi = (typeof browser !== 'undefined' && browser.runtime) 
-          ? browser.runtime 
-          : (typeof chrome !== 'undefined' && chrome.runtime ? chrome.runtime : null);
-
-        if (runtimeApi?.sendMessage) {
-          runtimeApi.sendMessage({
-            action: 'RELAY_PROMPT',
-            prompt: text,
-            messageId: messageId,
-            targetCardId: focusedCard.id,
-            targetHost: targetHost,
-            scope: 'focused'
-          });
         }
 
         // Reset studio inputs

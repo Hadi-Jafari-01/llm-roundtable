@@ -64,10 +64,17 @@ export class MirrorChatStudio {
       this.updateStealthIndicator(driver);
     });
 
-    // Auto-expanding textarea & character count
+    // Auto-expanding textarea & bidirectional real-time detection
     this.textarea?.addEventListener('input', () => {
-      const len = this.textarea.value.length;
+      const val = this.textarea.value;
+      const len = val.length;
       if (this.charCountEl) this.charCountEl.textContent = `${len} chars`;
+      
+      // Dynamic RTL / LTR input text alignment
+      const dir = this.detectTextDirection(val);
+      this.textarea.setAttribute('dir', dir);
+      this.textarea.classList.toggle('is-rtl', dir === 'rtl');
+
       this.textarea.style.height = 'auto';
       this.textarea.style.height = Math.min(this.textarea.scrollHeight, 150) + 'px';
     });
@@ -104,11 +111,14 @@ export class MirrorChatStudio {
     this.streamViewport?.addEventListener('click', (e) => {
       const copyBtn = e.target.closest('.btn-copy-code');
       if (copyBtn) {
-        const pre = copyBtn.closest('.mirror-code-block')?.querySelector('.mirror-code-body');
-        if (pre) {
-          navigator.clipboard.writeText(pre.innerText);
-          copyBtn.textContent = '✓ Copied!';
-          setTimeout(() => { copyBtn.textContent = 'Copy'; }, 1800);
+        const codeEl = copyBtn.closest('.mirror-code-block')?.querySelector('.mirror-code-body code') ||
+                       copyBtn.closest('.mirror-code-block')?.querySelector('.mirror-code-body');
+        if (codeEl) {
+          navigator.clipboard.writeText(codeEl.textContent || codeEl.innerText);
+          const labelSpan = copyBtn.querySelector('span') || copyBtn;
+          const origText = labelSpan.textContent;
+          labelSpan.textContent = '✓ Copied!';
+          setTimeout(() => { labelSpan.textContent = origText; }, 1800);
         }
       }
     });
@@ -369,38 +379,40 @@ export class MirrorChatStudio {
     // Reset textarea
     this.textarea.value = '';
     this.textarea.style.height = 'auto';
+    this.textarea.setAttribute('dir', 'ltr');
+    this.textarea.classList.remove('is-rtl');
     if (this.charCountEl) this.charCountEl.textContent = '0 chars';
 
-    // Dispatch to Target Iframe
+    // ایجاد شناسه یکتا برای پیام جهت جلوگیری قطعی از ارسال مجدد
+    const messageId = `mirror_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
     const iframe = this.getTargetIframe();
     const payload = {
       action: 'MIRROR_DISPATCH_PROMPT',
       cardId: this.activeCardId,
+      messageId,
       prompt: text,
       driver
     };
 
+    let delivered = false;
     if (iframe?.contentWindow) {
       try {
         iframe.contentWindow.postMessage(payload, '*');
+        delivered = true;
       } catch (e) {
         console.warn('[MirrorChat] Direct postMessage failed:', e);
       }
     }
 
-    // Also broadcast to matching card iframe containers
-    document.querySelectorAll('#spatial-cards-container iframe').forEach(ifr => {
-      if (ifr !== iframe && (ifr.dataset.cardId === this.activeCardId || ifr.name === this.activeCardId)) {
-        try { ifr.contentWindow?.postMessage(payload, '*'); } catch (_) {}
+    // در صورت تحویل موفق مستقیم از طریق postMessage، از ارسال دوباره رله پس‌زمینه اجتناب می‌شود
+    if (!delivered) {
+      const runtimeApi = (typeof browser !== 'undefined' && browser.runtime)
+        ? browser.runtime
+        : (typeof chrome !== 'undefined' && chrome.runtime ? chrome.runtime : null);
+
+      if (runtimeApi?.sendMessage) {
+        runtimeApi.sendMessage(payload);
       }
-    });
-
-    const runtimeApi = (typeof browser !== 'undefined' && browser.runtime)
-      ? browser.runtime
-      : (typeof chrome !== 'undefined' && chrome.runtime ? chrome.runtime : null);
-
-    if (runtimeApi?.sendMessage) {
-      runtimeApi.sendMessage(payload);
     }
 
     // Safety timeout: prevent UI lock if model takes over 50s without streaming
@@ -555,20 +567,25 @@ export class MirrorChatStudio {
       turnEl.className = `mirror-message-turn ${turn.role}`;
       turnEl.id = `turn-${turn.id}`;
 
+      const textDirection = this.detectTextDirection(turn.text || '');
+      const isRTL = textDirection === 'rtl';
+
       if (turn.role === 'user') {
         turnEl.innerHTML = `
           <div class="mirror-turn-meta"><span>You</span> • <span>${turn.time}</span></div>
-          <div class="mirror-bubble-card">${this.escapeHtml(turn.text)}</div>
+          <div class="mirror-bubble-card ${isRTL ? 'is-rtl' : 'is-ltr'}" dir="${textDirection}">${this.escapeHtml(turn.text)}</div>
         `;
       } else {
         const renderedMarkdown = this.renderMarkdown(turn.text || '');
+        const thinkingDirection = this.detectTextDirection(turn.thinkingText || '');
+
         const reasoningHtml = turn.thinkingText ? `
           <div class="mirror-reasoning-fold">
             <button type="button" class="reasoning-fold-trigger">
               <span>🧠 Thinking Process</span>
               <span>▼</span>
             </button>
-            <div class="reasoning-fold-body">${this.escapeHtml(turn.thinkingText)}</div>
+            <div class="reasoning-fold-body ${thinkingDirection === 'rtl' ? 'is-rtl' : ''}" dir="${thinkingDirection}">${this.escapeHtml(turn.thinkingText)}</div>
           </div>
         ` : '';
 
@@ -578,7 +595,7 @@ export class MirrorChatStudio {
 
         turnEl.innerHTML = `
           <div class="mirror-turn-meta"><span>Intelligence</span> • <span>${turn.time}</span></div>
-          <div class="mirror-bubble-card">
+          <div class="mirror-bubble-card ${isRTL ? 'is-rtl' : 'is-ltr'}" dir="${textDirection}">
             ${reasoningHtml}
             <div class="mirror-markdown-content">${renderedMarkdown}</div>
             ${streamingPulse}
@@ -600,6 +617,14 @@ export class MirrorChatStudio {
       return;
     }
 
+    const bubble = turnEl.querySelector('.mirror-bubble-card');
+    const textDirection = this.detectTextDirection(this.currentStreamingTurn.text || '');
+    if (bubble) {
+      bubble.setAttribute('dir', textDirection);
+      bubble.classList.toggle('is-rtl', textDirection === 'rtl');
+      bubble.classList.toggle('is-ltr', textDirection === 'ltr');
+    }
+
     const contentEl = turnEl.querySelector('.mirror-markdown-content');
     if (contentEl) {
       contentEl.innerHTML = this.renderMarkdown(this.currentStreamingTurn.text || '');
@@ -607,20 +632,25 @@ export class MirrorChatStudio {
 
     if (this.currentStreamingTurn.thinkingText) {
       let reasoningFold = turnEl.querySelector('.mirror-reasoning-fold');
+      const thinkingDirection = this.detectTextDirection(this.currentStreamingTurn.thinkingText || '');
+
       if (!reasoningFold) {
-        const bubble = turnEl.querySelector('.mirror-bubble-card');
         reasoningFold = document.createElement('div');
         reasoningFold.className = 'mirror-reasoning-fold';
         reasoningFold.innerHTML = `
           <button type="button" class="reasoning-fold-trigger">
             <span>🧠 Thinking Process</span><span>▼</span>
           </button>
-          <div class="reasoning-fold-body"></div>
+          <div class="reasoning-fold-body" dir="${thinkingDirection}"></div>
         `;
         bubble?.prepend(reasoningFold);
       }
       const body = reasoningFold.querySelector('.reasoning-fold-body');
-      if (body) body.textContent = this.currentStreamingTurn.thinkingText;
+      if (body) {
+        body.textContent = this.currentStreamingTurn.thinkingText;
+        body.setAttribute('dir', thinkingDirection);
+        body.classList.toggle('is-rtl', thinkingDirection === 'rtl');
+      }
     }
 
     this.scrollToBottom();
@@ -642,44 +672,138 @@ export class MirrorChatStudio {
       .replace(/'/g, '&#039;');
   }
 
+  /**
+   * تشخیص اصولی و وزن‌دهی شده جهت متن (RTL vs LTR)
+   * جملاتی که با واژگان انگلیسی آغاز می‌شوند ولی بدنه آن‌ها فارسی است (مثل "Hello, World یکی از...") به درستی RTL ارزیابی می‌شوند.
+   */
+  detectTextDirection(text) {
+    if (!text || typeof text !== 'string') return 'ltr';
+
+    // پاکسازی بلوک‌های کد، تگ‌ها و لینک‌ها قبل از ارزیابی زبانی
+    const stripped = text
+      .replace(/```[\s\S]*?```/g, ' ')
+      .replace(/`[^`]+`/g, ' ')
+      .replace(/https?:\/\/\S+/g, ' ')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/[*#_~>]/g, ' ')
+      .trim();
+
+    if (!stripped) return 'ltr';
+
+    // شمارش حروف RTL (فارسی، عربی، عبری و...) و LTR (لاتین)
+    const rtlRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u0590-\u05FF]/g;
+    const ltrRegex = /[A-Za-z\u00C0-\u024F]/g;
+
+    const rtlMatches = stripped.match(rtlRegex) || [];
+    const ltrMatches = stripped.match(ltrRegex) || [];
+
+    const rtlCount = rtlMatches.length;
+    const ltrCount = ltrMatches.length;
+
+    if (rtlCount === 0) return 'ltr';
+    if (ltrCount === 0) return 'rtl';
+
+    // در نگارش فارسی معمولاً اصطلاح یا کد ابتدای جمله انگلیسی است.
+    // اگر حجم حروف فارسی حداقل ۲۵ درصد کل یا مساوی/بیشتر باشد، کلیت پاراگراف قطعاً راست‌چین (RTL) است.
+    if (rtlCount >= ltrCount * 0.25 || rtlCount >= ltrCount) {
+      return 'rtl';
+    }
+
+    return 'ltr';
+  }
+
   renderMarkdown(raw) {
     if (!raw) return '<p></p>';
 
     let out = raw;
+    const codeBlocks = [];
 
-    // 1. Code blocks with copy button
-    out = out.replace(/```([a-zA-Z0-9_-]*)[ \t]*\n?([\s\S]*?)```/g, (match, lang, code) => {
-      const language = lang || 'code';
-      const cleanCode = this.escapeHtml(code.trim());
-      return `
-        <div class="mirror-code-block">
-          <div class="mirror-code-header">
-            <span>${language}</span>
-            <button type="button" class="btn-copy-code">Copy</button>
-          </div>
-          <pre class="mirror-code-body"><code>${cleanCode}</code></pre>
-        </div>
-      `;
+    // ۱. تبدیل هرگونه تگ HTML موجود <pre><code> به قالب فنس مارک‌داون
+    out = out.replace(/<pre[^>]*><code(?:\s+class="([^"]*)")?[^>]*>([\s\S]*?)<\/code><\/pre>/gi, (m, cls, code) => {
+      const langMatch = (cls || '').match(/(?:language|lang)-([a-zA-Z0-9_-]+)/i);
+      const lang = langMatch ? langMatch[1] : '';
+      return `\n\`\`\`${lang}\n${code}\n\`\`\`\n`;
     });
 
-    // 2. Inline code
-    out = out.replace(/`([^`\n]+)`/g, (m, c) => `<code class="inline-code">${this.escapeHtml(c)}</code>`);
+    // ۲. ایزوله‌سازی و جایگزینی بلوک‌های کد با توکن‌های اختصاصی تا تحت تاثیر شکستن خطوط قرار نگیرند
+    out = out.replace(/```([a-zA-Z0-9_#-]*)[ \t]*\n?([\s\S]*?)```/g, (match, lang, code) => {
+      const token = `%%OMNI_CODE_BLOCK_${codeBlocks.length}%%`;
+      const language = (lang || 'code').trim().toLowerCase();
+      const cleanCode = this.escapeHtml(code.replace(/^\n+|\n+$/g, ''));
+      const html = `
+        <div class="mirror-code-block" dir="ltr">
+          <div class="mirror-code-header" dir="ltr">
+            <span class="code-lang-tag">${language}</span>
+            <button type="button" class="btn-copy-code" title="Copy code">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <pre class="mirror-code-body" dir="ltr"><code>${cleanCode}</code></pre>
+        </div>
+      `;
+      codeBlocks.push({ token, html });
+      return `\n\n${token}\n\n`;
+    });
 
-    // 3. Headers & lists
-    out = out.replace(/^### (.*$)/gim, '<h5 style="margin:6px 0;color:#ddd6fe;font-size:12px;">$1</h5>');
-    out = out.replace(/^## (.*$)/gim, '<h4 style="margin:8px 0;color:#ddd6fe;font-size:13px;">$1</h4>');
-    out = out.replace(/^# (.*$)/gim, '<h3 style="margin:10px 0;color:#ddd6fe;font-size:14px;">$1</h3>');
-    out = out.replace(/^\s*[-*]\s+(.*$)/gim, '<li style="margin-left:14px;">$1</li>');
+    // ۳. کدهای درون‌خطی
+    out = out.replace(/`([^`\n]+)`/g, (m, c) => `<code class="inline-code" dir="ltr">${this.escapeHtml(c)}</code>`);
 
-    // 4. Bold & Italic
+    // ۴. تیترها با جهت‌یابی اختصاصی
+    out = out.replace(/^### (.*$)/gim, (m, h) => {
+      const dir = this.detectTextDirection(h);
+      return `<h5 dir="${dir}" class="${dir === 'rtl' ? 'is-rtl' : 'is-ltr'}" style="margin:8px 0 4px;color:#ddd6fe;font-size:12.5px;">${h}</h5>`;
+    });
+    out = out.replace(/^## (.*$)/gim, (m, h) => {
+      const dir = this.detectTextDirection(h);
+      return `<h4 dir="${dir}" class="${dir === 'rtl' ? 'is-rtl' : 'is-ltr'}" style="margin:10px 0 6px;color:#ddd6fe;font-size:13.5px;">${h}</h4>`;
+    });
+    out = out.replace(/^# (.*$)/gim, (m, h) => {
+      const dir = this.detectTextDirection(h);
+      return `<h3 dir="${dir}" class="${dir === 'rtl' ? 'is-rtl' : 'is-ltr'}" style="margin:12px 0 6px;color:#ddd6fe;font-size:15px;">${h}</h3>`;
+    });
+
+    // ۵. نقل قول‌ها
+    out = out.replace(/^\s*>\s+(.*$)/gim, (m, q) => {
+      const dir = this.detectTextDirection(q);
+      return `<blockquote dir="${dir}" class="${dir === 'rtl' ? 'is-rtl' : 'is-ltr'}">${q}</blockquote>`;
+    });
+
+    // ۶. لیست‌ها
+    out = out.replace(/^\s*[-*•]\s+(.*$)/gim, (m, item) => {
+      const dir = this.detectTextDirection(item);
+      return `<li dir="${dir}" class="${dir === 'rtl' ? 'is-rtl' : 'is-ltr'}">${item}</li>`;
+    });
+
+    // ۷. بولد و ایتالیک
     out = out.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
     out = out.replace(/\*([^*]+)\*/g, '<em>$1</em>');
 
-    // 4. Line breaks to paragraphs
-    const paragraphs = out.split(/\n\n+/);
-    return paragraphs.map(p => {
-      if (p.includes('<div class="mirror-code-block"')) return p;
-      return `<p>${p.replace(/\n/g, '<br/>')}</p>`;
-    }).join('');
+    // ۸. پاراگراف‌بندی و تفکیک جهت پاراگراف‌ها
+    const rawParagraphs = out.split(/\n\n+/);
+    const processedParagraphs = rawParagraphs.map(p => {
+      const trimmed = p.trim();
+      if (!trimmed) return '';
+
+      if (codeBlocks.some(cb => cb.token === trimmed)) {
+        return trimmed;
+      }
+
+      if (trimmed.startsWith('<h') || trimmed.startsWith('<blockquote') || trimmed.startsWith('<li')) {
+        return trimmed.replace(/\n/g, '<br/>');
+      }
+
+      const dir = this.detectTextDirection(trimmed);
+      return `<p dir="${dir}" class="${dir === 'rtl' ? 'is-rtl' : 'is-ltr'}">${trimmed.replace(/\n/g, '<br/>')}</p>`;
+    }).filter(Boolean);
+
+    let finalHtml = processedParagraphs.join('');
+
+    // ۹. بازگرداندن توکن‌های کدباکس
+    codeBlocks.forEach(cb => {
+      finalHtml = finalHtml.split(cb.token).join(cb.html);
+    });
+
+    return finalHtml;
   }
 }

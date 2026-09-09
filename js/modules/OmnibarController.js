@@ -179,20 +179,22 @@ export class OmnibarController {
     };
 
     // 1. Dispatch directly via PostMessage to embedded frames
+    let delivered = false;
     targetCards.forEach(card => {
       const cardEl = document.getElementById(card.id);
       const iframe = cardEl?.querySelector('iframe');
       if (iframe && iframe.contentWindow) {
         try {
-          iframe.contentWindow.postMessage(payload, '*');
+          iframe.contentWindow.postMessage({ ...payload, targetCardId: card.id }, '*');
+          delivered = true;
         } catch (e) {
           console.warn('[Omnibar] PostMessage relay skipped:', e);
         }
       }
     });
 
-    // 2. Dispatch via chrome.runtime background relay
-    if (typeof chrome !== 'undefined' && chrome.runtime?.sendMessage) {
+    // 2. تنها در صورت عدم امکان تحویل مستقیم از طریق postMessage رله می‌شود
+    if (!delivered && typeof chrome !== 'undefined' && chrome.runtime?.sendMessage) {
       chrome.runtime.sendMessage({
         action: 'RELAY_PROMPT',
         prompt: promptText,

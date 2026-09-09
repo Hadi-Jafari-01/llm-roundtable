@@ -8,9 +8,11 @@
   --bg-canvas: #0c0a12;
   --bg-canvas-subtle: #13101d;
   --bg-plane: #0e0c15;
-  --bg-surface-frosted: rgba(22, 18, 32, 0.65);
-  --bg-surface-elevated: rgba(28, 23, 40, 0.78);
-  --bg-surface-glass: rgba(255, 255, 255, 0.04);
+  --bg-surface-frosted: rgba(18, 15, 28, 0.72);
+  --bg-surface-elevated: rgba(24, 19, 36, 0.84);
+  --bg-surface-glass: rgba(255, 255, 255, 0.05);
+  --bg-studio-drawer: linear-gradient(175deg, rgba(16, 19, 33, 0.97) 0%, rgba(10, 11, 19, 0.99) 100%);
+  --bg-mirror-studio: linear-gradient(175deg, rgba(15, 18, 32, 0.96) 0%, rgba(8, 9, 16, 0.98) 100%);
 
   /* ── Ethereal Pastel Bioluminescence Orbs ── */
   --orb-rose: #fbcfe8;
@@ -18,6 +20,8 @@
   --orb-sage: #a7f3d0;
   --orb-peach: #fed7aa;
   --orb-aquamarine: #99f6e4;
+  --orb-amethyst: #c084fc;
+  --orb-indigo: #818cf8;
   --orb-opal: #93c5fd;
   --orb-lilac: #c4b5fd;
   --orb-pearl: #f8fafc;
@@ -48,13 +52,15 @@
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-standard: rgba(255, 255, 255, 0.13);
   --border-highlight: rgba(255, 255, 255, 0.24);
-  --border-active-pearl: rgba(196, 181, 253, 0.45);
-  --border-iridescent: linear-gradient(135deg, rgba(251, 207, 232, 0.4) 0%, rgba(221, 214, 254, 0.3) 50%, rgba(167, 243, 208, 0.3) 100%);
+  --border-active-pearl: rgba(196, 181, 253, 0.55);
+  --border-iridescent: linear-gradient(135deg, rgba(251, 207, 232, 0.35) 0%, rgba(192, 132, 252, 0.3) 50%, rgba(129, 140, 248, 0.35) 100%);
+  --border-jewel: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(192, 132, 252, 0.25) 50%, rgba(255, 255, 255, 0.06) 100%);
 
   /* ── Glassmorphism & Translucency ── */
-  --glass-blur: blur(28px) saturate(180%);
+  --glass-blur: blur(28px) saturate(190%);
   --glass-blur-sm: blur(16px) saturate(160%);
-  --glass-blur-heavy: blur(40px) saturate(200%);
+  --glass-blur-heavy: blur(44px) saturate(220%);
+  --glass-bevel: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 
   --card-surface-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
   --card-header-bg: rgba(23, 19, 34, 0.82);

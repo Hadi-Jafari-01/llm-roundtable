@@ -10,6 +10,9 @@
   const HOST = window.location.hostname;
   let cardId = window.name || null;
   let lastHandledMessageId = null;
+  const handledMessageIds = new Set();
+  let lastInjectedPrompt = '';
+  let lastInjectedTime = 0;
   let activeDriver = null;
   let streamObserver = null;
   let streamThrottleTimer = null;
@@ -84,17 +87,6 @@
     range.selectNodeContents(element);
     sel.removeAllRanges();
     sel.addRange(range);
-
-    try {
-      const beforeInput = new InputEvent('beforeinput', {
-        bubbles: true,
-        cancelable: true,
-        composed: true,
-        inputType: 'insertText',
-        data: text
-      });
-      element.dispatchEvent(beforeInput);
-    } catch (_) {}
 
     let execOk = false;
     try {
@@ -208,9 +200,8 @@
     el.dispatchEvent(new PointerEvent('pointerup', { ...baseOpts, buttons: 0, pressure: 0 }));
     el.dispatchEvent(new MouseEvent('mouseup', { ...baseOpts, buttons: 0 }));
 
-    // 5. Final Click
+    // 5. Final Click (تک رویداد کلیک برای جلوگیری از ارسال مجدد)
     el.dispatchEvent(new MouseEvent('click', { ...baseOpts, buttons: 0 }));
-    try { el.click(); } catch (_) {}
     return true;
   }
 
@@ -256,17 +247,6 @@
     element.focus();
     if (element.isContentEditable || element.getAttribute('contenteditable') === 'true' || strategy === 'lexical' || strategy === 'execCommand') {
       let success = false;
-      try {
-        const beforeInput = new InputEvent('beforeinput', {
-          bubbles: true,
-          cancelable: true,
-          composed: true,
-          inputType: 'insertText',
-          data: chunk
-        });
-        element.dispatchEvent(beforeInput);
-      } catch (_) {}
-
       try {
         success = document.execCommand('insertText', false, chunk);
       } catch (_) {}
@@ -326,16 +306,6 @@
 
   function backspaceOneChar(element) {
     element.focus();
-    try {
-      const beforeInput = new InputEvent('beforeinput', {
-        bubbles: true,
-        cancelable: true,
-        composed: true,
-        inputType: 'deleteContentBackward'
-      });
-      element.dispatchEvent(beforeInput);
-    } catch (_) {}
-
     let success = false;
     try {
       success = document.execCommand('delete', false, null);
@@ -461,22 +431,7 @@
   async function simulateHumanPaste(element, text, strategy, kinematics, abortSignal) {
     element.focus();
     await sleep(80 + Math.random() * 60);
-
-    try {
-      const dt = new DataTransfer();
-      dt.setData('text/plain', text);
-      const pasteEvt = new ClipboardEvent('paste', {
-        clipboardData: dt,
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      });
-      element.dispatchEvent(pasteEvt);
-    } catch (_) {}
-
     applyInputStrategy(element, text, strategy);
-
-    // Natural glance/verification delay after pasting
     await sleep(250 + Math.random() * 200);
   }
 
@@ -576,6 +531,61 @@
     return { inputEl, submitBtn };
   }
 
+  /**
+   * استخراج ساختاریافته محتوای پیام از مدل با حفظ بلوک‌های کد و حذف دکمه‌های مزاحم (Run, Copy و...)
+   */
+  function extractStructuredContent(element) {
+    if (!element) return '';
+
+    if (!element.children || element.children.length === 0) {
+      return (element.innerText || element.textContent || '').trim();
+    }
+
+    const clone = element.cloneNode(true);
+
+    // ۱. حذف دکمه‌های رابط کاربری، آیکون‌ها، دکمه‌های Run، نوار ابزار و موارد نامربوط
+    clone.querySelectorAll(
+      'button, svg, [role="button"], [class*="copy"], [class*="toolbar"], ' +
+      '[class*="actions"], [class*="feedback"], .sr-only, [aria-hidden="true"]'
+    ).forEach(el => el.remove());
+
+    // ۲. تبدیل تگ‌های <pre> به بلوک‌های کد استاندارد مارک‌داون (```lang ... ```)
+    clone.querySelectorAll('pre').forEach(pre => {
+      const codeEl = pre.querySelector('code') || pre;
+      let lang = '';
+
+      const classStr = `${codeEl.className || ''} ${pre.className || ''}`;
+      const langMatch = classStr.match(/(?:language|lang)-([a-zA-Z0-9_#-]+)/i);
+      if (langMatch) {
+        lang = langMatch[1];
+      } else {
+        const headerEl = pre.querySelector('[class*="header"], [class*="title"], [class*="lang"]');
+        if (headerEl) {
+          const headerText = (headerEl.innerText || headerEl.textContent || '').trim().toLowerCase();
+          if (/^[a-z0-9#+_-]{1,15}$/.test(headerText)) {
+            lang = headerText;
+          }
+        }
+      }
+
+      const rawCode = (codeEl.textContent || '').replace(/\r\n/g, '\n').trim();
+      const codeFence = `\n\n\`\`\`${lang}\n${rawCode}\n\`\`\`\n\n`;
+      pre.replaceWith(document.createTextNode(codeFence));
+    });
+
+    // ۳. تبدیل کدهای درون‌خطی <code> به `code`
+    clone.querySelectorAll('code').forEach(code => {
+      const inlineText = (code.textContent || '').trim();
+      if (inlineText && !inlineText.includes('`')) {
+        code.replaceWith(document.createTextNode(`\`${inlineText}\``));
+      }
+    });
+
+    let text = (clone.innerText || clone.textContent || '').trim();
+    text = text.replace(/\n{3,}/g, '\n\n');
+    return text;
+  }
+
   function extractConversationHistory(targetCardId, driver) {
     const userSel = driver?.userBubbleSelector || '[data-message-author-role="user"], [data-testid*="user"]';
     const botSel = driver?.responseContainerSelector || '[data-message-author-role="assistant"], [data-testid*="assistant"]';
@@ -600,7 +610,7 @@
 
     const messages = [];
     allElements.forEach((item, idx) => {
-      const text = (item.node.innerText || item.node.textContent || '').trim();
+      const text = extractStructuredContent(item.node);
       if (text && text.length > 0) {
         messages.push({
           id: `hist_${item.role}_${idx}_${Date.now()}`,
@@ -656,7 +666,7 @@
         latestResponseEl = currentResponseElements[currentResponseElements.length - 1];
       }
 
-      const text = latestResponseEl ? (latestResponseEl.innerText || latestResponseEl.textContent || '') : '';
+      const text = latestResponseEl ? extractStructuredContent(latestResponseEl) : '';
       const html = latestResponseEl ? latestResponseEl.innerHTML : '';
 
       let thinkingText = '';
@@ -743,8 +753,27 @@
     streamInactivityTimer = null;
   }
 
-  async function executePromptInjection(promptText, customDriver = null, attempt = 1) {
+  async function executePromptInjection(promptText, customDriver = null, messageId = null, attempt = 1) {
     if (!promptText) return;
+
+    const trimmedPrompt = promptText.trim();
+    const now = Date.now();
+
+    // سیستم جلوگیری قاطع از ارسال دوباره پیام تکراری
+    if (messageId && handledMessageIds.has(messageId)) {
+      return;
+    }
+    if (lastInjectedPrompt === trimmedPrompt && (now - lastInjectedTime) < 2500) {
+      console.log('[OmniAI Hub] Duplicate prompt dispatch blocked:', trimmedPrompt);
+      return;
+    }
+
+    if (messageId) {
+      handledMessageIds.add(messageId);
+      setTimeout(() => handledMessageIds.delete(messageId), 30000);
+    }
+    lastInjectedPrompt = trimmedPrompt;
+    lastInjectedTime = now;
 
     if (activeTypingAbortCtrl) {
       activeTypingAbortCtrl.abort();
@@ -759,7 +788,16 @@
       const mode = driver.humanizeEnabled === false ? 'instant' : (driver.humanizeMode || 'burst');
       const strategy = driver.inputStrategy || 'auto';
 
-      // 1. Execute Selected Humanized Typing Architecture
+      // پاکسازی کادر ورودی قبل از تایپ برای جلوگیری از الحاق به متن قبلی
+      if (inputEl.isContentEditable || inputEl.getAttribute('contenteditable') === 'true') {
+        const sel = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(inputEl);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+
+      // 1. اجرای استراتژی تایپ بدون تکرار متن
       if (mode === 'cadence') {
         await simulateHumanCadenceTyping(inputEl, promptText, strategy, driver, abortSignal);
       } else if (mode === 'burst') {
@@ -772,21 +810,23 @@
 
       if (abortSignal.aborted) return;
 
-      // 2. Pre-Submit Human Thinking / Dwell Delay
+      // 2. تاخیر کوتاه طبیعی
       if (driver.humanizeEnabled !== false && driver.preSubmitDelayMs > 0) {
         const dwellTime = Math.round(driver.preSubmitDelayMs + (Math.random() - 0.5) * 80);
         await sleep(Math.max(100, dwellTime));
       }
 
-      // 3. Intelligent Polling Submit Loop with Human Pointer Physics
+      // 3. ارسال تنها یک‌بار با قفل وضعیت
       const pollStartTime = Date.now();
       const maxWaitMs = 3200;
+      let submitted = false;
 
       const attemptSubmit = async () => {
-        if (abortSignal.aborted) return;
+        if (abortSignal.aborted || submitted) return;
         const { submitBtn } = locateElementsWithDriver(driver);
 
         if (submitBtn && isButtonReady(submitBtn)) {
+          submitted = true;
           await dispatchHumanClick(submitBtn, driver);
           showInjectionBadge(mode === 'instant' ? '⚡ Direct Dispatched' : '🛡️ Human Cadence Sent');
           startStreamingScraper(driver);
@@ -798,15 +838,16 @@
           return;
         }
 
-        // Fallback after timeout
+        // ارسال fallback نهایی تنها با یکی از روش‌ها (نه همه با هم)
+        submitted = true;
         if (submitBtn) {
           await dispatchHumanClick(submitBtn, driver);
-        }
-        dispatchEnterKey(inputEl);
-
-        const form = inputEl.closest('form');
-        if (form && typeof form.requestSubmit === 'function') {
-          try { form.requestSubmit(); } catch (_) {}
+        } else {
+          dispatchEnterKey(inputEl);
+          const form = inputEl.closest('form');
+          if (form && typeof form.requestSubmit === 'function') {
+            try { form.requestSubmit(); } catch (_) {}
+          }
         }
 
         showInjectionBadge(mode === 'instant' ? '⚡ Dispatched' : '🛡️ Human Sent');
@@ -815,7 +856,7 @@
 
       setTimeout(attemptSubmit, 50);
     } else if (attempt < 12) {
-      setTimeout(() => executePromptInjection(promptText, customDriver, attempt + 1), 250);
+      setTimeout(() => executePromptInjection(promptText, customDriver, messageId, attempt + 1), 250);
     }
   }
 
@@ -936,11 +977,14 @@
     }
 
     if (event.data.action === 'MIRROR_DISPATCH_PROMPT') {
-      if (event.data.cardId) {
+      if (event.data.cardId && cardId && event.data.cardId !== cardId) {
+        return;
+      }
+      if (!cardId && event.data.cardId) {
         cardId = event.data.cardId;
         try { window.name = cardId; } catch (_) {}
       }
-      executePromptInjection(event.data.prompt, event.data.driver);
+      executePromptInjection(event.data.prompt, event.data.driver, event.data.messageId);
       return;
     }
 
@@ -975,11 +1019,7 @@
       return;
     }
 
-    if (event.data.messageId && event.data.messageId === lastHandledMessageId) {
-      return;
-    }
-    lastHandledMessageId = event.data.messageId;
-    executePromptInjection(event.data.prompt, event.data.driver);
+    executePromptInjection(event.data.prompt, event.data.driver, event.data.messageId);
   });
 
   // Chrome Runtime Messaging Listener
@@ -1006,10 +1046,11 @@
       }
 
       if (msg?.action && msg.action.startsWith('MIRROR_')) {
-        if (msg.cardId) cardId = msg.cardId;
+        if (msg.cardId && currentCardId && msg.cardId !== currentCardId) return;
+        if (!cardId && msg.cardId) cardId = msg.cardId;
 
         if (msg.action === 'MIRROR_DISPATCH_PROMPT') {
-          executePromptInjection(msg.prompt, msg.driver);
+          executePromptInjection(msg.prompt, msg.driver, msg.messageId);
         } else if (msg.action === 'MIRROR_STOP_GENERATION') {
           const stopSel = msg.driver?.stopSelector || 'button[aria-label*="Stop" i], button[data-testid="stop-button"]';
           const stopBtn = document.querySelector(stopSel);
