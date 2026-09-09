@@ -30,6 +30,34 @@ button, input, textarea, select {
   background: transparent;
   border: none;
   outline: none;
+  box-sizing: border-box;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #64748b;
+  opacity: 0.85;
+}
+
+/* Custom Sleek Glass Scrollbars for all inputs & textareas */
+textarea::-webkit-scrollbar,
+input::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+textarea::-webkit-scrollbar-track,
+input::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 4px;
+}
+textarea::-webkit-scrollbar-thumb,
+input::-webkit-scrollbar-thumb {
+  background: rgba(192, 132, 252, 0.28);
+  border-radius: 4px;
+}
+textarea::-webkit-scrollbar-thumb:hover,
+input::-webkit-scrollbar-thumb:hover {
+  background: rgba(192, 132, 252, 0.55);
 }
 
 button {

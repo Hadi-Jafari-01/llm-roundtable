@@ -295,69 +295,158 @@
 
 .driver-text-input {
   flex: 1;
-  height: 36px;
-  padding: 0 12px;
+  min-height: 38px;
+  padding: 0 13px;
   border-radius: 9px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(8, 10, 18, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: rgba(10, 13, 24, 0.75);
   color: #f8fafc;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 11.5px;
+  font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  font-size: 12.5px;
+  line-height: 1.5;
   outline: none;
-  transition: all 0.18s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   box-sizing: border-box;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.driver-text-input:hover {
+  border-color: rgba(192, 132, 252, 0.35);
+  background: rgba(13, 16, 30, 0.85);
 }
 
 .driver-text-input:focus {
   border-color: #c084fc;
-  background: rgba(12, 15, 26, 0.9);
-  box-shadow: 0 0 14px rgba(192, 132, 252, 0.35), inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  background: rgba(16, 20, 36, 0.95);
+  box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.2), 0 0 16px rgba(192, 132, 252, 0.3), inset 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* Hide default browser number arrows for refined look */
+/* Specific Technical Selector Inputs retain strict monospace */
+.driver-text-input.is-code,
+.driver-text-input[data-code="true"],
+#driver-field-input-selector,
+#driver-field-submit-selector,
+#driver-field-response-container,
+#driver-field-streaming-tokens,
+#driver-field-stop-selector,
+#driver-field-new-chat-selector,
+#driver-field-reasoning-selector,
+#driver-field-user-bubble-selector {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  font-size: 11.5px !important;
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* Multiline Textareas using driver class */
+textarea.driver-text-input {
+  height: auto;
+  min-height: 75px;
+  padding: 10px 13px;
+  line-height: 1.7;
+  resize: vertical;
+}
+
+/* Number inputs styling with clean alignment */
+.driver-text-input[type="number"] {
+  font-variant-numeric: tabular-nums;
+}
 .driver-text-input[type="number"]::-webkit-inner-spin-button,
 .driver-text-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-.driver-text-input[type="number"] {
-  -moz-appearance: textfield;
+  opacity: 0.6;
+  cursor: pointer;
 }
 
-/* Custom Sleek Dropdown Selects */
-.driver-select-input {
-  flex: 1;
-  height: 36px;
-  padding: 0 32px 0 12px;
+/* Color input overhaul */
+input[type="color"].driver-text-input {
+  padding: 3px 6px;
+  height: 38px;
+  min-height: 38px;
+  cursor: pointer;
+  background: rgba(12, 15, 28, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 9px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background-color: rgba(12, 15, 26, 0.85);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23c084fc' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+input[type="color"].driver-text-input::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+input[type="color"].driver-text-input::-webkit-color-swatch {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+}
+
+/* Direction-Aware Luxury Dropdown Selects */
+.driver-select-input {
+  width: 100%;
+  height: 42px;
+  min-height: 42px;
+  padding: 0 38px 0 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background-color: rgba(16, 13, 28, 0.92);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23c084fc' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 10px center;
+  background-position: right 14px center;
   color: #f8fafc;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-  font-size: 11.5px;
+  font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  font-size: 12.5px;
   font-weight: 500;
   outline: none;
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
-  transition: all 0.18s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   box-sizing: border-box;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.25);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* RTL Support for Selects: Arrow on the left, text safe from clipping */
+.driver-select-input[dir="rtl"],
+.driver-select-input.is-rtl,
+[dir="rtl"] .driver-select-input {
+  background-position: left 14px center !important;
+  padding: 0 14px 0 38px !important;
+  text-align: right !important;
+  direction: rtl !important;
+}
+
+/* LTR specific overrides */
+.driver-select-input[dir="ltr"],
+.driver-select-input.is-ltr,
+[dir="ltr"] .driver-select-input {
+  background-position: right 14px center !important;
+  padding: 0 38px 0 14px !important;
+  text-align: left !important;
+  direction: ltr !important;
+}
+
+.driver-select-input:hover {
+  border-color: rgba(192, 132, 252, 0.45);
+  background-color: rgba(22, 18, 38, 0.96);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 16px rgba(192, 132, 252, 0.22);
 }
 
 .driver-select-input:focus {
   border-color: #c084fc;
-  box-shadow: 0 0 14px rgba(192, 132, 252, 0.35);
+  background-color: rgba(26, 20, 46, 0.98);
+  box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.25), 0 0 20px rgba(192, 132, 252, 0.38);
 }
 
 .driver-select-input option {
-  background: #0b0e1a;
-  color: #f8fafc;
-  padding: 8px;
+  background-color: #161228 !important;
+  color: #f8fafc !important;
+  padding: 12px 14px !important;
+  font-size: 13px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "Segoe UI", Roboto, sans-serif !important;
+  line-height: 1.6 !important;
+}
+
+.driver-select-input option:checked {
+  background: linear-gradient(135deg, #2e1d52 0%, #3b236b 100%) !important;
+  color: #fde68a !important;
+  font-weight: 600 !important;
 }
 
 /* Human Kinematics Master Card (Hero Jewel Aesthetic) */

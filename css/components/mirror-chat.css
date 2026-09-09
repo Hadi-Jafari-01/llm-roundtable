@@ -764,20 +764,28 @@
 
 .mirror-textarea {
   width: 100%;
-  min-height: 42px;
-  max-height: 150px;
+  min-height: 44px;
+  max-height: 160px;
   background: transparent;
   border: none;
   outline: none;
   color: #f8fafc;
   font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: 14px;
+  line-height: 1.75;
   resize: none;
-  padding: 2px;
+  padding: 8px 10px;
   box-sizing: border-box;
   unicode-bidi: plaintext;
   text-align: start;
+}
+
+.mirror-textarea::-webkit-scrollbar {
+  width: 4px;
+}
+.mirror-textarea::-webkit-scrollbar-thumb {
+  background: rgba(192, 132, 252, 0.3);
+  border-radius: 4px;
 }
 
 .mirror-textarea[dir="rtl"],

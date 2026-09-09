@@ -1330,7 +1330,7 @@
             <span>Ledger</span>
           </button>
           <button type="button" id="btn-symposium-open-sanctum" class="symposium-tool-btn primary-gold" title="آتلیه جامع تفکر، سناریوها و موتور دیالکتیک">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
             <span>Sanctum</span>
           </button>
           <button type="button" id="btn-symposium-export-briefing" class="symposium-tool-btn" title="خروجی مارک‌داون از کل پرونده مذاکرات">
@@ -1381,6 +1381,12 @@
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </button>
                   </div>
+                </div>
+                <div class="composer-footer-helper">
+                  <span class="composer-shortcut-hint">
+                    <kbd>⌘↵</kbd> ارسال پیام به شورا • <kbd>Shift↵</kbd> رفتن به خط بعد
+                  </span>
+                  <span style="font-size: 9.5px; opacity: 0.7;">Zero-API Native Dialectic</span>
                 </div>
               </div>
             </div>
@@ -1477,7 +1483,7 @@
         </div>
       </div>
 
-      <!-- ── Re-engineered 3-Zone Logic Sanctum Atelier Drawer ── -->
+      <!-- ── Re-engineered 4-Zone Logic Sanctum Atelier Drawer ── -->
       <div id="sanctum-backdrop" class="sanctum-backdrop"></div>
       <aside id="logic-sanctum-drawer" class="logic-sanctum-drawer">
         <div class="sanctum-drawer-header">
@@ -1549,7 +1555,7 @@
               <div class="driver-sub-grid">
                 <div>
                   <label class="driver-sub-label">متدولوژی و مدل مناظره</label>
-                  <select id="scenario-form-mode" class="driver-select-input">
+                  <select id="scenario-form-mode" class="driver-select-input" dir="rtl">
                     <option value="manual">Manual Conductor (دستی با عصای نوبت)</option>
                     <option value="socratic">Socratic Dialectic (سقراطی)</option>
                     <option value="round_robin">Orderly Round-Robin (ترتیبی)</option>
@@ -1565,7 +1571,7 @@
 
               <div>
                 <label class="driver-sub-label">پرومپت یا چالش آغازین سناریو</label>
-                <textarea id="scenario-form-prompt" class="driver-text-input" style="height: 65px; resize: vertical;" placeholder="پرسش یا مسئله‌ای که شورا با آن آغاز به کار می‌کند..." dir="auto"></textarea>
+                <textarea id="scenario-form-prompt" class="driver-text-input sanctum-directive-editor" placeholder="پرسش یا مسئله‌ای که شورا با آن آغاز به کار می‌کند..." dir="auto"></textarea>
               </div>
 
               <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px;">
@@ -1617,7 +1623,7 @@
 
               <div>
                 <label class="driver-sub-label">دستورالعمل سیستمی و مأموریت فکری پرسونا (Directive) *</label>
-                <textarea id="persona-form-directive" class="driver-text-input" style="height: 85px; resize: vertical;" placeholder="شما در این میزگرد چه نقشی دارید؟ اولویت‌ها، خط قرمزها و شیوه نقد شما چیست؟..." dir="auto" required></textarea>
+                <textarea id="persona-form-directive" class="driver-text-input sanctum-directive-editor" placeholder="شما در این میزگرد چه نقشی دارید؟ اولویت‌ها، خط قرمزها و شیوه نقد شما چیست؟..." dir="auto" required></textarea>
               </div>
 
               <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px;">
@@ -1720,7 +1726,7 @@
               </div>
             </div>
 
-            <!-- SECTION 2: PROMPT FORMULA TEMPLATES & COLLAPSIBLE EDITOR -->
+            <!-- SECTION 2: PROMPT FORMULA TEMPLATES & ADVANCED EDITOR -->
             <div class="engine-section-block">
               <div class="engine-section-header">
                 <span class="engine-section-title">۲. قالب ساختار پرومپت شورا (Prompt Architecture)</span>
@@ -1728,35 +1734,53 @@
               </div>
               <p class="engine-section-desc">قالب و اسکلت‌بندی پرسشی که در هر نوبت به هوش مصنوعی فعال تزریق می‌گردد:</p>
 
-              <div class="driver-field-card" style="padding: 10px 14px; background: rgba(255, 255, 255, 0.025);">
-                <div class="driver-field-top">
-                  <label class="driver-field-label">انتخاب قالب آماده پرومپت:</label>
+              <div class="driver-field-card" style="padding: 12px 16px; background: rgba(255, 255, 255, 0.035);">
+                <div class="driver-field-top" style="margin-bottom: 6px;">
+                  <label class="driver-field-label" style="font-size: 12px; color: #fde68a;">
+                    <span>انتخاب الگوی آماده پرومپت (Dialectic Formula Preset):</span>
+                  </label>
+                  <span class="driver-field-badge" style="background: rgba(245, 158, 11, 0.15); color: #fde68a;">۸ الگوی تخصصی</span>
                 </div>
-                <select id="sanctum-prompt-template-preset-select" class="driver-select-input"></select>
+                <select id="sanctum-prompt-template-preset-select" class="driver-select-input" dir="rtl"></select>
               </div>
 
-              <!-- Collapsible Advanced Formula Accordion -->
-              <div class="formula-accordion-block">
-                <button type="button" id="btn-toggle-formula-accordion" class="formula-accordion-trigger">
-                  <span style="display:flex;align-items:center;gap:6px;">
-                    <span>⚙️</span>
-                    <span>مشاهده و ویرایش پیشرفته فرمول پرومپت و متغیرها</span>
-                  </span>
-                  <span class="arrow-indicator">▼</span>
-                </button>
-                <div id="formula-accordion-content" class="formula-accordion-body" style="display: none;">
-                  <textarea id="sanctum-template-textarea" class="driver-text-input" style="height:115px;resize:vertical;font-family:ui-monospace,monospace;font-size:11px;padding:8px;line-height:1.45;"></textarea>
-                  
-                  <div style="font-size:10px;color:#cbd5e1;margin-top:6px;font-weight:600;">متغیرهای پویا (کلیک روی هر گزینه برای درج مستقیم در محل نشانگر متن):</div>
+              <!-- Dedicated Spacious Prompt Formula Editor Card -->
+              <div class="formula-editor-card">
+                <div class="formula-editor-toolbar">
+                  <div class="formula-toolbar-title-group">
+                    <span class="formula-toolbar-icon">⚡</span>
+                    <span class="formula-toolbar-title">ویرایشگر پیشرفته فرمول دیالکتیک</span>
+                    <span id="formula-stats-badge" class="formula-stats-badge">۰ نویسه</span>
+                  </div>
+                  <div class="formula-toolbar-actions">
+                    <button type="button" id="btn-copy-formula" class="btn-formula-tool" title="کپی فرمول پرومپت">
+                      <span>کپی 📋</span>
+                    </button>
+                    <button type="button" id="btn-reset-formula-default" class="btn-formula-tool reset" title="بازیابی این فرمول به پیش‌فرض الگو">
+                      <span>بازیابی پیش‌فرض ↺</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="formula-textarea-wrapper">
+                  <textarea id="sanctum-template-textarea" class="formula-textarea" placeholder="فرمول ساختار پرومپت شورا..." dir="rtl"></textarea>
+                </div>
+
+                <!-- Macro Tags Section with Clear Instructions -->
+                <div class="formula-macros-wrapper">
+                  <div class="macros-header-row">
+                    <span class="macros-header-title">متغیرهای هوشمند پویا (برای درج مستقیم در محل نشانگر متن کلیک کنید):</span>
+                    <span class="macros-hint-pill">Dynamic Injection</span>
+                  </div>
                   <div id="sanctum-macro-chips" class="macro-chips-flow">
-                    <button type="button" class="macro-chip-btn" data-macro="{{speaker_role}}" title="دستور و پرسونای مدل فعال">{{speaker_role}} <small>(نقش مدل)</small></button>
-                    <button type="button" class="macro-chip-btn" data-macro="{{user_core_prompt}}" title="پرسش بنیادین کاربر">{{user_core_prompt}} <small>(چالش اصلی)</small></button>
-                    <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_name}}" title="نام سخنران قبلی">{{last_speaker_name}} <small>(گوینده قبلی)</small></button>
-                    <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_argument}}" title="استدلال سخنران قبلی">{{last_speaker_argument}} <small>(سخن قبلی)</small></button>
-                    <button type="button" class="macro-chip-btn" data-macro="{{round_context_brief}}" title="خلاصه روند تا الان">{{round_context_brief}} <small>(خلاصه روند)</small></button>
-                    <button type="button" class="macro-chip-btn" data-macro="{{consensus_agreements}}" title="نقاط توافق">{{consensus_agreements}} <small>(توافقات)</small></button>
-                    <button type="button" class="macro-chip-btn" data-macro="{{consensus_gaps}}" title="نقاط اختلاف">{{consensus_gaps}} <small>(چالش‌ها)</small></button>
-                    <button type="button" class="macro-chip-btn" data-macro="{{round_number}}" title="شماره دور">{{round_number}} <small>(دور)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{speaker_role}}" title="دستورالعمل و پرسونای تخصصی هوش فعال"><code>{{speaker_role}}</code> <small>(نقش و پرسونای مدل)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{user_core_prompt}}" title="پرسش بنیادین یا چالش اصلی کاربر"><code>{{user_core_prompt}}</code> <small>(چالش اصلی کاربر)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_name}}" title="نام هوش یا کاربری که دور قبل سخن گفت"><code>{{last_speaker_name}}</code> <small>(نام گوینده قبلی)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_argument}}" title="خلاصه استدلال و سخن دور قبلی"><code>{{last_speaker_argument}}</code> <small>(استدلال دور قبلی)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{round_context_brief}}" title="خلاصه سوابق مذاکرات و نوبت‌های گذشته"><code>{{round_context_brief}}</code> <small>(خلاصه روند تا الان)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{consensus_agreements}}" title="فهرست توافقات ثبت‌شده در دفتر اجماع"><code>{{consensus_agreements}}</code> <small>(توافقات شورا)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{consensus_gaps}}" title="فهرست نقاط اختلاف و گره‌های باقیمانده"><code>{{consensus_gaps}}</code> <small>(نقاط اختلاف)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{round_number}}" title="شماره دور فعلی مذاکره"><code>{{round_number}}</code> <small>(شماره دور)</small></button>
                   </div>
                 </div>
               </div>
@@ -1770,35 +1794,35 @@
               </div>
 
               <div class="driver-sub-grid">
-                <div class="driver-field-card" style="padding: 10px 12px;">
+                <div class="driver-field-card" style="padding: 12px 14px;">
                   <label class="driver-sub-label">سقف تعداد دورهای مناظره (Max Rounds)</label>
                   <input type="number" id="sanctum-max-rounds" class="driver-text-input" min="1" max="50" value="10" />
-                  <span style="font-size:9.5px;color:#64748b;margin-top:2px;">پس از رسیدن به این دور، جلسه متوقف یا جمع‌بندی می‌شود.</span>
+                  <span style="font-size:9.5px;color:#94a3b8;margin-top:3px;">پس از رسیدن به این دور، جلسه متوقف یا جمع‌بندی می‌شود.</span>
                 </div>
-                <div class="driver-field-card" style="padding: 10px 12px;">
+                <div class="driver-field-card" style="padding: 12px 14px;">
                   <label class="driver-sub-label">مدیریت حجم تاریخچه (Context Distillation)</label>
-                  <select id="sanctum-distill-select" class="driver-select-input">
+                  <select id="sanctum-distill-select" class="driver-select-input" dir="rtl">
                     <option value="digest">Executive Digest (خلاصه نکات کلیدی - بهینه‌سازی توکن)</option>
                     <option value="verbatim">Full Verbatim (ارسال کامل متن‌های قبلی بدون تلخیص)</option>
                   </select>
-                  <span style="font-size:9.5px;color:#64748b;margin-top:2px;">جلوگیری از سرریز شدن سقف کانتکست پنجره مدل‌ها.</span>
+                  <span style="font-size:9.5px;color:#94a3b8;margin-top:3px;">جلوگیری از سرریز شدن سقف کانتکست پنجره مدل‌ها.</span>
                 </div>
               </div>
 
               <!-- Global Mandate Field -->
-              <div class="driver-field-card" style="border-color: rgba(254, 215, 170, 0.35); background: rgba(245, 158, 11, 0.04);">
-                <div class="driver-field-top">
+              <div class="driver-field-card" style="border-color: rgba(254, 215, 170, 0.35); background: rgba(245, 158, 11, 0.05); padding: 14px 16px;">
+                <div class="driver-field-top" style="margin-bottom: 6px;">
                   <label class="driver-field-label" style="color: #fde68a;">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
                     <span>دستورالعمل مشترک اجباری برای تمام مدل‌ها (Global Mandate)</span>
                   </label>
                   <span class="driver-field-badge" style="background: rgba(245, 158, 11, 0.2); color: #fde68a;">همگانی</span>
                 </div>
-                <select id="sanctum-global-directive-preset-select" class="driver-select-input" style="margin-bottom: 8px;"></select>
-                <textarea id="sanctum-global-directive" class="driver-text-input" style="height: 60px; resize: vertical; font-size: 11.5px; line-height: 1.5;" placeholder="دستوری که به ابتدای پرومپت همه مدل‌ها افزوده می‌شود (مثلاً فارسی‌نویسی تخصصی، پرهیز از تملق)..." dir="auto"></textarea>
+                <select id="sanctum-global-directive-preset-select" class="driver-select-input" dir="rtl" style="margin-bottom: 8px;"></select>
+                <textarea id="sanctum-global-directive" class="driver-text-input sanctum-directive-editor" placeholder="دستوری که به ابتدای پرومپت همه مدل‌ها افزوده می‌شود (مثلاً فارسی‌نویسی تخصصی، پرهیز از تملق)..." dir="rtl"></textarea>
               </div>
 
-              <button type="button" id="btn-save-protocols" class="btn-save-driver-master" style="margin-top: 4px;">
+              <button type="button" id="btn-save-protocols" class="btn-save-driver-master" style="margin-top: 6px;">
                 <span>ذخیره و اعمال پروتکل‌های موتور مناظره ✓</span>
               </button>
             </div>

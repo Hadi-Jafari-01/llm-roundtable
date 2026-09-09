@@ -251,14 +251,24 @@
   flex: 1;
   min-height: 48px;
   max-height: 180px;
-  padding: 8px 4px;
-  font-size: 13.5px;
-  line-height: 1.5;
+  padding: 8px 10px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.75;
   color: var(--text-primary);
   background: transparent;
   border: none;
   outline: none;
   resize: none;
+  unicode-bidi: plaintext;
+}
+
+.studio-textarea::-webkit-scrollbar {
+  width: 4px;
+}
+.studio-textarea::-webkit-scrollbar-thumb {
+  background: rgba(192, 132, 252, 0.3);
+  border-radius: 4px;
 }
 
 .studio-textarea::placeholder {

@@ -1080,44 +1080,46 @@
 }
 
 .symposium-chatgpt-composer {
-  background: rgba(20, 16, 34, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(175deg, rgba(24, 19, 44, 0.94) 0%, rgba(13, 10, 24, 0.98) 100%);
+  border: 1px solid rgba(192, 132, 252, 0.28);
   border-radius: 22px;
-  padding: 9px 16px;
-  backdrop-filter: blur(32px) saturate(200%);
-  -webkit-backdrop-filter: blur(32px) saturate(200%);
-  box-shadow: 0 16px 48px -8px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(192, 132, 252, 0.16) inset;
+  padding: 12px 18px 14px 20px;
+  min-height: 72px;
+  backdrop-filter: blur(36px) saturate(220%);
+  -webkit-backdrop-filter: blur(36px) saturate(220%);
+  box-shadow: 0 20px 52px -10px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.08) inset, 0 8px 26px rgba(192, 132, 252, 0.14);
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  transition: all 0.22s ease;
+  gap: 6px;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   box-sizing: border-box;
 }
 
 .symposium-chatgpt-composer:focus-within {
-  border-color: rgba(192, 132, 252, 0.55);
-  box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.85), 0 0 24px rgba(192, 132, 252, 0.25);
+  border-color: rgba(192, 132, 252, 0.65);
+  box-shadow: 0 24px 65px -10px rgba(0, 0, 0, 0.92), 0 0 0 1px rgba(192, 132, 252, 0.3) inset, 0 0 28px rgba(192, 132, 252, 0.26);
+  background: linear-gradient(175deg, rgba(28, 22, 50, 0.96) 0%, rgba(15, 11, 28, 0.99) 100%);
 }
 
 .symposium-chatgpt-composer.user-turn-active {
   border-color: rgba(245, 158, 11, 0.85);
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(236, 72, 153, 0.08) 100%);
-  box-shadow: 0 0 32px rgba(245, 158, 11, 0.35), 0 0 0 1px rgba(245, 158, 11, 0.6) inset;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.14) 0%, rgba(236, 72, 153, 0.09) 100%);
+  box-shadow: 0 0 34px rgba(245, 158, 11, 0.38), 0 0 0 1px rgba(245, 158, 11, 0.65) inset;
 }
 
 .composer-top-context-pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 600;
   color: #fde68a;
   user-select: none;
 }
 
 .composer-top-context-pill .dot {
-  width: 6px;
-  height: 6px;
+  width: 6.5px;
+  height: 6.5px;
   border-radius: 50%;
   background: #f59e0b;
   box-shadow: 0 0 8px #f59e0b;
@@ -1126,28 +1128,75 @@
 .composer-input-row {
   display: flex;
   align-items: flex-end;
-  gap: 10px;
+  gap: 12px;
 }
 
 .chatgpt-textarea {
   flex: 1;
-  min-height: 24px;
-  max-height: 160px;
+  min-height: 44px;
+  max-height: 180px;
   border: none;
   background: transparent;
   outline: none;
-  color: #ffffff;
-  font-family: inherit;
-  font-size: 13.5px;
-  line-height: 1.5;
+  color: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.75;
   resize: none;
-  padding: 4px 0;
+  padding: 8px 10px;
   box-sizing: border-box;
+  unicode-bidi: plaintext;
+  text-align: start;
+}
+
+.chatgpt-textarea[dir="rtl"],
+.chatgpt-textarea.is-rtl {
+  direction: rtl !important;
+  text-align: right !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "Segoe UI", Tahoma, Roboto, sans-serif !important;
+  line-height: 1.82 !important;
+}
+
+.chatgpt-textarea::-webkit-scrollbar {
+  width: 4px;
+}
+.chatgpt-textarea::-webkit-scrollbar-thumb {
+  background: rgba(192, 132, 252, 0.3);
+  border-radius: 4px;
+}
+.chatgpt-textarea::-webkit-scrollbar-thumb:hover {
+  background: rgba(192, 132, 252, 0.6);
 }
 
 .chatgpt-textarea::placeholder {
   color: #64748b;
   font-size: 13px;
+  font-family: inherit;
+}
+
+.composer-footer-helper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #64748b;
+  padding-top: 2px;
+  user-select: none;
+}
+
+.composer-shortcut-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.composer-shortcut-hint kbd {
+  font-size: 9px;
+  padding: 1px 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
 }
 
 .composer-actions-right {
@@ -1355,7 +1404,7 @@
 .seat-inline-inspector {
   position: fixed;
   z-index: 1500;
-  width: 380px;
+  width: 420px;
   max-width: calc(100vw - 32px);
   background: linear-gradient(175deg, rgba(20, 16, 36, 0.97) 0%, rgba(11, 8, 22, 0.99) 100%);
   backdrop-filter: blur(44px) saturate(230%);
@@ -1367,8 +1416,8 @@
               inset 0 1px 1px rgba(255, 255, 255, 0.2);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 16px 18px;
+  gap: 14px;
+  padding: 18px 20px;
   color: #f8fafc;
   opacity: 0;
   pointer-events: none;
@@ -1542,25 +1591,36 @@
 
 .inspector-directive-textarea {
   width: 100%;
-  height: 95px;
-  max-height: 180px;
-  background: rgba(8, 6, 16, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  padding: 8px 10px;
-  font-family: inherit;
-  font-size: 12px;
-  line-height: 1.6;
+  height: 135px;
+  min-height: 110px;
+  max-height: 260px;
+  background: rgba(8, 6, 18, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 11px;
+  padding: 12px 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  line-height: 1.8;
   color: #f8fafc;
   outline: none;
   resize: vertical;
   box-sizing: border-box;
-  transition: all 0.18s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.45);
 }
 
 .inspector-directive-textarea:focus {
   border-color: #c084fc;
-  box-shadow: 0 0 14px rgba(192, 132, 252, 0.3);
+  background: rgba(12, 9, 24, 0.95);
+  box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.2), 0 0 18px rgba(192, 132, 252, 0.35);
+}
+
+.inspector-directive-textarea::-webkit-scrollbar {
+  width: 4px;
+}
+.inspector-directive-textarea::-webkit-scrollbar-thumb {
+  background: rgba(192, 132, 252, 0.35);
+  border-radius: 4px;
 }
 
 /* Weight Slider & Controls Cluster */
@@ -1569,16 +1629,37 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 10px;
-  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 11px;
+  padding: 8px 14px;
 }
 
 .inspector-range-input {
   flex: 1;
-  accent-color: #c084fc;
+  height: 5px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(129, 140, 248, 0.45) 0%, rgba(192, 132, 252, 0.75) 100%);
+  outline: none;
   cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.inspector-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #c084fc;
+  box-shadow: 0 0 8px rgba(192, 132, 252, 0.6);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.inspector-range-input::-webkit-slider-thumb:hover {
+  transform: scale(1.18);
 }
 
 .inspector-weight-value {
@@ -1629,13 +1710,13 @@
   color: #fca5a5;
 }
 
-/* ── 10. The Re-engineered 3-Zone Logic Sanctum Atelier Drawer ── */
+/* ── 10. The Re-engineered 4-Zone Logic Sanctum Atelier Drawer ── */
 .logic-sanctum-drawer {
   position: fixed;
   top: 0;
   right: 0;
-  width: 580px;
-  max-width: calc(100vw - 20px);
+  width: 660px;
+  max-width: calc(100vw - 16px);
   height: 100vh;
   z-index: 1400;
   background: linear-gradient(175deg, rgba(16, 12, 28, 0.98) 0%, rgba(9, 7, 18, 0.99) 100%);
@@ -1999,43 +2080,222 @@
   line-height: 1.5;
 }
 
-/* Formula Accordion Block */
-.formula-accordion-block {
+/* ── Dedicated Spacious Prompt Formula Editor Card ── */
+.formula-editor-card {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-top: 6px;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: rgba(15, 12, 26, 0.92);
+  border: 1px solid rgba(192, 132, 252, 0.3);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-.formula-accordion-trigger {
-  width: 100%;
+.formula-editor-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 12px;
-  border-radius: 8px;
+  gap: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.formula-toolbar-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.formula-toolbar-icon {
+  font-size: 15px;
+  color: #fde68a;
+}
+
+.formula-toolbar-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.formula-stats-badge {
+  font-size: 10px;
+  font-weight: 600;
+  color: #a5b4fc;
+  background: rgba(129, 140, 248, 0.15);
+  border: 1px solid rgba(129, 140, 248, 0.3);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-family: ui-monospace, monospace;
+}
+
+.formula-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-formula-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
   color: #cbd5e1;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: inherit;
 }
 
-.formula-accordion-trigger:hover {
-  background: rgba(192, 132, 252, 0.12);
+.btn-formula-tool:hover {
+  background: rgba(192, 132, 252, 0.18);
+  border-color: rgba(192, 132, 252, 0.45);
   color: #ffffff;
-  border-color: rgba(192, 132, 252, 0.35);
 }
 
-.formula-accordion-body {
-  padding: 10px 12px;
-  border-radius: 9px;
-  background: rgba(10, 8, 18, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  animation: sanctumFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+.btn-formula-tool.reset:hover {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.5);
+  color: #fef08a;
+}
+
+.formula-textarea-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.formula-textarea {
+  width: 100%;
+  min-height: 280px;
+  height: 330px;
+  max-height: 620px;
+  background: rgba(8, 6, 18, 0.9);
+  border: 1px solid rgba(192, 132, 252, 0.35);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.85;
+  resize: vertical;
+  box-sizing: border-box;
+  outline: none;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.formula-textarea:focus {
+  border-color: #c084fc;
+  background: rgba(11, 8, 22, 0.98);
+  box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.22), 0 0 24px rgba(192, 132, 252, 0.32), inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.formula-textarea::-webkit-scrollbar {
+  width: 6px;
+}
+.formula-textarea::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+.formula-textarea::-webkit-scrollbar-thumb {
+  background: rgba(192, 132, 252, 0.35);
+  border-radius: 4px;
+}
+.formula-textarea::-webkit-scrollbar-thumb:hover {
+  background: rgba(192, 132, 252, 0.65);
+}
+
+/* Macro Tags Flow inside Formula Card */
+.formula-macros-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 2px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.macros-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.macros-header-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.macros-hint-pill {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #c084fc;
+  background: rgba(192, 132, 252, 0.14);
+  border: 1px solid rgba(192, 132, 252, 0.3);
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+.macro-chips-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.macro-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  background: rgba(192, 132, 252, 0.1);
+  border: 1px solid rgba(192, 132, 252, 0.28);
+  color: #e9d5ff;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: inherit;
+}
+
+.macro-chip-btn:hover {
+  background: rgba(192, 132, 252, 0.24);
+  border-color: rgba(192, 132, 252, 0.65);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(192, 132, 252, 0.25);
+}
+
+.macro-chip-btn:active {
+  transform: scale(0.96);
+}
+
+.macro-chip-btn code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  font-weight: 600;
+  color: #fbcfe8;
+}
+
+.macro-chip-btn small {
+  color: #94a3b8;
+  font-size: 10px;
+}
+
+/* Dedicated Directive Textareas across Sanctum */
+.sanctum-directive-editor {
+  width: 100%;
+  min-height: 120px !important;
+  height: 140px !important;
+  font-size: 13px !important;
+  line-height: 1.82 !important;
+  padding: 12px 14px !important;
+  border-radius: 10px !important;
+  box-sizing: border-box !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "SF Pro Text", "Segoe UI", Roboto, sans-serif !important;
 }
 
 /* Scenarios Grid & Cards */

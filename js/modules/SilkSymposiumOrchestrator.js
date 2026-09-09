@@ -140,11 +140,12 @@ export class SilkSymposiumOrchestrator {
     this.topologySelect = document.getElementById('sanctum-topology-select');
     this.topologyCardsGrid = document.getElementById('topology-cards-grid');
     this.promptTemplatePresetPicker = document.getElementById('sanctum-prompt-template-preset-select');
-    this.btnToggleFormulaAccordion = document.getElementById('btn-toggle-formula-accordion');
-    this.formulaAccordionContent = document.getElementById('formula-accordion-content');
+    this.templateTextarea = document.getElementById('sanctum-template-textarea');
+    this.btnResetFormula = document.getElementById('btn-reset-formula-default');
+    this.btnCopyFormula = document.getElementById('btn-copy-formula');
+    this.formulaStatsBadge = document.getElementById('formula-stats-badge');
     this.maxRoundsInput = document.getElementById('sanctum-max-rounds');
     this.distillSelect = document.getElementById('sanctum-distill-select');
-    this.templateTextarea = document.getElementById('sanctum-template-textarea');
     this.macroChipsContainer = document.getElementById('sanctum-macro-chips');
     this.sanctumGlobalDirectivePresetPicker = document.getElementById('sanctum-global-directive-preset-select');
     this.sanctumGlobalDirectiveTextarea = document.getElementById('sanctum-global-directive');
@@ -298,7 +299,8 @@ export class SilkSymposiumOrchestrator {
     this.inputPrompt?.addEventListener('input', () => {
       this.syncTextareaDirection(this.inputPrompt);
       this.inputPrompt.style.height = 'auto';
-      this.inputPrompt.style.height = Math.min(this.inputPrompt.scrollHeight, 160) + 'px';
+      const scrollH = this.inputPrompt.scrollHeight;
+      this.inputPrompt.style.height = Math.min(Math.max(32, scrollH), 180) + 'px';
     });
 
     // Auto text direction detection on custom directive textareas
@@ -306,40 +308,83 @@ export class SilkSymposiumOrchestrator {
       this.syncTextareaDirection(this.sanctumGlobalDirectiveTextarea);
     });
 
-    // Preset choosers for global directive and prompt templates
+    // Instant Preset choosers for global directive and prompt templates
     this.sanctumGlobalDirectivePresetPicker?.addEventListener('change', () => {
       const key = this.sanctumGlobalDirectivePresetPicker.value;
       if (key && GLOBAL_DIRECTIVE_PRESETS[key]) {
         this.sanctumGlobalDirectiveTextarea.value = GLOBAL_DIRECTIVE_PRESETS[key].directive;
         this.syncTextareaDirection(this.sanctumGlobalDirectiveTextarea);
+        this.symposiumState.applyGlobalDirectivePreset(key);
+        this.showToast(`دستور کلی شورا "${GLOBAL_DIRECTIVE_PRESETS[key].title}" اعمال شد ✓`);
       }
     });
 
     this.promptTemplatePresetPicker?.addEventListener('change', () => {
       const key = this.promptTemplatePresetPicker.value;
       if (key && DIALECTIC_PROMPT_TEMPLATES[key]) {
-        this.templateTextarea.value = DIALECTIC_PROMPT_TEMPLATES[key].template;
+        if (this.templateTextarea) {
+          this.templateTextarea.value = DIALECTIC_PROMPT_TEMPLATES[key].template;
+          this.syncTextareaDirection(this.templateTextarea);
+          this.updateFormulaStats();
+        }
+        this.symposiumState.applyPromptTemplate(key);
+        this.showToast(`فرمول پرومپت "${DIALECTIC_PROMPT_TEMPLATES[key].title}" اعمال شد ✓`);
       }
     });
 
-    // Toggle Formula Accordion
-    this.btnToggleFormulaAccordion?.addEventListener('click', () => {
-      if (!this.formulaAccordionContent) return;
-      const isOpen = this.formulaAccordionContent.style.display !== 'none';
-      this.formulaAccordionContent.style.display = isOpen ? 'none' : 'block';
-      const arrow = this.btnToggleFormulaAccordion.querySelector('.arrow-indicator');
-      if (arrow) arrow.textContent = isOpen ? '▼' : '▲';
+    // Formula Textarea live input monitoring
+    this.templateTextarea?.addEventListener('input', () => {
+      this.syncTextareaDirection(this.templateTextarea);
+      this.updateFormulaStats();
     });
 
-    // Visual Topology Cards Click Listeners
+    // Reset current formula to preset default
+    this.btnResetFormula?.addEventListener('click', () => {
+      const currentKey = this.symposiumState.config.activeTemplateKey || 'manual_conductor';
+      const tpl = DIALECTIC_PROMPT_TEMPLATES[currentKey] || DIALECTIC_PROMPT_TEMPLATES.manual_conductor;
+      if (tpl && this.templateTextarea) {
+        this.templateTextarea.value = tpl.template;
+        this.syncTextareaDirection(this.templateTextarea);
+        this.updateFormulaStats();
+        this.symposiumState.config.promptTemplate = tpl.template;
+        this.symposiumState.persistConfig();
+        this.showToast(`فرمول به پیش‌فرض الگوی "${tpl.title}" بازنشانی شد ↺`);
+      }
+    });
+
+    // Copy formula to clipboard
+    this.btnCopyFormula?.addEventListener('click', () => {
+      if (this.templateTextarea?.value) {
+        navigator.clipboard.writeText(this.templateTextarea.value);
+        this.showToast('فرمول پرومپت در کلیپ‌بورد کپی شد 📋');
+      }
+    });
+
+    // Instant Distillation and Max Rounds updates
+    this.distillSelect?.addEventListener('change', () => {
+      this.symposiumState.config.contextDistillation = this.distillSelect.value;
+      this.symposiumState.persistConfig();
+      this.showToast('مدیریت حجم تاریخچه به‌روز شد ✓');
+    });
+
+    this.maxRoundsInput?.addEventListener('change', () => {
+      this.symposiumState.config.maxRounds = parseInt(this.maxRoundsInput.value, 10) || 10;
+      this.symposiumState.persistConfig();
+    });
+
+    // Visual Topology Cards Click Listeners: Immediately applies and persists
     this.topologyCardsGrid?.addEventListener('click', (e) => {
       const card = e.target.closest('.topology-card');
       if (!card) return;
       const val = card.dataset.value;
-      if (val && this.topologySelect) {
-        this.topologySelect.value = val;
+      if (val) {
+        if (this.topologySelect) this.topologySelect.value = val;
         this.topologyCardsGrid.querySelectorAll('.topology-card').forEach(c => c.classList.remove('active'));
         card.classList.add('active');
+        this.symposiumState.debateMode = val;
+        this.symposiumState.persistConfig();
+        this.updateHeaderStats();
+        this.showToast(`متدولوژی نوبت‌دهی به ${val} تغییر یافت ✓`);
       }
     });
 
@@ -421,10 +466,13 @@ export class SilkSymposiumOrchestrator {
       const chip = e.target.closest('.macro-chip-btn');
       if (chip && this.templateTextarea) {
         const macro = chip.dataset.macro;
-        const pos = this.templateTextarea.selectionStart || this.templateTextarea.value.length;
+        const pos = this.templateTextarea.selectionStart ?? this.templateTextarea.value.length;
         const val = this.templateTextarea.value;
         this.templateTextarea.value = val.slice(0, pos) + macro + val.slice(pos);
         this.templateTextarea.focus();
+        this.templateTextarea.setSelectionRange(pos + macro.length, pos + macro.length);
+        this.updateFormulaStats();
+        this.showToast(`متغیر ${macro} درج شد ✓`);
       }
     });
 
@@ -1494,7 +1542,7 @@ export class SilkSymposiumOrchestrator {
 
         <div style="margin-top: 8px;">
           <label class="driver-sub-label">دستورالعمل سیستمی و مأموریت فکری کاربر در میزگرد:</label>
-          <textarea id="seat-edit-directive" class="driver-text-input" style="height: 70px; resize: vertical;" placeholder="تعریف مأموریت فکری خودتان در این مناظره..." dir="auto">${this.escapeHtml(seat.personaDirective || '')}</textarea>
+          <textarea id="seat-edit-directive" class="driver-text-input sanctum-directive-editor" placeholder="تعریف مأموریت فکری خودتان در این مناظره..." dir="auto">${this.escapeHtml(seat.personaDirective || '')}</textarea>
         </div>
 
         <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px;">
@@ -1550,7 +1598,7 @@ export class SilkSymposiumOrchestrator {
             <label class="driver-sub-label" style="margin:0;">دستورالعمل اختصاصی این هوش مصنوعی (System Directive):</label>
             <button type="button" id="btn-apply-persona-all-sanctum" class="btn-custom-bot-link" style="font-size:10.5px;">اعمال این پرسونا به همه مدل‌ها 🌐</button>
           </div>
-          <textarea id="seat-edit-directive" class="driver-text-input" style="height: 80px; resize: vertical;" placeholder="تعریف وظیفه فکری، تخصص و زاویه دید اختصاصی این صندلی..." dir="auto">${this.escapeHtml(seat.personaDirective || '')}</textarea>
+          <textarea id="seat-edit-directive" class="driver-text-input sanctum-directive-editor" placeholder="تعریف وظیفه فکری، تخصص و زاویه دید اختصاصی این صندلی..." dir="auto">${this.escapeHtml(seat.personaDirective || '')}</textarea>
         </div>
 
         <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px;">
@@ -1577,8 +1625,9 @@ export class SilkSymposiumOrchestrator {
     directiveEl?.addEventListener('input', () => {
       this.syncTextareaDirection(directiveEl);
     });
+    if (directiveEl) this.syncTextareaDirection(directiveEl);
 
-    // Persona Selection Handler
+    // Persona Selection Handler with instant directive filling & direction syncing
     this.daisSeatEditorContainer.querySelector('#seat-edit-persona-select')?.addEventListener('change', (e) => {
       const pKey = e.target.value;
       if (pKey && allPersonas[pKey]) {
@@ -1586,6 +1635,10 @@ export class SilkSymposiumOrchestrator {
         if (directiveEl) {
           directiveEl.value = p.directive;
           this.syncTextareaDirection(directiveEl);
+        }
+        const nameInput = this.daisSeatEditorContainer.querySelector('#seat-edit-name');
+        if (nameInput && !isUser && !nameInput.value) {
+          nameInput.value = p.title.split('(')[0].trim();
         }
       }
     });
@@ -1668,6 +1721,14 @@ export class SilkSymposiumOrchestrator {
     });
   }
 
+  updateFormulaStats() {
+    if (!this.formulaStatsBadge || !this.templateTextarea) return;
+    const text = this.templateTextarea.value || '';
+    const charCount = text.length;
+    const lineCount = text ? text.split('\n').length : 0;
+    this.formulaStatsBadge.textContent = `${charCount} نویسه • ${lineCount} سطر`;
+  }
+
   loadProtocolsIntoEditor() {
     if (this.topologySelect) this.topologySelect.value = this.symposiumState.debateMode;
 
@@ -1680,7 +1741,15 @@ export class SilkSymposiumOrchestrator {
 
     if (this.maxRoundsInput) this.maxRoundsInput.value = this.symposiumState.config.maxRounds;
     if (this.distillSelect) this.distillSelect.value = this.symposiumState.config.contextDistillation;
-    if (this.templateTextarea) this.templateTextarea.value = this.symposiumState.config.promptTemplate;
+    if (this.templateTextarea) {
+      this.templateTextarea.value = this.symposiumState.config.promptTemplate;
+      this.syncTextareaDirection(this.templateTextarea);
+      this.updateFormulaStats();
+    }
+    if (this.sanctumGlobalDirectiveTextarea) {
+      this.sanctumGlobalDirectiveTextarea.value = this.symposiumState.config.globalDirective || '';
+      this.syncTextareaDirection(this.sanctumGlobalDirectiveTextarea);
+    }
   }
 
   saveProtocolsConfig() {
@@ -1700,7 +1769,15 @@ export class SilkSymposiumOrchestrator {
 
   syncTextareaDirection(el) {
     if (!el) return;
-    const dir = this.detectTextDirection(el.value || '');
+    const val = el.value || '';
+    if (!val.trim()) {
+      const ph = el.getAttribute('placeholder') || '';
+      const dir = ph ? this.detectTextDirection(ph) : 'rtl';
+      el.setAttribute('dir', dir);
+      el.classList.toggle('is-rtl', dir === 'rtl');
+      return;
+    }
+    const dir = this.detectTextDirection(val);
     el.setAttribute('dir', dir);
     el.classList.toggle('is-rtl', dir === 'rtl');
   }
