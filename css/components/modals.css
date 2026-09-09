@@ -1,0 +1,215 @@
+/**
+ * OmniAI Hub — Modals & Dialogs
+ */
+
+.modal-veil {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 6, 14, 0.68);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  animation: modalVeilFade 0.2s var(--ease-spring);
+}
+
+.modal-veil.hidden {
+  display: none !important;
+}
+
+@keyframes modalVeilFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-card {
+  width: 480px;
+  max-width: 90vw;
+  background: var(--bg-surface-elevated);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border: 1px solid var(--border-highlight);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-popover);
+  padding: 20px;
+  animation: modalScaleUp 0.25s var(--ease-spring);
+}
+
+@keyframes modalScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.modal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-title-group svg {
+  width: 18px;
+  height: 18px;
+  color: var(--orb-lavender);
+}
+
+.modal-title-group h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.modal-close-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--text-tertiary);
+  transition: all var(--duration-fast) var(--ease-spring);
+}
+
+.modal-close-icon:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.modal-content-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field label {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.form-field input {
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-standard);
+  color: var(--text-primary);
+  font-size: 12.5px;
+  transition: border-color var(--duration-fast) var(--ease-spring);
+}
+
+.form-field input:focus {
+  border-color: rgba(196, 181, 253, 0.5);
+  box-shadow: 0 0 12px rgba(196, 181, 253, 0.15);
+}
+
+.field-tip {
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+
+.quick-presets-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.quick-bot-chip {
+  padding: 5px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  font-size: 11px;
+  color: var(--text-secondary);
+  transition: all var(--duration-fast) var(--ease-spring);
+}
+
+.quick-bot-chip:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #ffffff;
+  border-color: var(--border-highlight);
+}
+
+.modal-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.action-btn {
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 500;
+  transition: all var(--duration-fast) var(--ease-spring);
+}
+
+.action-btn.secondary {
+  color: var(--text-secondary);
+}
+
+.action-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+}
+
+.action-btn.primary {
+  background: linear-gradient(135deg, rgba(221, 214, 254, 0.28) 0%, rgba(251, 207, 232, 0.28) 100%);
+  border: 1px solid rgba(221, 214, 254, 0.45);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.action-btn.primary:hover {
+  background: linear-gradient(135deg, rgba(221, 214, 254, 0.38) 0%, rgba(251, 207, 232, 0.38) 100%);
+  box-shadow: 0 4px 18px rgba(196, 181, 253, 0.25);
+}
+
+/* ── Shortcuts Legend Table ── */
+.shortcuts-table {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.shortcut-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.shortcut-keys-combo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.shortcut-legend {
+  font-size: 12px;
+  color: var(--text-secondary);
+}

@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniAI Hub — Obsidian Rose & Frosted Silk Spatial Workspace</title>
+  
+  <!-- Obsidian Rose & Frosted Silk Haute Spatial Design System -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components/nav-bar.css">
+  <link rel="stylesheet" href="css/components/pane.css">
+  <link rel="stylesheet" href="css/components/omnibar.css">
+  <link rel="stylesheet" href="css/components/modals.css">
+  <link rel="stylesheet" href="css/components/selector-studio.css">
+  <link rel="stylesheet" href="css/components/mirror-chat.css">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    .window-controls-cluster {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: 8px;
+      padding: 2px 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+    }
+    .window-controls-cluster.hidden {
+      display: none !important;
+    }
+    .win-control-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 22px;
+      border: none;
+      background: transparent;
+      color: #cbd5e1;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      padding: 0;
+    }
+    .win-control-btn svg {
+      width: 13px;
+      height: 13px;
+      pointer-events: none;
+    }
+    .win-control-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #f8fafc;
+    }
+    .win-control-btn.btn-close:hover {
+      background: rgba(239, 68, 68, 0.85);
+      color: #ffffff;
+    }
+
+    /* Spatial Popover & Auto-Arrangement Engine Haute Silk Styling */
+    .spatial-popover-menu {
+      background: linear-gradient(175deg, rgba(20, 24, 38, 0.98) 0%, rgba(12, 14, 23, 0.99) 100%) !important;
+      backdrop-filter: blur(28px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+      z-index: 1000 !important;
+    }
+
+    #auto-arrange-popover {
+      position: absolute !important;
+      top: calc(100% + 8px) !important;
+      right: 0 !important;
+      left: auto !important;
+      transform: none !important;
+      width: 310px !important;
+      max-width: calc(100vw - 20px) !important;
+      max-height: calc(100vh - 65px) !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      overscroll-behavior: contain !important;
+      border-radius: 14px !important;
+      padding: 12px 14px !important;
+      box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.08), 0 8px 24px rgba(129, 140, 248, 0.12) !important;
+      color: #f1f5f9 !important;
+      box-sizing: border-box !important;
+    }
+
+    #auto-arrange-popover::-webkit-scrollbar {
+      width: 4px !important;
+    }
+    #auto-arrange-popover::-webkit-scrollbar-track {
+      background: transparent !important;
+    }
+    #auto-arrange-popover::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.18) !important;
+      border-radius: 4px !important;
+    }
+    #auto-arrange-popover::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.3) !important;
+    }
+
+    #auto-arrange-popover .popover-header {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding-bottom: 10px !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+      margin-bottom: 10px !important;
+    }
+
+    #auto-arrange-popover .popover-title {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      color: #f8fafc !important;
+    }
+
+    #auto-arrange-popover .popover-title svg {
+      width: 15px !important;
+      height: 15px !important;
+      color: #c084fc !important;
+      flex-shrink: 0 !important;
+    }
+
+    #auto-arrange-popover .popover-badge {
+      background: rgba(192, 132, 252, 0.12) !important;
+      border: 1px solid rgba(192, 132, 252, 0.3) !important;
+      color: #d8b4fe !important;
+      font-size: 9.5px !important;
+      font-weight: 600 !important;
+      padding: 2px 7px !important;
+      border-radius: 20px !important;
+      letter-spacing: 0.02em !important;
+    }
+
+    #auto-arrange-popover .popover-section {
+      margin-bottom: 10px !important;
+      padding-bottom: 8px !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    }
+
+    #auto-arrange-popover .popover-section:last-of-type {
+      border-bottom: none !important;
+      margin-bottom: 12px !important;
+      padding-bottom: 0 !important;
+    }
+
+    #auto-arrange-popover .section-label {
+      display: block !important;
+      font-size: 9.5px !important;
+      font-weight: 700 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.06em !important;
+      color: #718096 !important;
+      margin-bottom: 6px !important;
+    }
+
+    #auto-arrange-popover .layout-presets-grid {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 5px !important;
+    }
+
+    #auto-arrange-popover .layout-preset-chip {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 4px !important;
+      padding: 7px 3px !important;
+      background: rgba(255, 255, 255, 0.035) !important;
+      border: 1px solid rgba(255, 255, 255, 0.07) !important;
+      border-radius: 8px !important;
+      color: #94a3b8 !important;
+      cursor: pointer !important;
+      transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    #auto-arrange-popover .layout-preset-chip svg {
+      width: 16px !important;
+      height: 16px !important;
+      flex-shrink: 0 !important;
+      stroke: currentColor !important;
+      opacity: 0.85 !important;
+      transition: all 0.16s ease !important;
+    }
+
+    #auto-arrange-popover .layout-preset-chip span {
+      font-size: 10.5px !important;
+      font-weight: 500 !important;
+    }
+
+    #auto-arrange-popover .layout-preset-chip:hover {
+      background: rgba(255, 255, 255, 0.07) !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+      color: #f1f5f9 !important;
+      transform: translateY(-1px) !important;
+    }
+
+    #auto-arrange-popover .layout-preset-chip.active {
+      background: rgba(129, 140, 248, 0.16) !important;
+      border-color: rgba(129, 140, 248, 0.6) !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 16px rgba(129, 140, 248, 0.25) !important;
+    }
+
+    #auto-arrange-popover .layout-preset-chip.active svg {
+      stroke: #a5b4fc !important;
+      opacity: 1 !important;
+      transform: scale(1.06) !important;
+    }
+
+    #auto-arrange-popover .toggle-row {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      cursor: pointer !important;
+      user-select: none !important;
+      gap: 10px !important;
+      padding: 2px 0 !important;
+    }
+
+    #auto-arrange-popover .toggle-info {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 1px !important;
+    }
+
+    #auto-arrange-popover .toggle-title {
+      font-size: 11.5px !important;
+      font-weight: 500 !important;
+      color: #e2e8f0 !important;
+    }
+
+    #auto-arrange-popover .toggle-sub {
+      font-size: 9.5px !important;
+      color: #64748b !important;
+      line-height: 1.25 !important;
+    }
+
+    #auto-arrange-popover .silk-switch {
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      width: 32px !important;
+      height: 18px !important;
+      background: rgba(255, 255, 255, 0.15) !important;
+      border-radius: 20px !important;
+      position: relative !important;
+      cursor: pointer !important;
+      outline: none !important;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      flex-shrink: 0 !important;
+    }
+
+    #auto-arrange-popover .silk-switch::after {
+      content: '' !important;
+      position: absolute !important;
+      top: 2px !important;
+      left: 2px !important;
+      width: 14px !important;
+      height: 14px !important;
+      background: #ffffff !important;
+      border-radius: 50% !important;
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    #auto-arrange-popover .silk-switch:checked {
+      background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%) !important;
+      box-shadow: 0 0 12px rgba(192, 132, 252, 0.45) !important;
+    }
+
+    #auto-arrange-popover .silk-switch:checked::after {
+      transform: translateX(14px) !important;
+    }
+
+    #auto-arrange-popover .layout-preset-chip.desktop-full-preset {
+      grid-column: 1 / -1 !important;
+      flex-direction: row !important;
+      gap: 8px !important;
+      padding: 7px 10px !important;
+    }
+
+    #auto-arrange-popover .layout-preset-chip.desktop-full-preset span {
+      font-size: 11px !important;
+      font-weight: 600 !important;
+    }
+
+    #auto-arrange-popover .spacing-preset-group {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 5px !important;
+    }
+
+    #auto-arrange-popover .sizing-preset-group {
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 5px !important;
+    }
+
+    #auto-arrange-popover .spacing-preset-chip,
+    #auto-arrange-popover .sizing-preset-chip {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      text-align: center !important;
+      gap: 1px !important;
+      padding: 5px 2px !important;
+      min-height: 36px !important;
+      background: rgba(255, 255, 255, 0.035) !important;
+      border: 1px solid rgba(255, 255, 255, 0.07) !important;
+      border-radius: 7px !important;
+      color: #94a3b8 !important;
+      cursor: pointer !important;
+      transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      font-family: inherit !important;
+      line-height: 1.2 !important;
+      box-sizing: border-box !important;
+    }
+
+    #auto-arrange-popover .spacing-preset-chip strong,
+    #auto-arrange-popover .sizing-preset-chip strong {
+      font-size: 10.5px !important;
+      font-weight: 600 !important;
+      display: block !important;
+    }
+
+    #auto-arrange-popover .spacing-preset-chip small,
+    #auto-arrange-popover .sizing-preset-chip small {
+      font-size: 9px !important;
+      color: #64748b !important;
+      display: block !important;
+    }
+
+    #auto-arrange-popover .spacing-preset-chip:hover,
+    #auto-arrange-popover .sizing-preset-chip:hover {
+      background: rgba(255, 255, 255, 0.07) !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+      color: #f1f5f9 !important;
+      transform: translateY(-1px) !important;
+    }
+
+    #auto-arrange-popover .spacing-preset-chip.active,
+    #auto-arrange-popover .sizing-preset-chip.active {
+      background: rgba(129, 140, 248, 0.16) !important;
+      border-color: rgba(129, 140, 248, 0.6) !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 14px rgba(129, 140, 248, 0.22) !important;
+    }
+
+    #auto-arrange-popover .spacing-preset-chip.active small,
+    #auto-arrange-popover .sizing-preset-chip.active small {
+      color: #c7d2fe !important;
+    }
+
+    #auto-arrange-popover .popover-actions {
+      margin-top: 4px !important;
+      padding-top: 2px !important;
+    }
+
+    #auto-arrange-popover .popover-action-btn.primary {
+      width: 100% !important;
+      height: 36px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 8px !important;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%) !important;
+      border: none !important;
+      border-radius: 9px !important;
+      color: #ffffff !important;
+      font-size: 12.5px !important;
+      font-weight: 600 !important;
+      letter-spacing: -0.01em !important;
+      cursor: pointer !important;
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1) inset !important;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      overflow: hidden !important;
+      position: relative !important;
+    }
+
+    #auto-arrange-popover .popover-action-btn.primary svg {
+      width: 16px !important;
+      height: 16px !important;
+      max-width: 16px !important;
+      max-height: 16px !important;
+      min-width: 16px !important;
+      min-height: 16px !important;
+      flex-shrink: 0 !important;
+      stroke: #ffffff !important;
+      display: block !important;
+    }
+
+    #auto-arrange-popover .popover-action-btn.primary span {
+      display: inline-block !important;
+      white-space: nowrap !important;
+    }
+
+    #auto-arrange-popover .popover-action-btn.primary kbd {
+      background: rgba(0, 0, 0, 0.28) !important;
+      border: 1px solid rgba(255, 255, 255, 0.22) !important;
+      color: rgba(255, 255, 255, 0.95) !important;
+      padding: 2px 7px !important;
+      border-radius: 5px !important;
+      font-size: 10.5px !important;
+      font-weight: 600 !important;
+      font-family: inherit !important;
+      margin-left: 4px !important;
+    }
+
+    #auto-arrange-popover .popover-action-btn.primary:hover {
+      transform: translateY(-1.5px) !important;
+      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.2) inset !important;
+      filter: brightness(1.08) !important;
+    }
+
+    #auto-arrange-popover .popover-action-btn.primary:active {
+      transform: translateY(0.5px) scale(0.99) !important;
+      box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3) !important;
+    }
+
+    /* ==========================================================================
+       Haute Omnibar Floating Dock & Studio (Ultra Sleek & Non-Intrusive)
+       ========================================================================== */
+    .omnibar-capsule-island {
+      position: fixed !important;
+      bottom: 16px !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      z-index: 1100 !important;
+      pointer-events: none !important; /* Never block canvas clicks outside the bar itself */
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      transition: bottom 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.25s ease,
+                  transform 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    /* Zen Mode: tuck away smoothly to the bottom edge, reveal on hover */
+    .zen-mode .omnibar-capsule-island {
+      bottom: 6px !important;
+      opacity: 0.35 !important;
+    }
+    .zen-mode .omnibar-capsule-island:hover,
+    .zen-mode .omnibar-capsule-island.expanded {
+      bottom: 16px !important;
+      opacity: 1 !important;
+    }
+
+    /* 1. Resting Compact Pill */
+    .omnibar-compact-bar {
+      pointer-events: auto !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      height: 38px !important;
+      padding: 0 14px 0 10px !important;
+      border-radius: 999px !important;
+      background: rgba(13, 16, 26, 0.78) !important;
+      backdrop-filter: blur(24px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.09) !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 
+                  0 0 0 1px rgba(129, 140, 248, 0.1) inset,
+                  0 2px 10px rgba(0, 0, 0, 0.3) !important;
+      cursor: pointer !important;
+      user-select: none !important;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      max-width: 480px !important;
+      min-width: 330px !important;
+    }
+
+    .omnibar-compact-bar:hover {
+      background: rgba(18, 22, 36, 0.88) !important;
+      border-color: rgba(192, 132, 252, 0.35) !important;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55),
+                  0 0 20px rgba(192, 132, 252, 0.2),
+                  0 0 0 1px rgba(192, 132, 252, 0.25) inset !important;
+      transform: translateY(-2px) !important;
+    }
+
+    .capsule-spark-gem {
+      width: 24px !important;
+      height: 24px !important;
+      border-radius: 50% !important;
+      background: linear-gradient(135deg, rgba(129, 140, 248, 0.25) 0%, rgba(192, 132, 252, 0.25) 100%) !important;
+      border: 1px solid rgba(192, 132, 252, 0.4) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      flex-shrink: 0 !important;
+      color: #c084fc !important;
+      box-shadow: 0 0 10px rgba(192, 132, 252, 0.3) !important;
+      transition: transform 0.22s ease !important;
+    }
+
+    .omnibar-compact-bar:hover .capsule-spark-gem {
+      transform: rotate(15deg) scale(1.08) !important;
+      color: #f472b6 !important;
+    }
+
+    .capsule-spark-gem svg {
+      width: 13px !important;
+      height: 13px !important;
+    }
+
+    .capsule-placeholder {
+      font-size: 11.5px !important;
+      font-weight: 500 !important;
+      color: #94a3b8 !important;
+      letter-spacing: -0.01em !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      flex: 1 !important;
+      transition: color 0.18s ease !important;
+    }
+
+    .omnibar-compact-bar:hover .capsule-placeholder {
+      color: #e2e8f0 !important;
+    }
+
+    .capsule-hotkey-tags {
+      display: flex !important;
+      align-items: center !important;
+      gap: 5px !important;
+      flex-shrink: 0 !important;
+    }
+
+    .hotkey-badge {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 2px !important;
+      padding: 1px 5px !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      border-radius: 5px !important;
+      font-size: 9.5px !important;
+      color: #94a3b8 !important;
+      font-family: inherit !important;
+    }
+
+    .hotkey-badge kbd {
+      font-family: inherit !important;
+      font-size: 9.5px !important;
+      font-weight: 600 !important;
+    }
+
+    /* Dispatched pulse feedback on compact pill */
+    @keyframes pillDispatchedPulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(192, 132, 252, 0.8), 0 8px 32px rgba(0, 0, 0, 0.5);
+        border-color: rgba(192, 132, 252, 0.9);
+        transform: translateY(-3px) scale(1.03);
+      }
+      50% {
+        box-shadow: 0 0 28px 4px rgba(192, 132, 252, 0.5), 0 12px 40px rgba(0, 0, 0, 0.6);
+        border-color: rgba(244, 114, 182, 0.9);
+      }
+      100% {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+        border-color: rgba(255, 255, 255, 0.09);
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .omnibar-compact-bar.pill-dispatched {
+      animation: pillDispatchedPulse 1.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    .omnibar-compact-bar.pill-dispatched .capsule-spark-gem {
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%) !important;
+      color: #ffffff !important;
+    }
+
+    /* 2. Expanded Multi-Line Prompt Studio */
+    .omnibar-studio-layout {
+      pointer-events: auto !important;
+      width: 660px !important;
+      max-width: calc(100vw - 32px) !important;
+      background: linear-gradient(170deg, rgba(19, 23, 37, 0.96) 0%, rgba(11, 13, 22, 0.98) 100%) !important;
+      backdrop-filter: blur(32px) saturate(190%) !important;
+      -webkit-backdrop-filter: blur(32px) saturate(190%) !important;
+      border: 1px solid rgba(192, 132, 252, 0.28) !important;
+      border-radius: 16px !important;
+      box-shadow: 0 28px 70px -12px rgba(0, 0, 0, 0.88),
+                  0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+                  0 8px 32px rgba(129, 140, 248, 0.18) !important;
+      padding: 10px 12px !important;
+      box-sizing: border-box !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 8px !important;
+      transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      transform-origin: bottom center !important;
+      animation: studioPopIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+    }
+
+    @keyframes studioPopIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .omnibar-capsule-island:not(.expanded) .omnibar-studio-layout,
+    .omnibar-studio-layout.hidden {
+      display: none !important;
+    }
+
+    .omnibar-capsule-island.expanded .omnibar-compact-bar,
+    .omnibar-compact-bar.hidden {
+      display: none !important;
+    }
+
+    .studio-accessory-strip {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 8px !important;
+      padding-bottom: 6px !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    }
+
+    .sync-scope-cluster {
+      display: flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      background: rgba(255, 255, 255, 0.04) !important;
+      padding: 2px !important;
+      border-radius: 8px !important;
+      border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    }
+
+    .sync-scope-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 5px !important;
+      padding: 4px 9px !important;
+      border-radius: 6px !important;
+      border: none !important;
+      background: transparent !important;
+      color: #94a3b8 !important;
+      font-size: 10.5px !important;
+      font-weight: 500 !important;
+      cursor: pointer !important;
+      transition: all 0.16s ease !important;
+      font-family: inherit !important;
+    }
+
+    .sync-scope-btn svg {
+      width: 12px !important;
+      height: 12px !important;
+      opacity: 0.8 !important;
+    }
+
+    .sync-scope-btn:hover {
+      color: #f1f5f9 !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+    }
+
+    .sync-scope-btn.active {
+      background: rgba(129, 140, 248, 0.2) !important;
+      color: #ffffff !important;
+      font-weight: 600 !important;
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.25) !important;
+    }
+
+    .sync-scope-btn.active svg {
+      opacity: 1 !important;
+      stroke: #a5b4fc !important;
+    }
+
+    .studio-bots-ribbon {
+      display: flex !important;
+      align-items: center !important;
+      gap: 5px !important;
+      overflow-x: auto !important;
+      max-width: 220px !important;
+      padding: 0 4px !important;
+    }
+    .studio-bots-ribbon::-webkit-scrollbar {
+      display: none !important;
+    }
+
+    .btn-collapse-studio {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 24px !important;
+      height: 24px !important;
+      border-radius: 6px !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      background: rgba(255, 255, 255, 0.04) !important;
+      color: #94a3b8 !important;
+      cursor: pointer !important;
+      transition: all 0.16s ease !important;
+      padding: 0 !important;
+      margin-left: auto !important;
+      flex-shrink: 0 !important;
+    }
+
+    .btn-collapse-studio svg {
+      width: 13px !important;
+      height: 13px !important;
+    }
+
+    .btn-collapse-studio:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.18) !important;
+    }
+
+    .studio-input-row {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 8px !important;
+    }
+
+    .studio-textarea {
+      width: 100% !important;
+      min-height: 48px !important;
+      max-height: 160px !important;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      color: #f8fafc !important;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif !important;
+      font-size: 13px !important;
+      line-height: 1.5 !important;
+      resize: none !important;
+      padding: 4px 2px !important;
+      box-sizing: border-box !important;
+    }
+
+    .studio-textarea::placeholder {
+      color: #64748b !important;
+      font-size: 12.5px !important;
+    }
+
+    .studio-actions-dock {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: flex-end !important;
+      gap: 8px !important;
+    }
+
+    .char-counter {
+      font-size: 10px !important;
+      font-weight: 500 !important;
+      color: #64748b !important;
+      margin-right: auto !important;
+      font-variant-numeric: tabular-nums !important;
+    }
+
+    .btn-clear-input {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 24px !important;
+      height: 24px !important;
+      border: none !important;
+      background: transparent !important;
+      color: #64748b !important;
+      border-radius: 4px !important;
+      cursor: pointer !important;
+      padding: 0 !important;
+      transition: all 0.15s ease !important;
+    }
+    .btn-clear-input svg {
+      width: 13px !important;
+      height: 13px !important;
+    }
+    .btn-clear-input:hover {
+      color: #e2e8f0 !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .btn-dispatch-jewel {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      padding: 5px 12px 5px 14px !important;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%) !important;
+      border: none !important;
+      border-radius: 8px !important;
+      color: #ffffff !important;
+      font-size: 12px !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.15) inset !important;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .btn-dispatch-jewel svg {
+      width: 13px !important;
+      height: 13px !important;
+    }
+
+    .btn-dispatch-jewel .key-pill {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 2px !important;
+      padding: 1px 4px !important;
+      border-radius: 4px !important;
+      background: rgba(0, 0, 0, 0.28) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      font-size: 9.5px !important;
+      margin-left: 2px !important;
+    }
+
+    .btn-dispatch-jewel:hover {
+      transform: translateY(-1px) !important;
+      box-shadow: 0 6px 22px rgba(139, 92, 246, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.25) inset !important;
+      filter: brightness(1.08) !important;
+    }
+
+    .btn-dispatch-jewel:active {
+      transform: translateY(1px) scale(0.98) !important;
+      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.35) !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient Cosmic Aurora Bioluminescence -->
+  <div class="ambient-aura aura-top-left"></div>
+  <div class="ambient-aura aura-top-right"></div>
+  <div class="ambient-aura aura-bottom-center"></div>
+
+  <!-- Global Application Root -->
+  <div id="app" class="app-root">
+
+    <!-- Zen Mode Edge Sensor -->
+    <div class="nano-nav-sensor" id="nano-nav-sensor"></div>
+
+    <!-- Unified Haute Top Nano-Horizon Bar (42px Floating Obsidian Silk) -->
+    <header class="top-nano-nav" id="top-nav">
+
+      <!-- 1. LEFT ZONE: Brand Gem Capsule & Canvas Optics Hub -->
+      <div class="nav-cluster left">
+        <div class="brand-capsule">
+          <div class="brand-gem">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <span class="brand-title">OmniAI</span>
+        </div>
+
+        <!-- Collapsible Canvas Optics Hub (Zoom, Reset, Fit, Zen) -->
+        <div class="collapsible-island-wrapper" id="wrapper-view-controls">
+          <button id="btn-trigger-view" class="nano-jewel-btn" title="Canvas Viewport & Optics">
+            <svg class="icon-lens" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <span id="zoom-readout-compact" class="zoom-readout-compact">100%</span>
+            <svg class="icon-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </button>
+
+          <div id="popover-view-controls" class="spatial-popover-menu compact hidden">
+            <div class="popover-header">
+              <div class="popover-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <span>Canvas Optics</span>
+              </div>
+              <span class="popover-badge">Spatial Scale</span>
+            </div>
+
+            <div class="popover-section">
+              <span class="section-label">Magnification</span>
+              <div class="zoom-stepper-cluster">
+                <button id="btn-zoom-out" class="btn-popover-step" title="Zoom Out (Ctrl + Wheel Down)">−</button>
+                <button id="zoom-readout-btn" class="btn-popover-readout" title="Reset Zoom to 100%">100%</button>
+                <button id="btn-zoom-in" class="btn-popover-step" title="Zoom In (Ctrl + Wheel Up)">+</button>
+              </div>
+            </div>
+
+            <div class="popover-section view-actions-stack">
+              <button id="btn-fit-all" class="popover-menu-item" title="Fit All Cards into View (⌘0)">
+                <span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 9h6v6H9z"/>
+                  </svg>
+                  Fit All to Viewport
+                </span>
+                <kbd>⌘0</kbd>
+              </button>
+
+              <button id="btn-zen-mode" class="popover-menu-item" title="Toggle Zen Immersion (⌘Z)">
+                <span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
+                  </svg>
+                  Zen Mode Immersion
+                </span>
+                <kbd>⌘Z</kbd>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. CENTER ZONE: Unified AI Silk Tabs Ribbon (Integrated Stage) -->
+      <div class="nav-cluster center tabs-stage">
+        <div id="silk-tabs-container" class="silk-tabs-container silk-tabs-container-integrated">
+          <!-- Dynamic Tabs injected here by WorkspaceCanvas -->
+        </div>
+
+        <!-- Attached Quick Add Intelligence Dropdown -->
+        <div class="quick-launcher-wrapper">
+          <button id="btn-quick-add-tab" class="btn-tab-add-ghost" title="Open New AI Intelligence (⌘⇧A)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div id="quick-launcher-popover" class="quick-launcher-popover hidden">
+            <div class="quick-launcher-header">Select Model to Add</div>
+            <div class="quick-launcher-grid" id="quick-models-grid"></div>
+            <div class="quick-launcher-footer">
+              <button id="btn-open-custom-modal" class="btn-custom-bot-link">+ Add Custom URL</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. RIGHT ZONE: Modular Collapsible Drawers & OS Window Controls -->
+      <div class="nav-cluster right">
+        <!-- Native Mirror Chat Studio Jewel Trigger -->
+        <button id="btn-mirror-chat" class="nano-jewel-btn" title="Open Native Silk Mirror Chat (⌘J)">
+          <svg class="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+          <span>Mirror Sanctuary</span>
+          <kbd style="font-size: 9.5px; opacity: 0.7; margin-left: 2px;">⌘J</kbd>
+        </button>
+
+        <!-- Neural DOM Driver Studio Trigger -->
+        <button id="btn-driver-studio" class="nano-jewel-btn" title="Neural DOM Driver Studio (⌘⇧S)">
+          <svg class="icon-chip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/>
+          </svg>
+          <span>DOM Drivers</span>
+          <kbd style="font-size: 9.5px; opacity: 0.7; margin-left: 2px;">⌘⇧S</kbd>
+        </button>
+
+        <!-- Layout Architecture & Auto-Arrange Popover Trigger -->
+        <div class="collapsible-island-wrapper" id="wrapper-layout-menu">
+          <button id="btn-layout-menu" class="nano-jewel-btn" title="Layouts & Auto-Arrange (⌘⇧L)">
+            <svg class="icon-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
+              <rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>
+            </svg>
+            <span>Layout</span>
+            <span class="active-badge-dot" id="auto-arrange-status-dot"></span>
+            <svg class="icon-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </button>
+
+          <div id="auto-arrange-popover" class="spatial-popover-menu dropdown-right hidden">
+            <div class="popover-header">
+              <div class="popover-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+                <span>Auto-Arrangement Engine</span>
+              </div>
+              <span class="popover-badge">Spatial V2</span>
+            </div>
+
+            <div class="popover-section">
+              <span class="section-label">Architecture Preset</span>
+              <div class="layout-presets-grid">
+                <button class="layout-preset-chip active" data-preset="atelier" title="Atelier Dynamic Grid">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                  <span>Grid</span>
+                </button>
+                <button class="layout-preset-chip" data-preset="ribbon" title="Panoramic Horizon Ribbon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="6" height="12" rx="1.5"/><rect x="9" y="6" width="6" height="12" rx="1.5"/><rect x="16" y="6" width="6" height="12" rx="1.5"/></svg>
+                  <span>Ribbon</span>
+                </button>
+                <button class="layout-preset-chip" data-preset="duet" title="Dual Duet Focus">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="8.5" height="14" rx="2"/><rect x="12.5" y="5" width="8.5" height="14" rx="2"/></svg>
+                  <span>Duet</span>
+                </button>
+                <button class="layout-preset-chip" data-preset="hero" title="Hero & Sidebar Focus">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="11" height="16" rx="2"/><rect x="16" y="4" width="5" height="7.5" rx="1.5"/><rect x="16" y="12.5" width="5" height="7.5" rx="1.5"/></svg>
+                  <span>Hero</span>
+                </button>
+                <button class="layout-preset-chip" data-preset="vertical" title="Vertical Columns">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="9.5" y="4" width="5" height="16" rx="1.5"/><rect x="16" y="4" width="5" height="16" rx="1.5"/></svg>
+                  <span>Columns</span>
+                </button>
+                <button class="layout-preset-chip" data-preset="cascade" title="Cascade Staggered Stack">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="12" height="12" rx="2"/><rect x="6" y="6" width="12" height="12" rx="2" stroke-dasharray="2 2"/><rect x="9" y="9" width="12" height="12" rx="2"/></svg>
+                  <span>Cascade</span>
+                </button>
+                <button class="layout-preset-chip desktop-full-preset" data-preset="desktop" title="Full Desktop View (ابعاد کامل دسکتاپ 1280×850)">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2"/>
+                    <line x1="8" y1="21" x2="16" y2="21"/>
+                    <line x1="12" y1="17" x2="12" y2="21"/>
+                  </svg>
+                  <span>Full Desktop View</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="popover-section">
+              <label class="toggle-row" for="switch-auto-arrange">
+                <div class="toggle-info">
+                  <span class="toggle-title">Auto-arrange on new tabs</span>
+                  <span class="toggle-sub">Auto-pack cards whenever a new AI tab is opened</span>
+                </div>
+                <input type="checkbox" id="switch-auto-arrange" class="silk-switch" checked />
+              </label>
+            </div>
+
+            <div class="popover-section">
+              <label class="toggle-row" for="switch-auto-fit">
+                <div class="toggle-info">
+                  <span class="toggle-title">Auto-Fit Viewport</span>
+                  <span class="toggle-sub">Zoom to fit all cards into screen after arranging</span>
+                </div>
+                <input type="checkbox" id="switch-auto-fit" class="silk-switch" checked />
+              </label>
+            </div>
+
+            <div class="popover-section">
+              <span class="section-label">Card Spacing / Gap</span>
+              <div class="spacing-preset-group">
+                <button class="spacing-preset-chip" data-spacing="12">
+                  <strong>Compact</strong>
+                  <small>12px</small>
+                </button>
+                <button class="spacing-preset-chip active" data-spacing="24">
+                  <strong>Balanced</strong>
+                  <small>24px</small>
+                </button>
+                <button class="spacing-preset-chip" data-spacing="40">
+                  <strong>Spacious</strong>
+                  <small>40px</small>
+                </button>
+              </div>
+            </div>
+
+            <div class="popover-section">
+              <span class="section-label">Card Sizing Mode</span>
+              <div class="sizing-preset-group">
+                <button class="sizing-preset-chip" data-sizing="desktop" title="ابعاد کامل دسکتاپ (1280×850)">
+                  <strong>Desktop</strong>
+                  <small>1280×850</small>
+                </button>
+                <button class="sizing-preset-chip active" data-sizing="balanced">
+                  <strong>Balanced</strong>
+                  <small>640×820</small>
+                </button>
+                <button class="sizing-preset-chip" data-sizing="compact">
+                  <strong>Compact</strong>
+                  <small>520×720</small>
+                </button>
+                <button class="sizing-preset-chip" data-sizing="fill">
+                  <strong>Dynamic</strong>
+                  <small>Fill</small>
+                </button>
+              </div>
+            </div>
+
+            <div class="popover-actions">
+              <button id="btn-tidy-up-now" class="popover-action-btn primary" title="Tidy Up Now (⌘⇧L)">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                  <rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>
+                </svg>
+                <span>Tidy Up All Cards</span>
+                <kbd>⌘⇧L</kbd>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Studio Tools & Preferences Menu Dropdown Trigger -->
+        <div class="collapsible-island-wrapper" id="wrapper-tools-menu">
+          <button id="btn-tools-menu" class="nano-jewel-btn icon-only" title="Workspace Preferences & Add-ons">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="12" r="1.5"/>
+            </svg>
+          </button>
+          <div id="popover-tools-menu" class="spatial-popover-menu dropdown-right hidden">
+            <button id="menu-item-custom-bot" class="popover-menu-item">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                </svg>
+                Add Custom Model URL
+              </span>
+            </button>
+            <button id="menu-item-pwa-install" class="popover-menu-item" title="باز کردن در پنجره مستقل برنامه (بدون اضافات مرورگر)">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+                  <path d="M7 10l5 5 5-5" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Open in Desktop Window
+              </span>
+            </button>
+            <button id="menu-item-shortcuts" class="popover-menu-item">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3m.08 4h.01"/>
+                </svg>
+                Keyboard Shortcuts
+              </span>
+              <kbd>⌘/</kbd>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dedicated Window OS Controls Cluster (Active Minimize, Maximize/Restore, Close) -->
+        <div class="window-controls-cluster hidden" id="window-controls-cluster">
+          <button id="btn-win-min" class="win-control-btn btn-min" title="کمینه‌سازی به تسک‌بار (Minimize)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <button id="btn-win-max" class="win-control-btn btn-max" title="بزرگ‌نمایی / بازیابی پنجره (Maximize / Restore)">
+            <svg class="icon-max" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+            <svg class="icon-restore hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="7" width="13" height="13" rx="1.5"/><path d="M4 17V5a1 1 0 0 1 1-1h12"/></svg>
+          </button>
+          <button id="btn-win-close" class="win-control-btn btn-close" title="بستن پنجره (Close)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Infinite 2D Spatial Canvas Viewport -->
+    <main id="spatial-viewport" class="spatial-viewport">
+      <div id="spatial-canvas-plane" class="spatial-canvas-plane">
+        <div id="spatial-grid-mesh" class="spatial-grid-mesh"></div>
+        <div id="spatial-cards-container" class="spatial-cards-container"></div>
+      </div>
+    </main>
+
+    <!-- Module A: Neural DOM Driver Studio (Haute Slide-Over Glass Drawer) -->
+    <div id="selector-studio-backdrop" class="selector-studio-backdrop"></div>
+    <aside id="selector-studio-drawer" class="selector-studio-drawer">
+      <div class="studio-drawer-header">
+        <div class="studio-drawer-title-group">
+          <div class="studio-drawer-gem">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/>
+            </svg>
+          </div>
+          <div>
+            <h2>Neural DOM Driver Studio</h2>
+            <p>Interactive Selector & Interaction Automation Engine</p>
+          </div>
+        </div>
+        <button id="btn-close-studio-drawer" class="studio-drawer-close" title="Close Drawer (Esc)">✕</button>
+      </div>
+
+      <!-- Profiles Carousel -->
+      <div class="studio-profiles-bar">
+        <div class="studio-profiles-label">
+          <span>Active Driver Profile</span>
+          <span style="font-weight: 500; text-transform: none; color: #a5b4fc;">Live Synced</span>
+        </div>
+        <div class="studio-profiles-scroll" id="studio-profiles-scroll"></div>
+      </div>
+
+      <!-- Scrollable Form Body -->
+      <form id="form-driver-editor" class="studio-drawer-body">
+        <!-- 1. Metadata -->
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span>Profile Name</span>
+            </label>
+            <span class="driver-field-badge">Meta</span>
+          </div>
+          <input type="text" id="driver-field-name" class="driver-text-input" placeholder="e.g. ChatGPT (OpenAI)" required />
+        </div>
+
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+              <span>Domain Matcher</span>
+            </label>
+            <span class="driver-field-badge">Regex / Hostnames</span>
+          </div>
+          <input type="text" id="driver-field-domain" class="driver-text-input" placeholder="e.g. chatgpt.com, openai.com" required />
+        </div>
+
+        <!-- 2. Input Box Selector & Strategy -->
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              <span>Chat Input Box Selector</span>
+            </label>
+            <span class="driver-field-badge">CSS</span>
+          </div>
+          <div class="driver-input-row">
+            <input type="text" id="driver-field-input-selector" class="driver-text-input" placeholder="CSS query matching input textarea or div" />
+            <button type="button" class="btn-probe-jewel" data-probe-field="inputSelector">🎯 Probe</button>
+          </div>
+          <div id="probe-status-inputSelector" class="probe-status-row"></div>
+        </div>
+
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              <span>Input Dispatch Strategy</span>
+            </label>
+            <span class="driver-field-badge">Engine</span>
+          </div>
+          <select id="driver-field-input-strategy" class="driver-select-input">
+            <option value="auto">Auto Heuristic (ContentEditable vs Native)</option>
+            <option value="lexical">Lexical / React Synthetic (ChatGPT)</option>
+            <option value="execCommand">ExecCommand InsertText (Claude / Gemini)</option>
+            <option value="native">Native Property Setter (Standard Textarea)</option>
+            <option value="simulatedKeys">Simulated Keyboard Events</option>
+          </select>
+        </div>
+
+        <!-- 3. Submit Button & Mechanism -->
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              <span>Send / Submit Button Selector</span>
+            </label>
+            <span class="driver-field-badge">CSS</span>
+          </div>
+          <div class="driver-input-row">
+            <input type="text" id="driver-field-submit-selector" class="driver-text-input" placeholder="CSS query matching send button" />
+            <button type="button" class="btn-probe-jewel" data-probe-field="submitSelector">🎯 Probe</button>
+          </div>
+          <div id="probe-status-submitSelector" class="probe-status-row"></div>
+        </div>
+
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+              <span>Submit Mechanism</span>
+            </label>
+            <span class="driver-field-badge">Action</span>
+          </div>
+          <select id="driver-field-submit-mechanism" class="driver-select-input">
+            <option value="click">Synthetic Button Click</option>
+            <option value="enterKey">Keyboard Enter Event (keyCode 13)</option>
+            <option value="formSubmit">Form Submit Event</option>
+          </select>
+        </div>
+
+        <!-- 4. Response & Streaming Token Containers -->
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+              <span>Response Turn Container</span>
+            </label>
+            <span class="driver-field-badge">Scraper</span>
+          </div>
+          <div class="driver-input-row">
+            <input type="text" id="driver-field-response-container" class="driver-text-input" placeholder="Container wrapping assistant responses" />
+            <button type="button" class="btn-probe-jewel" data-probe-field="responseContainerSelector">🎯 Probe</button>
+          </div>
+          <div id="probe-status-responseContainerSelector" class="probe-status-row"></div>
+        </div>
+
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <span>Streaming Token Bubble Selector</span>
+            </label>
+            <span class="driver-field-badge">Live Tokens</span>
+          </div>
+          <div class="driver-input-row">
+            <input type="text" id="driver-field-streaming-tokens" class="driver-text-input" placeholder="Actively updated markdown text node" />
+            <button type="button" class="btn-probe-jewel" data-probe-field="streamingTokenSelector">🎯 Probe</button>
+          </div>
+          <div id="probe-status-streamingTokenSelector" class="probe-status-row"></div>
+        </div>
+
+        <!-- 5. Stop & New Chat -->
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+              <span>Stop Generation Button Selector</span>
+            </label>
+            <span class="driver-field-badge">Cancel</span>
+          </div>
+          <div class="driver-input-row">
+            <input type="text" id="driver-field-stop-selector" class="driver-text-input" placeholder="Stop/cancel response button" />
+            <button type="button" class="btn-probe-jewel" data-probe-field="stopSelector">🎯 Probe</button>
+          </div>
+          <div id="probe-status-stopSelector" class="probe-status-row"></div>
+        </div>
+
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span>New Chat / Reset Selector</span>
+            </label>
+            <span class="driver-field-badge">Reset</span>
+          </div>
+          <div class="driver-input-row">
+            <input type="text" id="driver-field-new-chat-selector" class="driver-text-input" placeholder="New chat / start fresh button" />
+            <button type="button" class="btn-probe-jewel" data-probe-field="newChatSelector">🎯 Probe</button>
+          </div>
+          <div id="probe-status-newChatSelector" class="probe-status-row"></div>
+        </div>
+
+        <!-- 6. Reasoning / Thinking Selector -->
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>
+              <span>Reasoning / Thinking Fold Selector</span>
+            </label>
+            <span class="driver-field-badge">DeepSeek / o1 / o3</span>
+          </div>
+          <div class="driver-input-row">
+            <input type="text" id="driver-field-reasoning-selector" class="driver-text-input" placeholder="Thought container (DeepSeek ds-think, o1/o3)" />
+            <button type="button" class="btn-probe-jewel" data-probe-field="reasoningSelector">🎯 Probe</button>
+          </div>
+          <div id="probe-status-reasoningSelector" class="probe-status-row"></div>
+        </div>
+
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <span>User Bubble Selector (History Extraction)</span>
+            </label>
+            <span class="driver-field-badge">Sync</span>
+          </div>
+          <div class="driver-input-row">
+            <input type="text" id="driver-field-user-bubble-selector" class="driver-text-input" placeholder="Selector matching user message turn" />
+            <button type="button" class="btn-probe-jewel" data-probe-field="userBubbleSelector">🎯 Probe</button>
+          </div>
+          <div id="probe-status-userBubbleSelector" class="probe-status-row"></div>
+        </div>
+
+        <!-- 7. Human Kinematics & Anti-Bot Armor Engine -->
+        <div class="driver-field-card kinematics-master-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>رفتارسنجی انسانی و ضد شناسایی روباتیک (Anti-Bot Armor)</span>
+            </label>
+            <span class="driver-field-badge active-stealth">Stealth V2</span>
+          </div>
+          
+          <label class="toggle-row" for="driver-field-humanize-enabled" style="margin-top: 4px;">
+            <div class="toggle-info">
+              <span class="toggle-title">فعال‌سازی سیستم رفتار ارگونومیک انسانی</span>
+              <span class="toggle-sub">شبیه‌سازی دقیق تایپ، تاخیرهای بیولوژیک و کلیک‌های طبیعی برای دور زدن تشخیص‌های هوش مصنوعی</span>
+            </div>
+            <input type="checkbox" id="driver-field-humanize-enabled" class="silk-switch" checked />
+          </label>
+        </div>
+
+        <div class="driver-field-card" id="card-kinematics-options">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M18 12h.01M8 16h8"/></svg>
+              <span>معماری شبیه‌سازی تایپ (Typing Engine)</span>
+            </label>
+            <span class="driver-field-badge">Mode</span>
+          </div>
+          <select id="driver-field-humanize-mode" class="driver-select-input">
+            <option value="burst">Adaptive Human Burst (تایپ رگباری با ریتم انسانی - توصیه شده)</option>
+            <option value="cadence">Natural Keystroke Cadence (تایپ طبیعی نویسه‌به‌نویسه)</option>
+            <option value="paste">Smart Human Paste Simulation (الصاق هوشمند طبیعی همراه با بررسی)</option>
+            <option value="instant">Instant Raw Dispatch (ارسال آنی مستقیم بدون شبیه‌سازی)</option>
+          </select>
+
+          <div class="driver-sub-grid">
+            <div>
+              <label class="driver-sub-label">سرعت ریتم تایپ (Cadence Speed)</label>
+              <select id="driver-field-humanize-speed" class="driver-select-input">
+                <option value="natural">طبیعی / استاندارد (۷۵ تا ۹۰ کلمه بر دقیقه)</option>
+                <option value="relaxed">آرام و با تأمل (۴۵ تا ۶۰ کلمه بر دقیقه)</option>
+                <option value="rapid">تندنویس حرفه‌ای (۱۱۰ تا ۱۳۰ کلمه بر دقیقه)</option>
+              </select>
+            </div>
+            <div>
+              <label class="driver-sub-label">تأخیر تفکر قبل از ارسال (Pre-Submit Dwell)</label>
+              <div class="driver-input-row">
+                <input type="number" id="driver-field-presubmit-delay" class="driver-text-input" min="50" max="3000" step="50" value="500" placeholder="500" />
+                <span class="unit-tag">ms</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="driver-sub-grid">
+            <div>
+              <label class="driver-sub-label">مکث روی علائم نگارشی (Punctuation Pause)</label>
+              <div class="driver-input-row">
+                <input type="number" id="driver-field-punctuation-delay" class="driver-text-input" min="0" max="1500" step="50" value="220" placeholder="220" />
+                <span class="unit-tag">ms</span>
+              </div>
+            </div>
+            <div>
+              <label class="driver-sub-label">مدت نگه‌داشتن کلیک ماوس (Click Dwell)</label>
+              <div class="driver-input-row">
+                <input type="number" id="driver-field-click-dwell" class="driver-text-input" min="20" max="300" step="10" value="75" placeholder="75" />
+                <span class="unit-tag">ms</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Advanced Anti-Detection Toggles -->
+          <div class="kinematics-toggles-stack">
+            <label class="toggle-row" for="driver-field-cursor-jitter">
+              <div class="toggle-info">
+                <span class="toggle-title">مختصات تصادفی کلیک (Cursor Jitter)</span>
+                <span class="toggle-sub">کلیک در مختصات پویا درون کادر دکمه (جلوگیری از تشخیص کلیک رباتیک 0,0)</span>
+              </div>
+              <input type="checkbox" id="driver-field-cursor-jitter" class="silk-switch" checked />
+            </label>
+
+            <label class="toggle-row" for="driver-field-hover-approach">
+              <div class="toggle-info">
+                <span class="toggle-title">شبیه‌سازی هاور و حرکت نشانگر (Pointer Hover / Approach)</span>
+                <span class="toggle-sub">ارسال رویدادهای pointerover، pointerenter و mousemove قبل از فشردن</span>
+              </div>
+              <input type="checkbox" id="driver-field-hover-approach" class="silk-switch" checked />
+            </label>
+
+            <label class="toggle-row" for="driver-field-simulate-typos">
+              <div class="toggle-info">
+                <span class="toggle-title">شبیه‌سازی خطای تایپی تصادفی و اصلاح خودکار</span>
+                <span class="toggle-sub">تایپ گاه‌به‌گاه نویسه مجاور کیبورد و پاک‌کردن با Backspace جهت طبیعی‌سازی کامل</span>
+              </div>
+              <input type="checkbox" id="driver-field-simulate-typos" class="silk-switch" checked />
+            </label>
+          </div>
+
+          <!-- Live Simulation Test Button -->
+          <div class="driver-test-toolbar">
+            <span style="font-size: 10.5px; color: #94a3b8;">تست زنده شبیه‌سازی در فریم فعال:</span>
+            <button type="button" id="btn-test-human-typing" class="btn-probe-jewel" style="background: rgba(168, 85, 247, 0.2); border-color: rgba(168, 85, 247, 0.45);">
+              <span>🧪 تست تایپ طبیعی در کادر</span>
+            </button>
+          </div>
+          <div id="probe-status-humanTyping" class="probe-status-row"></div>
+        </div>
+      </form>
+
+      <!-- Drawer Footer Controls -->
+      <div class="studio-drawer-footer">
+        <div class="footer-actions-grid">
+          <button type="button" id="btn-export-drivers-json" class="btn-utility-ghost" title="Export Drivers to JSON">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Export JSON</span>
+          </button>
+          <button type="button" id="btn-import-drivers-json" class="btn-utility-ghost" title="Import Drivers from JSON">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span>Import JSON</span>
+          </button>
+          <input type="file" id="file-import-drivers" accept=".json" style="display: none;" />
+          <button type="button" id="btn-reset-factory-drivers" class="btn-utility-ghost" style="color: #f87171;" title="Restore Default Selectors">
+            <span>Reset Factory</span>
+          </button>
+        </div>
+
+        <button type="button" id="btn-save-driver-master" class="btn-save-driver-master">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          <span>Save Driver Profile</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Module B: The Silk Mirror Sanctuary (Native Unified Chat Studio) -->
+    <aside id="mirror-chat-studio" class="mirror-chat-studio">
+      <div id="mirror-resize-handle" class="mirror-resize-handle"></div>
+
+      <!-- Header -->
+      <div class="mirror-header-bar">
+        <div class="mirror-brand-title">
+          <div class="mirror-spark-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <div class="mirror-title-text">
+            <h3>Silk Mirror Sanctuary</h3>
+            <p id="mirror-target-model-name">AI Intelligence</p>
+          </div>
+        </div>
+
+        <div class="mirror-header-actions">
+          <button id="btn-mirror-sync-history" class="mirror-icon-btn" title="Sync / Extract Conversation History">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          </button>
+          <button id="btn-mirror-new-chat" class="mirror-icon-btn" title="Start New Conversation (+)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <button id="btn-close-mirror-studio" class="mirror-icon-btn" title="Close Sanctuary (Esc)">✕</button>
+        </div>
+      </div>
+
+      <!-- Pearl Model Switcher Ribbon -->
+      <div class="mirror-pearl-bar" id="mirror-pearl-bar"></div>
+
+      <!-- Message Stream -->
+      <div class="mirror-stream-viewport" id="mirror-stream-viewport"></div>
+
+      <!-- Controls Dock -->
+      <div class="mirror-controls-dock">
+        <div class="mirror-dock-meta">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span id="mirror-char-count">0 chars</span>
+            <button type="button" id="btn-mirror-toggle-stealth" class="mirror-stealth-badge active" title="حالت رفتار انسانی و ضد روباتیک فعال است (کلیک برای تغییر حالت یا تنظیمات)">
+              <span class="stealth-dot"></span>
+              <span id="mirror-stealth-mode-label" class="stealth-label">Human Mode: Active</span>
+            </button>
+          </div>
+          <button type="button" id="btn-mirror-stop" class="btn-stop-streaming-jewel hidden" title="Cancel Response Generation">
+            <span>■</span> Stop Generating
+          </button>
+        </div>
+
+        <div class="mirror-input-box">
+          <textarea id="mirror-prompt-textarea" class="mirror-textarea" placeholder="Message intelligence in pristine silk mode... (⌘↵ to send)" rows="1"></textarea>
+
+          <div class="mirror-dock-actions">
+            <div class="mirror-dock-left-tools"></div>
+            <button type="button" id="btn-mirror-send" class="btn-mirror-send-jewel" title="Dispatch to active model (Cmd+Enter)">
+              <span>Send</span>
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- The Floating Jewel Omnibar (Parfum Flacon Aesthetic) -->
+    <div class="omnibar-capsule-island" id="omnibar-island">
+      
+      <!-- 1. Resting Compact Pill (34px) -->
+      <div class="omnibar-compact-bar" id="capsule-compact-trigger">
+        <div class="capsule-spark-gem">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M12 2l2.4 7.2L21 12l-6.6 2.8L12 22l-2.4-7.2L3 12l6.6-2.8L12 2z" />
+          </svg>
+        </div>
+        <span class="capsule-placeholder">Dispatch prompt across active intelligences...</span>
+        <div class="capsule-hotkey-tags">
+          <span class="hotkey-badge"><kbd>⌘</kbd><kbd>K</kbd></span>
+          <span class="hotkey-badge"><kbd>⌘</kbd><kbd>↵</kbd></span>
+        </div>
+      </div>
+
+      <!-- 2. Expanded Multi-Line Prompt Studio -->
+      <div class="omnibar-studio-layout hidden" id="capsule-studio">
+        <!-- Accessory Row -->
+        <div class="studio-accessory-strip">
+          <div class="sync-scope-cluster">
+            <button class="sync-scope-btn active" data-sync="all" title="Send to all cards on canvas">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg>
+              <span>All Cards (<span id="total-cards-count">3</span>)</span>
+            </button>
+            <button class="sync-scope-btn" data-sync="focused" title="Send only to focused card">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
+              <span>Focused Pearl</span>
+            </button>
+          </div>
+
+          <!-- Active Receiving Model Avatar Pearls -->
+          <div class="studio-bots-ribbon" id="studio-bots-ribbon"></div>
+
+          <button id="btn-collapse-studio" class="btn-collapse-studio" title="Collapse Studio (Escape)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
+          </button>
+        </div>
+
+        <!-- Studio Textarea Body -->
+        <div class="studio-input-row">
+          <textarea 
+            id="studio-prompt-textarea" 
+            class="studio-textarea" 
+            placeholder="Compose prompt for all intelligences... (⌘↵ to send, Esc to collapse)" 
+            rows="1"
+            autocomplete="off"
+            spellcheck="false"
+          ></textarea>
+
+          <div class="studio-actions-dock">
+            <span class="char-counter" id="studio-char-count">0</span>
+            <button id="btn-studio-clear" class="btn-clear-input hidden" title="Clear text">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            
+            <button id="btn-jewel-send" class="btn-dispatch-jewel" title="Dispatch prompt (Cmd/Ctrl + Enter)">
+              <span>Send</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <span class="key-pill"><kbd>⌘</kbd><kbd>↵</kbd></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Modal: Add Custom AI Model -->
+    <div id="modal-custom-bot" class="modal-veil hidden">
+      <div class="modal-card">
+        <div class="modal-header-bar">
+          <div class="modal-title-group">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            <h3>Add Custom AI Intelligence</h3>
+          </div>
+          <button class="modal-close-icon" data-close-modal="modal-custom-bot">✕</button>
+        </div>
+
+        <form id="form-custom-bot" class="modal-content-body">
+          <div class="form-field">
+            <label for="custom-bot-name">Intelligence Name</label>
+            <input type="text" id="custom-bot-name" placeholder="e.g. Local Ollama, Phind, Mistral" required />
+          </div>
+
+          <div class="form-field">
+            <label for="custom-bot-url">Web App URL</label>
+            <input type="url" id="custom-bot-url" placeholder="https://chat.mistral.ai or http://localhost:3000" required />
+            <span class="field-tip">DeclarativeNetRequest framing engine removes frame embedding blocks automatically.</span>
+          </div>
+
+          <div class="form-field">
+            <label>Quick Presets</label>
+            <div class="quick-presets-flow">
+              <button type="button" class="quick-bot-chip" data-name="Mistral Le Chat" data-url="https://chat.mistral.ai">Mistral</button>
+              <button type="button" class="quick-bot-chip" data-name="Poe" data-url="https://poe.com">Poe</button>
+              <button type="button" class="quick-bot-chip" data-name="Phind" data-url="https://www.phind.com">Phind</button>
+              <button type="button" class="quick-bot-chip" data-name="Copilot" data-url="https://copilot.microsoft.com">Copilot</button>
+              <button type="button" class="quick-bot-chip" data-name="Grok" data-url="https://grok.com">Grok</button>
+            </div>
+          </div>
+
+          <div class="modal-actions-bar">
+            <button type="button" class="action-btn secondary" data-close-modal="modal-custom-bot">Cancel</button>
+            <button type="submit" class="action-btn primary">Add to Infinite Canvas</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Keyboard Shortcuts -->
+    <div id="modal-shortcuts" class="modal-veil hidden">
+      <div class="modal-card">
+        <div class="modal-header-bar">
+          <div class="modal-title-group">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 16v-4m0-4h.01"/>
+            </svg>
+            <h3>Haute Spatial Keyboard Engine</h3>
+          </div>
+          <button class="modal-close-icon" data-close-modal="modal-shortcuts">✕</button>
+        </div>
+
+        <div class="modal-content-body">
+          <div class="shortcuts-table">
+            <div class="shortcut-entry">
+              <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>K</kbd></div>
+              <span class="shortcut-legend">Focus Master Omnibar Studio</span>
+            </div>
+            <div class="shortcut-entry">
+              <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>↵ Enter</kbd></div>
+              <span class="shortcut-legend">Dispatch prompt to all selected models</span>
+            </div>
+            <div class="shortcut-entry">
+              <div class="shortcut-keys-combo"><kbd>Space</kbd> + <kbd>Drag</kbd></div>
+              <span class="shortcut-legend">Pan across infinite 2D canvas</span>
+            </div>
+            <div class="shortcut-entry">
+              <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd> + <kbd>Wheel</kbd></div>
+              <span class="shortcut-legend">Pinch or zoom infinite canvas</span>
+            </div>
+            <div class="shortcut-entry">
+              <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>⇧ Shift</kbd><kbd>L</kbd></div>
+              <span class="shortcut-legend">Tidy Up & Auto-Arrange all cards instantly</span>
+            </div>
+            <div class="shortcut-entry">
+              <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>⇧ Shift</kbd><kbd>A</kbd></div>
+              <span class="shortcut-legend">Open Quick AI Tab Launcher</span>
+            </div>
+            <div class="shortcut-entry">
+              <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>0</kbd></div>
+              <span class="shortcut-legend">Fit all sanctuary cards into view</span>
+            </div>
+            <div class="shortcut-entry">
+              <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>Z</kbd></div>
+              <span class="shortcut-legend">Toggle Zen Mode (Zero-waste full immersion)</span>
+            </div>
+            <div class="shortcut-entry">
+              <div class="shortcut-keys-combo"><kbd>Escape</kbd></div>
+              <span class="shortcut-legend">Collapse Omnibar / Close active dialogs</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-actions-bar">
+          <button type="button" class="action-btn primary" data-close-modal="modal-shortcuts">Done</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Master ES Module Entry -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

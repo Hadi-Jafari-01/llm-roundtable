@@ -1,0 +1,338 @@
+/**
+ * OmniAI Hub — Parfum Flacon Omnibar Component
+ * Luxury Crystal Pill & Multi-Model Dispatch Studio
+ */
+
+.omnibar-capsule-island {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.omnibar-capsule-island > * {
+  pointer-events: auto;
+}
+
+/* ── 1. Resting Compact Pill (40px) ── */
+.omnibar-compact-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, rgba(32, 26, 46, 0.88) 0%, rgba(20, 16, 30, 0.92) 100%);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border: 1px solid var(--border-standard);
+  box-shadow: var(--shadow-omnibar);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.25s var(--ease-spring);
+}
+
+.omnibar-compact-bar:hover {
+  transform: translateY(-2px) scale(1.015);
+  border-color: rgba(221, 214, 254, 0.38);
+  box-shadow: 0 28px 65px -6px rgba(0, 0, 0, 0.65), 0 0 38px -2px rgba(221, 214, 254, 0.22);
+}
+
+.capsule-spark-gem {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--orb-rose);
+  filter: drop-shadow(0 0 8px var(--orb-rose));
+}
+
+.capsule-spark-gem svg {
+  width: 15px;
+  height: 15px;
+}
+
+.capsule-placeholder {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: -0.01em;
+}
+
+.capsule-hotkey-tags {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 6px;
+}
+
+/* ── 2. Expanded Multi-Line Prompt Studio ── */
+.omnibar-studio-layout {
+  display: none;
+  flex-direction: column;
+  width: min(720px, 92vw);
+  background: linear-gradient(145deg, rgba(30, 24, 44, 0.95) 0%, rgba(18, 15, 27, 0.97) 100%);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border: 1px solid var(--border-highlight);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 30px 80px -10px rgba(0, 0, 0, 0.75), 0 0 50px -4px rgba(221, 214, 254, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  padding: 14px 16px;
+  gap: 10px;
+  animation: studioPop 0.25s var(--ease-spring);
+}
+
+.omnibar-capsule-island.expanded .omnibar-compact-bar {
+  display: none;
+}
+
+.omnibar-capsule-island.expanded .omnibar-studio-layout {
+  display: flex;
+}
+
+@keyframes studioPop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ── Accessory Row: Scope Cluster & Model Pearls ── */
+.studio-accessory-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 8px;
+}
+
+.sync-scope-cluster {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 2px 4px;
+  gap: 2px;
+}
+
+.sync-scope-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all var(--duration-fast) var(--ease-spring);
+}
+
+.sync-scope-btn svg {
+  width: 12px;
+  height: 12px;
+  opacity: 0.8;
+}
+
+.sync-scope-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.sync-scope-btn.active {
+  background: rgba(221, 214, 254, 0.16);
+  border: 1px solid rgba(221, 214, 254, 0.3);
+  color: #ffffff;
+}
+
+.studio-bots-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.studio-bots-ribbon::-webkit-scrollbar {
+  display: none;
+}
+
+.bot-pearl-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.bot-pearl-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.btn-collapse-studio {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--text-tertiary);
+  transition: all var(--duration-fast) var(--ease-spring);
+}
+
+.btn-collapse-studio:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+/* ── Muse Sparks Row (Prompt Inspiration Chips) ── */
+.muse-sparks-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 2px 0;
+}
+
+.muse-sparks-row::-webkit-scrollbar {
+  display: none;
+}
+
+.muse-spark-chip {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  font-size: 11px;
+  color: var(--text-secondary);
+  transition: all var(--duration-fast) var(--ease-spring);
+  flex-shrink: 0;
+}
+
+.muse-spark-chip:hover {
+  background: rgba(221, 214, 254, 0.1);
+  border-color: rgba(221, 214, 254, 0.28);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* ── Input Row: Textarea & Dispatch Jewel ── */
+.studio-input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.studio-textarea {
+  flex: 1;
+  min-height: 48px;
+  max-height: 180px;
+  padding: 8px 4px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+}
+
+.studio-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.studio-actions-dock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding-bottom: 4px;
+}
+
+.char-counter {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+
+.btn-clear-input {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--text-tertiary);
+  transition: all var(--duration-fast) var(--ease-spring);
+}
+
+.btn-clear-input.hidden {
+  display: none;
+}
+
+.btn-clear-input:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.btn-dispatch-jewel {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, rgba(221, 214, 254, 0.28) 0%, rgba(251, 207, 232, 0.28) 100%);
+  border: 1px solid rgba(221, 214, 254, 0.45);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 4px 18px rgba(196, 181, 253, 0.2);
+  transition: all var(--duration-fast) var(--ease-spring);
+}
+
+.btn-dispatch-jewel svg {
+  width: 14px;
+  height: 14px;
+}
+
+.btn-dispatch-jewel:hover {
+  background: linear-gradient(135deg, rgba(221, 214, 254, 0.42) 0%, rgba(251, 207, 232, 0.42) 100%);
+  border-color: rgba(221, 214, 254, 0.6);
+  box-shadow: 0 6px 24px rgba(196, 181, 253, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-dispatch-jewel:active {
+  transform: scale(0.98);
+}
+
+.key-pill {
+  display: inline-flex;
+  gap: 2px;
+  opacity: 0.85;
+}
