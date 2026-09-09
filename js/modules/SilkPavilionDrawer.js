@@ -16,6 +16,17 @@ export class SilkPavilionDrawer {
     // Extensible Studio Registry (Curated Atelier Chambers)
     this.studios = [
       {
+        id: 'silk-symposium',
+        title: 'The Silk Symposium',
+        subtitle: 'Infinite Multi-Turn AI Roundtable & Dialectic Agora',
+        badge: 'Roundtable',
+        badgeColor: '#fed7aa',
+        color: '#f59e0b',
+        iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="5" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/><circle cx="5" cy="12" r="1.5"/></svg>`,
+        hotkey: '⌘⌥S',
+        action: () => globalBus.emit('TRIGGER_SYMPOSIUM_STUDIO')
+      },
+      {
         id: 'llm-council',
         title: 'The Celestial Council',
         subtitle: 'Autonomous Multi-Model Debate, Peer-Review & Synthesis',
