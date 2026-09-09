@@ -16,6 +16,7 @@ export class SymposiumTranscript {
       onChallenge: () => {},
       onCrownInsight: () => {},
       onSynthesize: () => {},
+      onDeleteTurn: () => {},
       ...callbacks
     };
 
@@ -24,6 +25,12 @@ export class SymposiumTranscript {
 
   bindEvents() {
     this.viewportEl?.addEventListener('click', (e) => {
+      const deleteBtn = e.target.closest('.btn-delete-turn-chip, .btn-turn-meta-del');
+      if (deleteBtn) {
+        this.callbacks.onDeleteTurn(deleteBtn.dataset.turnId);
+        return;
+      }
+
       const challengeBtn = e.target.closest('.btn-challenge-chip');
       if (challengeBtn) {
         this.callbacks.onChallenge(challengeBtn.dataset.turnId);
@@ -119,14 +126,20 @@ export class SymposiumTranscript {
 
       row.innerHTML = `
         <div class="symposium-turn-meta">
+          <button type="button" class="btn-turn-meta-del btn-delete-turn-chip" data-turn-id="${turn.id}" title="حذف این پیام از میزگرد">✕</button>
+          <span class="turn-round-tag">Round ${turn.round || 1} • ${turn.timestamp || ''}</span>
+          <span class="turn-speaker-badge">${this.escapeHtml(speakerBadge)}</span>
           <span class="turn-avatar-badge" style="background: ${turn.color || '#f59e0b'};">
             ${isSeatedUser ? '👑' : '👤'}
           </span>
-          <span class="turn-speaker-badge">${this.escapeHtml(speakerBadge)}</span>
-          <span class="turn-round-tag">Round ${turn.round || 1} • ${turn.timestamp || ''}</span>
         </div>
         <div class="symposium-bubble-card ${isRTL ? 'is-rtl' : 'is-ltr'}" dir="${textDir}">
-          ${this.escapeHtml(turn.text)}
+          <div>${this.escapeHtml(turn.text)}</div>
+          <div class="symposium-bubble-actions user-actions">
+            <button type="button" class="btn-bubble-chip delete-chip btn-delete-turn-chip" data-turn-id="${turn.id}" title="حذف این پیام از تاریخچه میزگرد">
+              <span>🗑️ Delete</span>
+            </button>
+          </div>
         </div>
       `;
     } else {
@@ -157,6 +170,7 @@ export class SymposiumTranscript {
           </span>
           <span class="turn-persona-tag">${this.escapeHtml(turn.personaBadge || 'Chair')}</span>
           <span class="turn-round-tag">Round ${turn.round || 1} • ${turn.timestamp || ''}</span>
+          <button type="button" class="btn-turn-meta-del btn-delete-turn-chip" data-turn-id="${turn.id}" title="حذف این پیام از میزگرد">✕</button>
         </div>
 
         <div class="symposium-bubble-card ${isRTL ? 'is-rtl' : 'is-ltr'}" dir="${textDir}" style="--model-color: ${turn.color};">
@@ -173,6 +187,9 @@ export class SymposiumTranscript {
             </button>
             <button type="button" class="btn-bubble-chip btn-synth-chip" data-turn-id="${turn.id}" title="Request Synthesizer to formulate a milestone consensus">
               <span>👑 Synthesize</span>
+            </button>
+            <button type="button" class="btn-bubble-chip delete-chip btn-delete-turn-chip" data-turn-id="${turn.id}" title="حذف این پیام از تاریخچه میزگرد">
+              <span>🗑️ Delete</span>
             </button>
           </div>
         </div>

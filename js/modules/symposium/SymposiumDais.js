@@ -16,7 +16,7 @@ export class SymposiumDais {
     };
   }
 
-  render(seats = [], activeIndex = 0, waitingForUser = false, recommendedNextIndex = -1, waitingForMaestro = false) {
+  render(seats = [], activeIndex = -1, waitingForUser = false, recommendedNextIndex = -1, waitingForMaestro = false, isSpeaking = false) {
     if (!this.ribbonEl) return;
     this.ribbonEl.innerHTML = '';
 
@@ -30,12 +30,14 @@ export class SymposiumDais {
     }
 
     seats.forEach((seat, idx) => {
-      const isCurrentSpeaker = idx === activeIndex && !waitingForMaestro;
-      const isRecommendedNext = idx === recommendedNextIndex && waitingForMaestro;
+      const isCurrentSpeaker = Boolean(isSpeaking) && idx === activeIndex && !waitingForMaestro;
+      const isRecommendedNext = idx === recommendedNextIndex && waitingForMaestro && !isSpeaking;
       const isUserSeat = Boolean(seat.isUser);
 
+      const seatStatus = isCurrentSpeaker ? 'speaking' : (isRecommendedNext ? 'recommended' : (seat.isMuted ? 'muted' : 'idle'));
+
       const seatCard = document.createElement('div');
-      seatCard.className = `symposium-seat-card ${seat.status || 'idle'} ${seat.isMuted ? 'muted' : ''} ${isUserSeat ? 'user-seat' : ''} ${isCurrentSpeaker ? 'active-speaker' : ''} ${isRecommendedNext ? 'recommended-next' : ''}`;
+      seatCard.className = `symposium-seat-card ${seatStatus} ${seat.isMuted ? 'muted' : ''} ${isUserSeat ? 'user-seat' : ''} ${isCurrentSpeaker ? 'active-speaker' : ''} ${isRecommendedNext ? 'recommended-next' : ''}`;
       if (isUserSeat && waitingForUser) {
         seatCard.classList.add('your-turn');
       }
@@ -48,33 +50,61 @@ export class SymposiumDais {
         avatarSymbol = avatarSymbol.slice(0, 2);
       }
 
+      seatCard.setAttribute('role', 'button');
+      seatCard.setAttribute('tabindex', '0');
+      const personaLabel = seat.personaTitle ? seat.personaTitle.split('(')[0].trim() : (isUserSeat ? 'Human Maestro' : 'AI Chair');
+      const statusDotClass = isCurrentSpeaker ? 'speaking' : (isRecommendedNext ? 'recommended' : (seat.isMuted ? 'muted' : 'idle'));
+      const cardTooltip = `کلیک برای سپردن نوبت به ${seat.name}${isCurrentSpeaker ? ' (هم‌اکنون در حال سخن گفتن)' : ''}`;
+      seatCard.title = cardTooltip;
+
       seatCard.innerHTML = `
-        <div class="seat-jewel-avatar" style="--model-color: ${seat.color || '#c084fc'};" title="${this.escapeHtml(seat.name)}">
-          <span>${avatarSymbol}</span>
-        </div>
-        <div class="seat-details-expandable">
-          <div class="seat-name-row">
-            <span class="seat-name-text" title="${this.escapeHtml(seat.name)}">${this.escapeHtml(seat.name)}</span>
-            ${seat.isCustomized ? '<span class="seat-custom-indicator" title="Customized Persona">✦</span>' : ''}
+        <div class="seat-card-main">
+          <div class="seat-jewel-avatar" style="--model-color: ${seat.color || '#c084fc'};">
+            <span class="avatar-symbol">${avatarSymbol}</span>
+            <span class="seat-status-dot ${statusDotClass}"></span>
           </div>
-          <span class="seat-persona-subtext" title="${this.escapeHtml(seat.personaTitle)}">
-            ${this.escapeHtml(seat.personaTitle ? seat.personaTitle.split('(')[0].trim() : 'AI Chair')}
-          </span>
+          <div class="seat-details-expandable">
+            <div class="seat-name-row">
+              <span class="seat-name-text" title="${this.escapeHtml(seat.name)}">${this.escapeHtml(seat.name)}</span>
+              ${seat.isCustomized ? '<span class="seat-custom-indicator" title="Customized Persona">✦</span>' : ''}
+            </div>
+            <span class="seat-persona-subtext" title="${this.escapeHtml(seat.personaTitle || '')}">
+              ${this.escapeHtml(personaLabel)}
+            </span>
+          </div>
         </div>
-        <div class="seat-hover-actions">
-          <button type="button" class="btn-seat-quick-action btn-seat-edit" title="بازرسی و تنظیم سریع پرسونا (Inline Inspector)">⚙️</button>
-          ${!isUserSeat ? `
-            <button type="button" class="btn-seat-quick-action btn-seat-mute ${seat.isMuted ? 'muted' : ''}" title="${seat.isMuted ? 'Unmute' : 'Mute'}">
-              ${seat.isMuted ? '🔇' : '🔊'}
+
+        <div class="seat-tail-cluster">
+          ${isCurrentSpeaker ? `
+            <div class="seat-live-wave" title="در حال سخن گفتن">
+              <span></span><span></span><span></span>
+            </div>
+          ` : `
+            <span class="seat-run-hint" title="کلیک برای اجرا">
+              <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+            </span>
+          `}
+          <div class="seat-hover-actions">
+            <button type="button" class="btn-seat-quick-action btn-seat-edit" title="تنظیمات پرسونا و پرومپت">
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
             </button>
-          ` : ''}
-          <button type="button" class="btn-seat-quick-action btn-pass-baton-icon" title="Pass Speaking Baton (🪄)">🪄</button>
+            ${!isUserSeat ? `
+              <button type="button" class="btn-seat-quick-action btn-seat-mute ${seat.isMuted ? 'muted' : ''}" title="${seat.isMuted ? 'فعال‌سازی صدا' : 'بی‌صدا کردن'}">
+                ${seat.isMuted ? `
+                  <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                ` : `
+                  <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                `}
+              </button>
+            ` : ''}
+          </div>
         </div>
       `;
 
       // 1. Contextual Inline Inspector trigger via Gear
       seatCard.querySelector('.btn-seat-edit')?.addEventListener('click', (e) => {
         e.stopPropagation();
+        e.preventDefault();
         const rect = seatCard.getBoundingClientRect();
         if (typeof this.callbacks.onOpenInspector === 'function') {
           this.callbacks.onOpenInspector(idx, rect);
@@ -86,45 +116,67 @@ export class SymposiumDais {
       // 2. Mute / Unmute
       seatCard.querySelector('.btn-seat-mute')?.addEventListener('click', (e) => {
         e.stopPropagation();
+        e.preventDefault();
         this.callbacks.onToggleMute(idx);
       });
 
-      // 3. Pass Baton Icon
-      seatCard.querySelector('.btn-pass-baton-icon')?.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this.callbacks.onPassBaton(idx);
-      });
-
-      // 4. Clicking the avatar or pod opens the quick inline inspector if not dragging
-      seatCard.querySelector('.seat-jewel-avatar')?.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const rect = seatCard.getBoundingClientRect();
-        if (typeof this.callbacks.onOpenInspector === 'function') {
-          this.callbacks.onOpenInspector(idx, rect);
-        } else {
-          this.callbacks.onConfigureSeat(idx);
+      // 3. Main Card Click - Executes Turn (Baton)
+      seatCard.addEventListener('click', (e) => {
+        if (e.target.closest('.btn-seat-edit') || e.target.closest('.btn-seat-mute')) {
+          return;
         }
+        this.callbacks.onPassBaton(idx);
       });
 
-      seatCard.addEventListener('click', () => {
-        this.callbacks.onPassBaton(idx);
+      // 4. Keyboard trigger
+      seatCard.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          if (e.target.closest('.btn-seat-edit') || e.target.closest('.btn-seat-mute')) return;
+          e.preventDefault();
+          this.callbacks.onPassBaton(idx);
+        }
       });
 
       this.ribbonEl.appendChild(seatCard);
     });
   }
 
-  highlightActiveSeat(activeIndex, waitingForUser = false, recommendedNextIndex = -1, waitingForMaestro = false) {
+  highlightActiveSeat(activeIndex = -1, waitingForUser = false, recommendedNextIndex = -1, waitingForMaestro = false, isSpeaking = false) {
     if (!this.ribbonEl) return;
     this.ribbonEl.querySelectorAll('.symposium-seat-card').forEach((card, idx) => {
-      const isCurrentSpeaker = idx === activeIndex && !waitingForMaestro;
-      const isRecommendedNext = idx === recommendedNextIndex && waitingForMaestro;
+      const isCurrentSpeaker = Boolean(isSpeaking) && idx === activeIndex && !waitingForMaestro;
+      const isRecommendedNext = idx === recommendedNextIndex && waitingForMaestro && !isSpeaking;
 
       card.classList.toggle('active-speaker', isCurrentSpeaker);
       card.classList.toggle('recommended-next', isRecommendedNext);
 
       if (card.classList.contains('user-seat')) {
         card.classList.toggle('your-turn', isCurrentSpeaker && waitingForUser);
+      }
+
+      // Update status dot
+      const dot = card.querySelector('.seat-status-dot');
+      if (dot) {
+        dot.className = `seat-status-dot ${isCurrentSpeaker ? 'speaking' : (isRecommendedNext ? 'recommended' : 'idle')}`;
+      }
+
+      // Dynamically add/remove live equalizer wave
+      let wave = card.querySelector('.seat-live-wave');
+      const tail = card.querySelector('.seat-tail-cluster');
+      const runHint = card.querySelector('.seat-run-hint');
+
+      if (isCurrentSpeaker) {
+        if (runHint) runHint.style.display = 'none';
+        if (!wave && tail) {
+          wave = document.createElement('div');
+          wave.className = 'seat-live-wave';
+          wave.title = 'در حال سخن گفتن';
+          wave.innerHTML = '<span></span><span></span><span></span>';
+          tail.prepend(wave);
+        }
+      } else {
+        if (wave) wave.remove();
+        if (runHint) runHint.style.display = '';
       }
     });
   }

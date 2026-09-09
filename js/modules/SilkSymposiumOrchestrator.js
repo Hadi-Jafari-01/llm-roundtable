@@ -10,7 +10,6 @@ import {
   DEFAULT_DIALECTIC_TEMPLATE,
   DIALECTIC_PROMPT_TEMPLATES,
   GLOBAL_DIRECTIVE_PRESETS,
-  USER_ROLE_PRESETS,
   SYMPOSIUM_SCENARIOS
 } from './symposium/SymposiumState.js';
 import { TurnSequencer } from './symposium/TurnSequencer.js';
@@ -35,7 +34,7 @@ export class SilkSymposiumOrchestrator {
       onSessionPaused: () => this.updateHeaderStats(),
       onSessionResumed: () => this.updateHeaderStats(),
       onSessionCompleted: () => this.handleSessionCompleted(),
-      onSessionWaitingForMaestro: () => this.updateHeaderStats()
+      onSessionWaitingForMaestro: () => this.renderAll()
     });
 
     this.currentSanctumZone = 'scenarios';
@@ -131,19 +130,18 @@ export class SilkSymposiumOrchestrator {
     this.btnCancelPersonaForm = document.getElementById('btn-cancel-persona-form');
     this.btnDismissPersonaForm = document.getElementById('btn-dismiss-persona-form');
 
-    // Zone 3: Dais Floor Plan & User Maestro Seat
+    // Zone 3: Dais Floor Plan & Complete Seat Configuration
     this.daisFloorCircle = document.getElementById('dais-interactive-floor-circle');
-    this.sanctumUserSeatedCheck = document.getElementById('sanctum-user-seated-check');
-    this.sanctumUserNameInput = document.getElementById('sanctum-user-name');
-    this.sanctumUserRolePresetPicker = document.getElementById('sanctum-user-role-preset-select');
-    this.sanctumUserPersonaSelect = document.getElementById('sanctum-user-persona-select');
-    this.sanctumUserWeightInput = document.getElementById('sanctum-user-weight');
-    this.sanctumUserDirectiveTextarea = document.getElementById('sanctum-user-directive');
-    this.btnSaveUserRole = document.getElementById('btn-save-user-role');
+    this.daisSeatSelectorBar = document.getElementById('dais-seat-selector-bar');
+    this.daisSeatEditorContainer = document.getElementById('dais-seat-editor-container');
+    this.selectedDaisSeatIndex = 0;
 
     // Zone 4: Dialectic Engine & Templates
     this.topologySelect = document.getElementById('sanctum-topology-select');
+    this.topologyCardsGrid = document.getElementById('topology-cards-grid');
     this.promptTemplatePresetPicker = document.getElementById('sanctum-prompt-template-preset-select');
+    this.btnToggleFormulaAccordion = document.getElementById('btn-toggle-formula-accordion');
+    this.formulaAccordionContent = document.getElementById('formula-accordion-content');
     this.maxRoundsInput = document.getElementById('sanctum-max-rounds');
     this.distillSelect = document.getElementById('sanctum-distill-select');
     this.templateTextarea = document.getElementById('sanctum-template-textarea');
@@ -157,7 +155,32 @@ export class SilkSymposiumOrchestrator {
     const daisContainer = document.getElementById('symposium-dais-container');
     const daisRibbon = document.getElementById('symposium-dais-ribbon');
     this.dais = new SymposiumDais(daisContainer, daisRibbon, {
-      onPassBaton: (idx) => this.turnSequencer.passBaton(idx),
+      onPassBaton: (idx) => {
+        const inputVal = (this.inputPrompt?.value || '').trim();
+        if (inputVal) {
+          if (!this.symposiumState.userCorePrompt) {
+            this.symposiumState.userCorePrompt = inputVal;
+          }
+          this.symposiumState.addTurn({
+            id: `turn_u_${Date.now()}`,
+            role: 'user',
+            isSeatedUser: false,
+            speakerName: 'Human Maestro',
+            color: '#f59e0b',
+            text: inputVal,
+            round: this.symposiumState.roundIndex,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          });
+          this.inputPrompt.value = '';
+          this.inputPrompt.style.height = 'auto';
+        }
+        const seat = this.symposiumState.seats[idx];
+        if (seat?.isMuted) {
+          this.symposiumState.setSeatMuted(idx, false);
+        }
+        this.turnSequencer.passBaton(idx);
+        this.renderAll();
+      },
       onOpenInspector: (idx, rect) => this.openSeatInspector(idx, rect),
       onConfigureSeat: (idx) => this.openSeatInspector(idx),
       onToggleMute: (idx) => this.handleToggleSeatMute(idx)
@@ -167,7 +190,8 @@ export class SilkSymposiumOrchestrator {
     this.transcriptView = new SymposiumTranscript(transcriptViewport, {
       onChallenge: (turnId) => this.handleChallengeTurn(turnId),
       onCrownInsight: (turnId) => this.handleCrownInsight(turnId),
-      onSynthesize: () => this.handleSynthesize()
+      onSynthesize: () => this.handleSynthesize(),
+      onDeleteTurn: (turnId) => this.handleDeleteTurn(turnId)
     });
 
     const ledgerTray = document.getElementById('symposium-ledger-tray');
@@ -281,11 +305,8 @@ export class SilkSymposiumOrchestrator {
     this.sanctumGlobalDirectiveTextarea?.addEventListener('input', () => {
       this.syncTextareaDirection(this.sanctumGlobalDirectiveTextarea);
     });
-    this.sanctumUserDirectiveTextarea?.addEventListener('input', () => {
-      this.syncTextareaDirection(this.sanctumUserDirectiveTextarea);
-    });
 
-    // Preset choosers for global directive, user roles, and prompt templates
+    // Preset choosers for global directive and prompt templates
     this.sanctumGlobalDirectivePresetPicker?.addEventListener('change', () => {
       const key = this.sanctumGlobalDirectivePresetPicker.value;
       if (key && GLOBAL_DIRECTIVE_PRESETS[key]) {
@@ -301,25 +322,30 @@ export class SilkSymposiumOrchestrator {
       }
     });
 
-    this.sanctumUserRolePresetPicker?.addEventListener('change', () => {
-      const key = this.sanctumUserRolePresetPicker.value;
-      if (key && USER_ROLE_PRESETS[key]) {
-        const p = USER_ROLE_PRESETS[key];
-        if (this.sanctumUserDirectiveTextarea) {
-          this.sanctumUserDirectiveTextarea.value = p.directive;
-          this.syncTextareaDirection(this.sanctumUserDirectiveTextarea);
-        }
+    // Toggle Formula Accordion
+    this.btnToggleFormulaAccordion?.addEventListener('click', () => {
+      if (!this.formulaAccordionContent) return;
+      const isOpen = this.formulaAccordionContent.style.display !== 'none';
+      this.formulaAccordionContent.style.display = isOpen ? 'none' : 'block';
+      const arrow = this.btnToggleFormulaAccordion.querySelector('.arrow-indicator');
+      if (arrow) arrow.textContent = isOpen ? '▼' : '▲';
+    });
+
+    // Visual Topology Cards Click Listeners
+    this.topologyCardsGrid?.addEventListener('click', (e) => {
+      const card = e.target.closest('.topology-card');
+      if (!card) return;
+      const val = card.dataset.value;
+      if (val && this.topologySelect) {
+        this.topologySelect.value = val;
+        this.topologyCardsGrid.querySelectorAll('.topology-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
       }
     });
 
     // Save protocols
     this.btnSaveProtocols?.addEventListener('click', () => {
       this.saveProtocolsConfig();
-    });
-
-    // Save user role
-    this.btnSaveUserRole?.addEventListener('click', () => {
-      this.saveUserRoleConfig();
     });
 
     // Scenario Builder Form Toggles & Actions
@@ -353,6 +379,24 @@ export class SilkSymposiumOrchestrator {
     // Send and Next Turn Baton Handlers
     this.btnSendMaestro?.addEventListener('click', () => this.handleUserInputSubmit());
     this.btnNextTurn?.addEventListener('click', () => {
+      const inputVal = (this.inputPrompt?.value || '').trim();
+      if (inputVal) {
+        if (!this.symposiumState.userCorePrompt) {
+          this.symposiumState.userCorePrompt = inputVal;
+        }
+        this.symposiumState.addTurn({
+          id: `turn_u_${Date.now()}`,
+          role: 'user',
+          isSeatedUser: false,
+          speakerName: 'Human Maestro',
+          color: '#f59e0b',
+          text: inputVal,
+          round: this.symposiumState.roundIndex,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+        this.inputPrompt.value = '';
+        this.inputPrompt.style.height = 'auto';
+      }
       this.turnSequencer.advanceNext();
     });
 
@@ -415,7 +459,6 @@ export class SilkSymposiumOrchestrator {
     this.renderDaisFloorPlan();
     this.renderPromptTemplatesDropdown();
     this.renderGlobalDirectivesDropdown();
-    this.renderUserRolesDropdown();
     this.updateScenarioHeaderBadge();
     requestAnimationFrame(() => this.inputPrompt?.focus());
     globalBus.emit('SILK_SYMPOSIUM_OPENED');
@@ -447,26 +490,22 @@ export class SilkSymposiumOrchestrator {
     if (!seat) return;
     const nextMuted = !seat.isMuted;
     this.symposiumState.setSeatMuted(seatIndex, nextMuted);
-    this.dais.render(
-      this.symposiumState.seats,
-      this.symposiumState.activeSpeakerIndex,
-      this.symposiumState.sessionStatus === 'WAITING_FOR_USER',
-      this.symposiumState.recommendedNextSpeakerIndex,
-      this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO'
-    );
+    this.renderAll();
     this.showToast(`${seat.name} ${nextMuted ? 'بی‌صدا شد 🔇' : 'فعال شد 🔊'}`);
   }
 
   renderAll() {
+    const isSpeaking = Boolean(this.symposiumState.isSpeakerStreaming && this.symposiumState.sessionStatus === 'ACTIVE');
     const waitingForUser = this.symposiumState.sessionStatus === 'WAITING_FOR_USER';
     const waitingForMaestro = this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO';
 
     this.dais.render(
       this.symposiumState.seats,
-      this.symposiumState.activeSpeakerIndex,
+      isSpeaking ? this.symposiumState.activeSpeakerIndex : -1,
       waitingForUser,
-      this.symposiumState.recommendedNextSpeakerIndex,
-      waitingForMaestro
+      waitingForMaestro ? this.symposiumState.recommendedNextSpeakerIndex : -1,
+      waitingForMaestro,
+      isSpeaking
     );
     this.transcriptView.render(this.symposiumState.transcript);
     this.ledgerView.render(this.symposiumState.ledger);
@@ -520,6 +559,8 @@ export class SilkSymposiumOrchestrator {
     const activeSeat = seats[activeSpeakerIndex];
     const recSeat = seats[recommendedNextSpeakerIndex];
 
+    this.btnNextTurn?.classList.toggle('ready-to-dispatch', sessionStatus === 'WAITING_FOR_MAESTRO');
+
     if (sessionStatus === 'WAITING_FOR_USER') {
       this.composerSpeakerName.textContent = 'نوبت شما در شورا فرا رسیده است (Your Turn) 👑';
       this.composerBox?.classList.add('user-turn-active');
@@ -527,7 +568,10 @@ export class SilkSymposiumOrchestrator {
       this.composerSpeakerName.textContent = `در حال تفکر و پاسخ: ${activeSeat.name} (${activeSeat.personaBadge || ''}) ⚡`;
       this.composerBox?.classList.remove('user-turn-active');
     } else if (sessionStatus === 'WAITING_FOR_MAESTRO' && recSeat) {
-      this.composerSpeakerName.textContent = `نوبت بعد با عصا: ${recSeat.name} (${recSeat.personaBadge || ''}) 🪄`;
+      this.composerSpeakerName.textContent = `نوبت بعد با عصا: ${recSeat.name} (${recSeat.personaBadge || ''}) 🪄 (کلیک روی عصا یا صندلی برای شروع)`;
+      this.composerBox?.classList.remove('user-turn-active');
+    } else if (sessionStatus === 'IDLE') {
+      this.composerSpeakerName.textContent = 'میزگرد آماده آغاز است • پیامی بنویسید یا روی صندلی یک مدل کلیک کنید';
       this.composerBox?.classList.remove('user-turn-active');
     } else if (activeSeat) {
       this.composerSpeakerName.textContent = `سخنران بعدی: ${activeSeat.name} (${activeSeat.personaBadge || ''})`;
@@ -582,6 +626,20 @@ export class SilkSymposiumOrchestrator {
 
     this.inputPrompt.value = '';
     this.inputPrompt.style.height = 'auto';
+
+    // در حالت نوبت دستی، پس از ارسال پیام انسانی هیچ مدلی درجا جواب نمی‌دهد
+    if (this.symposiumState.debateMode === 'manual') {
+      clearTimeout(this.turnSequencer.autoAdvanceTimer);
+      clearTimeout(this.turnSequencer.safetyTimer);
+      this.symposiumState.sessionStatus = 'WAITING_FOR_MAESTRO';
+      this.symposiumState.recommendedNextSpeakerIndex = this.symposiumState.calculateRecommendedNextSpeaker();
+      this.renderAll();
+      const recSeat = this.symposiumState.seats[this.symposiumState.recommendedNextSpeakerIndex];
+      const recName = recSeat ? recSeat.name : 'مدل بعدی';
+      this.showToast(`پیام ثبت شد 💬. نوبت را با عصا (🪄) یا کلیک روی صندلی به ${recName} بسپارید.`);
+      return;
+    }
+
     this.renderAll();
 
     if (this.symposiumState.sessionStatus !== 'ACTIVE') {
@@ -593,7 +651,7 @@ export class SilkSymposiumOrchestrator {
   }
 
   handleUserTurnPrompted({ seat, seatIndex }) {
-    this.dais.render(this.symposiumState.seats, seatIndex, true);
+    this.dais.render(this.symposiumState.seats, seatIndex, true, -1, false, false);
     this.composerBox?.classList.add('user-turn-active');
     if (this.inputPrompt) {
       this.inputPrompt.placeholder = `🌟 Your turn to address the Dais as ${seat.personaTitle}... (⌘↵ to speak)`;
@@ -611,7 +669,7 @@ export class SilkSymposiumOrchestrator {
 
   handleSeatDispatched({ seat, seatIndex, immediateContext }) {
     this.clearUserTurnHighlight();
-    this.dais.highlightActiveSeat(seatIndex, false);
+    this.dais.highlightActiveSeat(seatIndex, false, -1, false, true);
     this.updateComposerSpeakerHint();
 
     const promptToSend = this.composeSeatPrompt(seat, immediateContext);
@@ -786,6 +844,30 @@ export class SilkSymposiumOrchestrator {
     this.turnSequencer.dispatchTurn(targetIdx, directive);
   }
 
+  handleDeleteTurn(turnId) {
+    const turn = this.symposiumState.transcript.find(t => t.id === turnId);
+    if (!turn) return;
+
+    const speaker = turn.speakerName || (turn.role === 'user' ? 'کاربر' : 'مدل');
+    if (!confirm(`آیا از حذف این پیام («${speaker}») از گفتگوی میزگرد اطمینان دارید؟ با حذف این پیام، هیچ اثری از آن در ادامه بحث و کانتکست هوش‌ها باقی نخواهد ماند.`)) {
+      return;
+    }
+
+    const wasStreaming = turn.isStreaming;
+    const removed = this.symposiumState.removeTurn(turnId);
+    if (removed) {
+      if (wasStreaming) {
+        clearTimeout(this.turnSequencer.safetyTimer);
+        clearTimeout(this.turnSequencer.autoAdvanceTimer);
+        this.symposiumState.sessionStatus = 'WAITING_FOR_MAESTRO';
+        this.symposiumState.recommendedNextSpeakerIndex = this.symposiumState.calculateRecommendedNextSpeaker();
+      }
+
+      this.renderAll();
+      this.showToast(`پیام ${speaker} با موفقیت از میزگرد حذف شد 🗑️`);
+    }
+  }
+
   // ── 1. Contextual Inline Seat Inspector Engine (Zero Context-Switch) ──
 
   openSeatInspector(seatIndex, anchorRect = null) {
@@ -796,12 +878,14 @@ export class SilkSymposiumOrchestrator {
 
     // Anchor positioning immediately adjacent to left rail seat pod
     if (anchorRect) {
-      const top = Math.max(56, Math.min(anchorRect.top - 20, window.innerHeight - 380));
+      const top = Math.max(56, Math.min(anchorRect.top - 10, window.innerHeight - 380));
+      const targetLeft = Math.min(anchorRect.right + 12, window.innerWidth - 410);
       this.seatInspector.style.top = `${top}px`;
-      this.seatInspector.style.left = '76px';
+      this.seatInspector.style.left = `${Math.max(16, targetLeft)}px`;
     } else {
+      const isRailExpanded = this.leftRail?.classList.contains('expanded');
       this.seatInspector.style.top = '70px';
-      this.seatInspector.style.left = '76px';
+      this.seatInspector.style.left = isRailExpanded ? '236px' : '82px';
     }
 
     // Set model identity & color styling
@@ -891,14 +975,7 @@ export class SilkSymposiumOrchestrator {
           });
 
           this.showInspectorSavedBadge();
-          this.dais.render(
-            this.symposiumState.seats,
-            this.symposiumState.activeSpeakerIndex,
-            this.symposiumState.sessionStatus === 'WAITING_FOR_USER',
-            this.symposiumState.recommendedNextSpeakerIndex,
-            this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO'
-          );
-          this.updateComposerSpeakerHint();
+          this.renderAll();
         });
 
         this.inspectorChipsCarousel.appendChild(chip);
@@ -942,13 +1019,7 @@ export class SilkSymposiumOrchestrator {
       this.symposiumState.persistConfig();
 
       this.showInspectorSavedBadge();
-      this.dais.render(
-        this.symposiumState.seats,
-        this.symposiumState.activeSpeakerIndex,
-        this.symposiumState.sessionStatus === 'WAITING_FOR_USER',
-        this.symposiumState.recommendedNextSpeakerIndex,
-        this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO'
-      );
+      this.renderAll();
     }, 280);
   }
 
@@ -970,13 +1041,7 @@ export class SilkSymposiumOrchestrator {
     if (!confirm(`آیا مایلید پرسونا و پرومپت "${source.name}" به تمام صندلی‌های هوش مصنوعی اعمال شود؟`)) return;
 
     this.symposiumState.applySeatPersonaToAll(sourceIndex);
-    this.dais.render(
-      this.symposiumState.seats,
-      this.symposiumState.activeSpeakerIndex,
-      this.symposiumState.sessionStatus === 'WAITING_FOR_USER',
-      this.symposiumState.recommendedNextSpeakerIndex,
-      this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO'
-    );
+    this.renderAll();
     this.showToast('پرسونا و پرومپت به تمام صندلی‌های میزگرد اعمال شد ✓');
   }
 
@@ -1011,7 +1076,6 @@ export class SilkSymposiumOrchestrator {
     this.renderPersonasGrid();
     this.renderDaisFloorPlan();
     this.loadProtocolsIntoEditor();
-    this.loadUserRoleIntoEditor();
 
     this.switchSanctumZone(zone);
   }
@@ -1314,22 +1378,263 @@ export class SilkSymposiumOrchestrator {
     if (!this.daisFloorCircle) return;
     this.daisFloorCircle.innerHTML = '';
 
+    // If active selected index is out of bounds, reset to 0
+    if (this.selectedDaisSeatIndex >= this.symposiumState.seats.length) {
+      this.selectedDaisSeatIndex = 0;
+    }
+
+    // 1. Render Amphitheater Visual Nodes
     this.symposiumState.seats.forEach((seat, idx) => {
+      const isSelected = idx === this.selectedDaisSeatIndex;
       const node = document.createElement('div');
-      node.className = 'dais-floor-chair-node';
-      node.title = `کلیک برای بازرسی و ویرایش سریع ${seat.name}`;
+      node.className = `dais-floor-chair-node ${isSelected ? 'active' : ''} ${seat.isUser ? 'user-node' : ''}`;
+      node.title = `انتخاب و ویرایش تنظیمات ${seat.name}`;
       node.innerHTML = `
         <span class="chair-dot" style="background:${seat.color || '#c084fc'};color:${seat.color || '#c084fc'};"></span>
         <span>${this.escapeHtml(seat.name)}</span>
-        <span style="font-size:9.5px;color:#94a3b8;">(${seat.personaBadge || 'Chair'})</span>
+        <span style="font-size:9.5px;color:#94a3b8;">(${seat.personaBadge || (seat.isUser ? '👑' : 'AI')})</span>
       `;
 
       node.addEventListener('click', () => {
-        this.closeSanctum();
-        this.openSeatInspector(idx);
+        this.selectedDaisSeatIndex = idx;
+        this.renderDaisFloorPlan();
       });
 
       this.daisFloorCircle.appendChild(node);
+    });
+
+    // 2. Render Seat Selector Ribbon Pills
+    this.renderDaisSeatSelectorBar();
+
+    // 3. Render the Seat Editor Card for selected seat
+    this.renderDaisSeatEditor(this.selectedDaisSeatIndex);
+  }
+
+  renderDaisSeatSelectorBar() {
+    if (!this.daisSeatSelectorBar) return;
+    this.daisSeatSelectorBar.innerHTML = '';
+
+    this.symposiumState.seats.forEach((seat, idx) => {
+      const isSelected = idx === this.selectedDaisSeatIndex;
+      const pill = document.createElement('button');
+      pill.type = 'button';
+      pill.className = `dais-seat-tab ${isSelected ? 'active' : ''} ${seat.isUser ? 'user-tab' : ''}`;
+      pill.innerHTML = `
+        <span class="seat-dot" style="background:${seat.color || '#c084fc'};"></span>
+        <span>${this.escapeHtml(seat.name)}</span>
+        <span style="font-size:9px;opacity:0.75;">${seat.personaBadge || ''}</span>
+      `;
+      pill.addEventListener('click', () => {
+        this.selectedDaisSeatIndex = idx;
+        this.renderDaisFloorPlan();
+      });
+      this.daisSeatSelectorBar.appendChild(pill);
+    });
+  }
+
+  renderDaisSeatEditor(seatIndex) {
+    if (!this.daisSeatEditorContainer) return;
+    const seat = this.symposiumState.seats[seatIndex];
+    if (!seat) {
+      this.daisSeatEditorContainer.innerHTML = `<div style="color:#94a3b8;font-size:11px;">صندلی یافت نشد.</div>`;
+      return;
+    }
+
+    const isUser = Boolean(seat.isUser);
+    const allPersonas = this.symposiumState.getAllPersonas();
+    const personaKeys = Object.keys(allPersonas);
+
+    // Build persona dropdown options
+    let personaOptionsHtml = `<option value="">-- انتخاب از کتابخانه پرسوناها --</option>`;
+    personaKeys.forEach(k => {
+      const p = allPersonas[k];
+      const isCur = seat.personaKey === k;
+      personaOptionsHtml += `<option value="${k}" ${isCur ? 'selected' : ''}>${p.badge || '🎭'} ${p.title}</option>`;
+    });
+
+    if (isUser) {
+      // Configuration Card for Human User
+      this.daisSeatEditorContainer.innerHTML = `
+        <div class="driver-field-top" style="margin-bottom: 8px;">
+          <label class="driver-field-label" style="color:#fde68a;">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a6 6 0 0 1 12 0v2"/></svg>
+            <span>تنظیمات جایگاه کاربر انسانی (Human Maestro Seat)</span>
+          </label>
+          <span class="driver-field-badge" style="background: rgba(245, 158, 11, 0.2); color: #fde68a;">کاربر انسان</span>
+        </div>
+
+        <label class="toggle-row" for="sanctum-user-seated-check" style="margin-bottom: 10px;">
+          <div class="toggle-info">
+            <span class="toggle-title">حضور رسمی با صندلی در حلقه مناظره (Seated Participant)</span>
+            <span class="toggle-sub">کاربر نوبت رسمی می‌گیرد و هوش‌ها مستقیماً با او به عنوان همتا بحث می‌کنند</span>
+          </div>
+          <input type="checkbox" id="sanctum-user-seated-check" class="silk-switch" ${this.symposiumState.userParticipant.isSeated ? 'checked' : ''} />
+        </label>
+
+        <div class="driver-sub-grid">
+          <div>
+            <label class="driver-sub-label">نام نمایشی کاربر در میزگرد</label>
+            <input type="text" id="seat-edit-name" class="driver-text-input" value="${this.escapeHtml(seat.name)}" placeholder="Human Maestro" />
+          </div>
+          <div>
+            <label class="driver-sub-label">وزن نفوذ و رأی کاربر (Weight)</label>
+            <div class="driver-input-row">
+              <input type="number" id="seat-edit-weight" class="driver-text-input" min="10" max="300" step="10" value="${seat.weight || 120}" />
+              <span class="unit-tag">%</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 8px;">
+          <label class="driver-sub-label">انتساب پرسونا به کاربر (اختیاری - از کتابخانه پرسوناهای بالا):</label>
+          <select id="seat-edit-persona-select" class="driver-select-input">
+            ${personaOptionsHtml}
+          </select>
+        </div>
+
+        <div style="margin-top: 8px;">
+          <label class="driver-sub-label">دستورالعمل سیستمی و مأموریت فکری کاربر در میزگرد:</label>
+          <textarea id="seat-edit-directive" class="driver-text-input" style="height: 70px; resize: vertical;" placeholder="تعریف مأموریت فکری خودتان در این مناظره..." dir="auto">${this.escapeHtml(seat.personaDirective || '')}</textarea>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px;">
+          <button type="button" id="btn-save-current-seat" class="btn-save-driver-master" style="width: auto; padding: 0 18px;">
+            <span>ذخیره و تثبیت صندلی کاربر 👑</span>
+          </button>
+        </div>
+      `;
+    } else {
+      // Configuration Card for AI Model
+      this.daisSeatEditorContainer.innerHTML = `
+        <div class="driver-field-top" style="margin-bottom: 8px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="seat-dot" style="width:10px;height:10px;border-radius:50%;background:${seat.color || '#c084fc'};box-shadow:0 0 8px ${seat.color || '#c084fc'};"></span>
+            <label class="driver-field-label" style="font-size:13px;color:#ffffff;">
+              <span>پیکربندی هوش مصنوعی: <strong>${this.escapeHtml(seat.name)}</strong></span>
+            </label>
+          </div>
+          <span class="driver-field-badge" style="background: rgba(192, 132, 252, 0.2); color: #e9d5ff;">صندلی هوش</span>
+        </div>
+
+        <div class="driver-sub-grid">
+          <div>
+            <label class="driver-sub-label">عنوان نمایشی صندلی</label>
+            <input type="text" id="seat-edit-name" class="driver-text-input" value="${this.escapeHtml(seat.name)}" />
+          </div>
+          <div>
+            <label class="driver-sub-label">وزن نفوذ رأی (Influence Weight)</label>
+            <div class="driver-input-row">
+              <input type="number" id="seat-edit-weight" class="driver-text-input" min="10" max="300" step="10" value="${seat.weight || 100}" />
+              <span class="unit-tag">%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="driver-sub-grid" style="margin-top: 8px;">
+          <div>
+            <label class="driver-sub-label">انتساب پرسونا از کتابخانه:</label>
+            <select id="seat-edit-persona-select" class="driver-select-input">
+              ${personaOptionsHtml}
+            </select>
+          </div>
+          <div>
+            <label class="driver-sub-label">وضعیت صدا و مشارکت:</label>
+            <button type="button" id="btn-toggle-seat-mute-sanctum" class="btn-utility-ghost" style="width:100%;height:36px;justify-content:center;color:${seat.isMuted ? '#f87171' : '#34d399'};">
+              <span>${seat.isMuted ? '🔇 بی‌صدا (Muted)' : '🔊 فعال و حاضر در بحث'}</span>
+            </button>
+          </div>
+        </div>
+
+        <div style="margin-top: 8px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+            <label class="driver-sub-label" style="margin:0;">دستورالعمل اختصاصی این هوش مصنوعی (System Directive):</label>
+            <button type="button" id="btn-apply-persona-all-sanctum" class="btn-custom-bot-link" style="font-size:10.5px;">اعمال این پرسونا به همه مدل‌ها 🌐</button>
+          </div>
+          <textarea id="seat-edit-directive" class="driver-text-input" style="height: 80px; resize: vertical;" placeholder="تعریف وظیفه فکری، تخصص و زاویه دید اختصاصی این صندلی..." dir="auto">${this.escapeHtml(seat.personaDirective || '')}</textarea>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px;">
+          <button type="button" id="btn-save-current-seat" class="btn-save-driver-master" style="width: auto; padding: 0 18px;">
+            <span>ذخیره تنظیمات ${this.escapeHtml(seat.name)} ✓</span>
+          </button>
+        </div>
+      `;
+
+      // Mute Toggle in Sanctum
+      this.daisSeatEditorContainer.querySelector('#btn-toggle-seat-mute-sanctum')?.addEventListener('click', () => {
+        this.handleToggleSeatMute(seatIndex);
+        this.renderDaisSeatEditor(seatIndex);
+      });
+
+      // Apply to all models
+      this.daisSeatEditorContainer.querySelector('#btn-apply-persona-all-sanctum')?.addEventListener('click', () => {
+        this.applySeatToAll(seatIndex);
+      });
+    }
+
+    // Dynamic auto-direction for directive textarea
+    const directiveEl = this.daisSeatEditorContainer.querySelector('#seat-edit-directive');
+    directiveEl?.addEventListener('input', () => {
+      this.syncTextareaDirection(directiveEl);
+    });
+
+    // Persona Selection Handler
+    this.daisSeatEditorContainer.querySelector('#seat-edit-persona-select')?.addEventListener('change', (e) => {
+      const pKey = e.target.value;
+      if (pKey && allPersonas[pKey]) {
+        const p = allPersonas[pKey];
+        if (directiveEl) {
+          directiveEl.value = p.directive;
+          this.syncTextareaDirection(directiveEl);
+        }
+      }
+    });
+
+    // Save Seat Handler
+    this.daisSeatEditorContainer.querySelector('#btn-save-current-seat')?.addEventListener('click', () => {
+      const nameInput = this.daisSeatEditorContainer.querySelector('#seat-edit-name');
+      const weightInput = this.daisSeatEditorContainer.querySelector('#seat-edit-weight');
+      const personaSelect = this.daisSeatEditorContainer.querySelector('#seat-edit-persona-select');
+      const userCheck = this.daisSeatEditorContainer.querySelector('#sanctum-user-seated-check');
+
+      const name = nameInput?.value?.trim() || seat.name;
+      const weight = parseInt(weightInput?.value, 10) || 100;
+      const directive = directiveEl?.value?.trim() || '';
+      const personaKey = personaSelect?.value || seat.personaKey;
+      const persona = allPersonas[personaKey];
+
+      if (isUser) {
+        const isSeated = Boolean(userCheck?.checked);
+        this.symposiumState.setUserParticipation(isSeated, {
+          name,
+          personaKey,
+          weight
+        });
+        if (directive) {
+          this.symposiumState.userParticipant.personaDirective = directive;
+          const uSeat = this.symposiumState.seats.find(s => s.isUser);
+          if (uSeat) uSeat.personaDirective = directive;
+        }
+        this.symposiumState.persistConfig();
+        this.syncSeats();
+        this.renderAll();
+        this.renderDaisFloorPlan();
+        this.showToast('تنظیمات جایگاه کاربر ذخیره شد ✓');
+      } else {
+        this.symposiumState.updateSeat(seatIndex, {
+          name,
+          weight,
+          personaKey,
+          personaTitle: persona ? persona.title : seat.personaTitle,
+          personaBadge: persona ? persona.badge : seat.personaBadge,
+          personaDirective: directive,
+          isCustomized: true
+        });
+        this.symposiumState.persistConfig();
+        this.renderAll();
+        this.renderDaisFloorPlan();
+        this.showToast(`تنظیمات ${name} ذخیره و اعمال شد ✓`);
+      }
     });
   }
 
@@ -1363,23 +1668,16 @@ export class SilkSymposiumOrchestrator {
     });
   }
 
-  renderUserRolesDropdown() {
-    if (!this.sanctumUserRolePresetPicker) return;
-    const roles = this.symposiumState.getUserRolePresets();
-    this.sanctumUserRolePresetPicker.innerHTML = '<option value="">-- انتخاب از الگوهای آماده نقش کاربر --</option>';
-
-    Object.keys(roles).forEach(key => {
-      const r = roles[key];
-      const opt = document.createElement('option');
-      opt.value = key;
-      opt.textContent = `${r.badge} ${r.title}`;
-      if (key === this.symposiumState.userParticipant.personaKey) opt.selected = true;
-      this.sanctumUserRolePresetPicker.appendChild(opt);
-    });
-  }
-
   loadProtocolsIntoEditor() {
     if (this.topologySelect) this.topologySelect.value = this.symposiumState.debateMode;
+
+    // Update active state in visual topology cards
+    if (this.topologyCardsGrid) {
+      this.topologyCardsGrid.querySelectorAll('.topology-card').forEach(card => {
+        card.classList.toggle('active', card.dataset.value === this.symposiumState.debateMode);
+      });
+    }
+
     if (this.maxRoundsInput) this.maxRoundsInput.value = this.symposiumState.config.maxRounds;
     if (this.distillSelect) this.distillSelect.value = this.symposiumState.config.contextDistillation;
     if (this.templateTextarea) this.templateTextarea.value = this.symposiumState.config.promptTemplate;
@@ -1398,67 +1696,6 @@ export class SilkSymposiumOrchestrator {
     this.symposiumState.persistConfig();
     this.updateHeaderStats();
     this.showToast('تنظیمات پروتکل و نوبت‌دهی ذخیره شد ✓');
-  }
-
-  loadUserRoleIntoEditor() {
-    const u = this.symposiumState.userParticipant;
-    if (this.sanctumUserSeatedCheck) this.sanctumUserSeatedCheck.checked = Boolean(u.isSeated);
-    if (this.sanctumUserNameInput) this.sanctumUserNameInput.value = u.name || 'Human Maestro';
-    if (this.sanctumUserWeightInput) this.sanctumUserWeightInput.value = u.weight || 120;
-    if (this.sanctumUserDirectiveTextarea) {
-      this.sanctumUserDirectiveTextarea.value = u.personaDirective || '';
-      this.syncTextareaDirection(this.sanctumUserDirectiveTextarea);
-    }
-
-    if (this.sanctumUserPersonaSelect) {
-      this.sanctumUserPersonaSelect.innerHTML = '';
-      const allPersonas = this.symposiumState.getAllPersonas();
-      const personaKeys = Object.keys(allPersonas);
-
-      if (personaKeys.length === 0) {
-        const opt = document.createElement('option');
-        opt.value = 'maestro';
-        opt.textContent = '👑 Lead Maestro';
-        opt.selected = true;
-        this.sanctumUserPersonaSelect.appendChild(opt);
-      } else {
-        personaKeys.forEach(key => {
-          const p = allPersonas[key];
-          const opt = document.createElement('option');
-          opt.value = key;
-          opt.textContent = `${p.badge || '👑'} ${p.title}`;
-          if (key === u.personaKey) opt.selected = true;
-          this.sanctumUserPersonaSelect.appendChild(opt);
-        });
-      }
-    }
-  }
-
-  saveUserRoleConfig() {
-    const isSeated = Boolean(this.sanctumUserSeatedCheck?.checked);
-    const name = this.sanctumUserNameInput?.value?.trim() || 'Human Maestro';
-    const personaKey = this.sanctumUserPersonaSelect?.value || 'innovator';
-    const weight = parseInt(this.sanctumUserWeightInput?.value, 10) || 120;
-    const directive = this.sanctumUserDirectiveTextarea?.value?.trim();
-
-    this.symposiumState.setUserParticipation(isSeated, {
-      name,
-      personaKey,
-      weight
-    });
-
-    if (directive) {
-      this.symposiumState.userParticipant.personaDirective = directive;
-      const userSeat = this.symposiumState.seats.find(s => s.isUser);
-      if (userSeat) {
-        userSeat.personaDirective = directive;
-      }
-    }
-
-    this.symposiumState.persistConfig();
-    this.syncSeats();
-    this.renderAll();
-    this.showToast('جایگاه و شخصیت کاربر به‌روزرسانی شد ✓');
   }
 
   syncTextareaDirection(el) {

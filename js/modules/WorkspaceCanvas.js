@@ -46,6 +46,7 @@ export class WorkspaceCanvas {
     this.setupViewportGuards();
     this.setupEvents();
     this.setupBusListeners();
+    this.applyTransform();
   }
 
   /**
@@ -495,24 +496,26 @@ export class WorkspaceCanvas {
     header.addEventListener('mousedown', (e) => {
       if (e.target.closest('.card-ctrl-btn')) return;
 
-      this.activeDragCard = card;
+      const currentCard = this.stateStore.getCard(card.id) || card;
+      this.activeDragCard = currentCard;
       this.dragStartX = e.clientX;
       this.dragStartY = e.clientY;
-      this.initialCardX = card.x;
-      this.initialCardY = card.y;
-      this.stateStore.setActiveCard(card.id);
+      this.initialCardX = currentCard.x;
+      this.initialCardY = currentCard.y;
+      this.stateStore.setActiveCard(currentCard.id);
       this.setIframeShields(true);
       e.preventDefault();
     });
 
     // Resize handler
     resizeHandle.addEventListener('mousedown', (e) => {
-      this.activeResizeCard = card;
+      const currentCard = this.stateStore.getCard(card.id) || card;
+      this.activeResizeCard = currentCard;
       this.resizeStartX = e.clientX;
       this.resizeStartY = e.clientY;
-      this.initialCardW = card.width;
-      this.initialCardH = card.height;
-      this.stateStore.setActiveCard(card.id);
+      this.initialCardW = currentCard.width;
+      this.initialCardH = currentCard.height;
+      this.stateStore.setActiveCard(currentCard.id);
       this.setIframeShields(true);
       e.preventDefault();
       e.stopPropagation();

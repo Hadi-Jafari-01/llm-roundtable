@@ -106,6 +106,9 @@ export class OmnibarController {
 
   expand() {
     this.dom.island?.classList.add('expanded');
+    const studio = document.getElementById('capsule-studio');
+    if (studio) studio.classList.remove('hidden');
+    if (this.dom.compactTrigger) this.dom.compactTrigger.classList.add('hidden');
     setTimeout(() => {
       this.dom.textarea?.focus({ preventScroll: true });
       this.adjustTextareaHeight();
@@ -114,6 +117,9 @@ export class OmnibarController {
 
   collapse() {
     this.dom.island?.classList.remove('expanded');
+    const studio = document.getElementById('capsule-studio');
+    if (studio) studio.classList.add('hidden');
+    if (this.dom.compactTrigger) this.dom.compactTrigger.classList.remove('hidden');
   }
 
   adjustTextareaHeight() {

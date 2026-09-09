@@ -4,7 +4,80 @@
  * chronological turn transcript, and milestone consensus ledger.
  */
 
-export const COGNITIVE_PERSONAS = {};
+/* ── نقش‌های پیش‌فرض کاربر (User Role Presets) ── */
+export const USER_ROLE_PRESETS = {
+  maestro: {
+    id: 'maestro',
+    title: 'Lead Architect & Maestro (رهبر ارکستر و معمار ارشد)',
+    badge: '👑 Maestro',
+    directive: 'شما در جایگاه استاد راهنما و رهبر ارکستر فکری این جلسه قرار دارید. وظیفه شما طرح سوالات جهت‌دهنده، حل تعارضات، داوری بین دیدگاه‌ها و هدایت شورا به سمت راه‌حل نهایی است.'
+  },
+  observer: {
+    id: 'observer',
+    title: 'Critical Observer (ناظر نقاد)',
+    badge: '👁️ Observer',
+    directive: 'شما در جایگاه ناظر بی‌طرف قرار دارید و صرفاً روند استدلال‌ها را از بالا رصد کرده و خطاهای شناختی یا سوگیری‌های پنهان را گوشزد می‌کنید.'
+  },
+  challenger: {
+    id: 'challenger',
+    title: 'Inquisitive Challenger (پرسشگر چالشی)',
+    badge: '⚔️ Challenger',
+    directive: 'شما هر فرضیه و استدلالی را با ارائه مثال‌های نقض و سناریوهای مرزی به چالش می‌کشید تا استحکام تئوریک آن سنجیده شود.'
+  }
+};
+
+/* ── پرسوناهای شناختی پیش‌فرض (Core Cognitive Archetypes) ── */
+export const COGNITIVE_PERSONAS = {
+  architect: {
+    id: 'architect',
+    title: 'معمار ارشد سیستم (The Systems Architect)',
+    badge: '🏛️ Architect',
+    color: '#818cf8',
+    directive: 'شما معمار ارشد سیستم هستید. تمرکز شما بر طراحی کلان، ماژولار بودن، مقیاس‌پذیری، الگوهای طراحی استاندارد، کاهش وابستگی‌ها (Decoupling) و پایداری درازمدت است.'
+  },
+  devils_advocate: {
+    id: 'devils_advocate',
+    title: 'منتقد سرسخت و وکیل مدافع شیطان (The Devil\'s Advocate)',
+    badge: '⚔️ Devil\'s Advocate',
+    color: '#f43f5e',
+    directive: 'شما وکیل مدافع شیطان و منتقد بی‌رحم هستید. وظیفه شما به چالش کشیدن تمام فرضیات پذیرفته‌شده، یافتن نقاط کور، کشف باگ‌های منطقی پنهان و سناریوهای شکست حتمی است.'
+  },
+  synthesizer: {
+    id: 'synthesizer',
+    title: 'سنتزکننده و معمار اجماع (The Synthesizer)',
+    badge: '⚖️ Synthesizer',
+    color: '#c084fc',
+    directive: 'شما سنتزکننده شورا هستید. وظیفه شما پل زدن میان دیدگاه‌های به ظاهر متضاد، استخراج وجوه مشترک، حل تناقض‌ها و تدوین یک چارچوب منسجم و یکپارچه برای اجماع نهایی است.'
+  },
+  innovator: {
+    id: 'innovator',
+    title: 'نوآور و اندیشمند واگرا (The Innovator)',
+    badge: '💡 Innovator',
+    color: '#f59e0b',
+    directive: 'شما متفکر نوآور و خارج از چارچوب هستید. با ارائه راه‌حل‌های غیرمتعارف، پارادایم‌های نوین و رویکردهای ساختارشکن، بن‌بست‌های فکری را باز می‌کنید.'
+  },
+  cynic: {
+    id: 'cynic',
+    title: 'بدبین تجربی و ارزیاب واقع‌گرا (The Pragmatic Cynic)',
+    badge: '🧐 Cynic',
+    color: '#fb923c',
+    directive: 'شما بدبین عمل‌گرا و واقع‌بین هستید. به وعده‌های بیش از حد خوش‌بینانه مشکوکید و بر هزینه‌های اجرایی، پیچیدگی‌های عملیاتی، بدهی فنی (Technical Debt) و نگهداری تمرکز دارید.'
+  },
+  empiricist: {
+    id: 'empiricist',
+    title: 'دانشمند تجربه‌گرا و داده‌محور (The Empiricist)',
+    badge: '🔬 Empiricist',
+    color: '#34d399',
+    directive: 'شما دانشمند تجربه‌گرا هستید. تنها به داده‌های تجربی، بنچمارک‌های قابل تکرار، سنجش‌های آماری و ابطال‌پذیری علمی بها می‌دهید و از ادعاهای بدون مدرک پرهیز می‌کنید.'
+  },
+  physicist: {
+    id: 'physicist',
+    title: 'استدلال‌گر اصول اولیه (First-Principles Thinker)',
+    badge: '⚛️ Physicist',
+    color: '#38bdf8',
+    directive: 'شما به اصول بنیادین پایبندید. مسئله را به غیرقابل انکارترین قوانین فیزیک، ریاضی و منطق محض تجزیه می‌کنید و استدلال خود را از پایین‌ترین سطح به بالا می‌سازید.'
+  }
+};
 
 /* ── الگوهای متنوع و کامل فرمول‌های پرومپت (Turn-Injection Dialectic Templates) ── */
 export const DIALECTIC_PROMPT_TEMPLATES = {
@@ -207,48 +280,57 @@ export const GLOBAL_DIRECTIVE_PRESETS = {
   }
 };
 
-/* ── الگوهای نقش و جایگاه کاربر (User Maestro Role Presets) ── */
-export const USER_ROLE_PRESETS = {
-  maestro: {
-    id: 'maestro',
-    title: 'رهبر ارکستر و معمار ارشد (Lead Architect & Maestro)',
-    badge: '👑 Maestro',
-    directive: 'شما رهبر ارکستر فکری و معمار ارشد این جلسه هستید. وظیفه شما هدایت کلان، جمع‌بندی تریدآف‌ها، وارد کردن خرد انسانی و تعیین اولویت‌های استراتژیک است.'
+/* ── مخزن سناریوهای جامع (ایجاد و مدیریت توسط خود کاربر) ── */
+export const SYMPOSIUM_SCENARIOS = {
+  architecture_review: {
+    id: 'architecture_review',
+    title: 'بازبینی معماری سیستم (System Architecture Review)',
+    description: 'تحلیل تریدآف‌ها، مقیاس‌پذیری و ارزیابی عمیق تصمیمات مهندسی',
+    badge: '🏛️ Architecture',
+    color: '#818cf8',
+    debateMode: 'socratic',
+    templateKey: 'adr_architecture',
+    globalDirectiveKey: 'deep_technical_code',
+    initialPrompt: 'بررسی معماری پیشنهادی سیستم، تریدآف‌های همزمانی، پایگاه داده و نقاط تکین شکست.',
+    recommendedPersonas: ['architect', 'devils_advocate', 'cynic', 'synthesizer']
   },
-  magistrate: {
-    id: 'magistrate',
-    title: 'داور بی‌طرف و قاضی شورا (Chief Magistrate)',
-    badge: '⚖️ Judge',
-    directive: 'شما داور بی‌طرف شورا هستید. مستندات طرفین را بی‌طرفانه وزن‌کشی می‌کنید، مغالطات را اخطار می‌دهید و رأی نهایی را صادر می‌نمایید.'
+  deep_dialectic: {
+    id: 'deep_dialectic',
+    title: 'مناظره سقراطی و موشکافی بنیادین (Deep Socratic Inquest)',
+    description: 'تشکیک در فرضیات، برهان خلف و پالایش تعاریف و گزاره‌ها',
+    badge: '⚔️ Socratic',
+    color: '#f43f5e',
+    debateMode: 'socratic',
+    templateKey: 'socratic',
+    globalDirectiveKey: 'first_principles',
+    initialPrompt: 'واکاوی عمیق و ریشه‌ای فرضیات بنیادین و کشف تناقضات منطقی طرح.',
+    recommendedPersonas: ['innovator', 'cynic', 'physicist', 'synthesizer']
   },
-  inquisitor: {
-    id: 'inquisitor',
-    title: 'بازپرس منتقد و به چالش‌کشنده (Chief Inquisitor)',
-    badge: '⚔️ Inquisitor',
-    directive: 'شما پرسشگر منتقد جلسه هستید. سخنان هر مدل را با سناریوهای دشوار می‌سنجید و به هیچ پاسخ آسان یا کلیشه‌ای رضایت نمی‌دهید.'
+  delphi_consensus: {
+    id: 'delphi_consensus',
+    title: 'همگرایی دلفی و اجماع شورا (Delphi Consensus)',
+    description: 'امتیازدهی تدریجی و نزدیک شدن به یک نتیجه واحد و مستدل',
+    badge: '📊 Delphi',
+    color: '#34d399',
+    debateMode: 'delphi',
+    templateKey: 'delphi_consensus',
+    globalDirectiveKey: 'persian_academic',
+    initialPrompt: 'همگرایی نظرات پیرامون بهینه‌ترین استراتژی حل مسئله و تعیین اولویت‌های اجرایی.',
+    recommendedPersonas: ['empiricist', 'architect', 'synthesizer']
   },
-  product_owner: {
-    id: 'product_owner',
-    title: 'نماینده کاربر نهایی و بازار (Product Owner)',
-    badge: '🎯 Product',
-    directive: 'شما وکیل و نماینده مشتری نهایی هستید. پیچیدگی‌های فنی را با فیلتر سادگی، تجربه واقعی کاربر و ارزش عملیاتی می‌سنجید.'
-  },
-  angel_investor: {
-    id: 'angel_investor',
-    title: 'سرمایه‌گذار ریسک‌پذیر و تحلیل‌گر ارزش (Venture Capitalist)',
-    badge: '💼 Investor',
-    directive: 'شما سرمایه‌گذار ریسک‌پذیر هستید. روی اندازه بازار، خندق دفاعی (Moat)، بازگشت سرمایه و امکان‌پذیری مقیاس‌گیری تمرکز دارید.'
-  },
-  silent_conductor: {
-    id: 'silent_conductor',
-    title: 'ناظر بالینی و نوبت‌دهنده آرام (Silent Conductor)',
-    badge: '🪄 Conductor',
-    directive: 'شما ناظر بی‌طرف جلسه هستید و صرفاً با نوبت‌دهی دستی و انتقال عصای گفتگو، جریان دیالکتیک میان هوش‌ها را تنظیم می‌کنید.'
+  manual_maestro: {
+    id: 'manual_maestro',
+    title: 'میزگرد هدایت‌شده توسط استاد (Maestro Master Inquest)',
+    description: 'نوبت‌دهی دستی با عصا و کنترل کامل روند گفتگو توسط کاربر',
+    badge: '🪄 Maestro',
+    color: '#f59e0b',
+    debateMode: 'manual',
+    templateKey: 'manual_conductor',
+    globalDirectiveKey: 'persian_academic',
+    initialPrompt: 'طرح مسئله و آغاز گفتگو تحت هدایت گام‌به‌گام استاد انسان.',
+    recommendedPersonas: ['architect', 'devils_advocate', 'synthesizer']
   }
 };
-
-/* ── مخزن سناریوهای جامع (ایجاد و مدیریت توسط خود کاربر) ── */
-export const SYMPOSIUM_SCENARIOS = {};
 
 export class SymposiumState {
   constructor() {
@@ -256,8 +338,8 @@ export class SymposiumState {
     this.debateMode = 'manual'; // Default to manual conductor for total user control
     this.roundIndex = 1;
     this.userCorePrompt = '';
-    this.activeSpeakerIndex = 0;
-    this.recommendedNextSpeakerIndex = 0;
+    this.activeSpeakerIndex = -1;
+    this.recommendedNextSpeakerIndex = -1;
     this.isSpeakerStreaming = false;
     this.activeScenarioKey = '';
 
@@ -277,7 +359,7 @@ export class SymposiumState {
       personaKey: 'maestro',
       personaTitle: 'Lead Architect & Maestro (رهبر ارکستر و معمار ارشد)',
       personaBadge: '👑 Maestro',
-      personaDirective: USER_ROLE_PRESETS.maestro ? USER_ROLE_PRESETS.maestro.directive : '',
+      personaDirective: USER_ROLE_PRESETS?.maestro?.directive || '',
       color: '#f59e0b',
       weight: 120
     };
@@ -317,10 +399,6 @@ export class SymposiumState {
 
   getGlobalDirectivePresets() {
     return { ...GLOBAL_DIRECTIVE_PRESETS };
-  }
-
-  getUserRolePresets() {
-    return { ...USER_ROLE_PRESETS };
   }
 
   getScenarios() {
@@ -427,26 +505,6 @@ export class SymposiumState {
     if (!preset) return false;
     this.config.globalDirective = preset.directive;
     this.config.activeGlobalDirectiveKey = presetKey;
-    this.persistConfig();
-    return true;
-  }
-
-  applyUserRolePreset(roleKey) {
-    const preset = USER_ROLE_PRESETS[roleKey];
-    if (!preset) return false;
-    this.userParticipant.personaKey = roleKey;
-    this.userParticipant.personaTitle = preset.title;
-    this.userParticipant.personaBadge = preset.badge;
-    this.userParticipant.personaDirective = preset.directive;
-
-    const userSeat = this.seats.find(s => s.isUser);
-    if (userSeat) {
-      userSeat.personaKey = roleKey;
-      userSeat.personaTitle = preset.title;
-      userSeat.personaBadge = preset.badge;
-      userSeat.personaDirective = preset.directive;
-    }
-
     this.persistConfig();
     return true;
   }
@@ -600,7 +658,7 @@ export class SymposiumState {
       this.seats = modelSeats;
     }
 
-    if (this.activeSpeakerIndex >= this.seats.length) {
+    if (this.sessionStatus !== 'IDLE' && this.activeSpeakerIndex >= this.seats.length) {
       this.activeSpeakerIndex = 0;
     }
 
@@ -651,6 +709,55 @@ export class SymposiumState {
   addTurn(turn) {
     this.transcript.push(turn);
     return turn;
+  }
+
+  removeTurn(turnId) {
+    const idx = this.transcript.findIndex(t => t.id === turnId);
+    if (idx === -1) return null;
+    const [removed] = this.transcript.splice(idx, 1);
+
+    // If turn was actively streaming, halt streaming flag
+    if (removed.isStreaming) {
+      this.isSpeakerStreaming = false;
+    }
+
+    // If this turn came from a seat, decrement that seat's turnCount if > 0
+    if (typeof removed.seatIndex === 'number' && this.seats[removed.seatIndex]) {
+      const seat = this.seats[removed.seatIndex];
+      if (seat.turnCount && seat.turnCount > 0) {
+        seat.turnCount--;
+      }
+      if (seat.status === 'speaking') {
+        seat.status = 'idle';
+      }
+    }
+
+    // Clean up userCorePrompt if the removed turn was the opening user turn
+    const remainingUserTurns = this.transcript.filter(t => t.role === 'user');
+    if (remainingUserTurns.length > 0) {
+      this.userCorePrompt = remainingUserTurns[0].text;
+    } else if (removed.role === 'user') {
+      this.userCorePrompt = '';
+    }
+
+    // Purge any ledger items extracted directly from this turn
+    if (removed.speakerName && removed.text) {
+      ['agreements', 'divergences', 'openQuestions'].forEach(cat => {
+        if (Array.isArray(this.ledger[cat])) {
+          this.ledger[cat] = this.ledger[cat].filter(item => {
+            if (item.startsWith(`${removed.speakerName}:`)) {
+              const snippet = item.replace(`${removed.speakerName}:`, '').trim();
+              if (snippet && removed.text.includes(snippet.slice(0, 25))) {
+                return false;
+              }
+            }
+            return true;
+          });
+        }
+      });
+    }
+
+    return removed;
   }
 
   updateStreamingTurn(partial) {
@@ -764,7 +871,8 @@ export class SymposiumState {
   resetSession() {
     this.sessionStatus = 'IDLE';
     this.roundIndex = 1;
-    this.activeSpeakerIndex = 0;
+    this.activeSpeakerIndex = -1;
+    this.recommendedNextSpeakerIndex = -1;
     this.isSpeakerStreaming = false;
     this.transcript = [];
     this.ledger = {

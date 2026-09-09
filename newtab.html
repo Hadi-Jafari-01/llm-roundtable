@@ -1631,147 +1631,178 @@
             <div id="sanctum-personas-grid" class="persona-presets-grid"></div>
           </div>
 
-          <!-- ZONE 3: DAIS FLOOR PLAN & USER MAESTRO SEAT -->
+          <!-- ZONE 3: DAIS FLOOR PLAN & COMPLETE SEAT CONFIGURATION -->
           <div id="sanctum-zone-dais-floor" class="sanctum-zone-panel" style="display: none;">
             <!-- Interactive Visual Amphitheater Circle -->
             <div class="dais-floor-plan-card">
               <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span style="font-size: 11px; font-weight: 700; color: #f1f5f9;">طرح‌واره چیدمان صندلی‌های هوش در سکو:</span>
-                <span style="font-size: 10px; color: #c084fc;">کلیک روی هر صندلی برای تنظیم سریع</span>
+                <div>
+                  <span style="font-size: 11.5px; font-weight: 700; color: #f1f5f9;">چیدمان و انتخاب صندلی‌های شورا</span>
+                  <p style="margin: 2px 0 0; font-size: 10px; color: #94a3b8;">روی هر صندلی کلیک کنید تا مشخصات و پرومپت آن را در کادر زیر ویرایش نمایید</p>
+                </div>
+                <span class="driver-field-badge" style="background: rgba(192, 132, 252, 0.15); color: #e9d5ff;">Chamber Dais</span>
               </div>
               <div id="dais-interactive-floor-circle" class="dais-interactive-circle"></div>
             </div>
 
-            <!-- Royal Human Maestro Seat Panel -->
-            <div class="driver-field-card royal-maestro-seat-card">
-              <div class="driver-field-top">
-                <label class="driver-field-label" style="color:#fde68a;">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a6 6 0 0 1 12 0v2"/></svg>
-                  <span>جایگاه و نقش رسمی کاربر (Human Maestro Dais Seat)</span>
-                </label>
-                <span class="driver-field-badge" style="background: rgba(245, 158, 11, 0.2); color: #fde68a;">Peer Seat</span>
-              </div>
+            <!-- Seat Switcher Ribbon (Pills for User & all AI models) -->
+            <div class="dais-seat-selector-bar" id="dais-seat-selector-bar">
+              <!-- Dynamically populated seat selector pills -->
+            </div>
 
-              <label class="toggle-row" for="sanctum-user-seated-check" style="margin-top: 4px;">
-                <div class="toggle-info">
-                  <span class="toggle-title">حضور رسمی با صندلی در حلقه مناظره (Seated Participant)</span>
-                  <span class="toggle-sub">کاربر نوبت رسمی می‌گیرد و هوش‌ها مستقیماً با او به عنوان همتا بحث می‌کنند</span>
-                </div>
-                <input type="checkbox" id="sanctum-user-seated-check" class="silk-switch" />
-              </label>
-
-              <div class="driver-sub-grid" style="margin-top: 8px;">
-                <div>
-                  <label class="driver-sub-label">نام نمایشی کاربر در میزگرد</label>
-                  <input type="text" id="sanctum-user-name" class="driver-text-input" placeholder="Human Maestro" value="Human Maestro" />
-                </div>
-                <div>
-                  <label class="driver-sub-label">وزن نفوذ و رای کاربر</label>
-                  <div class="driver-input-row">
-                    <input type="number" id="sanctum-user-weight" class="driver-text-input" min="50" max="250" step="10" value="120" />
-                    <span class="unit-tag">%</span>
-                  </div>
-                </div>
-              </div>
-
-              <div style="margin-top: 8px;">
-                <label class="driver-sub-label">الگوهای آماده برای نقش کاربر در شورا</label>
-                <select id="sanctum-user-role-preset-select" class="driver-select-input"></select>
-              </div>
-
-              <div style="margin-top: 8px;">
-                <label class="driver-sub-label">پرسونای فکری پیش‌فرض کاربر</label>
-                <select id="sanctum-user-persona-select" class="driver-select-input"></select>
-              </div>
-
-              <div style="margin-top: 8px;">
-                <label class="driver-sub-label">دستورالعمل سیستمی و هویت کاربر در بحث</label>
-                <textarea id="sanctum-user-directive" class="driver-text-input" style="height: 65px; resize: vertical;" placeholder="تعریف هویت فکری خودتان در مناظره..."></textarea>
-              </div>
-
-              <button type="button" id="btn-save-user-role" class="btn-save-driver-master" style="margin-top: 8px;">
-                <span>ذخیره و تثبیت جایگاه کاربر 👑</span>
-              </button>
+            <!-- Master Seat Editor (Dynamically configures Human OR any AI model) -->
+            <div id="dais-seat-editor-container" class="dais-seat-editor-card">
+              <!-- Dynamically rendered by renderDaisSeatEditor() -->
             </div>
           </div>
 
-          <!-- ZONE 3: DIALECTIC ENGINE & TEMPLATES -->
+          <!-- ZONE 4: DIALECTIC ENGINE & METHODOLOGY (USER-FRIENDLY & INTUITIVE) -->
           <div id="sanctum-zone-engine" class="sanctum-zone-panel" style="display: none;">
-            <div class="driver-field-card">
-              <div class="driver-field-top">
-                <label class="driver-field-label">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg>
-                  <span>الگوی نوبت‌دهی و متدولوژی مناظره (Topology)</span>
-                </label>
-                <span class="driver-field-badge">Engine</span>
+            
+            <!-- SECTION 1: VISUAL TOPOLOGY SELECTOR -->
+            <div class="engine-section-block">
+              <div class="engine-section-header">
+                <span class="engine-section-title">۱. انتخاب جریان و متدولوژی نوبت‌دهی (Dialectic Topology)</span>
+                <span class="engine-section-badge">جریان مذاکره</span>
               </div>
-              <select id="sanctum-topology-select" class="driver-select-input">
-                <option value="manual">Manual Conductor (نوبت‌دهی دستی با عصای نوبت استاد — توصیه شده)</option>
-                <option value="socratic">Socratic Dialectic (مناظره سقراطی اولویت‌محور و تشکیک در پیش‌فرض‌ها)</option>
-                <option value="round_robin">Orderly Round-Robin (چرخش ترتیبی و ساختاریافته میان صندلی‌ها)</option>
-                <option value="delphi">Delphi Convergence (همگرایی دلفی به سوی اجماع تدریجی)</option>
-                <option value="autonomous">Fully Autonomous Flow (جریان پیوسته و خودگردان با توقف اضطراری)</option>
+              <p class="engine-section-desc">مشخص کنید هوش‌ها چگونه نوبت گفتگو را بین خود یا با شما رد و بدل کنند:</p>
+
+              <!-- Hidden native select for state compatibility -->
+              <select id="sanctum-topology-select" class="driver-select-input" style="display: none;">
+                <option value="manual">Manual Conductor</option>
+                <option value="socratic">Socratic Dialectic</option>
+                <option value="round_robin">Orderly Round-Robin</option>
+                <option value="delphi">Delphi Convergence</option>
+                <option value="autonomous">Fully Autonomous Flow</option>
               </select>
+
+              <!-- Elegant Visual Cards Grid -->
+              <div class="topology-cards-grid" id="topology-cards-grid">
+                <div class="topology-card active" data-value="manual">
+                  <div class="topology-card-icon">🪄</div>
+                  <div class="topology-card-content">
+                    <div class="topology-card-title">عصای نوبت دستی (Manual Conductor) <span class="recom-tag">توصیه شده</span></div>
+                    <div class="topology-card-desc">شما با کلیک روی عصا یا صندلی هر مدل، نوبت بعدی را مستقیماً تعیین و هدایت می‌کنید. آرام و تحت کنترل کامل.</div>
+                  </div>
+                </div>
+
+                <div class="topology-card" data-value="socratic">
+                  <div class="topology-card-icon">⚔️</div>
+                  <div class="topology-card-content">
+                    <div class="topology-card-title">مناظره سقراطی (Socratic Dialectic)</div>
+                    <div class="topology-card-desc">نوبت‌ها بر اساس تقابل فکری توزیع می‌شود؛ مدل‌ها پیش‌فرض‌های یکدیگر را زیر سوال می‌برند و تشکیک می‌کنند.</div>
+                  </div>
+                </div>
+
+                <div class="topology-card" data-value="round_robin">
+                  <div class="topology-card-icon">🔄</div>
+                  <div class="topology-card-content">
+                    <div class="topology-card-title">حلقه ترتیبی (Orderly Round-Robin)</div>
+                    <div class="topology-card-desc">مدل‌ها و کاربر به شکل منظم، ساعت‌گرد و یکی پس از دیگری در هر دور نظر خود را اعلام می‌کنند.</div>
+                  </div>
+                </div>
+
+                <div class="topology-card" data-value="delphi">
+                  <div class="topology-card-icon">📊</div>
+                  <div class="topology-card-content">
+                    <div class="topology-card-title">همگرایی دلفی (Delphi Convergence)</div>
+                    <div class="topology-card-desc">مدل‌ها در چند دور به نظرات قبلی امتیاز می‌دهند تا اختلافات محو و به یک اجماع فنی منتهی شود.</div>
+                  </div>
+                </div>
+
+                <div class="topology-card" data-value="autonomous">
+                  <div class="topology-card-icon">⚡</div>
+                  <div class="topology-card-content">
+                    <div class="topology-card-title">جریان خودگردان (Autonomous Flow)</div>
+                    <div class="topology-card-desc">مباحثه پیوسته و بدون توقف میان مدل‌ها جریان می‌یابد تا زمانی که شما دکمه توقف را فشار دهید.</div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div class="driver-field-card">
-              <div class="driver-field-top">
-                <label class="driver-field-label">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                  <span>الگوی آماده فرمول پرومپت (Prompt Template)</span>
-                </label>
-                <span class="driver-field-badge">Formula</span>
+            <!-- SECTION 2: PROMPT FORMULA TEMPLATES & COLLAPSIBLE EDITOR -->
+            <div class="engine-section-block">
+              <div class="engine-section-header">
+                <span class="engine-section-title">۲. قالب ساختار پرومپت شورا (Prompt Architecture)</span>
+                <span class="engine-section-badge">دستور تزریق</span>
               </div>
-              <select id="sanctum-prompt-template-preset-select" class="driver-select-input"></select>
+              <p class="engine-section-desc">قالب و اسکلت‌بندی پرسشی که در هر نوبت به هوش مصنوعی فعال تزریق می‌گردد:</p>
+
+              <div class="driver-field-card" style="padding: 10px 14px; background: rgba(255, 255, 255, 0.025);">
+                <div class="driver-field-top">
+                  <label class="driver-field-label">انتخاب قالب آماده پرومپت:</label>
+                </div>
+                <select id="sanctum-prompt-template-preset-select" class="driver-select-input"></select>
+              </div>
+
+              <!-- Collapsible Advanced Formula Accordion -->
+              <div class="formula-accordion-block">
+                <button type="button" id="btn-toggle-formula-accordion" class="formula-accordion-trigger">
+                  <span style="display:flex;align-items:center;gap:6px;">
+                    <span>⚙️</span>
+                    <span>مشاهده و ویرایش پیشرفته فرمول پرومپت و متغیرها</span>
+                  </span>
+                  <span class="arrow-indicator">▼</span>
+                </button>
+                <div id="formula-accordion-content" class="formula-accordion-body" style="display: none;">
+                  <textarea id="sanctum-template-textarea" class="driver-text-input" style="height:115px;resize:vertical;font-family:ui-monospace,monospace;font-size:11px;padding:8px;line-height:1.45;"></textarea>
+                  
+                  <div style="font-size:10px;color:#cbd5e1;margin-top:6px;font-weight:600;">متغیرهای پویا (کلیک روی هر گزینه برای درج مستقیم در محل نشانگر متن):</div>
+                  <div id="sanctum-macro-chips" class="macro-chips-flow">
+                    <button type="button" class="macro-chip-btn" data-macro="{{speaker_role}}" title="دستور و پرسونای مدل فعال">{{speaker_role}} <small>(نقش مدل)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{user_core_prompt}}" title="پرسش بنیادین کاربر">{{user_core_prompt}} <small>(چالش اصلی)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_name}}" title="نام سخنران قبلی">{{last_speaker_name}} <small>(گوینده قبلی)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_argument}}" title="استدلال سخنران قبلی">{{last_speaker_argument}} <small>(سخن قبلی)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{round_context_brief}}" title="خلاصه روند تا الان">{{round_context_brief}} <small>(خلاصه روند)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{consensus_agreements}}" title="نقاط توافق">{{consensus_agreements}} <small>(توافقات)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{consensus_gaps}}" title="نقاط اختلاف">{{consensus_gaps}} <small>(چالش‌ها)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{round_number}}" title="شماره دور">{{round_number}} <small>(دور)</small></button>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div class="driver-sub-grid">
-              <div class="driver-field-card">
-                <label class="driver-sub-label">سقف تعداد دورها (Max Rounds)</label>
-                <input type="number" id="sanctum-max-rounds" class="driver-text-input" min="1" max="50" value="10" />
+            <!-- SECTION 3: PROTOCOLS, ROUND LIMITS & GLOBAL MANDATE -->
+            <div class="engine-section-block">
+              <div class="engine-section-header">
+                <span class="engine-section-title">۳. قوانین کلان و حاکمیتی شورا (Global Rules & Limits)</span>
+                <span class="engine-section-badge">محدودیت‌ها</span>
               </div>
-              <div class="driver-field-card">
-                <label class="driver-sub-label">روش تلخیص کانتکست (Distillation)</label>
-                <select id="sanctum-distill-select" class="driver-select-input">
-                  <option value="digest">Executive Digest (خلاصه چرخان برای بهینه‌سازی کانتکست)</option>
-                  <option value="verbatim">Full Verbatim (ارسال کامل متن بدون تلخیص)</option>
-                </select>
+
+              <div class="driver-sub-grid">
+                <div class="driver-field-card" style="padding: 10px 12px;">
+                  <label class="driver-sub-label">سقف تعداد دورهای مناظره (Max Rounds)</label>
+                  <input type="number" id="sanctum-max-rounds" class="driver-text-input" min="1" max="50" value="10" />
+                  <span style="font-size:9.5px;color:#64748b;margin-top:2px;">پس از رسیدن به این دور، جلسه متوقف یا جمع‌بندی می‌شود.</span>
+                </div>
+                <div class="driver-field-card" style="padding: 10px 12px;">
+                  <label class="driver-sub-label">مدیریت حجم تاریخچه (Context Distillation)</label>
+                  <select id="sanctum-distill-select" class="driver-select-input">
+                    <option value="digest">Executive Digest (خلاصه نکات کلیدی - بهینه‌سازی توکن)</option>
+                    <option value="verbatim">Full Verbatim (ارسال کامل متن‌های قبلی بدون تلخیص)</option>
+                  </select>
+                  <span style="font-size:9.5px;color:#64748b;margin-top:2px;">جلوگیری از سرریز شدن سقف کانتکست پنجره مدل‌ها.</span>
+                </div>
               </div>
+
+              <!-- Global Mandate Field -->
+              <div class="driver-field-card" style="border-color: rgba(254, 215, 170, 0.35); background: rgba(245, 158, 11, 0.04);">
+                <div class="driver-field-top">
+                  <label class="driver-field-label" style="color: #fde68a;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                    <span>دستورالعمل مشترک اجباری برای تمام مدل‌ها (Global Mandate)</span>
+                  </label>
+                  <span class="driver-field-badge" style="background: rgba(245, 158, 11, 0.2); color: #fde68a;">همگانی</span>
+                </div>
+                <select id="sanctum-global-directive-preset-select" class="driver-select-input" style="margin-bottom: 8px;"></select>
+                <textarea id="sanctum-global-directive" class="driver-text-input" style="height: 60px; resize: vertical; font-size: 11.5px; line-height: 1.5;" placeholder="دستوری که به ابتدای پرومپت همه مدل‌ها افزوده می‌شود (مثلاً فارسی‌نویسی تخصصی، پرهیز از تملق)..." dir="auto"></textarea>
+              </div>
+
+              <button type="button" id="btn-save-protocols" class="btn-save-driver-master" style="margin-top: 4px;">
+                <span>ذخیره و اعمال پروتکل‌های موتور مناظره ✓</span>
+              </button>
             </div>
 
-            <div class="driver-field-card">
-              <label class="driver-field-label">فرمول تزریق پرومپت (Turn-Injection Formula)</label>
-              <textarea id="sanctum-template-textarea" class="driver-text-input" style="height:120px;resize:vertical;font-family:ui-monospace,monospace;font-size:11px;padding:8px;line-height:1.45;"></textarea>
-              
-              <div style="font-size:10px;color:#94a3b8;margin-top:6px;">ماکروهای پویا (کلیک برای درج خودکار):</div>
-              <div id="sanctum-macro-chips" class="macro-chips-flow">
-                <button type="button" class="macro-chip-btn" data-macro="{{speaker_role}}">{{speaker_role}}</button>
-                <button type="button" class="macro-chip-btn" data-macro="{{user_core_prompt}}">{{user_core_prompt}}</button>
-                <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_name}}">{{last_speaker_name}}</button>
-                <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_argument}}">{{last_speaker_argument}}</button>
-                <button type="button" class="macro-chip-btn" data-macro="{{round_context_brief}}">{{round_context_brief}}</button>
-                <button type="button" class="macro-chip-btn" data-macro="{{consensus_agreements}}">{{consensus_agreements}}</button>
-                <button type="button" class="macro-chip-btn" data-macro="{{consensus_gaps}}">{{consensus_gaps}}</button>
-                <button type="button" class="macro-chip-btn" data-macro="{{round_number}}">{{round_number}}</button>
-              </div>
-            </div>
-
-            <!-- Global Mandate Field -->
-            <div class="driver-field-card" style="border-style: dashed; border-color: rgba(255, 255, 255, 0.2);">
-              <div class="driver-field-top">
-                <label class="driver-field-label">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-                  <span>دستور کلی مشترک برای تمام مدل‌ها (Global Mandate)</span>
-                </label>
-                <span class="driver-field-badge">All Models</span>
-              </div>
-              <select id="sanctum-global-directive-preset-select" class="driver-select-input" style="margin-bottom: 8px;"></select>
-              <textarea id="sanctum-global-directive" class="driver-text-input" style="height: 65px; resize: vertical; font-size: 11.5px; line-height: 1.5;" placeholder="دستوری که به ابتدای پرومپت تمام مدل‌ها اضافه می‌شود (مثلاً فارسی‌نویسی اجباری)..." dir="auto"></textarea>
-            </div>
-
-            <button type="button" id="btn-save-protocols" class="btn-save-driver-master">
-              <span>ذخیره و اعمال پروتکل‌های مناظره</span>
-            </button>
           </div>
         </div>
       </aside>

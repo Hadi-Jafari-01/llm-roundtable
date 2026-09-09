@@ -436,22 +436,130 @@ class StateStore {
 
   getStorageItem(key) {
     return new Promise((resolve) => {
-      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-        chrome.storage.local.get([key], (res) => resolve(res[key]));
-      } else {
-        const val = localStorage.getItem(key);
-        resolve(val ? JSON.parse(val) : null);
+      let resolved = false;
+      const timer = setTimeout(() => {
+        if (!resolved) {
+          resolved = true;
+          try {
+            const val = localStorage.getItem(key);
+            resolve(val ? JSON.parse(val) : null);
+          } catch (_) {
+            resolve(null);
+          }
+        }
+      }, 400);
+
+      try {
+        const storage = (typeof browser !== 'undefined' && browser.storage?.local)
+          ? browser.storage.local
+          : (typeof chrome !== 'undefined' && chrome.storage?.local ? chrome.storage.local : null);
+
+        if (storage) {
+          const p = storage.get([key], (res) => {
+            if (!resolved) {
+              resolved = true;
+              clearTimeout(timer);
+              resolve(res && res[key] !== undefined ? res[key] : null);
+            }
+          });
+          if (p && typeof p.then === 'function') {
+            p.then((res) => {
+              if (!resolved) {
+                resolved = true;
+                clearTimeout(timer);
+                resolve(res && res[key] !== undefined ? res[key] : null);
+              }
+            }).catch(() => {
+              if (!resolved) {
+                resolved = true;
+                clearTimeout(timer);
+                resolve(null);
+              }
+            });
+          }
+        } else {
+          if (!resolved) {
+            resolved = true;
+            clearTimeout(timer);
+            const val = localStorage.getItem(key);
+            resolve(val ? JSON.parse(val) : null);
+          }
+        }
+      } catch (_) {
+        if (!resolved) {
+          resolved = true;
+          clearTimeout(timer);
+          try {
+            const val = localStorage.getItem(key);
+            resolve(val ? JSON.parse(val) : null);
+          } catch (__) {
+            resolve(null);
+          }
+        }
       }
     });
   }
 
   setStorageItem(key, value) {
     return new Promise((resolve) => {
-      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-        chrome.storage.local.set({ [key]: value }, resolve);
-      } else {
-        localStorage.setItem(key, JSON.stringify(value));
-        resolve();
+      let resolved = false;
+      const timer = setTimeout(() => {
+        if (!resolved) {
+          resolved = true;
+          try {
+            localStorage.setItem(key, JSON.stringify(value));
+          } catch (_) {}
+          resolve();
+        }
+      }, 400);
+
+      try {
+        const storage = (typeof browser !== 'undefined' && browser.storage?.local)
+          ? browser.storage.local
+          : (typeof chrome !== 'undefined' && chrome.storage?.local ? chrome.storage.local : null);
+
+        if (storage) {
+          const p = storage.set({ [key]: value }, () => {
+            if (!resolved) {
+              resolved = true;
+              clearTimeout(timer);
+              resolve();
+            }
+          });
+          if (p && typeof p.then === 'function') {
+            p.then(() => {
+              if (!resolved) {
+                resolved = true;
+                clearTimeout(timer);
+                resolve();
+              }
+            }).catch(() => {
+              if (!resolved) {
+                resolved = true;
+                clearTimeout(timer);
+                resolve();
+              }
+            });
+          }
+        } else {
+          if (!resolved) {
+            resolved = true;
+            clearTimeout(timer);
+            try {
+              localStorage.setItem(key, JSON.stringify(value));
+            } catch (_) {}
+            resolve();
+          }
+        }
+      } catch (_) {
+        if (!resolved) {
+          resolved = true;
+          clearTimeout(timer);
+          try {
+            localStorage.setItem(key, JSON.stringify(value));
+          } catch (__) {}
+          resolve();
+        }
       }
     });
   }

@@ -444,8 +444,17 @@ class OmniApp {
   }
 
   async init() {
-    await stateStore.init();
-    await domDriverRegistry.init();
+    try {
+      await stateStore.init();
+    } catch (e) {
+      console.error('[OmniAI Hub] StateStore init warning:', e);
+    }
+
+    try {
+      await domDriverRegistry.init();
+    } catch (e) {
+      console.error('[OmniAI Hub] DomDriverRegistry init warning:', e);
+    }
 
     // Intercept and handle desktop layout & sizing commands gracefully
     const origSetLayoutPreset = stateStore.setLayoutPreset?.bind(stateStore);
@@ -509,22 +518,50 @@ class OmniApp {
       syncButtons: document.querySelectorAll('.sync-scope-btn')
     };
 
-    this.omnibar = new OmnibarController(omnibarDom, stateStore);
-    this.syncScope = (this.omnibar?.syncScope === 'focused') ? 'focused' : 'all';
-    if (this.omnibar) {
-      this.omnibar.syncScope = this.syncScope;
+    try {
+      this.omnibar = new OmnibarController(omnibarDom, stateStore);
+      this.syncScope = (this.omnibar?.syncScope === 'focused') ? 'focused' : 'all';
+      if (this.omnibar) {
+        this.omnibar.syncScope = this.syncScope;
+      }
+    } catch (e) {
+      console.error('[OmniAI Hub] OmnibarController init error:', e);
     }
 
     this.setupFocusTracking();
     this.setupOmnibarInteractions(omnibarDom);
     this.popoverManager = new PopoverManager();
 
-    // Initialize Module A (Neural DOM Driver Studio), Module B (The Silk Mirror Sanctuary), Module C (The Silk Pavilion), Module D (The Celestial Council) & Module E (The Silk Symposium)
-    this.selectorStudio = new SelectorStudioDrawer(stateStore);
-    this.mirrorChat = new MirrorChatStudio(stateStore);
-    this.silkPavilion = new SilkPavilionDrawer(stateStore);
-    this.councilOrchestrator = new CouncilOrchestrator(stateStore);
-    this.symposiumOrchestrator = new SilkSymposiumOrchestrator(stateStore);
+    // Initialize Drawers with safe guards to prevent any single studio from freezing the entire app
+    try {
+      this.selectorStudio = new SelectorStudioDrawer(stateStore);
+    } catch (e) {
+      console.error('[OmniAI Hub] SelectorStudioDrawer init error:', e);
+    }
+
+    try {
+      this.mirrorChat = new MirrorChatStudio(stateStore);
+    } catch (e) {
+      console.error('[OmniAI Hub] MirrorChatStudio init error:', e);
+    }
+
+    try {
+      this.silkPavilion = new SilkPavilionDrawer(stateStore);
+    } catch (e) {
+      console.error('[OmniAI Hub] SilkPavilionDrawer init error:', e);
+    }
+
+    try {
+      this.councilOrchestrator = new CouncilOrchestrator(stateStore);
+    } catch (e) {
+      console.error('[OmniAI Hub] CouncilOrchestrator init error:', e);
+    }
+
+    try {
+      this.symposiumOrchestrator = new SilkSymposiumOrchestrator(stateStore);
+    } catch (e) {
+      console.error('[OmniAI Hub] SilkSymposiumOrchestrator init error:', e);
+    }
 
     this.setupStudioEventRelays();
     this.setupTopNavigation();

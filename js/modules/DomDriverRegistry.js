@@ -192,7 +192,44 @@ class DomDriverRegistry {
 
       if (storage) {
         const stored = await new Promise(resolve => {
-          storage.get([STORAGE_KEY_DOM_DRIVERS], res => resolve(res?.[STORAGE_KEY_DOM_DRIVERS]));
+          let resolved = false;
+          const timer = setTimeout(() => {
+            if (!resolved) {
+              resolved = true;
+              resolve(null);
+            }
+          }, 400);
+
+          try {
+            const p = storage.get([STORAGE_KEY_DOM_DRIVERS], res => {
+              if (!resolved) {
+                resolved = true;
+                clearTimeout(timer);
+                resolve(res?.[STORAGE_KEY_DOM_DRIVERS]);
+              }
+            });
+            if (p && typeof p.then === 'function') {
+              p.then(res => {
+                if (!resolved) {
+                  resolved = true;
+                  clearTimeout(timer);
+                  resolve(res?.[STORAGE_KEY_DOM_DRIVERS]);
+                }
+              }).catch(() => {
+                if (!resolved) {
+                  resolved = true;
+                  clearTimeout(timer);
+                  resolve(null);
+                }
+              });
+            }
+          } catch (_) {
+            if (!resolved) {
+              resolved = true;
+              clearTimeout(timer);
+              resolve(null);
+            }
+          }
         });
 
         if (stored && typeof stored === 'object') {
@@ -284,7 +321,44 @@ class DomDriverRegistry {
 
       if (storage) {
         await new Promise(resolve => {
-          storage.set({ [STORAGE_KEY_DOM_DRIVERS]: this.drivers }, resolve);
+          let resolved = false;
+          const timer = setTimeout(() => {
+            if (!resolved) {
+              resolved = true;
+              resolve();
+            }
+          }, 400);
+
+          try {
+            const p = storage.set({ [STORAGE_KEY_DOM_DRIVERS]: this.drivers }, () => {
+              if (!resolved) {
+                resolved = true;
+                clearTimeout(timer);
+                resolve();
+              }
+            });
+            if (p && typeof p.then === 'function') {
+              p.then(() => {
+                if (!resolved) {
+                  resolved = true;
+                  clearTimeout(timer);
+                  resolve();
+                }
+              }).catch(() => {
+                if (!resolved) {
+                  resolved = true;
+                  clearTimeout(timer);
+                  resolve();
+                }
+              });
+            }
+          } catch (_) {
+            if (!resolved) {
+              resolved = true;
+              clearTimeout(timer);
+              resolve();
+            }
+          }
         });
       }
     } catch (err) {
