@@ -11,6 +11,7 @@ import { domDriverRegistry } from './modules/DomDriverRegistry.js';
 import { SelectorStudioDrawer } from './modules/SelectorStudioDrawer.js';
 import { MirrorChatStudio } from './modules/MirrorChatStudio.js';
 import { SilkPavilionDrawer } from './modules/SilkPavilionDrawer.js';
+import { CouncilOrchestrator } from './modules/CouncilOrchestrator.js';
 
 class PopoverManager {
   constructor() {
@@ -517,10 +518,11 @@ class OmniApp {
     this.setupOmnibarInteractions(omnibarDom);
     this.popoverManager = new PopoverManager();
 
-    // Initialize Module A (Neural DOM Driver Studio), Module B (The Silk Mirror Sanctuary) & Module C (The Silk Pavilion)
+    // Initialize Module A (Neural DOM Driver Studio), Module B (The Silk Mirror Sanctuary), Module C (The Silk Pavilion) & Module D (The Celestial Council)
     this.selectorStudio = new SelectorStudioDrawer(stateStore);
     this.mirrorChat = new MirrorChatStudio(stateStore);
     this.silkPavilion = new SilkPavilionDrawer(stateStore);
+    this.councilOrchestrator = new CouncilOrchestrator(stateStore);
 
     this.setupStudioEventRelays();
     this.setupTopNavigation();
@@ -545,6 +547,12 @@ class OmniApp {
 
   setupStudioEventRelays() {
     // Decoupled bus relays for sub-studios triggered from the Silk Pavilion
+    globalBus.on('TRIGGER_COUNCIL_STUDIO', () => {
+      this.popoverManager?.closeAll();
+      this.silkPavilion?.close();
+      this.councilOrchestrator?.open();
+    });
+
     globalBus.on('TRIGGER_MIRROR_STUDIO', () => {
       this.popoverManager?.closeAll();
       this.silkPavilion?.close();
@@ -1400,8 +1408,17 @@ class OmniApp {
 
   setupGlobalHotkeys() {
     window.addEventListener('keydown', (e) => {
+      // Cmd/Ctrl + Alt + C: Convene The Celestial Council Chamber (LLM Council)
+      if ((e.metaKey || e.ctrlKey) && e.altKey && e.key.toLowerCase() === 'c') {
+        e.preventDefault();
+        e.stopPropagation();
+        this.popoverManager?.closeAll();
+        this.silkPavilion?.close();
+        this.councilOrchestrator?.toggle();
+      }
+
       // Cmd/Ctrl + P or Cmd/Ctrl + Alt + P: Toggle Silk Pavilion Chamber
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'p') {
+      if ((e.metaKey || e.ctrlKey) && !e.altKey && e.key.toLowerCase() === 'p') {
         e.preventDefault();
         e.stopPropagation();
         this.popoverManager?.closeAll();
@@ -1453,8 +1470,14 @@ class OmniApp {
         document.getElementById('modal-shortcuts')?.classList.toggle('hidden');
       }
 
-      // Escape: layered dismissal (Silk Pavilion -> Studio Drawer -> Mirror Chat -> Popovers -> Modals -> Omnibar)
+      // Escape: layered dismissal (Council Chamber -> Silk Pavilion -> Studio Drawer -> Mirror Chat -> Popovers -> Modals -> Omnibar)
       if (e.key === 'Escape') {
+        if (this.councilOrchestrator?.isOpen) {
+          e.preventDefault();
+          this.councilOrchestrator.close();
+          return;
+        }
+
         if (this.silkPavilion?.isOpen) {
           e.preventDefault();
           this.silkPavilion.close();

@@ -13,8 +13,19 @@ export class SilkPavilionDrawer {
     this.isOpen = false;
     this.searchQuery = '';
 
-    // Extensible Studio Registry (Currently focused on Silk Mirror & DOM Driver studios)
+    // Extensible Studio Registry (Curated Atelier Chambers)
     this.studios = [
+      {
+        id: 'llm-council',
+        title: 'The Celestial Council',
+        subtitle: 'Autonomous Multi-Model Debate, Peer-Review & Synthesis',
+        badge: 'Consensus',
+        badgeColor: '#fbcfe8',
+        color: '#f472b6',
+        iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 9 9M12 21a9 9 0 0 1-9-9"/><circle cx="12" cy="12" r="4"/><polygon points="12 2 15 8 22 9 17 14 18 21 12 18 6 21 7 14 2 9 9 8 12 2" stroke="currentColor" fill="none" stroke-width="1.5"/></svg>`,
+        hotkey: '⌘⌥C',
+        action: () => globalBus.emit('TRIGGER_COUNCIL_STUDIO')
+      },
       {
         id: 'mirror-sanctuary',
         title: 'Silk Mirror Sanctuary',
