@@ -19,6 +19,7 @@ export class TurnSequencer {
       onSessionPaused: () => {},
       onSessionResumed: () => {},
       onSessionCompleted: () => {},
+      onSessionWaitingForMaestro: () => {},
       ...callbacks
     };
 
@@ -26,7 +27,7 @@ export class TurnSequencer {
     this.safetyTimer = null;
   }
 
-  start(initialPrompt = '') {
+  start(initialPrompt = '', targetSeatIndex = null) {
     if (initialPrompt) {
       this.state.userCorePrompt = initialPrompt;
     }
@@ -34,7 +35,10 @@ export class TurnSequencer {
     this.state.sessionStatus = 'ACTIVE';
     this.callbacks.onSessionResumed();
 
-    const targetIndex = this.determineFirstSpeaker();
+    let targetIndex = targetSeatIndex;
+    if (typeof targetIndex !== 'number' || targetIndex < 0 || targetIndex >= this.state.seats.length) {
+      targetIndex = this.determineFirstSpeaker();
+    }
     this.dispatchTurn(targetIndex);
   }
 
@@ -52,17 +56,18 @@ export class TurnSequencer {
     this.advanceNext();
   }
 
-  passBaton(targetSeatIndex) {
-    if (this.state.isSpeakerStreaming) {
-      console.warn('[TurnSequencer] Speaker active. Baton pass queued or rejected.');
-      return false;
-    }
-
+  passBaton(targetSeatIndex, immediateContext = '') {
     clearTimeout(this.autoAdvanceTimer);
     clearTimeout(this.safetyTimer);
+
+    // If a speaker is currently streaming, cleanly conclude it without dropping
+    if (this.state.isSpeakerStreaming) {
+      this.state.concludeStreamingTurn();
+    }
+
     this.state.sessionStatus = 'ACTIVE';
     this.callbacks.onSessionResumed();
-    this.dispatchTurn(targetSeatIndex);
+    this.dispatchTurn(targetSeatIndex, immediateContext);
     return true;
   }
 
@@ -83,26 +88,46 @@ export class TurnSequencer {
       isFinished
     });
 
-    if (this.state.sessionStatus !== 'ACTIVE') return;
-
-    // Progression logic based on active topology
+    // Progression logic: Seamless coordination with Manual Turn-Taking
     if (this.state.debateMode === 'manual') {
-      // Manual conductor halts after each speech, awaiting maestro trigger
-      this.pause();
+      // Manual conductor halts cleanly after each speech, calculating the recommended next chair
+      this.state.sessionStatus = 'WAITING_FOR_MAESTRO';
+      const recommendedNext = this.state.calculateRecommendedNextSpeaker();
+      this.state.recommendedNextSpeakerIndex = recommendedNext;
+
+      this.callbacks.onSessionWaitingForMaestro({
+        seatIndex: recommendedNext,
+        seat: this.state.seats[recommendedNext]
+      });
       return;
     }
 
-    // Schedule next turn
+    if (this.state.sessionStatus !== 'ACTIVE') return;
+
+    // Schedule next turn in automated flow
     clearTimeout(this.autoAdvanceTimer);
-    const delay = this.state.config.autoAdvanceDelayMs || 2200;
+    const delay = this.state.config.autoAdvanceDelayMs || 2400;
     this.autoAdvanceTimer = setTimeout(() => {
       this.advanceNext();
     }, delay);
   }
 
   advanceNext() {
-    if (this.state.sessionStatus !== 'ACTIVE') return;
     if (!this.state.seats || this.state.seats.length === 0) return;
+
+    // If in manual mode, dispatch the recommended or active speaker index
+    if (this.state.debateMode === 'manual' || this.state.sessionStatus === 'WAITING_FOR_MAESTRO') {
+      const nextIdx = (typeof this.state.recommendedNextSpeakerIndex === 'number' && this.state.recommendedNextSpeakerIndex >= 0)
+        ? this.state.recommendedNextSpeakerIndex
+        : this.state.calculateRecommendedNextSpeaker();
+
+      this.state.sessionStatus = 'ACTIVE';
+      this.callbacks.onSessionResumed();
+      this.dispatchTurn(nextIdx);
+      return;
+    }
+
+    if (this.state.sessionStatus !== 'ACTIVE') return;
 
     const nextIndex = this.calculateNextSpeakerIndex();
     if (nextIndex === -1) {
@@ -159,8 +184,10 @@ export class TurnSequencer {
     if (count === 0) return -1;
 
     switch (debateMode) {
-      case 'manual':
-        return -1;
+      case 'manual': {
+        // Calculate recommended next speaker without halting sequencer abruptly
+        return this.state.calculateRecommendedNextSpeaker();
+      }
 
       case 'round_robin':
       case 'autonomous': {

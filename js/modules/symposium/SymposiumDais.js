@@ -16,7 +16,7 @@ export class SymposiumDais {
     };
   }
 
-  render(seats = [], activeIndex = 0, waitingForUser = false) {
+  render(seats = [], activeIndex = 0, waitingForUser = false, recommendedNextIndex = -1, waitingForMaestro = false) {
     if (!this.ribbonEl) return;
     this.ribbonEl.innerHTML = '';
 
@@ -30,11 +30,12 @@ export class SymposiumDais {
     }
 
     seats.forEach((seat, idx) => {
-      const isCurrentSpeaker = idx === activeIndex;
+      const isCurrentSpeaker = idx === activeIndex && !waitingForMaestro;
+      const isRecommendedNext = idx === recommendedNextIndex && waitingForMaestro;
       const isUserSeat = Boolean(seat.isUser);
 
       const seatCard = document.createElement('div');
-      seatCard.className = `symposium-seat-card ${seat.status || 'idle'} ${seat.isMuted ? 'muted' : ''} ${isUserSeat ? 'user-seat' : ''} ${isCurrentSpeaker ? 'active-speaker' : ''}`;
+      seatCard.className = `symposium-seat-card ${seat.status || 'idle'} ${seat.isMuted ? 'muted' : ''} ${isUserSeat ? 'user-seat' : ''} ${isCurrentSpeaker ? 'active-speaker' : ''} ${isRecommendedNext ? 'recommended-next' : ''}`;
       if (isUserSeat && waitingForUser) {
         seatCard.classList.add('your-turn');
       }
@@ -42,9 +43,14 @@ export class SymposiumDais {
       seatCard.dataset.seatIndex = idx;
       seatCard.style.setProperty('--model-color', seat.color || '#c084fc');
 
-      const statusLabel = isUserSeat && waitingForUser
-        ? 'YOUR TURN'
-        : (isCurrentSpeaker ? 'SPEAKING' : (seat.status || 'IDLE').toUpperCase());
+      let statusLabel = (seat.status || 'IDLE').toUpperCase();
+      if (isUserSeat && waitingForUser) {
+        statusLabel = 'YOUR TURN';
+      } else if (isCurrentSpeaker) {
+        statusLabel = 'SPEAKING';
+      } else if (isRecommendedNext) {
+        statusLabel = 'NEXT 🪄';
+      }
 
       seatCard.innerHTML = `
         <div class="seat-top-row">
@@ -108,17 +114,30 @@ export class SymposiumDais {
     });
   }
 
-  highlightActiveSeat(activeIndex, waitingForUser = false) {
+  highlightActiveSeat(activeIndex, waitingForUser = false, recommendedNextIndex = -1, waitingForMaestro = false) {
     if (!this.ribbonEl) return;
     this.ribbonEl.querySelectorAll('.symposium-seat-card').forEach((card, idx) => {
-      const isTarget = idx === activeIndex;
-      card.classList.toggle('active-speaker', isTarget);
+      const isCurrentSpeaker = idx === activeIndex && !waitingForMaestro;
+      const isRecommendedNext = idx === recommendedNextIndex && waitingForMaestro;
+
+      card.classList.toggle('active-speaker', isCurrentSpeaker);
+      card.classList.toggle('recommended-next', isRecommendedNext);
+
       if (card.classList.contains('user-seat')) {
-        card.classList.toggle('your-turn', isTarget && waitingForUser);
+        card.classList.toggle('your-turn', isCurrentSpeaker && waitingForUser);
       }
+
       const pill = card.querySelector('.seat-status-pill');
       if (pill) {
-        pill.textContent = isTarget ? (card.classList.contains('user-seat') && waitingForUser ? 'YOUR TURN' : 'SPEAKING') : 'IDLE';
+        if (card.classList.contains('user-seat') && waitingForUser) {
+          pill.textContent = 'YOUR TURN';
+        } else if (isCurrentSpeaker) {
+          pill.textContent = 'SPEAKING';
+        } else if (isRecommendedNext) {
+          pill.textContent = 'NEXT 🪄';
+        } else {
+          pill.textContent = 'IDLE';
+        }
       }
     });
   }
