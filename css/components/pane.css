@@ -1,17 +1,15 @@
 /**
  * OmniAI Hub — Spatial AI Card & Frame Architecture
- * Quiet Luxury Glassmorphism with Smooth Spring Kinematics
+ * Clean Dark Charcoal Surfaces (#212121) • Minimalist Frames
  */
 
 .spatial-card {
   position: absolute;
   border-radius: var(--radius-lg);
-  background: var(--card-surface-gradient);
-  background-color: var(--bg-surface-frosted);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--border-standard);
-  box-shadow: var(--shadow-card);
+  background: #212121;
+  background-color: #212121;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -20,12 +18,12 @@
 }
 
 .spatial-card:hover {
-  border-color: var(--border-highlight);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .spatial-card.active {
-  border-color: var(--active-card-color, var(--border-active-pearl));
-  box-shadow: var(--shadow-card-active);
+  border-color: var(--active-card-color, rgba(255, 255, 255, 0.28));
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.5);
   z-index: 25;
 }
 
@@ -36,8 +34,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 12px;
-  background: var(--card-header-bg);
-  border-bottom: 1px solid var(--border-subtle);
+  background: #171717; /* Matches sidebar/header charcoal */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   cursor: grab;
   user-select: none;
   flex-shrink: 0;
@@ -55,17 +53,17 @@
 }
 
 .card-model-pearl {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
-  box-shadow: 0 0 10px currentColor;
+  box-shadow: 0 0 6px currentColor;
 }
 
 .card-title-text {
   font-size: 12px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #ececec;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -84,8 +82,8 @@
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-xs);
-  color: var(--text-tertiary);
-  transition: all var(--duration-fast) var(--ease-spring);
+  color: #9ca3af;
+  transition: all var(--duration-fast) ease;
 }
 
 .card-ctrl-btn svg {
@@ -94,14 +92,13 @@
 }
 
 .card-ctrl-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-primary);
-  transform: scale(1.06);
+  background: #2a2a2a;
+  color: #ffffff;
 }
 
 .card-ctrl-btn.close:hover {
-  background: rgba(244, 114, 182, 0.2);
-  color: var(--orb-rose);
+  background: rgba(239, 68, 68, 0.25);
+  color: #f87171;
 }
 
 /* ── Card Frame Wrapper & Iframe ── */
@@ -110,7 +107,7 @@
   flex: 1;
   width: 100%;
   height: calc(100% - 40px);
-  background: #0d0a14;
+  background: #212121;
   overflow: hidden;
 }
 
@@ -156,12 +153,12 @@
   content: "";
   width: 7px;
   height: 7px;
-  border-right: 2px solid var(--text-muted);
-  border-bottom: 2px solid var(--text-muted);
+  border-right: 2px solid #6b7280;
+  border-bottom: 2px solid #6b7280;
   border-radius: 1px;
-  transition: border-color var(--duration-fast) var(--ease-spring);
+  transition: border-color var(--duration-fast) ease;
 }
 
 .card-resize-handle:hover::after {
-  border-color: var(--orb-lavender);
+  border-color: #ffffff;
 }

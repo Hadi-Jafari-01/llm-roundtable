@@ -1,5 +1,5 @@
 /**
- * OmniAI Hub — Spatial Layout & Ambient Aurora Architecture
+ * OmniAI Hub — Spatial Layout & Minimalist Charcoal Workspace (#212121)
  */
 
 .app-root {
@@ -7,43 +7,12 @@
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background: radial-gradient(circle at 50% 0%, #161224 0%, #0d0b13 70%, #08060c 100%);
+  background: #212121; /* Authentic ChatGPT dark theme background */
 }
 
-/* ── Ambient Ethereal Bioluminescent Aurora ── */
+/* ── Ambient Aurora Disabled for Clean ChatGPT/DeepSeek Minimalism ── */
 .ambient-aura {
-  position: absolute;
-  pointer-events: none;
-  z-index: 0;
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.22;
-  transition: opacity 1.2s var(--ease-spring);
-}
-
-.aura-top-left {
-  width: 600px;
-  height: 600px;
-  top: -200px;
-  left: -100px;
-  background: radial-gradient(circle, var(--orb-lavender) 0%, rgba(221, 214, 254, 0) 70%);
-}
-
-.aura-top-right {
-  width: 650px;
-  height: 650px;
-  top: -220px;
-  right: -120px;
-  background: radial-gradient(circle, var(--orb-rose) 0%, rgba(251, 207, 232, 0) 70%);
-}
-
-.aura-bottom-center {
-  width: 800px;
-  height: 400px;
-  bottom: -200px;
-  left: calc(50% - 400px);
-  background: radial-gradient(circle, var(--orb-sage) 0%, rgba(167, 243, 208, 0) 70%);
-  opacity: 0.16;
+  display: none !important;
 }
 
 /* ── Spatial Infinite Canvas Viewport ── */
@@ -55,6 +24,7 @@
   overflow: hidden;
   cursor: default;
   z-index: 1;
+  background: #212121;
 }
 
 .spatial-viewport.panning {
@@ -79,9 +49,9 @@
   width: 40000px;
   height: 40000px;
   pointer-events: none;
-  background-image: radial-gradient(rgba(221, 214, 254, 0.12) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
   background-size: 32px 32px;
-  opacity: 0.65;
+  opacity: 0.35;
 }
 
 .spatial-cards-container {

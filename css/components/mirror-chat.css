@@ -1,7 +1,7 @@
 /* ==========================================================================
    OmniAI Hub — The Silk Mirror Sanctuary (Native Unified Chat Studio)
-   Haute Digital Aesthetic: Obsidian Rose & Frosted Silk Glass
-   Spatial Kinematics • VisionOS Translucency • Bioluminescent Sheen
+   Clean Dark Charcoal Architecture (#212121 & #171717)
+   ChatGPT / DeepSeek Dark Ergonomics
    ========================================================================== */
 
 .mirror-chat-studio {
@@ -13,26 +13,21 @@
   min-width: 420px;
   max-width: calc(100vw - 36px);
   z-index: 1050;
-  background: var(--bg-mirror-studio);
-  backdrop-filter: blur(44px) saturate(220%);
-  -webkit-backdrop-filter: blur(44px) saturate(220%);
-  border: 1px solid rgba(192, 132, 252, 0.32);
-  border-radius: 20px;
-  box-shadow: 0 32px 85px -12px rgba(0, 0, 0, 0.92),
-              inset 0 1px 1px rgba(255, 255, 255, 0.15),
-              inset 0 0 0 1px rgba(255, 255, 255, 0.05),
-              0 12px 42px rgba(129, 140, 248, 0.2);
+  background: #212121; /* Authentic ChatGPT dark theme card */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   box-sizing: border-box;
-  color: #f8fafc;
+  color: #ececec;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
   transform: translateX(125%);
   opacity: 0;
   pointer-events: none;
-  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.3s ease,
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.24s ease,
               width 0.2s ease;
 }
 
@@ -71,13 +66,7 @@
 .mirror-resize-handle:hover::after,
 .mirror-resize-handle.resizing::after {
   height: 60px;
-  background: #c084fc;
-  box-shadow: 0 0 10px #c084fc;
-}
-
-.mirror-resize-handle:hover,
-.mirror-resize-handle.resizing {
-  background: rgba(192, 132, 252, 0.12);
+  background: #ffffff;
 }
 
 /* Header Area */
@@ -87,7 +76,7 @@
   justify-content: space-between;
   padding: 12px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.02);
+  background: #171717; /* Sidebar & header charcoal */
   flex-shrink: 0;
 }
 
@@ -98,27 +87,20 @@
 }
 
 .mirror-spark-badge {
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, rgba(244, 114, 182, 0.3) 0%, rgba(192, 132, 252, 0.35) 100%);
-  border: 1px solid rgba(244, 114, 182, 0.5);
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: #262626;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fbcfe8;
-  box-shadow: 0 0 16px rgba(244, 114, 182, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.25);
-  animation: badgeBreathe 4s infinite ease-in-out alternate;
-}
-
-@keyframes badgeBreathe {
-  0% { transform: scale(0.96); filter: drop-shadow(0 0 4px rgba(244, 114, 182, 0.3)); }
-  100% { transform: scale(1.04); filter: drop-shadow(0 0 12px rgba(192, 132, 252, 0.6)); }
+  color: #10a37f;
 }
 
 .mirror-spark-badge svg {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
 }
 
 .mirror-title-text h3 {
@@ -131,7 +113,7 @@
 
 .mirror-title-text p {
   font-size: 10px;
-  color: #94a3b8;
+  color: #9ca3af;
   margin: 0;
 }
 
@@ -144,10 +126,10 @@
 .mirror-icon-btn {
   width: 28px;
   height: 28px;
-  border-radius: 7px;
+  border-radius: 6px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
-  color: #94a3b8;
+  background: #212121;
+  color: #9ca3af;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -161,9 +143,8 @@
 }
 
 .mirror-icon-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: #2c2c2c;
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Target Bot Pearl Ribbon */
@@ -172,7 +153,7 @@
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  background: rgba(0, 0, 0, 0.22);
+  background: #1a1a1a;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   overflow-x: auto;
   flex-shrink: 0;
@@ -187,47 +168,47 @@
   align-items: center;
   gap: 6px;
   padding: 4px 10px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
+  border-radius: 14px;
+  background: #262626;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #94a3b8;
+  color: #9ca3af;
   font-size: 11px;
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.16s ease;
   font-family: inherit;
 }
 
 .mirror-pearl-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: #2d2d2d;
   color: #f1f5f9;
 }
 
 .mirror-pearl-btn.active {
-  background: rgba(129, 140, 248, 0.22);
-  border-color: rgba(192, 132, 252, 0.65);
+  background: #333333;
+  border-color: rgba(255, 255, 255, 0.25);
   color: #ffffff;
   font-weight: 600;
-  box-shadow: 0 0 16px rgba(192, 132, 252, 0.25);
 }
 
 .mirror-pearl-btn .pearl-status-dot {
-  width: 7px;
-  height: 7px;
+  width: 6.5px;
+  height: 6.5px;
   border-radius: 50%;
-  box-shadow: 0 0 6px currentColor;
+  box-shadow: 0 0 4px currentColor;
 }
 
-/* Messages Stream Viewport */
+/* Messages Stream Viewport (#212121) */
 .mirror-stream-viewport {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 16px;
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
+  background: #212121;
   box-sizing: border-box;
 }
 
@@ -252,27 +233,20 @@
 }
 
 .sanctuary-orb {
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(192, 132, 252, 0.4) 0%, rgba(129, 140, 248, 0.1) 70%, transparent 100%);
-  border: 1px solid rgba(192, 132, 252, 0.3);
+  background: #2a2a2a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #c084fc;
-  box-shadow: 0 0 32px rgba(192, 132, 252, 0.35);
-  animation: orbGlowPulse 3.5s ease-in-out infinite alternate;
-}
-
-@keyframes orbGlowPulse {
-  0% { transform: scale(0.96); box-shadow: 0 0 20px rgba(192, 132, 252, 0.25); }
-  100% { transform: scale(1.04); box-shadow: 0 0 40px rgba(244, 114, 182, 0.45); }
+  color: #10a37f;
 }
 
 .sanctuary-orb svg {
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
 }
 
 .mirror-empty-sanctuary h4 {
@@ -290,65 +264,77 @@
   margin: 0;
 }
 
-/* Message Rows & Bubbles (Haute Digital Obsidian Rose Architecture) */
+/* Message Rows & Bubbles (ChatGPT Ergonomics) */
 .mirror-message-turn {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  max-width: 88%;
-  animation: turnPopIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  width: 100%;
+  animation: turnPopIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes turnPopIn {
-  from { opacity: 0; transform: translateY(8px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .mirror-message-turn.user {
   align-self: flex-end;
+  max-width: 82%;
 }
 
 .mirror-message-turn.assistant {
   align-self: flex-start;
-  max-width: 96%;
+  width: 100%;
 }
 
 .mirror-turn-meta {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 500;
-  color: #64748b;
-  padding: 0 6px;
-  letter-spacing: 0.02em;
+  color: #6b7280;
+  padding: 0 4px;
 }
 
 .mirror-message-turn.user .mirror-turn-meta {
   justify-content: flex-end;
 }
 
-.mirror-bubble-card {
-  padding: 13px 17px;
-  border-radius: 16px;
-  font-size: 13.5px;
+/* User Bubble: Exact ChatGPT dark capsule tone (#2f2f2f) */
+.mirror-message-turn.user .mirror-bubble-card {
+  background: #2f2f2f;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #f3f4f6;
+  border-radius: 20px;
+  padding: 11px 18px;
+  font-size: 14px;
   line-height: 1.65;
-  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
   word-break: break-word;
   user-select: text;
-  transition: all 0.2s ease;
-  unicode-bidi: plaintext;
-  text-align: start;
 }
 
-/* RTL Specific Typography & Layout Rules */
+/* Assistant Bubble: Clean natural flow directly on #212121 */
+.mirror-message-turn.assistant .mirror-bubble-card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: #ececec;
+  font-size: 14.5px;
+  line-height: 1.75;
+  padding: 2px 0 0 0;
+  word-break: break-word;
+  user-select: text;
+}
+
 .mirror-bubble-card[dir="rtl"],
 .mirror-bubble-card.is-rtl {
   direction: rtl !important;
   text-align: right !important;
   font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "Segoe UI", Tahoma, Roboto, sans-serif;
   line-height: 1.82;
-  letter-spacing: normal !important;
 }
 
 .mirror-bubble-card[dir="ltr"],
@@ -357,38 +343,10 @@
   text-align: left !important;
 }
 
-/* User Bubble: Rich Cashmere Amethyst & Rose Sheen */
-.mirror-message-turn.user .mirror-bubble-card {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.32) 0%, rgba(168, 85, 247, 0.36) 50%, rgba(236, 72, 153, 0.28) 100%);
-  border: 1px solid rgba(192, 132, 252, 0.45);
-  color: #ffffff;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.25);
-  border-top-right-radius: 4px;
-}
-
-/* Assistant Bubble: Velvet Frosted Dark Silk with Adaptive Directional Border */
-.mirror-message-turn.assistant .mirror-bubble-card {
-  background: rgba(18, 22, 38, 0.76);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-left: 3px solid #c084fc;
-  color: #f8fafc;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.07);
-  border-top-left-radius: 4px;
-}
-
-.mirror-message-turn.assistant .mirror-bubble-card[dir="rtl"],
-.mirror-message-turn.assistant .mirror-bubble-card.is-rtl {
-  border-left: 1px solid rgba(255, 255, 255, 0.09);
-  border-right: 3px solid #c084fc;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 4px;
-}
-
-/* Markdown Rendering Inside Assistant Bubbles */
+/* Markdown Rendering */
 .mirror-markdown-content p {
   margin: 0 0 10px 0;
   unicode-bidi: plaintext;
-  text-align: start;
 }
 .mirror-markdown-content p:last-child {
   margin-bottom: 0;
@@ -398,81 +356,20 @@
 .mirror-markdown-content .is-rtl {
   direction: rtl !important;
   text-align: right !important;
-  letter-spacing: normal !important;
   line-height: 1.82;
 }
 
-.mirror-markdown-content p[dir="ltr"],
-.mirror-markdown-content .is-ltr {
-  direction: ltr !important;
-  text-align: left !important;
-}
-
-/* Bidirectional Headings & Lists */
-.mirror-markdown-content h3[dir="rtl"],
-.mirror-markdown-content h4[dir="rtl"],
-.mirror-markdown-content h5[dir="rtl"] {
-  direction: rtl !important;
-  text-align: right !important;
-  letter-spacing: normal !important;
-}
-
-.mirror-markdown-content ul,
-.mirror-markdown-content ol {
-  margin: 8px 0;
-  padding-inline-start: 22px;
-}
-
-.mirror-markdown-content li[dir="rtl"] {
-  direction: rtl !important;
-  text-align: right !important;
-  letter-spacing: normal !important;
-  line-height: 1.75;
-}
-
-/* Inline Code: Strict LTR Isolation */
-.mirror-markdown-content code.inline-code {
-  direction: ltr !important;
-  unicode-bidi: isolate !important;
-  display: inline-block;
-  vertical-align: baseline;
-  text-align: left !important;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
-  font-size: 11.5px;
-  padding: 2px 6px;
-  margin: 0 2px;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #f472b6;
-}
-
-/* Blockquote Bidirectional Formatting */
-.mirror-markdown-content blockquote {
-  margin: 8px 0;
-  padding: 6px 14px;
-  background: rgba(255, 255, 255, 0.03);
-  border-inline-start: 3px solid rgba(192, 132, 252, 0.5);
-  border-radius: 4px;
-  color: #cbd5e1;
-}
-
-.mirror-markdown-content blockquote[dir="rtl"] {
-  direction: rtl !important;
-  text-align: right !important;
-}
-
-/* Code Blocks: Strict LTR Isolation with Haute Studio Finish */
+/* Code Blocks */
 .mirror-code-block {
   direction: ltr !important;
   unicode-bidi: isolate !important;
   text-align: left !important;
   margin: 12px 0;
-  border-radius: 10px;
-  background: #080a14 !important;
-  border: 1px solid rgba(192, 132, 252, 0.22) !important;
+  border-radius: 8px;
+  background: #0d0d0d !important;
+  border: 1px solid #2f2f2f !important;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
 }
 
 .mirror-code-header {
@@ -481,19 +378,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.04);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  font-size: 11px;
-  color: #a5b4fc;
+  padding: 7px 14px;
+  background: #2f2f2f;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 11.5px;
+  color: #b4b4b4;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 .code-lang-tag {
   font-weight: 600;
   text-transform: lowercase;
-  letter-spacing: 0.03em;
-  color: #c084fc;
+  color: #e5e7eb;
 }
 
 .mirror-code-body {
@@ -502,42 +398,20 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
   font-size: 12px;
   line-height: 1.55;
-  color: #e2e8f0;
+  color: #e5e7eb;
   margin: 0;
   white-space: pre;
-  tab-size: 2;
-}
-
-.btn-copy-code {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 8px;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #cbd5e1;
-  font-size: 10.5px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  font-family: inherit;
-}
-
-.btn-copy-code:hover {
-  background: rgba(192, 132, 252, 0.2);
-  color: #ffffff;
-  border-color: rgba(192, 132, 252, 0.45);
 }
 
 .btn-copy-code {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 2px 7px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.06);
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: #383838;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #cbd5e1;
+  color: #d1d5db;
   font-size: 10px;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -545,36 +419,17 @@
 }
 
 .btn-copy-code:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: #444444;
   color: #ffffff;
 }
 
-.mirror-code-body {
-  padding: 12px;
-  overflow-x: auto;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 11.5px;
-  line-height: 1.5;
-  color: #e2e8f0;
-  margin: 0;
-}
-
-.mirror-code-body::-webkit-scrollbar {
-  height: 4px;
-}
-.mirror-code-body::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.18);
-  border-radius: 4px;
-}
-
-/* DeepSeek / o1 / o3 Reasoning Fold (Amethyst Glow Accordion) */
+/* Reasoning Fold */
 .mirror-reasoning-fold {
-  margin-bottom: 12px;
-  border-radius: 10px;
-  background: rgba(192, 132, 252, 0.07);
-  border: 1px solid rgba(192, 132, 252, 0.28);
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background: #171717;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   overflow: hidden;
-  box-shadow: 0 4px 14px rgba(192, 132, 252, 0.08);
 }
 
 .reasoning-fold-trigger {
@@ -583,76 +438,35 @@
   align-items: center;
   justify-content: space-between;
   padding: 7px 12px;
-  background: rgba(192, 132, 252, 0.04);
+  background: #1e1e1e;
   border: none;
-  color: #d8b4fe;
-  font-size: 11.5px;
-  font-weight: 600;
+  color: #9ca3af;
+  font-size: 11px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: all 0.16s ease;
 }
 
 .reasoning-fold-trigger:hover {
-  background: rgba(192, 132, 252, 0.12);
+  background: #262626;
   color: #ffffff;
 }
 
 .reasoning-fold-body {
   padding: 10px 14px;
-  border-top: 1px solid rgba(192, 132, 252, 0.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   font-size: 12px;
-  color: #cbd5e1;
-  line-height: 1.55;
+  color: #d1d5db;
+  line-height: 1.6;
   font-style: italic;
   unicode-bidi: plaintext;
 }
 
-.reasoning-fold-body[dir="rtl"],
-.reasoning-fold-body.is-rtl {
-  direction: rtl !important;
-  text-align: right !important;
-  font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "Segoe UI", Tahoma, Roboto, sans-serif;
-  line-height: 1.75;
-  letter-spacing: normal !important;
-}
-
-/* Real-Time Live Streaming Pulse */
-.mirror-streaming-pulse {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 8px;
-  margin-top: 6px;
-}
-
-.mirror-streaming-pulse span {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #f472b6;
-  animation: pulseDot 1.2s infinite ease-in-out;
-}
-
-.mirror-streaming-pulse span:nth-child(2) {
-  background: #c084fc;
-  animation-delay: 0.2s;
-}
-
-.mirror-streaming-pulse span:nth-child(3) {
-  background: #818cf8;
-  animation-delay: 0.4s;
-}
-
-@keyframes pulseDot {
-  0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; }
-  40% { transform: scale(1.1); opacity: 1; }
-}
-
-/* Interactive Controls Dock */
+/* Controls Dock (#171717) */
 .mirror-controls-dock {
-  padding: 12px 14px;
+  padding: 12px 16px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(11, 13, 22, 0.9);
+  background: #171717;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -664,60 +478,28 @@
   align-items: center;
   justify-content: space-between;
   font-size: 10.5px;
-  color: #64748b;
+  color: #6b7280;
 }
 
-/* Anti-Bot Stealth Badge in Mirror Sanctuary Dock (Crystal Glow Pill) */
 .mirror-stealth-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 3px 9px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%);
-  border: 1px solid rgba(16, 185, 129, 0.4);
-  color: #6ee7b7;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: #212121;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #10a37f;
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  font-family: inherit;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
-}
-
-.mirror-stealth-badge:hover {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.28) 0%, rgba(5, 150, 105, 0.2) 100%);
-  border-color: rgba(16, 185, 129, 0.7);
-  color: #ffffff;
-  box-shadow: 0 0 18px rgba(16, 185, 129, 0.4);
-  transform: translateY(-1px);
 }
 
 .mirror-stealth-badge .stealth-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 8px #10b981;
-  animation: stealthPulse 2s infinite ease-in-out alternate;
-}
-
-.mirror-stealth-badge.disabled {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: #94a3b8;
-  box-shadow: none;
-}
-
-.mirror-stealth-badge.disabled .stealth-dot {
-  background: #64748b;
-  box-shadow: none;
-  animation: none;
-}
-
-@keyframes stealthPulse {
-  0% { transform: scale(0.85); box-shadow: 0 0 4px #10b981; }
-  100% { transform: scale(1.25); box-shadow: 0 0 12px #34d399; }
+  background: #10a37f;
 }
 
 .btn-stop-streaming-jewel {
@@ -726,121 +508,70 @@
   gap: 5px;
   padding: 3px 9px;
   border-radius: 6px;
-  background: rgba(239, 68, 68, 0.18);
-  border: 1px solid rgba(239, 68, 68, 0.45);
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
   color: #fca5a5;
   font-size: 10.5px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.16s ease;
-  animation: stopPulse 1.5s infinite alternate;
-}
-
-@keyframes stopPulse {
-  0% { box-shadow: 0 0 4px rgba(239, 68, 68, 0.2); }
-  100% { box-shadow: 0 0 12px rgba(239, 68, 68, 0.6); }
-}
-
-.btn-stop-streaming-jewel:hover {
-  background: rgba(239, 68, 68, 0.35);
-  color: #ffffff;
 }
 
 .mirror-input-box {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 8px 10px;
-  transition: all 0.2s ease;
+  align-items: flex-end;
+  gap: 8px;
+  background: #2f2f2f; /* Exact ChatGPT input box */
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  padding: 8px 12px 8px 16px;
+  transition: all 0.18s ease;
 }
 
 .mirror-input-box:focus-within {
-  border-color: rgba(192, 132, 252, 0.45);
-  box-shadow: 0 0 16px rgba(192, 132, 252, 0.18), 0 0 0 1px rgba(192, 132, 252, 0.12) inset;
+  border-color: rgba(255, 255, 255, 0.28);
 }
 
 .mirror-textarea {
-  width: 100%;
-  min-height: 44px;
+  flex: 1;
+  min-height: 36px;
   max-height: 160px;
   background: transparent;
   border: none;
   outline: none;
-  color: #f8fafc;
+  color: #f3f4f6;
   font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
   font-size: 14px;
   line-height: 1.75;
   resize: none;
-  padding: 8px 10px;
+  padding: 4px 0;
   box-sizing: border-box;
   unicode-bidi: plaintext;
-  text-align: start;
-}
-
-.mirror-textarea::-webkit-scrollbar {
-  width: 4px;
-}
-.mirror-textarea::-webkit-scrollbar-thumb {
-  background: rgba(192, 132, 252, 0.3);
-  border-radius: 4px;
-}
-
-.mirror-textarea[dir="rtl"],
-.mirror-textarea.is-rtl {
-  direction: rtl !important;
-  text-align: right !important;
-  line-height: 1.75;
-  letter-spacing: normal !important;
-}
-
-.mirror-textarea[dir="rtl"]::placeholder,
-.mirror-textarea.is-rtl::placeholder {
-  direction: rtl !important;
-  text-align: right !important;
 }
 
 .mirror-textarea::placeholder {
-  color: #64748b;
-  font-size: 12px;
-}
-
-.mirror-dock-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.mirror-dock-left-tools {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  color: #8e8e8e;
+  font-size: 13px;
 }
 
 .btn-mirror-send-jewel {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px 5px 14px;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   border: none;
-  border-radius: 8px;
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 600;
+  background: #ffffff; /* Canonical ChatGPT White Send Button */
+  color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.16s ease;
+  flex-shrink: 0;
+}
+
+.btn-mirror-send-jewel svg {
+  stroke: #000000;
 }
 
 .btn-mirror-send-jewel:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.55);
-  filter: brightness(1.08);
-}
-
-.btn-mirror-send-jewel:active {
-  transform: translateY(1px) scale(0.98);
+  background: #e5e7eb;
 }

@@ -1,5 +1,5 @@
 /**
- * OmniAI Hub — Celestial Radar Spatial Mini-Map
+ * OmniAI Hub — Minimalist Charcoal Spatial Mini-Map
  */
 
 .spatial-radar-card {
@@ -9,20 +9,18 @@
   width: 170px;
   height: 110px;
   border-radius: var(--radius-md);
-  background: var(--bg-surface-elevated);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--border-standard);
-  box-shadow: var(--shadow-card);
+  background: #171717;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
   z-index: 60;
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.25s var(--ease-spring);
+  transition: all 0.2s ease;
 }
 
 .spatial-radar-card:hover {
-  border-color: var(--border-highlight);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(221, 214, 254, 0.15);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
 }
 
 .radar-canvas-view {
@@ -34,20 +32,19 @@
 .radar-card-rect {
   position: absolute;
   border-radius: 2px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   transition: all 0.15s ease-out;
 }
 
 .radar-card-rect.active {
-  box-shadow: 0 0 8px currentColor;
+  box-shadow: 0 0 6px currentColor;
   z-index: 5;
 }
 
 .radar-frustum-box {
   position: absolute;
-  border: 1.5px solid var(--orb-lavender);
-  background: rgba(221, 214, 254, 0.08);
+  border: 1.5px solid #10a37f;
+  background: rgba(16, 163, 127, 0.08);
   border-radius: 3px;
   pointer-events: none;
-  box-shadow: 0 0 10px rgba(221, 214, 254, 0.35);
 }

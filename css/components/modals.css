@@ -1,18 +1,18 @@
 /**
- * OmniAI Hub — Modals & Dialogs
+ * OmniAI Hub — Modals & Dialogs (Clean Dark Architecture #212121)
  */
 
 .modal-veil {
   position: fixed;
   inset: 0;
-  background: rgba(8, 6, 14, 0.68);
+  background: rgba(0, 0, 0, 0.68);
   backdrop-filter: var(--glass-blur-sm);
   -webkit-backdrop-filter: var(--glass-blur-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 200;
-  animation: modalVeilFade 0.2s var(--ease-spring);
+  animation: modalVeilFade 0.2s ease;
 }
 
 .modal-veil.hidden {
@@ -27,20 +27,19 @@
 .modal-card {
   width: 480px;
   max-width: 90vw;
-  background: var(--bg-surface-elevated);
-  backdrop-filter: var(--glass-blur-heavy);
-  -webkit-backdrop-filter: var(--glass-blur-heavy);
-  border: 1px solid var(--border-highlight);
+  background: #212121; /* Authentic ChatGPT dark modal */
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-popover);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
   padding: 20px;
-  animation: modalScaleUp 0.25s var(--ease-spring);
+  color: #ececec;
+  animation: modalScaleUp 0.22s var(--ease-spring);
 }
 
 @keyframes modalScaleUp {
   from {
     opacity: 0;
-    transform: scale(0.95) translateY(10px);
+    transform: scale(0.96) translateY(6px);
   }
   to {
     opacity: 1;
@@ -54,7 +53,7 @@
   justify-content: space-between;
   margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .modal-title-group {
@@ -66,13 +65,13 @@
 .modal-title-group svg {
   width: 18px;
   height: 18px;
-  color: var(--orb-lavender);
+  color: #10a37f;
 }
 
 .modal-title-group h3 {
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #f3f4f6;
 }
 
 .modal-close-icon {
@@ -82,13 +81,13 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  color: var(--text-tertiary);
-  transition: all var(--duration-fast) var(--ease-spring);
+  color: #9ca3af;
+  transition: all var(--duration-fast) ease;
 }
 
 .modal-close-icon:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-primary);
+  background: #2a2a2a;
+  color: #ffffff;
 }
 
 .modal-content-body {
@@ -106,31 +105,30 @@
 .form-field label {
   font-size: 11.5px;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: #d1d5db;
 }
 
 .form-field input {
   padding: 10px 14px;
   height: 42px;
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border-standard);
-  color: var(--text-primary);
+  background: #171717;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ececec;
   font-family: var(--font-sans);
   font-size: 13px;
   line-height: 1.6;
-  transition: all var(--duration-fast) var(--ease-spring);
+  transition: all var(--duration-fast) ease;
 }
 
 .form-field input:focus {
-  border-color: #c084fc;
-  box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.2), 0 0 16px rgba(192, 132, 252, 0.3);
-  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.35);
+  background: #171717;
 }
 
 .field-tip {
   font-size: 10.5px;
-  color: var(--text-muted);
+  color: #9ca3af;
 }
 
 .quick-presets-flow {
@@ -142,17 +140,17 @@
 .quick-bot-chip {
   padding: 5px 10px;
   border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-subtle);
+  background: #262626;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   font-size: 11px;
-  color: var(--text-secondary);
-  transition: all var(--duration-fast) var(--ease-spring);
+  color: #d1d5db;
+  transition: all var(--duration-fast) ease;
 }
 
 .quick-bot-chip:hover {
-  background: rgba(255, 255, 255, 0.09);
+  background: #303030;
   color: #ffffff;
-  border-color: var(--border-highlight);
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
 .modal-actions-bar {
@@ -168,28 +166,27 @@
   border-radius: var(--radius-md);
   font-size: 12px;
   font-weight: 500;
-  transition: all var(--duration-fast) var(--ease-spring);
+  transition: all var(--duration-fast) ease;
 }
 
 .action-btn.secondary {
-  color: var(--text-secondary);
+  color: #9ca3af;
 }
 
 .action-btn.secondary:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-primary);
+  background: #262626;
+  color: #ffffff;
 }
 
 .action-btn.primary {
-  background: linear-gradient(135deg, rgba(221, 214, 254, 0.28) 0%, rgba(251, 207, 232, 0.28) 100%);
-  border: 1px solid rgba(221, 214, 254, 0.45);
+  background: #10a37f;
+  border: 1px solid #10a37f;
   color: #ffffff;
   font-weight: 600;
 }
 
 .action-btn.primary:hover {
-  background: linear-gradient(135deg, rgba(221, 214, 254, 0.38) 0%, rgba(251, 207, 232, 0.38) 100%);
-  box-shadow: 0 4px 18px rgba(196, 181, 253, 0.25);
+  background: #0d8a6a;
 }
 
 /* ── Shortcuts Legend Table ── */
@@ -204,7 +201,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 6px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .shortcut-keys-combo {
@@ -215,5 +212,5 @@
 
 .shortcut-legend {
   font-size: 12px;
-  color: var(--text-secondary);
+  color: #d1d5db;
 }

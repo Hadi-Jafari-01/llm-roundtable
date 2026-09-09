@@ -1,76 +1,80 @@
 /**
- * OmniAI Hub — Obsidian Rose & Frosted Silk Design Tokens
- * Haute Digital Spatial Architecture: Quiet Luxury, Soft Cashmere, Ethereal Pastel
+ * OmniAI Hub — ChatGPT (#212121) × DeepSeek (#171717) Minimalist Dark Design Tokens
+ * Clean Charcoal Surfaces • Subtle Monochromatic Borders • Crisp Emerald & Mint Accents
  */
 
 :root {
-  /* ── Canvas & Atmosphere Base ── */
-  --bg-canvas: #0c0a12;
-  --bg-canvas-subtle: #13101d;
-  --bg-plane: #0e0c15;
-  --bg-surface-frosted: rgba(18, 15, 28, 0.72);
-  --bg-surface-elevated: rgba(24, 19, 36, 0.84);
-  --bg-surface-glass: rgba(255, 255, 255, 0.05);
-  --bg-studio-drawer: linear-gradient(175deg, rgba(16, 19, 33, 0.97) 0%, rgba(10, 11, 19, 0.99) 100%);
-  --bg-mirror-studio: linear-gradient(175deg, rgba(15, 18, 32, 0.96) 0%, rgba(8, 9, 16, 0.98) 100%);
+  /* ── Canvas & Atmosphere Base (ChatGPT #212121 × DeepSeek #171717) ── */
+  --bg-canvas: #212121;
+  --bg-canvas-subtle: #171717;
+  --bg-plane: #212121;
+  --bg-surface-frosted: #212121;
+  --bg-surface-elevated: #262626;
+  --bg-surface-glass: rgba(255, 255, 255, 0.04);
+  --bg-studio-drawer: #171717;
+  --bg-mirror-studio: #212121;
+  --bg-council-chamber: #212121;
+  --bg-input: #2f2f2f;
 
-  /* ── Ethereal Pastel Bioluminescence Orbs ── */
-  --orb-rose: #fbcfe8;
-  --orb-lavender: #ddd6fe;
-  --orb-sage: #a7f3d0;
-  --orb-peach: #fed7aa;
-  --orb-aquamarine: #99f6e4;
-  --orb-amethyst: #c084fc;
-  --orb-indigo: #818cf8;
-  --orb-opal: #93c5fd;
-  --orb-lilac: #c4b5fd;
-  --orb-pearl: #f8fafc;
+  /* ── Clean Accents ── */
+  --accent-chatgpt: #10a37f;
+  --accent-deepseek: #4d6bfe;
+  --orb-rose: #f472b6;
+  --orb-lavender: #9ca3af;
+  --orb-sage: #10a37f;
+  --orb-peach: #fb923c;
+  --orb-aquamarine: #14b8a6;
+  --orb-amethyst: #10a37f;
+  --orb-indigo: #6366f1;
+  --orb-opal: #60a5fa;
+  --orb-lilac: #a78bfa;
+  --orb-pearl: #f3f4f6;
 
   /* ── AI Intelligence Pearl Signatures ── */
-  --ai-chatgpt: #6ee7b7;     /* Soft Mint Sage */
-  --ai-claude: #fed7aa;      /* Warm Champagne Peach */
-  --ai-gemini: #93c5fd;      /* Celestial Opal Blue */
-  --ai-perplexity: #99f6e4;  /* Delicate Aquamarine */
-  --ai-deepseek: #c4b5fd;    /* Luminous Lilac */
-  --ai-grok: #f1f5f9;        /* Frosted Pearl White */
-  --ai-mistral: #fdba74;     /* Warm Apricot */
-  --ai-poe: #f472b6;         /* Rose Silk */
-  --ai-phind: #a7f3d0;       /* Pristine Sage */
-  --ai-copilot: #67e8f9;     /* Cyan Silk */
+  --ai-chatgpt: #10a37f;
+  --ai-claude: #f59e0b;
+  --ai-gemini: #60a5fa;
+  --ai-perplexity: #2dd4bf;
+  --ai-deepseek: #38bdf8;
+  --ai-grok: #f3f4f6;
+  --ai-mistral: #fb923c;
+  --ai-poe: #a78bfa;
+  --ai-phind: #34d399;
+  --ai-copilot: #38bdf8;
 
-  /* ── Typography & Cashmere Inks ── */
+  /* ── Typography ── */
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Vazirmatn", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: "SF Mono", "Fira Code", Menlo, Monaco, Consolas, monospace;
 
-  --text-primary: #fbfaff;
-  --text-secondary: #d5d0e2;
-  --text-tertiary: #9c96ad;
-  --text-muted: #6e6882;
-  --text-accent: #e9d5ff;
+  --text-primary: #ececec;
+  --text-secondary: #c5c5c5;
+  --text-tertiary: #9ca3af;
+  --text-muted: #6b7280;
+  --text-accent: #10a37f;
 
-  /* ── Crisp Borders & Iridescent Reflective Sheen ── */
+  /* ── Borders (Subtle Crisp Monochrome) ── */
   --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-standard: rgba(255, 255, 255, 0.13);
-  --border-highlight: rgba(255, 255, 255, 0.24);
-  --border-active-pearl: rgba(196, 181, 253, 0.55);
-  --border-iridescent: linear-gradient(135deg, rgba(251, 207, 232, 0.35) 0%, rgba(192, 132, 252, 0.3) 50%, rgba(129, 140, 248, 0.35) 100%);
-  --border-jewel: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(192, 132, 252, 0.25) 50%, rgba(255, 255, 255, 0.06) 100%);
+  --border-standard: rgba(255, 255, 255, 0.12);
+  --border-highlight: rgba(255, 255, 255, 0.2);
+  --border-active-pearl: #10a37f;
+  --border-iridescent: rgba(255, 255, 255, 0.14);
+  --border-jewel: rgba(255, 255, 255, 0.12);
 
   /* ── Glassmorphism & Translucency ── */
-  --glass-blur: blur(28px) saturate(190%);
-  --glass-blur-sm: blur(16px) saturate(160%);
-  --glass-blur-heavy: blur(44px) saturate(220%);
-  --glass-bevel: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --glass-blur: blur(20px);
+  --glass-blur-sm: blur(12px);
+  --glass-blur-heavy: blur(28px);
+  --glass-bevel: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
-  --card-surface-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
-  --card-header-bg: rgba(23, 19, 34, 0.82);
+  --card-surface-gradient: #212121;
+  --card-header-bg: #171717;
 
-  /* ── Multi-Layered Soft Ambient Shadows ── */
-  --shadow-subtle: 0 4px 18px -2px rgba(0, 0, 0, 0.28);
-  --shadow-card: 0 8px 32px -4px rgba(0, 0, 0, 0.36), 0 20px 48px -6px rgba(192, 132, 252, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.16);
-  --shadow-card-active: 0 12px 42px -4px rgba(0, 0, 0, 0.48), 0 0 35px 2px rgba(196, 181, 253, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.28);
-  --shadow-omnibar: 0 24px 60px -8px rgba(0, 0, 0, 0.6), 0 0 45px -4px rgba(221, 214, 254, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.22);
-  --shadow-popover: 0 16px 40px -4px rgba(0, 0, 0, 0.55), 0 0 32px -2px rgba(196, 181, 253, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  /* ── Clean Ergonomic Shadows ── */
+  --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.35);
+  --shadow-card-active: 0 6px 28px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.18);
+  --shadow-omnibar: 0 10px 30px rgba(0, 0, 0, 0.4);
+  --shadow-popover: 0 16px 40px rgba(0, 0, 0, 0.65);
 
   /* ── Kinematics & Spring Physics ── */
   --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
@@ -78,16 +82,16 @@
   --ease-out-back: cubic-bezier(0.34, 1.3, 0.64, 1);
 
   --duration-fast: 160ms;
-  --duration-normal: 260ms;
-  --duration-glide: 360ms;
+  --duration-normal: 240ms;
+  --duration-glide: 340ms;
 
   /* ── Structural Dimensions ── */
-  --top-nav-height: 40px;
+  --top-nav-height: 42px;
   --tab-ribbon-height: 38px;
   --radius-xs: 6px;
-  --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-lg: 18px;
-  --radius-xl: 24px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
   --radius-full: 9999px;
 }

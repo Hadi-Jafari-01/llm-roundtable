@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OmniAI Hub — Obsidian Rose & Frosted Silk Spatial Workspace</title>
+  <title>OmniAI Hub — Spatial AI Workspace</title>
   
-  <!-- Obsidian Rose & Frosted Silk Haute Spatial Design System -->
+  <!-- Minimalist Dark Design System (ChatGPT #212121 × DeepSeek #171717) -->
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/reset.css">
@@ -29,6 +29,7 @@
       height: 100vh;
       overflow: hidden;
       box-sizing: border-box;
+      background-color: #212121;
     }
     .window-controls-cluster {
       display: flex;
@@ -36,8 +37,8 @@
       gap: 4px;
       margin-left: 8px;
       padding: 2px 6px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: #212121;
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 6px;
     }
     .window-controls-cluster.hidden {
@@ -63,7 +64,7 @@
       pointer-events: none;
     }
     .win-control-btn:hover {
-      background: rgba(255, 255, 255, 0.12);
+      background: #2f2f2f;
       color: #f8fafc;
     }
     .win-control-btn.btn-close:hover {
@@ -71,13 +72,11 @@
       color: #ffffff;
     }
 
-    /* Spatial Popover & Auto-Arrangement Engine Haute Silk Styling */
+    /* Spatial Popover & Auto-Arrangement Engine Dark Theme */
     .spatial-popover-menu {
-      background: linear-gradient(175deg, rgba(20, 24, 38, 0.98) 0%, rgba(12, 14, 23, 0.99) 100%) !important;
-      backdrop-filter: blur(28px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+      background: #171717 !important;
       border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7) !important;
       z-index: 1000 !important;
     }
 
@@ -93,72 +92,67 @@
       overflow-y: auto !important;
       overflow-x: hidden !important;
       overscroll-behavior: contain !important;
-      border-radius: 14px !important;
+      border-radius: 12px !important;
       padding: 12px 14px !important;
-      box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.08), 0 8px 24px rgba(129, 140, 248, 0.12) !important;
-      color: #f1f5f9 !important;
+      background: #171717 !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7) !important;
+      color: #ececec !important;
       box-sizing: border-box !important;
     }
 
     #auto-arrange-popover::-webkit-scrollbar {
       width: 4px !important;
     }
-    #auto-arrange-popover::-webkit-scrollbar-track {
-      background: transparent !important;
-    }
     #auto-arrange-popover::-webkit-scrollbar-thumb {
       background: rgba(255, 255, 255, 0.18) !important;
       border-radius: 4px !important;
-    }
-    #auto-arrange-popover::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.3) !important;
     }
 
     #auto-arrange-popover .popover-header {
       display: flex !important;
       align-items: center !important;
       justify-content: space-between !important;
-      padding-bottom: 10px !important;
+      padding-bottom: 8px !important;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-      margin-bottom: 10px !important;
+      margin-bottom: 9px !important;
     }
 
     #auto-arrange-popover .popover-title {
       display: flex !important;
       align-items: center !important;
-      gap: 8px !important;
-      font-size: 13px !important;
+      gap: 7px !important;
+      font-size: 12px !important;
       font-weight: 600 !important;
-      color: #f8fafc !important;
+      color: #f3f4f6 !important;
     }
 
     #auto-arrange-popover .popover-title svg {
-      width: 15px !important;
-      height: 15px !important;
-      color: #c084fc !important;
+      width: 14px !important;
+      height: 14px !important;
+      color: #10a37f !important;
       flex-shrink: 0 !important;
     }
 
     #auto-arrange-popover .popover-badge {
-      background: rgba(192, 132, 252, 0.12) !important;
-      border: 1px solid rgba(192, 132, 252, 0.3) !important;
-      color: #d8b4fe !important;
+      background: #262626 !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      color: #9ca3af !important;
       font-size: 9.5px !important;
-      font-weight: 600 !important;
-      padding: 2px 7px !important;
-      border-radius: 20px !important;
-      letter-spacing: 0.02em !important;
+      font-weight: 500 !important;
+      padding: 2px 6px !important;
+      border-radius: 4px !important;
     }
 
     #auto-arrange-popover .popover-section {
-      margin-bottom: 10px !important;
-      padding-bottom: 8px !important;
+      margin-bottom: 9px !important;
+      padding-bottom: 7px !important;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
     }
 
     #auto-arrange-popover .popover-section:last-of-type {
       border-bottom: none !important;
-      margin-bottom: 12px !important;
+      margin-bottom: 10px !important;
       padding-bottom: 0 !important;
     }
 
@@ -167,8 +161,8 @@
       font-size: 9.5px !important;
       font-weight: 700 !important;
       text-transform: uppercase !important;
-      letter-spacing: 0.06em !important;
-      color: #718096 !important;
+      letter-spacing: 0.05em !important;
+      color: #6b7280 !important;
       margin-bottom: 6px !important;
     }
 
@@ -185,12 +179,12 @@
       justify-content: center !important;
       gap: 4px !important;
       padding: 7px 3px !important;
-      background: rgba(255, 255, 255, 0.035) !important;
-      border: 1px solid rgba(255, 255, 255, 0.07) !important;
-      border-radius: 8px !important;
-      color: #94a3b8 !important;
+      background: #212121 !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-radius: 7px !important;
+      color: #9ca3af !important;
       cursor: pointer !important;
-      transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      transition: all 0.16s ease !important;
     }
 
     #auto-arrange-popover .layout-preset-chip svg {
@@ -198,8 +192,6 @@
       height: 16px !important;
       flex-shrink: 0 !important;
       stroke: currentColor !important;
-      opacity: 0.85 !important;
-      transition: all 0.16s ease !important;
     }
 
     #auto-arrange-popover .layout-preset-chip span {
@@ -208,23 +200,15 @@
     }
 
     #auto-arrange-popover .layout-preset-chip:hover {
-      background: rgba(255, 255, 255, 0.07) !important;
-      border-color: rgba(255, 255, 255, 0.15) !important;
-      color: #f1f5f9 !important;
-      transform: translateY(-1px) !important;
+      background: #282828 !important;
+      border-color: rgba(255, 255, 255, 0.18) !important;
+      color: #f3f4f6 !important;
     }
 
     #auto-arrange-popover .layout-preset-chip.active {
-      background: rgba(129, 140, 248, 0.16) !important;
-      border-color: rgba(129, 140, 248, 0.6) !important;
+      background: #303030 !important;
+      border-color: rgba(255, 255, 255, 0.25) !important;
       color: #ffffff !important;
-      box-shadow: 0 0 16px rgba(129, 140, 248, 0.25) !important;
-    }
-
-    #auto-arrange-popover .layout-preset-chip.active svg {
-      stroke: #a5b4fc !important;
-      opacity: 1 !important;
-      transform: scale(1.06) !important;
     }
 
     #auto-arrange-popover .toggle-row {
@@ -244,14 +228,14 @@
     }
 
     #auto-arrange-popover .toggle-title {
-      font-size: 11.5px !important;
+      font-size: 11px !important;
       font-weight: 500 !important;
-      color: #e2e8f0 !important;
+      color: #e5e7eb !important;
     }
 
     #auto-arrange-popover .toggle-sub {
       font-size: 9.5px !important;
-      color: #64748b !important;
+      color: #6b7280 !important;
       line-height: 1.25 !important;
     }
 
@@ -260,12 +244,12 @@
       -webkit-appearance: none !important;
       width: 32px !important;
       height: 18px !important;
-      background: rgba(255, 255, 255, 0.15) !important;
-      border-radius: 20px !important;
+      background: #2a2a2a !important;
+      border-radius: 10px !important;
       position: relative !important;
       cursor: pointer !important;
       outline: none !important;
-      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      transition: background 0.2s ease !important;
       flex-shrink: 0 !important;
     }
 
@@ -278,13 +262,11 @@
       height: 14px !important;
       background: #ffffff !important;
       border-radius: 50% !important;
-      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+      transition: transform 0.2s ease !important;
     }
 
     #auto-arrange-popover .silk-switch:checked {
-      background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%) !important;
-      box-shadow: 0 0 12px rgba(192, 132, 252, 0.45) !important;
+      background: #10a37f !important;
     }
 
     #auto-arrange-popover .silk-switch:checked::after {
@@ -325,12 +307,12 @@
       gap: 1px !important;
       padding: 5px 2px !important;
       min-height: 36px !important;
-      background: rgba(255, 255, 255, 0.035) !important;
-      border: 1px solid rgba(255, 255, 255, 0.07) !important;
+      background: #212121 !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
       border-radius: 7px !important;
-      color: #94a3b8 !important;
+      color: #9ca3af !important;
       cursor: pointer !important;
-      transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      transition: all 0.16s ease !important;
       font-family: inherit !important;
       line-height: 1.2 !important;
       box-sizing: border-box !important;
@@ -346,29 +328,22 @@
     #auto-arrange-popover .spacing-preset-chip small,
     #auto-arrange-popover .sizing-preset-chip small {
       font-size: 9px !important;
-      color: #64748b !important;
+      color: #6b7280 !important;
       display: block !important;
     }
 
     #auto-arrange-popover .spacing-preset-chip:hover,
     #auto-arrange-popover .sizing-preset-chip:hover {
-      background: rgba(255, 255, 255, 0.07) !important;
-      border-color: rgba(255, 255, 255, 0.15) !important;
+      background: #282828 !important;
+      border-color: rgba(255, 255, 255, 0.18) !important;
       color: #f1f5f9 !important;
-      transform: translateY(-1px) !important;
     }
 
     #auto-arrange-popover .spacing-preset-chip.active,
     #auto-arrange-popover .sizing-preset-chip.active {
-      background: rgba(129, 140, 248, 0.16) !important;
-      border-color: rgba(129, 140, 248, 0.6) !important;
+      background: #303030 !important;
+      border-color: rgba(255, 255, 255, 0.25) !important;
       color: #ffffff !important;
-      box-shadow: 0 0 14px rgba(129, 140, 248, 0.22) !important;
-    }
-
-    #auto-arrange-popover .spacing-preset-chip.active small,
-    #auto-arrange-popover .sizing-preset-chip.active small {
-      color: #c7d2fe !important;
     }
 
     #auto-arrange-popover .popover-actions {
@@ -383,66 +358,23 @@
       align-items: center !important;
       justify-content: center !important;
       gap: 8px !important;
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%) !important;
+      background: #10a37f !important;
       border: none !important;
-      border-radius: 9px !important;
+      border-radius: 8px !important;
       color: #ffffff !important;
       font-size: 12.5px !important;
       font-weight: 600 !important;
-      letter-spacing: -0.01em !important;
       cursor: pointer !important;
-      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1) inset !important;
-      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      overflow: hidden !important;
-      position: relative !important;
-    }
-
-    #auto-arrange-popover .popover-action-btn.primary svg {
-      width: 16px !important;
-      height: 16px !important;
-      max-width: 16px !important;
-      max-height: 16px !important;
-      min-width: 16px !important;
-      min-height: 16px !important;
-      flex-shrink: 0 !important;
-      stroke: #ffffff !important;
-      display: block !important;
-    }
-
-    #auto-arrange-popover .popover-action-btn.primary span {
-      display: inline-block !important;
-      white-space: nowrap !important;
-    }
-
-    #auto-arrange-popover .popover-action-btn.primary kbd {
-      background: rgba(0, 0, 0, 0.28) !important;
-      border: 1px solid rgba(255, 255, 255, 0.22) !important;
-      color: rgba(255, 255, 255, 0.95) !important;
-      padding: 2px 7px !important;
-      border-radius: 5px !important;
-      font-size: 10.5px !important;
-      font-weight: 600 !important;
-      font-family: inherit !important;
-      margin-left: 4px !important;
+      transition: all 0.16s ease !important;
     }
 
     #auto-arrange-popover .popover-action-btn.primary:hover {
-      transform: translateY(-1.5px) !important;
-      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.2) inset !important;
-      filter: brightness(1.08) !important;
-    }
-
-    #auto-arrange-popover .popover-action-btn.primary:active {
-      transform: translateY(0.5px) scale(0.99) !important;
-      box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3) !important;
+      background: #0d8a6a !important;
     }
   </style>
 </head>
 <body>
-  <!-- Ambient Cosmic Aurora Bioluminescence -->
-  <div class="ambient-aura aura-top-left"></div>
-  <div class="ambient-aura aura-top-right"></div>
-  <div class="ambient-aura aura-bottom-center"></div>
+  <!-- Ambient Cosmic Aurora is disabled for clean ChatGPT/DeepSeek dark theme -->
 
   <!-- Global Application Root -->
   <div id="app" class="app-root">
@@ -450,7 +382,7 @@
     <!-- Zen Mode Edge Sensor -->
     <div class="nano-nav-sensor" id="nano-nav-sensor"></div>
 
-    <!-- Unified Haute Top Nano-Horizon Bar (42px Floating Obsidian Silk) -->
+    <!-- Unified Top Horizon Bar (42px Dark Charcoal #171717) -->
     <header class="top-nano-nav" id="top-nav">
 
       <!-- 1. LEFT ZONE: Brand Gem Capsule & Canvas Optics Hub -->
@@ -522,7 +454,7 @@
         </div>
       </div>
 
-      <!-- 2. CENTER ZONE: Unified AI Silk Tabs Ribbon (Integrated Stage) -->
+      <!-- 2. CENTER ZONE: AI Tabs Ribbon (Integrated Stage) -->
       <div class="nav-cluster center tabs-stage">
         <div id="silk-tabs-container" class="silk-tabs-container silk-tabs-container-integrated">
           <!-- Dynamic Tabs injected here by WorkspaceCanvas -->
@@ -543,7 +475,7 @@
         </div>
       </div>
 
-      <!-- 3. RIGHT ZONE: Modular Collapsible Drawers & OS Window Controls -->
+      <!-- 3. RIGHT ZONE: Modular Drawers & Window Controls -->
       <div class="nav-cluster right">
         <!-- The Silk Pavilion Studio Chamber Trigger -->
         <button id="btn-silk-pavilion" class="nano-jewel-btn" title="Silk Pavilion — Studio Chamber (⌘P / ⌘⌥P)">
@@ -607,7 +539,7 @@
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="12" height="12" rx="2"/><rect x="6" y="6" width="12" height="12" rx="2" stroke-dasharray="2 2"/><rect x="9" y="9" width="12" height="12" rx="2"/></svg>
                   <span>Cascade</span>
                 </button>
-                <button class="layout-preset-chip desktop-full-preset" data-preset="desktop" title="Full Desktop View (ابعاد کامل دسکتاپ 1280×850)">
+                <button class="layout-preset-chip desktop-full-preset" data-preset="desktop" title="Full Desktop View (1280×850)">
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="2" y="3" width="20" height="14" rx="2"/>
                     <line x1="8" y1="21" x2="16" y2="21"/>
@@ -659,7 +591,7 @@
             <div class="popover-section">
               <span class="section-label">Card Sizing Mode</span>
               <div class="sizing-preset-group">
-                <button class="sizing-preset-chip" data-sizing="desktop" title="ابعاد کامل دسکتاپ (1280×850)">
+                <button class="sizing-preset-chip" data-sizing="desktop" title="Full Desktop View (1280×850)">
                   <strong>Desktop</strong>
                   <small>1280×850</small>
                 </button>
@@ -699,12 +631,12 @@
             </svg>
           </button>
           <div id="popover-tools-menu" class="spatial-popover-menu dropdown-right hidden">
-            <button id="menu-item-data-vault" class="popover-menu-item" title="صندوق جامع پشتیبان‌گیری، درون‌ریزی و برون‌ریزی همه‌چیز (⌘⌥E)">
+            <button id="menu-item-data-vault" class="popover-menu-item" title="Universal Data Vault (⌘⌥E)">
               <span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
                 </svg>
-                صندوق جامع داده‌ها (Data Vault)
+                Data Vault (Backup & Restore)
               </span>
               <kbd>⌘⌥E</kbd>
             </button>
@@ -717,7 +649,7 @@
                 Add Custom Model URL
               </span>
             </button>
-            <button id="menu-item-pwa-install" class="popover-menu-item" title="باز کردن در پنجره مستقل برنامه (بدون اضافات مرورگر)">
+            <button id="menu-item-pwa-install" class="popover-menu-item" title="Open in Standalone Desktop App Window">
               <span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
@@ -739,16 +671,16 @@
           </div>
         </div>
 
-        <!-- Dedicated Window OS Controls Cluster (Active Minimize, Maximize/Restore, Close) -->
+        <!-- Dedicated Window OS Controls Cluster -->
         <div class="window-controls-cluster hidden" id="window-controls-cluster">
-          <button id="btn-win-min" class="win-control-btn btn-min" title="کمینه‌سازی به تسک‌بار (Minimize)">
+          <button id="btn-win-min" class="win-control-btn btn-min" title="Minimize">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </button>
-          <button id="btn-win-max" class="win-control-btn btn-max" title="بزرگ‌نمایی / بازیابی پنجره (Maximize / Restore)">
+          <button id="btn-win-max" class="win-control-btn btn-max" title="Maximize / Restore">
             <svg class="icon-max" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
             <svg class="icon-restore hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="7" width="13" height="13" rx="1.5"/><path d="M4 17V5a1 1 0 0 1 1-1h12"/></svg>
           </button>
-          <button id="btn-win-close" class="win-control-btn btn-close" title="بستن پنجره (Close)">
+          <button id="btn-win-close" class="win-control-btn btn-close" title="Close">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
@@ -763,7 +695,7 @@
       </div>
     </main>
 
-    <!-- Module A: Neural DOM Driver Studio (Haute Slide-Over Glass Drawer) -->
+    <!-- Module A: Neural DOM Driver Studio -->
     <div id="selector-studio-backdrop" class="selector-studio-backdrop"></div>
     <aside id="selector-studio-drawer" class="selector-studio-drawer">
       <div class="studio-drawer-header">
@@ -792,7 +724,6 @@
 
       <!-- Scrollable Form Body -->
       <form id="form-driver-editor" class="studio-drawer-body">
-        <!-- 1. Metadata -->
         <div class="driver-field-card">
           <div class="driver-field-top">
             <label class="driver-field-label">
@@ -815,7 +746,6 @@
           <input type="text" id="driver-field-domain" class="driver-text-input" placeholder="e.g. chatgpt.com, openai.com" required />
         </div>
 
-        <!-- 2. Input Box Selector & Strategy -->
         <div class="driver-field-card">
           <div class="driver-field-top">
             <label class="driver-field-label">
@@ -848,7 +778,6 @@
           </select>
         </div>
 
-        <!-- 3. Submit Button & Mechanism -->
         <div class="driver-field-card">
           <div class="driver-field-top">
             <label class="driver-field-label">
@@ -879,7 +808,6 @@
           </select>
         </div>
 
-        <!-- 4. Response & Streaming Token Containers -->
         <div class="driver-field-card">
           <div class="driver-field-top">
             <label class="driver-field-label">
@@ -910,7 +838,6 @@
           <div id="probe-status-streamingTokenSelector" class="probe-status-row"></div>
         </div>
 
-        <!-- 5. Stop & New Chat -->
         <div class="driver-field-card">
           <div class="driver-field-top">
             <label class="driver-field-label">
@@ -941,7 +868,6 @@
           <div id="probe-status-newChatSelector" class="probe-status-row"></div>
         </div>
 
-        <!-- 6. Reasoning / Thinking Selector -->
         <div class="driver-field-card">
           <div class="driver-field-top">
             <label class="driver-field-label">
@@ -951,7 +877,7 @@
             <span class="driver-field-badge">DeepSeek / o1 / o3</span>
           </div>
           <div class="driver-input-row">
-            <input type="text" id="driver-field-reasoning-selector" class="driver-text-input" placeholder="Thought container (DeepSeek ds-think, o1/o3)" />
+            <input type="text" id="driver-field-reasoning-selector" class="driver-text-input" placeholder="Thought container" />
             <button type="button" class="btn-probe-jewel" data-probe-field="reasoningSelector">🎯 Probe</button>
           </div>
           <div id="probe-status-reasoningSelector" class="probe-status-row"></div>
@@ -961,7 +887,7 @@
           <div class="driver-field-top">
             <label class="driver-field-label">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-              <span>User Bubble Selector (History Extraction)</span>
+              <span>User Bubble Selector</span>
             </label>
             <span class="driver-field-badge">Sync</span>
           </div>
@@ -972,20 +898,20 @@
           <div id="probe-status-userBubbleSelector" class="probe-status-row"></div>
         </div>
 
-        <!-- 7. Human Kinematics & Anti-Bot Armor Engine -->
+        <!-- Human Kinematics -->
         <div class="driver-field-card kinematics-master-card">
           <div class="driver-field-top">
             <label class="driver-field-label">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <span>رفتارسنجی انسانی و ضد شناسایی روباتیک (Anti-Bot Armor)</span>
+              <span>Human Kinematics & Anti-Bot Armor</span>
             </label>
             <span class="driver-field-badge active-stealth">Stealth V2</span>
           </div>
           
           <label class="toggle-row" for="driver-field-humanize-enabled" style="margin-top: 4px;">
             <div class="toggle-info">
-              <span class="toggle-title">فعال‌سازی سیستم رفتار ارگونومیک انسانی</span>
-              <span class="toggle-sub">شبیه‌سازی دقیق تایپ، تاخیرهای بیولوژیک و کلیک‌های طبیعی برای دور زدن تشخیص‌های هوش مصنوعی</span>
+              <span class="toggle-title">Enable Human Kinematics</span>
+              <span class="toggle-sub">Simulate natural keystrokes, biologics delays, and bounding box clicks</span>
             </div>
             <input type="checkbox" id="driver-field-humanize-enabled" class="silk-switch" checked />
           </label>
@@ -995,28 +921,28 @@
           <div class="driver-field-top">
             <label class="driver-field-label">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M18 12h.01M8 16h8"/></svg>
-              <span>معماری شبیه‌سازی تایپ (Typing Engine)</span>
+              <span>Typing Engine Mode</span>
             </label>
             <span class="driver-field-badge">Mode</span>
           </div>
           <select id="driver-field-humanize-mode" class="driver-select-input">
-            <option value="burst">Adaptive Human Burst (تایپ رگباری با ریتم انسانی - توصیه شده)</option>
-            <option value="cadence">Natural Keystroke Cadence (تایپ طبیعی نویسه‌به‌نویسه)</option>
-            <option value="paste">Smart Human Paste Simulation (الصاق هوشمند طبیعی همراه با بررسی)</option>
-            <option value="instant">Instant Raw Dispatch (ارسال آنی مستقیم بدون شبیه‌سازی)</option>
+            <option value="burst">Adaptive Human Burst (Natural Rhythm)</option>
+            <option value="cadence">Natural Keystroke Cadence</option>
+            <option value="paste">Smart Human Paste Simulation</option>
+            <option value="instant">Instant Raw Dispatch</option>
           </select>
 
           <div class="driver-sub-grid">
             <div>
-              <label class="driver-sub-label">سرعت ریتم تایپ (Cadence Speed)</label>
+              <label class="driver-sub-label">Cadence Speed</label>
               <select id="driver-field-humanize-speed" class="driver-select-input">
-                <option value="natural">طبیعی / استاندارد (۷۵ تا ۹۰ کلمه بر دقیقه)</option>
-                <option value="relaxed">آرام و با تأمل (۴۵ تا ۶۰ کلمه بر دقیقه)</option>
-                <option value="rapid">تندنویس حرفه‌ای (۱۱۰ تا ۱۳۰ کلمه بر دقیقه)</option>
+                <option value="natural">Natural (75-90 WPM)</option>
+                <option value="relaxed">Relaxed (45-60 WPM)</option>
+                <option value="rapid">Rapid (110-130 WPM)</option>
               </select>
             </div>
             <div>
-              <label class="driver-sub-label">تأخیر تفکر قبل از ارسال (Pre-Submit Dwell)</label>
+              <label class="driver-sub-label">Pre-Submit Dwell</label>
               <div class="driver-input-row">
                 <input type="number" id="driver-field-presubmit-delay" class="driver-text-input" min="50" max="3000" step="50" value="500" placeholder="500" />
                 <span class="unit-tag">ms</span>
@@ -1026,14 +952,14 @@
 
           <div class="driver-sub-grid">
             <div>
-              <label class="driver-sub-label">مکث روی علائم نگارشی (Punctuation Pause)</label>
+              <label class="driver-sub-label">Punctuation Pause</label>
               <div class="driver-input-row">
                 <input type="number" id="driver-field-punctuation-delay" class="driver-text-input" min="0" max="1500" step="50" value="220" placeholder="220" />
                 <span class="unit-tag">ms</span>
               </div>
             </div>
             <div>
-              <label class="driver-sub-label">مدت نگه‌داشتن کلیک ماوس (Click Dwell)</label>
+              <label class="driver-sub-label">Click Dwell</label>
               <div class="driver-input-row">
                 <input type="number" id="driver-field-click-dwell" class="driver-text-input" min="20" max="300" step="10" value="75" placeholder="75" />
                 <span class="unit-tag">ms</span>
@@ -1041,41 +967,39 @@
             </div>
           </div>
 
-          <!-- Advanced Anti-Detection Toggles -->
           <div class="kinematics-toggles-stack">
             <label class="toggle-row" for="driver-field-cursor-jitter">
               <div class="toggle-info">
-                <span class="toggle-title">مختصات تصادفی کلیک (Cursor Jitter)</span>
-                <span class="toggle-sub">کلیک در مختصات پویا درون کادر دکمه (جلوگیری از تشخیص کلیک رباتیک 0,0)</span>
+                <span class="toggle-title">Dynamic Cursor Jitter</span>
+                <span class="toggle-sub">Randomize coordinates inside button bounds</span>
               </div>
               <input type="checkbox" id="driver-field-cursor-jitter" class="silk-switch" checked />
             </label>
 
             <label class="toggle-row" for="driver-field-hover-approach">
               <div class="toggle-info">
-                <span class="toggle-title">شبیه‌سازی هاور و حرکت نشانگر (Pointer Hover / Approach)</span>
-                <span class="toggle-sub">ارسال رویدادهای pointerover، pointerenter و mousemove قبل از فشردن</span>
+                <span class="toggle-title">Hover & Approach Simulation</span>
+                <span class="toggle-sub">Dispatch pointerover and mousemove before clicks</span>
               </div>
               <input type="checkbox" id="driver-field-hover-approach" class="silk-switch" checked />
             </label>
 
             <label class="toggle-row" for="driver-field-simulate-typos">
               <div class="toggle-info">
-                <span class="toggle-title">شبیه‌سازی خطای تایپی تصادفی و اصلاح خودکار</span>
-                <span class="toggle-sub">تایپ گاه‌به‌گاه نویسه مجاور کیبورد و پاک‌کردن با Backspace جهت طبیعی‌سازی کامل</span>
+                <span class="toggle-title">Simulate Natural Typos & Correction</span>
+                <span class="toggle-sub">Occasional natural typo and backspace correction</span>
               </div>
               <input type="checkbox" id="driver-field-simulate-typos" class="silk-switch" checked />
             </label>
           </div>
 
-          <!-- Live Simulation Test Button -->
           <div class="driver-test-toolbar">
-            <span style="font-size: 10.5px; color: #94a3b8; font-weight: 500;">تست زنده شبیه‌سازی در کادر فعال:</span>
+            <span style="font-size: 10.5px; color: #9ca3af; font-weight: 500;">Test typing simulation:</span>
             <button type="button" id="btn-test-human-typing" class="btn-test-typing-jewel">
               <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2">
                 <path d="M12 2l2.4 7.2L21 12l-6.6 2.8L12 22l-2.4-7.2L3 12l6.6-2.8L12 2z"/>
               </svg>
-              <span>تست تایپ ارگونومیک</span>
+              <span>Test Typing</span>
             </button>
           </div>
           <div id="probe-status-humanTyping" class="probe-status-row"></div>
@@ -1106,11 +1030,10 @@
       </div>
     </aside>
 
-    <!-- Module B: The Silk Mirror Sanctuary (Native Unified Chat Studio) -->
+    <!-- Module B: The Silk Mirror Sanctuary -->
     <aside id="mirror-chat-studio" class="mirror-chat-studio">
       <div id="mirror-resize-handle" class="mirror-resize-handle"></div>
 
-      <!-- Header -->
       <div class="mirror-header-bar">
         <div class="mirror-brand-title">
           <div class="mirror-spark-badge">
@@ -1126,10 +1049,10 @@
 
         <div class="mirror-header-actions">
           <input type="file" id="file-mirror-import-chat" accept=".json" style="display: none;" />
-          <button id="btn-mirror-export-chat" class="mirror-icon-btn" title="خروجی گرفتن از گفتگو (Markdown / JSON)">
+          <button id="btn-mirror-export-chat" class="mirror-icon-btn" title="Export Chat (Markdown / JSON)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </button>
-          <button id="btn-mirror-import-chat" class="mirror-icon-btn" title="درون‌ریزی گفتگو (JSON)">
+          <button id="btn-mirror-import-chat" class="mirror-icon-btn" title="Import Chat (JSON)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           </button>
           <button id="btn-mirror-sync-history" class="mirror-icon-btn" title="Sync / Extract Conversation History">
@@ -1142,18 +1065,14 @@
         </div>
       </div>
 
-      <!-- Pearl Model Switcher Ribbon -->
       <div class="mirror-pearl-bar" id="mirror-pearl-bar"></div>
-
-      <!-- Message Stream -->
       <div class="mirror-stream-viewport" id="mirror-stream-viewport"></div>
 
-      <!-- Controls Dock -->
       <div class="mirror-controls-dock">
         <div class="mirror-dock-meta">
           <div style="display: flex; align-items: center; gap: 8px;">
             <span id="mirror-char-count">0 chars</span>
-            <button type="button" id="btn-mirror-toggle-stealth" class="mirror-stealth-badge active" title="حالت رفتار انسانی و ضد روباتیک فعال است (کلیک برای تغییر حالت یا تنظیمات)">
+            <button type="button" id="btn-mirror-toggle-stealth" class="mirror-stealth-badge" title="Stealth Human Mode">
               <span class="stealth-dot"></span>
               <span id="mirror-stealth-mode-label" class="stealth-label">Human Mode: Active</span>
             </button>
@@ -1164,23 +1083,22 @@
         </div>
 
         <div class="mirror-input-box">
-          <textarea id="mirror-prompt-textarea" class="mirror-textarea" placeholder="Message intelligence in pristine silk mode... (⌘↵ to send)" rows="1"></textarea>
+          <textarea id="mirror-prompt-textarea" class="mirror-textarea" placeholder="Message intelligence... (⌘↵ to send)" rows="1"></textarea>
 
           <div class="mirror-dock-actions">
             <div class="mirror-dock-left-tools"></div>
             <button type="button" id="btn-mirror-send" class="btn-mirror-send-jewel" title="Dispatch to active model (Cmd+Enter)">
-              <span>Send</span>
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
           </div>
         </div>
       </div>
     </aside>
 
-    <!-- The Floating Jewel Omnibar (Parfum Flacon Aesthetic) -->
+    <!-- The Floating Omnibar (#2f2f2f & #212121) -->
     <div class="omnibar-capsule-island" id="omnibar-island">
       
-      <!-- 1. Resting Compact Pill (34px) -->
+      <!-- Resting Compact Pill -->
       <div class="omnibar-compact-bar" id="capsule-compact-trigger">
         <div class="capsule-spark-gem">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
@@ -1194,9 +1112,8 @@
         </div>
       </div>
 
-      <!-- 2. Expanded Multi-Line Prompt Studio -->
+      <!-- Expanded Multi-Line Prompt Studio -->
       <div class="omnibar-studio-layout hidden" id="capsule-studio">
-        <!-- Accessory Row -->
         <div class="studio-accessory-strip">
           <div class="sync-scope-cluster">
             <button class="sync-scope-btn active" data-sync="all" title="Send to all cards on canvas">
@@ -1209,7 +1126,6 @@
             </button>
           </div>
 
-          <!-- Active Receiving Model Avatar Pearls -->
           <div class="studio-bots-ribbon" id="studio-bots-ribbon"></div>
 
           <button id="btn-collapse-studio" class="btn-collapse-studio" title="Collapse Studio (Escape)">
@@ -1217,7 +1133,6 @@
           </button>
         </div>
 
-        <!-- Studio Textarea Body -->
         <div class="studio-input-row">
           <textarea 
             id="studio-prompt-textarea" 
@@ -1245,7 +1160,7 @@
 
     </div>
 
-    <!-- Module C: The Silk Pavilion (Haute Atelier Studio Chamber) -->
+    <!-- Module C: The Silk Pavilion -->
     <div id="silk-pavilion-backdrop" class="silk-pavilion-backdrop"></div>
     <aside id="silk-pavilion-drawer" class="silk-pavilion-drawer" aria-label="Silk Pavilion Chamber">
       <div class="pavilion-drawer-header">
@@ -1279,44 +1194,29 @@
           <span>Curated Atelier Chambers</span>
           <span id="pavilion-studios-count" class="pavilion-counter-pill">2 Studios</span>
         </div>
-        <div class="pavilion-grid" id="pavilion-studios-grid">
-          <!-- Dynamically injected studio jewel cards -->
-        </div>
+        <div class="pavilion-grid" id="pavilion-studios-grid"></div>
       </div>
 
       <div class="pavilion-drawer-footer">
-        <div class="pavilion-footer-stats" id="pavilion-footer-stats">
-          <!-- Dynamically injected live workspace stats -->
-        </div>
+        <div class="pavilion-footer-stats" id="pavilion-footer-stats"></div>
       </div>
     </aside>
 
-    <!-- Module E: The Silk Symposium Chamber (Infinite Roundtable Agora — ChatGPT Ergonomics & Contextual Inspector) -->
+    <!-- Module E: The Silk Symposium Chamber -->
     <div id="silk-symposium-chamber" class="silk-symposium-overlay" aria-label="The Silk Symposium">
-      <div class="symposium-aurora symposium-aurora-top"></div>
-      <div class="symposium-aurora symposium-aurora-left"></div>
-      <div class="symposium-aurora symposium-aurora-right"></div>
-
-      <!-- Master Top Header Bar (3 Ergonomic Floating Glass Capsules) -->
       <header class="symposium-header-bar">
-        <!-- Capsule 1: Left Brand & Active Scenario Gateway -->
         <div class="symposium-header-capsule left">
           <div class="symposium-gem-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="9"/>
               <path d="M12 3v18M3 12h18"/>
               <circle cx="12" cy="12" r="5"/>
-              <circle cx="12" cy="5" r="1.5"/>
-              <circle cx="19" cy="12" r="1.5"/>
-              <circle cx="12" cy="19" r="1.5"/>
-              <circle cx="5" cy="12" r="1.5"/>
             </svg>
           </div>
           <div class="symposium-title-stack">
             <h2>The Silk Symposium</h2>
             <p>تالار هم‌اندیشی و دیالکتیک زنده هوش‌ها</p>
           </div>
-          <!-- Quick Clickable Scenario Switcher Pill -->
           <button type="button" id="btn-header-switch-scenario" class="active-scenario-pill" title="کلیک برای تغییر سناریوی میزگرد">
             <span class="scenario-gem-dot"></span>
             <span id="header-active-scenario-title">سناریوهای میزگرد</span>
@@ -1324,46 +1224,41 @@
           </button>
         </div>
 
-        <!-- Capsule 2: Center Dialectic Conductor Island -->
         <div class="symposium-header-capsule center">
           <span id="symposium-topology-badge" class="topology-mode-badge">
             <span class="dot"></span> Manual Conductor
           </span>
           <span id="symposium-round-counter" class="round-counter-badge">R1</span>
-          <button type="button" id="btn-symposium-autoplay-toggle" class="btn-header-play-pause" title="تغییر حالت بین نوبت‌دهی دستی با عصا و جریان خودکار">
+          <button type="button" id="btn-symposium-autoplay-toggle" class="btn-header-play-pause" title="تغییر حالت بین نوبت‌دهی دستی و خودکار">
             ▶️ خودکار
           </button>
         </div>
 
-        <!-- Capsule 3: Right Action Cluster -->
         <div class="symposium-header-capsule right">
           <input type="file" id="file-symposium-import" accept=".json" style="display: none;" />
-          <button type="button" id="btn-symposium-toggle-user-seat" class="symposium-tool-btn" title="حضور رسمی کاربر به عنوان عضو هم‌پایه در سکو">
+          <button type="button" id="btn-symposium-toggle-user-seat" class="symposium-tool-btn" title="حضور رسمی کاربر در شورا">
             <span>🪑 Seat Yourself</span>
           </button>
-          <button type="button" id="btn-symposium-toggle-dais" class="symposium-tool-btn active" title="نمایش/مخفی‌سازی ریل مدل‌ها در سمت چپ">
+          <button type="button" id="btn-symposium-toggle-dais" class="symposium-tool-btn active" title="نمایش/مخفی‌سازی ریل مدل‌ها">
             <span>Dais Rail</span>
           </button>
-          <button type="button" id="btn-symposium-toggle-ledger" class="symposium-tool-btn" title="دفتر کل اجماع‌ها و چالش‌های ثبت‌شده">
+          <button type="button" id="btn-symposium-toggle-ledger" class="symposium-tool-btn" title="دفتر کل اجماع‌ها">
             <span>Ledger</span>
           </button>
           <button type="button" id="btn-symposium-open-sanctum" class="symposium-tool-btn primary-gold" title="آتلیه جامع تفکر، سناریوها و موتور دیالکتیک">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
             <span>Sanctum</span>
           </button>
-          <button type="button" id="btn-symposium-import-briefing" class="symposium-tool-btn" title="بازیابی جلسه و پرونده مذاکرات از فایل JSON">
+          <button type="button" id="btn-symposium-import-briefing" class="symposium-tool-btn" title="بازیابی جلسه از فایل JSON">
             <span>Import</span>
           </button>
-          <button type="button" id="btn-symposium-export-briefing" class="symposium-tool-btn" title="خروجی مارک‌داون از کل پرونده مذاکرات">
+          <button type="button" id="btn-symposium-export-briefing" class="symposium-tool-btn" title="خروجی مارک‌داون">
             <span>Export</span>
           </button>
           <button type="button" id="btn-close-symposium-chamber" class="symposium-tool-btn btn-close" title="خروج از تالار (Esc)">✕</button>
         </div>
       </header>
 
-      <!-- Main Workspace Layout: Left Rail + Centered ChatGPT Stage + Collapsible Ledger -->
       <div class="symposium-body-layout">
-        <!-- 1. Left Vertical Models Rail (Dais Pods) -->
         <aside id="symposium-dais-container" class="symposium-dais-left-rail" aria-label="Celestial Models Rail">
           <div class="dais-rail-header">
             <span class="rail-title-label">CHAIRS</span>
@@ -1371,20 +1266,14 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
             </button>
           </div>
-          <div id="symposium-dais-ribbon" class="dais-vertical-stack">
-            <!-- Dynamically rendered by SymposiumDais.js -->
-          </div>
+          <div id="symposium-dais-ribbon" class="dais-vertical-stack"></div>
         </aside>
 
-        <!-- 2. Centered ChatGPT Dialogue Stage -->
         <section class="symposium-chat-stage">
           <div id="symposium-transcript-viewport" class="symposium-transcript-viewport">
-            <div class="chat-centered-container">
-              <!-- Turns rendered here by SymposiumTranscript.js -->
-            </div>
+            <div class="chat-centered-container"></div>
           </div>
 
-          <!-- Floating ChatGPT Capsule Composer -->
           <div class="symposium-composer-container">
             <div class="chat-centered-container">
               <div class="symposium-chatgpt-composer">
@@ -1414,7 +1303,6 @@
           </div>
         </section>
 
-        <!-- 3. Collapsible Consensus Ledger (Right Tray) -->
         <aside id="symposium-ledger-tray" class="symposium-ledger-tray collapsed">
           <div class="ledger-tray-header">
             <div class="ledger-title-group">
@@ -1428,7 +1316,7 @@
             <div>
               <div class="ledger-section-title">
                 <span>Confirmed Agreements</span>
-                <span style="color: #34d399;">🟢</span>
+                <span style="color: #10a37f;">🟢</span>
               </div>
               <div id="ledger-agreements-list" style="display:flex;flex-direction:column;gap:6px;"></div>
             </div>
@@ -1436,7 +1324,7 @@
             <div>
               <div class="ledger-section-title">
                 <span>Critical Divergences</span>
-                <span style="color: #f87171;">🔴</span>
+                <span style="color: #ef4444;">🔴</span>
               </div>
               <div id="ledger-divergences-list" style="display:flex;flex-direction:column;gap:6px;"></div>
             </div>
@@ -1444,7 +1332,7 @@
             <div>
               <div class="ledger-section-title">
                 <span>Open Hypotheses</span>
-                <span style="color: #c084fc;">🟣</span>
+                <span style="color: #60a5fa;">🟣</span>
               </div>
               <div id="ledger-questions-list" style="display:flex;flex-direction:column;gap:6px;"></div>
             </div>
@@ -1452,7 +1340,7 @@
         </aside>
       </div>
 
-      <!-- ── Contextual Inline Seat Inspector (Floating Amethyst Frosted Popover) ── -->
+      <!-- Inline Seat Inspector Popover -->
       <div id="seat-inline-inspector" class="seat-inline-inspector" role="dialog" aria-label="Seat Inspector">
         <div class="inspector-header-bar">
           <div class="inspector-model-identity">
@@ -1468,68 +1356,61 @@
           </div>
         </div>
 
-        <!-- Quick Persona Chips Bar -->
-        <div class="inspector-chips-carousel" id="inspector-chips-carousel">
-          <!-- Dynamically populated persona chips -->
-        </div>
+        <div class="inspector-chips-carousel" id="inspector-chips-carousel"></div>
 
-        <!-- Directive Editor -->
         <div class="inspector-field-group">
           <label class="inspector-field-label">
             <span>دستور سیستمی و پرومپت این صندلی (System Directive):</span>
           </label>
-          <textarea id="inspector-directive-input" class="inspector-directive-textarea" placeholder="دستورالعمل فکری و ماموریت این مدل..." dir="auto"></textarea>
+          <textarea id="inspector-directive-input" class="inspector-directive-textarea" placeholder="دستورالعمل فکری این مدل..." dir="auto"></textarea>
         </div>
 
-        <!-- Weight & Influence Slider -->
         <div class="inspector-slider-row">
           <span style="font-size:11px;color:#cbd5e1;font-weight:500;">وزن نفوذ رأی:</span>
           <input type="range" id="inspector-weight-slider" class="inspector-range-input" min="10" max="250" step="10" value="100" />
           <span id="inspector-weight-display" class="inspector-weight-value">100%</span>
         </div>
 
-        <!-- Actions Bar -->
         <div class="inspector-actions-bar">
           <button type="button" id="btn-inspector-mute" class="btn-inspector-action mute-btn">
             🔇 Mute
           </button>
           <div style="display:flex;gap:6px;">
-            <button type="button" id="btn-inspector-apply-all" class="btn-inspector-action" title="اعمال این پرسونا به تمام صندلی‌ها">
+            <button type="button" id="btn-inspector-apply-all" class="btn-inspector-action" title="اعمال به همه صندلی‌ها">
               اعمال به همه 🌐
             </button>
-            <button type="button" id="btn-inspector-save-preset" class="btn-inspector-action" style="color:#fde68a;" title="ذخیره این تنظیمات به عنوان الگوی آماده جدید">
+            <button type="button" id="btn-inspector-save-preset" class="btn-inspector-action" style="color:#fde68a;" title="ذخیره به عنوان الگوی آماده">
               + ذخیره الگو 💾
             </button>
           </div>
         </div>
       </div>
 
-      <!-- ── Re-engineered 4-Zone Logic Sanctum Atelier Drawer ── -->
+      <!-- Logic Sanctum Atelier Drawer -->
       <div id="sanctum-backdrop" class="sanctum-backdrop"></div>
       <aside id="logic-sanctum-drawer" class="logic-sanctum-drawer">
         <div class="sanctum-drawer-header">
           <div style="display:flex;align-items:center;gap:10px;">
-            <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg, rgba(245,158,11,0.3) 0%, rgba(244,114,182,0.25) 100%);border:1px solid rgba(245,158,11,0.5);display:flex;align-items:center;justify-content:center;color:#fde68a;">
+            <div style="width:32px;height:32px;border-radius:8px;background:#262626;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:#10a37f;">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="4"/></svg>
             </div>
             <div>
               <h3 style="margin:0;font-size:14px;color:#ffffff;">The Logic Sanctum Atelier</h3>
-              <p style="margin:2px 0 0;font-size:10.5px;color:#94a3b8;">استودیوی جامع ۴ منطقه‌ای: سناریوها، پرسوناها، سکو و موتور دیالکتیک</p>
+              <p style="margin:2px 0 0;font-size:10.5px;color:#9ca3af;">استودیوی جامع ۴ منطقه‌ای: سناریوها، پرسوناها، سکو و موتور دیالکتیک</p>
             </div>
           </div>
           <div style="display: flex; align-items: center; gap: 6px;">
             <input type="file" id="file-sanctum-import" accept=".json" style="display: none;" />
-            <button type="button" id="btn-sanctum-import-all" class="symposium-tool-btn" style="height: 28px; font-size: 10px;" title="درون‌ریزی سناریوها و الگوها از فایل JSON">
+            <button type="button" id="btn-sanctum-import-all" class="symposium-tool-btn" style="height: 28px; font-size: 10px;">
               درون‌ریزی 📥
             </button>
-            <button type="button" id="btn-sanctum-export-all" class="symposium-tool-btn" style="height: 28px; font-size: 10px;" title="استخراج تمام سناریوها و الگوها به عنوان JSON">
+            <button type="button" id="btn-sanctum-export-all" class="symposium-tool-btn" style="height: 28px; font-size: 10px;">
               استخراج 📤
             </button>
             <button type="button" id="btn-close-sanctum" class="symposium-tool-btn btn-close">✕</button>
           </div>
         </div>
 
-        <!-- 4-Zone Navigation Tabs -->
         <div class="sanctum-zones-nav">
           <button type="button" class="sanctum-zone-tab active" data-zone="scenarios">
             <span>🏛️ سناریوها</span>
@@ -1546,40 +1427,38 @@
         </div>
 
         <div class="sanctum-drawer-body">
-          <!-- ZONE 1: SCENARIOS SHOWCASE & BUILDER -->
           <div id="sanctum-zone-scenarios" class="sanctum-zone-panel" style="display: flex;">
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
               <div>
-                <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #fde68a;">سناریوهای جامع میزگرد</span>
-                <p style="margin: 2px 0 0; font-size: 10px; color: #94a3b8;">طراحی و اجرای سناریوهای سفارشی با اهداف، پرومپت و متدولوژی دلخواه</p>
+                <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #f3f4f6;">سناریوهای جامع میزگرد</span>
+                <p style="margin: 2px 0 0; font-size: 10px; color: #9ca3af;">طراحی و اجرای سناریوهای سفارشی</p>
               </div>
-              <button type="button" id="btn-show-create-scenario" class="btn-load-scenario" style="width: auto; padding: 4px 12px; margin: 0; background: rgba(245, 158, 11, 0.25); border-color: rgba(245, 158, 11, 0.6); color: #fef08a;">
+              <button type="button" id="btn-show-create-scenario" class="btn-load-scenario" style="width: auto; padding: 4px 12px; margin: 0; background: #262626; border-color: rgba(255,255,255,0.15); color: #ffffff;">
                 <span>+ ساخت سناریوی جدید</span>
               </button>
             </div>
 
-            <!-- Scenario Create/Edit Form (Hidden by default) -->
             <div id="sanctum-scenario-form-card" class="sanctum-form-card" style="display: none;">
               <input type="hidden" id="scenario-form-id" value="" />
               <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span id="scenario-form-heading" style="font-size: 11.5px; font-weight: 700; color: #fde68a;">ساخت سناریوی جدید</span>
-                <button type="button" id="btn-cancel-scenario-form" style="background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 12px;">✕</button>
+                <span id="scenario-form-heading" style="font-size: 11.5px; font-weight: 700; color: #ffffff;">ساخت سناریوی جدید</span>
+                <button type="button" id="btn-cancel-scenario-form" style="background: none; border: none; color: #9ca3af; cursor: pointer; font-size: 12px;">✕</button>
               </div>
 
               <div class="driver-sub-grid">
                 <div>
                   <label class="driver-sub-label">عنوان سناریو *</label>
-                  <input type="text" id="scenario-form-title" class="driver-text-input" placeholder="مثال: بازبینی معماری میکروسرویس..." required />
+                  <input type="text" id="scenario-form-title" class="driver-text-input" placeholder="عنوان سناریو..." required />
                 </div>
                 <div>
                   <label class="driver-sub-label">نشان / ایموجی</label>
-                  <input type="text" id="scenario-form-badge" class="driver-text-input" placeholder="مثال: 🏛️ Architecture" value="🏛️ سناریو" />
+                  <input type="text" id="scenario-form-badge" class="driver-text-input" value="🏛️ سناریو" />
                 </div>
               </div>
 
               <div>
                 <label class="driver-sub-label">توضیح کوتاه درباره هدف سناریو</label>
-                <input type="text" id="scenario-form-desc" class="driver-text-input" placeholder="شرح ماموریت شورا در این سناریو..." />
+                <input type="text" id="scenario-form-desc" class="driver-text-input" placeholder="شرح ماموریت شورا..." />
               </div>
 
               <div class="driver-sub-grid">
@@ -1595,13 +1474,13 @@
                 </div>
                 <div>
                   <label class="driver-sub-label">رنگ تم سناریو</label>
-                  <input type="color" id="scenario-form-color" class="driver-text-input" value="#f59e0b" style="padding: 2px 6px; height: 36px; cursor: pointer;" />
+                  <input type="color" id="scenario-form-color" class="driver-text-input" value="#10a37f" style="padding: 2px 6px; height: 36px; cursor: pointer;" />
                 </div>
               </div>
 
               <div>
                 <label class="driver-sub-label">پرومپت یا چالش آغازین سناریو</label>
-                <textarea id="scenario-form-prompt" class="driver-text-input sanctum-directive-editor" placeholder="پرسش یا مسئله‌ای که شورا با آن آغاز به کار می‌کند..." dir="auto"></textarea>
+                <textarea id="scenario-form-prompt" class="driver-text-input sanctum-directive-editor" placeholder="پرسش یا مسئله‌ای که شورا با آن آغاز می‌شود..." dir="auto"></textarea>
               </div>
 
               <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px;">
@@ -1615,45 +1494,43 @@
             <div id="sanctum-scenarios-grid" class="scenario-presets-grid"></div>
           </div>
 
-          <!-- ZONE 2: PERSONAS SHOWCASE & BUILDER -->
           <div id="sanctum-zone-personas" class="sanctum-zone-panel" style="display: none;">
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
               <div>
-                <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #c084fc;">کتابخانه پرسوناهای شناختی</span>
-                <p style="margin: 2px 0 0; font-size: 10px; color: #94a3b8;">تعریف و انتساب نقش‌های فکری، زاویه دیدهای نقادانه و دستورالعمل‌های تخصصی</p>
+                <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #f3f4f6;">کتابخانه پرسوناهای شناختی</span>
+                <p style="margin: 2px 0 0; font-size: 10px; color: #9ca3af;">تعریف و انتساب نقش‌های فکری و تخصصی</p>
               </div>
-              <button type="button" id="btn-show-create-persona" class="btn-load-scenario" style="width: auto; padding: 4px 12px; margin: 0; background: rgba(192, 132, 252, 0.25); border-color: rgba(192, 132, 252, 0.6); color: #e9d5ff;">
+              <button type="button" id="btn-show-create-persona" class="btn-load-scenario" style="width: auto; padding: 4px 12px; margin: 0; background: #262626; border-color: rgba(255,255,255,0.15); color: #ffffff;">
                 <span>+ ساخت پرسونای جدید</span>
               </button>
             </div>
 
-            <!-- Persona Create/Edit Form (Hidden by default) -->
-            <div id="sanctum-persona-form-card" class="sanctum-form-card" style="display: none; border-color: rgba(192, 132, 252, 0.45); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 16px rgba(192, 132, 252, 0.15);">
+            <div id="sanctum-persona-form-card" class="sanctum-form-card" style="display: none;">
               <input type="hidden" id="persona-form-id" value="" />
               <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span id="persona-form-heading" style="font-size: 11.5px; font-weight: 700; color: #e9d5ff;">ساخت پرسونای جدید</span>
-                <button type="button" id="btn-cancel-persona-form" style="background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 12px;">✕</button>
+                <span id="persona-form-heading" style="font-size: 11.5px; font-weight: 700; color: #ffffff;">ساخت پرسونای جدید</span>
+                <button type="button" id="btn-cancel-persona-form" style="background: none; border: none; color: #9ca3af; cursor: pointer; font-size: 12px;">✕</button>
               </div>
 
               <div class="driver-sub-grid">
                 <div>
                   <label class="driver-sub-label">عنوان و هویت پرسونا *</label>
-                  <input type="text" id="persona-form-title" class="driver-text-input" placeholder="مثال: منتقد بی‌رحم کد، معمار دیتابیس..." required />
+                  <input type="text" id="persona-form-title" class="driver-text-input" placeholder="مثال: منتقد کد، معمار..." required />
                 </div>
                 <div>
                   <label class="driver-sub-label">نشان / ایموجی</label>
-                  <input type="text" id="persona-form-badge" class="driver-text-input" placeholder="مثال: ⚔️ Critic" value="🎭 پرسونا" />
+                  <input type="text" id="persona-form-badge" class="driver-text-input" value="🎭 پرسونا" />
                 </div>
               </div>
 
               <div>
                 <label class="driver-sub-label">رنگ نشانگر پرسونا</label>
-                <input type="color" id="persona-form-color" class="driver-text-input" value="#c084fc" style="padding: 2px 6px; height: 36px; cursor: pointer;" />
+                <input type="color" id="persona-form-color" class="driver-text-input" value="#10a37f" style="padding: 2px 6px; height: 36px; cursor: pointer;" />
               </div>
 
               <div>
                 <label class="driver-sub-label">دستورالعمل سیستمی و مأموریت فکری پرسونا (Directive) *</label>
-                <textarea id="persona-form-directive" class="driver-text-input sanctum-directive-editor" placeholder="شما در این میزگرد چه نقشی دارید؟ اولویت‌ها، خط قرمزها و شیوه نقد شما چیست؟..." dir="auto" required></textarea>
+                <textarea id="persona-form-directive" class="driver-text-input sanctum-directive-editor" placeholder="دستورالعمل، اولویت‌ها و تخصص..." dir="auto" required></textarea>
               </div>
 
               <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px;">
@@ -1667,48 +1544,35 @@
             <div id="sanctum-personas-grid" class="persona-presets-grid"></div>
           </div>
 
-          <!-- ZONE 3: DAIS FLOOR PLAN & COMPLETE SEAT CONFIGURATION -->
           <div id="sanctum-zone-dais-floor" class="sanctum-zone-panel" style="display: none;">
-            <!-- Interactive Visual Amphitheater Circle -->
             <div class="dais-floor-plan-card">
               <div style="display: flex; align-items: center; justify-content: space-between;">
                 <div>
                   <span style="font-size: 11.5px; font-weight: 700; color: #f1f5f9;">چیدمان و انتخاب صندلی‌های شورا</span>
-                  <p style="margin: 2px 0 0; font-size: 10px; color: #94a3b8;">روی هر صندلی کلیک کنید تا مشخصات و پرومپت آن را در کادر زیر ویرایش نمایید</p>
+                  <p style="margin: 2px 0 0; font-size: 10px; color: #9ca3af;">روی هر صندلی کلیک کنید تا مشخصات آن در کادر زیر ویرایش شود</p>
                 </div>
-                <span class="driver-field-badge" style="background: rgba(192, 132, 252, 0.15); color: #e9d5ff;">Chamber Dais</span>
+                <span class="driver-field-badge">Chamber Dais</span>
               </div>
               <div id="dais-interactive-floor-circle" class="dais-interactive-circle"></div>
             </div>
 
-            <!-- Seat Switcher Ribbon (Pills for User & all AI models) -->
-            <div class="dais-seat-selector-bar" id="dais-seat-selector-bar">
-              <!-- Dynamically populated seat selector pills -->
-            </div>
-
-            <!-- Master Seat Editor (Dynamically configures Human OR any AI model) -->
-            <div id="dais-seat-editor-container" class="dais-seat-editor-card">
-              <!-- Dynamically rendered by renderDaisSeatEditor() -->
-            </div>
+            <div class="dais-seat-selector-bar" id="dais-seat-selector-bar"></div>
+            <div id="dais-seat-editor-container" class="dais-seat-editor-card"></div>
           </div>
 
-          <!-- ZONE 4: DIALECTIC ENGINE & METHODOLOGY (USER-FRIENDLY & INTUITIVE) -->
           <div id="sanctum-zone-engine" class="sanctum-zone-panel" style="display: none;">
-            
-            <!-- SECTION 1: CUSTOM FLOW & TOPOLOGY BUILDER -->
             <div class="engine-section-block">
               <div class="engine-section-header">
-                <span class="engine-section-title">۱. متدولوژی و الگوی جریان مذاکره (Dialectic Flow & Topology)</span>
+                <span class="engine-section-title">۱. متدولوژی و الگوی جریان مذاکره</span>
                 <span class="engine-section-badge">جریان مذاکره</span>
               </div>
-              <p class="engine-section-desc">متدولوژی نوبت‌دهی و ساختار گردش بحث را تنظیم یا از الگوهای جریان ذخیره‌شده انتخاب نمایید:</p>
+              <p class="engine-section-desc">متدولوژی نوبت‌دهی و گردش بحث شورا:</p>
 
-              <!-- Saved Flow Presets Row -->
-              <div class="driver-field-card" style="padding: 10px 14px; background: rgba(255, 255, 255, 0.03);">
+              <div class="driver-field-card" style="padding: 10px 14px;">
                 <div class="driver-field-top" style="margin-bottom: 6px;">
-                  <label class="driver-sub-label" style="margin: 0; color: #fde68a;">الگوهای ذخیره‌شده جریان مذاکره:</label>
+                  <label class="driver-sub-label" style="margin: 0;">الگوهای ذخیره‌شده جریان مذاکره:</label>
                   <div style="display: flex; gap: 6px;">
-                    <button type="button" id="btn-save-current-flow-preset" class="btn-custom-bot-link" style="color: #fde68a; font-size: 11px;">+ ذخیره به عنوان الگوی جدید</button>
+                    <button type="button" id="btn-save-current-flow-preset" class="btn-custom-bot-link" style="font-size: 11px;">+ ذخیره الگوی جدید</button>
                     <button type="button" id="btn-del-flow-preset" class="btn-custom-bot-link" style="color: #f87171; font-size: 11px; display: none;">حذف این الگو</button>
                   </div>
                 </div>
@@ -1717,155 +1581,138 @@
                 </select>
               </div>
 
-              <!-- Base Flow Selector -->
               <div class="driver-sub-grid">
                 <div>
-                  <label class="driver-sub-label">هسته ساختار نوبت‌دهی (Core Mechanism)</label>
+                  <label class="driver-sub-label">هسته ساختار نوبت‌دهی</label>
                   <select id="sanctum-topology-select" class="driver-select-input" dir="rtl">
-                    <option value="manual">Manual Conductor (دستی با عصای نوبت - تمرکز و کنترل کامل)</option>
-                    <option value="round_robin">Orderly Round-Robin (ترتیبی صندلی به صندلی)</option>
-                    <option value="socratic">Socratic Dialectic (تناوب و نقد متقابل)</option>
-                    <option value="delphi">Delphi Convergence (همگرایی مرحله‌ای)</option>
-                    <option value="random">Dynamic Random (پینگ‌پنگ تصادفی پویا)</option>
-                    <option value="autonomous">Fully Autonomous Flow (جریان خودگردان پیوسته)</option>
+                    <option value="manual">Manual Conductor (دستی با عصای نوبت)</option>
+                    <option value="round_robin">Orderly Round-Robin (ترتیبی)</option>
+                    <option value="socratic">Socratic Dialectic (سقراطی)</option>
+                    <option value="delphi">Delphi Convergence (دلفی)</option>
+                    <option value="random">Dynamic Random (تصادفی)</option>
+                    <option value="autonomous">Fully Autonomous Flow (خودکار)</option>
                   </select>
                 </div>
                 <div>
-                  <label class="driver-sub-label">تأخیر خودکار بین نوبت‌ها (میلی‌ثانیه)</label>
+                  <label class="driver-sub-label">تأخیر خودکار بین نوبت‌ها (ms)</label>
                   <div class="driver-input-row">
                     <input type="number" id="sanctum-flow-delay" class="driver-text-input" min="500" max="10000" step="200" value="2400" />
                     <span class="unit-tag">ms</span>
                   </div>
                 </div>
               </div>
-
             </div>
 
-            <!-- SECTION 2: PROMPT FORMULA TEMPLATES & ADVANCED EDITOR -->
             <div class="engine-section-block">
               <div class="engine-section-header">
-                <span class="engine-section-title">۲. اسکلت و فرمول پرومپت تزریقی (Prompt Architecture)</span>
+                <span class="engine-section-title">۲. اسکلت و فرمول پرومپت تزریقی</span>
                 <span class="engine-section-badge">دستور تزریق</span>
               </div>
-              <p class="engine-section-desc">فرمول اسکلت پرومپت تزریقی در هر نوبت از شورا. متغیرهای هوشمند را درج کنید یا از الگوهای ذخیره‌شده بهره ببرید:</p>
+              <p class="engine-section-desc">فرمول اسکلت پرومپت در هر نوبت از شورا:</p>
 
-              <!-- Saved Template Presets Row -->
-              <div class="driver-field-card" style="padding: 10px 14px; background: rgba(255, 255, 255, 0.035);">
+              <div class="driver-field-card" style="padding: 10px 14px;">
                 <div class="driver-field-top" style="margin-bottom: 6px;">
-                  <label class="driver-field-label" style="font-size: 11.5px; color: #fde68a;">
+                  <label class="driver-field-label" style="font-size: 11.5px;">
                     <span>الگوهای ذخیره‌شده فرمول پرومپت:</span>
                   </label>
                   <div style="display: flex; gap: 6px;">
-                    <button type="button" id="btn-save-current-formula-preset" class="btn-custom-bot-link" style="color: #fde68a; font-size: 11px;">+ ذخیره به عنوان الگوی پرومپت</button>
+                    <button type="button" id="btn-save-current-formula-preset" class="btn-custom-bot-link" style="font-size: 11px;">+ ذخیره الگوی پرومپت</button>
                     <button type="button" id="btn-del-formula-preset" class="btn-custom-bot-link" style="color: #f87171; font-size: 11px; display: none;">حذف این الگو</button>
                   </div>
                 </div>
                 <select id="sanctum-prompt-template-preset-select" class="driver-select-input" dir="rtl">
-                  <option value="">-- هیچ الگوی پرومپتی ذخیره نشده است (آزادانه در کادر زیر بنویسید) --</option>
+                  <option value="">-- هیچ الگوی پرومپتی ذخیره نشده است --</option>
                 </select>
               </div>
 
-              <!-- Dedicated Spacious Prompt Formula Editor Card -->
               <div class="formula-editor-card">
                 <div class="formula-editor-toolbar">
                   <div class="formula-toolbar-title-group">
                     <span class="formula-toolbar-icon">⚡</span>
-                    <span class="formula-toolbar-title">ویرایشگر آزاد فرمول دیالکتیک</span>
+                    <span class="formula-toolbar-title">ویرایشگر فرمول دیالکتیک</span>
                     <span id="formula-stats-badge" class="formula-stats-badge">۰ نویسه</span>
                   </div>
                   <div class="formula-toolbar-actions">
-                    <button type="button" id="btn-copy-formula" class="btn-formula-tool" title="کپی فرمول پرومپت">
+                    <button type="button" id="btn-copy-formula" class="btn-formula-tool">
                       <span>کپی 📋</span>
                     </button>
-                    <button type="button" id="btn-clear-formula" class="btn-formula-tool reset" title="پاک‌سازی متن فرمول">
+                    <button type="button" id="btn-clear-formula" class="btn-formula-tool reset">
                       <span>پاک کردن 🗑️</span>
                     </button>
                   </div>
                 </div>
 
                 <div class="formula-textarea-wrapper">
-                  <textarea id="sanctum-template-textarea" class="formula-textarea" placeholder="فرمول دلخواه ساختار پرومپت شورا... متغیرهای زیر را در هر کجای متن درج نمایید." dir="rtl"></textarea>
+                  <textarea id="sanctum-template-textarea" class="formula-textarea" placeholder="فرمول دلخواه ساختار پرومپت شورا..." dir="rtl"></textarea>
                 </div>
 
-                <!-- Macro Tags Section with Clear Instructions -->
                 <div class="formula-macros-wrapper">
                   <div class="macros-header-row">
-                    <span class="macros-header-title">متغیرهای هوشمند پویا (برای درج مستقیم در محل نشانگر کلیک کنید):</span>
+                    <span class="macros-header-title">متغیرهای هوشمند پویا (برای درج کلیک کنید):</span>
                     <span class="macros-hint-pill">Dynamic Injection</span>
                   </div>
                   <div id="sanctum-macro-chips" class="macro-chips-flow">
-                    <button type="button" class="macro-chip-btn" data-macro="{{speaker_role}}" title="دستورالعمل و پرسونای تخصصی هوش فعال"><code>{{speaker_role}}</code> <small>(نقش و پرسونای مدل)</small></button>
-                    <button type="button" class="macro-chip-btn" data-macro="{{user_core_prompt}}" title="پرسش بنیادین یا چالش اصلی کاربر"><code>{{user_core_prompt}}</code> <small>(چالش اصلی کاربر)</small></button>
-                    <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_name}}" title="نام هوش یا کاربری که دور قبل سخن گفت"><code>{{last_speaker_name}}</code> <small>(نام گوینده قبلی)</small></button>
-                    <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_argument}}" title="خلاصه استدلال و سخن دور قبلی"><code>{{last_speaker_argument}}</code> <small>(استدلال دور قبلی)</small></button>
-                    <button type="button" class="macro-chip-btn" data-macro="{{round_context_brief}}" title="خلاصه سوابق مذاکرات و نوبت‌های گذشته"><code>{{round_context_brief}}</code> <small>(خلاصه روند تا الان)</small></button>
-                    <button type="button" class="macro-chip-btn" data-macro="{{consensus_agreements}}" title="فهرست توافقات ثبت‌شده در دفتر اجماع"><code>{{consensus_agreements}}</code> <small>(توافقات شورا)</small></button>
-                    <button type="button" class="macro-chip-btn" data-macro="{{consensus_gaps}}" title="فهرست نقاط اختلاف و گره‌های باقیمانده"><code>{{consensus_gaps}}</code> <small>(نقاط اختلاف)</small></button>
-                    <button type="button" class="macro-chip-btn" data-macro="{{round_number}}" title="شماره دور فعلی مذاکره"><code>{{round_number}}</code> <small>(شماره دور)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{speaker_role}}"><code>{{speaker_role}}</code> <small>(نقش مدل)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{user_core_prompt}}"><code>{{user_core_prompt}}</code> <small>(چالش کاربر)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_name}}"><code>{{last_speaker_name}}</code> <small>(گوینده قبلی)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_argument}}"><code>{{last_speaker_argument}}</code> <small>(استدلال قبلی)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{round_context_brief}}"><code>{{round_context_brief}}</code> <small>(سوابق روند)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{consensus_agreements}}"><code>{{consensus_agreements}}</code> <small>(توافقات)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{consensus_gaps}}"><code>{{consensus_gaps}}</code> <small>(نقاط اختلاف)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{round_number}}"><code>{{round_number}}</code> <small>(شماره دور)</small></button>
                   </div>
                 </div>
-
               </div>
             </div>
 
-            <!-- SECTION 3: PROTOCOLS, ROUND LIMITS & GLOBAL MANDATE -->
             <div class="engine-section-block">
               <div class="engine-section-header">
-                <span class="engine-section-title">۳. قوانین کلان و دستورالعمل مشترک (Global Directive & Rules)</span>
-                <span class="engine-section-badge">محدودیت‌ها و احکام</span>
+                <span class="engine-section-title">۳. قوانین کلان و دستورالعمل مشترک</span>
+                <span class="engine-section-badge">احکام</span>
               </div>
 
               <div class="driver-sub-grid">
                 <div class="driver-field-card" style="padding: 12px 14px;">
                   <label class="driver-sub-label">سقف تعداد دورهای مناظره (Max Rounds)</label>
                   <input type="number" id="sanctum-max-rounds" class="driver-text-input" min="1" max="50" value="10" />
-                  <span style="font-size:9.5px;color:#94a3b8;margin-top:3px;">پس از رسیدن به این دور، جلسه متوقف می‌شود.</span>
                 </div>
                 <div class="driver-field-card" style="padding: 12px 14px;">
                   <label class="driver-sub-label">مدیریت حجم تاریخچه (Context Distillation)</label>
                   <select id="sanctum-distill-select" class="driver-select-input" dir="rtl">
-                    <option value="digest">Executive Digest (خلاصه نکات کلیدی - بهینه‌سازی توکن)</option>
-                    <option value="verbatim">Full Verbatim (ارسال کامل متن‌های قبلی بدون تلخیص)</option>
+                    <option value="digest">Executive Digest (خلاصه نکات - بهینه‌سازی توکن)</option>
+                    <option value="verbatim">Full Verbatim (ارسال کامل متن‌ها)</option>
                   </select>
-                  <span style="font-size:9.5px;color:#94a3b8;margin-top:3px;">جلوگیری از سرریز شدن سقف کانتکست پنجره مدل‌ها.</span>
                 </div>
               </div>
 
-              <!-- Global Mandate Field -->
-              <div class="driver-field-card" style="border-color: rgba(254, 215, 170, 0.35); background: rgba(245, 158, 11, 0.05); padding: 14px 16px;">
+              <div class="driver-field-card" style="padding: 14px 16px;">
                 <div class="driver-field-top" style="margin-bottom: 6px;">
-                  <label class="driver-field-label" style="color: #fde68a;">
+                  <label class="driver-field-label">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
                     <span>دستورالعمل مشترک اجباری برای تمام مدل‌ها (Global Mandate)</span>
                   </label>
                   <div style="display: flex; gap: 6px;">
-                    <button type="button" id="btn-save-current-global-directive-preset" class="btn-custom-bot-link" style="color: #fde68a; font-size: 11px;">+ ذخیره به عنوان الگوی آماده</button>
+                    <button type="button" id="btn-save-current-global-directive-preset" class="btn-custom-bot-link" style="font-size: 11px;">+ ذخیره به عنوان الگوی آماده</button>
                     <button type="button" id="btn-del-global-directive-preset" class="btn-custom-bot-link" style="color: #f87171; font-size: 11px; display: none;">حذف این الگو</button>
                   </div>
                 </div>
                 <select id="sanctum-global-directive-preset-select" class="driver-select-input" dir="rtl" style="margin-bottom: 8px;">
-                  <option value="">-- الگوهای ذخیره‌شده دستورالعمل مشترک (می‌توانید مستقیم بنویسید) --</option>
+                  <option value="">-- الگوهای ذخیره‌شده دستورالعمل مشترک --</option>
                 </select>
-                <textarea id="sanctum-global-directive" class="driver-text-input sanctum-directive-editor" placeholder="دستوری که به ابتدای پرومپت همه مدل‌ها افزوده می‌شود (مثلاً ادبیات نگارش، استانداردهای فنی، پرهیز از تملق)..." dir="rtl"></textarea>
+                <textarea id="sanctum-global-directive" class="driver-text-input sanctum-directive-editor" placeholder="دستوری که به ابتدای پرومپت همه مدل‌ها افزوده می‌شود..." dir="rtl"></textarea>
               </div>
 
               <button type="button" id="btn-save-protocols" class="btn-save-driver-master" style="margin-top: 6px;">
                 <span>ذخیره و تثبیت کلیه تنظیمات موتور مناظره ✓</span>
               </button>
             </div>
-
           </div>
         </div>
       </aside>
     </div>
 
-    <!-- Module D: The Celestial Council Chamber (Andrej Karpathy's 3-Stage LLM Council) -->
+    <!-- Module D: The Celestial Council Chamber -->
     <div id="council-chamber-overlay" class="council-chamber-overlay" aria-label="The Celestial Council">
-      <div class="council-aurora-glow council-aurora-left"></div>
-      <div class="council-aurora-glow council-aurora-right"></div>
-      <div class="council-aurora-glow council-aurora-center"></div>
-
-      <!-- Council Header Bar -->
       <header class="council-header-bar">
         <div class="council-brand-group">
           <div class="council-gem-icon">
@@ -1882,7 +1729,6 @@
           </div>
         </div>
 
-        <!-- Stage Timeline Navigation -->
         <div class="council-stage-timeline">
           <div class="council-stage-step active" data-stage="1">
             <span class="step-dot"></span>
@@ -1900,7 +1746,6 @@
           </div>
         </div>
 
-        <!-- Header Actions: Chairman Pill & Close -->
         <div class="council-header-actions">
           <input type="file" id="file-council-import" accept=".json" style="display: none;" />
           <button type="button" id="btn-council-import-json" class="btn-council-action" title="بازیابی جلسه شورا از فایل JSON">
@@ -1920,24 +1765,21 @@
         </div>
       </header>
 
-      <!-- Council Main Content Viewport -->
       <main class="council-chamber-body">
-        
-        <!-- View A: Setup / Query Input & Council Selection -->
         <div id="council-setup-view" class="council-setup-card">
           <div class="council-query-box">
-            <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #fbcfe8;">
+            <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #f3f4f6;">
               Challenge for the Council (پرسش یا چالش مطرح شده):
             </label>
-            <textarea id="council-query-input" class="council-textarea" placeholder="Pose a complex query, scientific debate, or architectural question for the Council to resolve... (Auto RTL/LTR)" rows="3"></textarea>
+            <textarea id="council-query-input" class="council-textarea" placeholder="Pose a complex query or debate for the Council to resolve... (Auto RTL/LTR)" rows="3"></textarea>
           </div>
 
           <div>
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-              <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #a5b4fc;">
+              <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #d1d5db;">
                 Selected Council Members & Chairman:
               </span>
-              <span style="font-size: 10px; color: #94a3b8;">Choose 2–6 models</span>
+              <span style="font-size: 10px; color: #9ca3af;">Choose 2–6 models</span>
             </div>
             <div id="council-model-picker-grid" class="council-selection-grid"></div>
           </div>
@@ -1948,16 +1790,10 @@
           </button>
         </div>
 
-        <!-- View B: Running / Results Stage Display -->
         <div id="council-stage-view" style="display: none; flex-direction: column; gap: 20px;">
-          
-          <!-- Stage 1 Container: First Opinions Comparison Grid -->
           <div id="council-stage1-container" class="stage-opinions-grid"></div>
-
-          <!-- Stage 2 Container: Peer Review Matrix -->
           <div id="council-stage2-container" class="peer-review-matrix" style="display: none;"></div>
 
-          <!-- Stage 3 Container: Consensus Throne -->
           <div id="council-stage3-container" class="consensus-throne-card" style="display: none;">
             <div class="throne-header">
               <div class="throne-title-block">
@@ -1978,7 +1814,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
                 <span>Export Council Briefing (.md)</span>
               </button>
-              <button type="button" id="btn-council-copy-synthesis" class="btn-council-action" style="background: rgba(192, 132, 252, 0.2); border-color: rgba(192, 132, 252, 0.5); color: #ffffff;">
+              <button type="button" id="btn-council-copy-synthesis" class="btn-council-action" style="background: #2a2a2a; border-color: rgba(255,255,255,0.2); color: #ffffff;">
                 <span>Copy Master Answer</span>
               </button>
               <button type="button" id="btn-council-restart" class="btn-council-action" style="margin-left: 10px;">
@@ -1987,24 +1823,21 @@
             </div>
           </div>
 
-          <!-- Bottom Floating Stage Transition Actions -->
           <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
-            <button type="button" id="btn-council-proceed-stage2" class="btn-council-action" style="display: none; background: linear-gradient(135deg, rgba(244, 114, 182, 0.3), rgba(192, 132, 252, 0.4)); color: #ffffff; font-weight: 600;">
+            <button type="button" id="btn-council-proceed-stage2" class="btn-council-action" style="display: none; background: #2a2a2a; color: #ffffff; font-weight: 600;">
               <span>Proceed to Peer Review (مرحله دوم: بررسی همتایان) →</span>
             </button>
-            <button type="button" id="btn-council-proceed-stage3" class="btn-council-action" style="display: none; background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(192, 132, 252, 0.4)); color: #ffffff; font-weight: 600;">
+            <button type="button" id="btn-council-proceed-stage3" class="btn-council-action" style="display: none; background: #10a37f; color: #ffffff; font-weight: 600;">
               <span>Summon Chairman Synthesis (مرحله سوم: سنتز رئیس شورا) →</span>
             </button>
           </div>
-
         </div>
       </main>
     </div>
 
-    <!-- Modal: Universal Data Vault (صندوق جامع پشتیبان‌گیری و انتقال داده‌ها) -->
+    <!-- Modal: Universal Data Vault -->
     <div id="modal-data-vault" class="modal-veil hidden">
       <div class="modal-card data-vault-modal-card">
-        <!-- Vault Header -->
         <div class="vault-header-bar">
           <div class="vault-title-group">
             <div class="vault-gem-badge">
@@ -2022,7 +1855,6 @@
           <button id="btn-close-data-vault" class="modal-close-icon" title="بستن (Esc)">✕</button>
         </div>
 
-        <!-- Vault Tabs Switcher -->
         <div class="vault-tabs-nav">
           <button type="button" class="vault-tab-btn active" data-tab="master">
             <span>🌟 پشتیبان کامل (Master Backup)</span>
@@ -2035,14 +1867,11 @@
           </button>
         </div>
 
-        <!-- Vault Body Content -->
         <div class="vault-body-content">
-          <!-- Panel 1: Master Backup -->
           <div id="vault-tab-master" style="display: flex; flex-direction: column; gap: 16px;">
             <div class="vault-master-hero">
-              <!-- Export All Card -->
               <div class="vault-action-card hero-export">
-                <div class="vault-card-icon" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">
+                <div class="vault-card-icon" style="background: rgba(16, 185, 129, 0.2); color: #10a37f;">
                   💾
                 </div>
                 <h4>پشتیبان‌گیری یکپارچه از همه‌چیز</h4>
@@ -2053,9 +1882,8 @@
                 </button>
               </div>
 
-              <!-- Import All Card -->
               <div class="vault-action-card hero-import">
-                <div class="vault-card-icon" style="background: rgba(192, 132, 252, 0.2); color: #c084fc;">
+                <div class="vault-card-icon" style="background: #2a2a2a; color: #ececec;">
                   🔄
                 </div>
                 <h4>بازیابی و درون‌ریزی کامل</h4>
@@ -2064,7 +1892,7 @@
                 <div id="vault-master-dropzone" class="vault-dropzone">
                   <span style="font-size: 20px;">📁</span>
                   <span style="font-size: 11.5px; color: #f1f5f9; font-weight: 500;">فایل پشتیبان را اینجا بکشید و رها کنید</span>
-                  <span style="font-size: 10px; color: #94a3b8;">یا روی دکمه زیر کلیک نمایید</span>
+                  <span style="font-size: 10px; color: #9ca3af;">یا روی دکمه زیر کلیک نمایید</span>
                 </div>
 
                 <input type="file" id="file-vault-import-master" accept=".json,.omniai.json" style="display: none;" />
@@ -2076,10 +1904,8 @@
             </div>
           </div>
 
-          <!-- Panel 2: Granular Modules -->
           <div id="vault-tab-granular" style="display: none; flex-direction: column; gap: 10px;">
             <div class="vault-modules-grid">
-              <!-- Module: Canvas & Cards -->
               <div class="vault-module-row">
                 <div class="module-row-info">
                   <div class="module-icon-gem">🖼️</div>
@@ -2099,7 +1925,6 @@
                 </div>
               </div>
 
-              <!-- Module: Neural DOM Drivers -->
               <div class="vault-module-row">
                 <div class="module-row-info">
                   <div class="module-icon-gem">🧠</div>
@@ -2119,7 +1944,6 @@
                 </div>
               </div>
 
-              <!-- Module: Silk Symposium -->
               <div class="vault-module-row">
                 <div class="module-row-info">
                   <div class="module-icon-gem">🏛️</div>
@@ -2139,7 +1963,6 @@
                 </div>
               </div>
 
-              <!-- Module: Mirror Chats -->
               <div class="vault-module-row">
                 <div class="module-row-info">
                   <div class="module-icon-gem">💬</div>
@@ -2159,7 +1982,6 @@
                 </div>
               </div>
 
-              <!-- Module: Celestial Council -->
               <div class="vault-module-row">
                 <div class="module-row-info">
                   <div class="module-icon-gem">👑</div>
@@ -2181,7 +2003,6 @@
             </div>
           </div>
 
-          <!-- Panel 3: Maintenance & Reset -->
           <div id="vault-tab-maintenance" style="display: none; flex-direction: column; gap: 14px;">
             <div class="vault-danger-box">
               <div class="danger-item-row">
@@ -2274,7 +2095,7 @@
               <circle cx="12" cy="12" r="10"/>
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 16v-4m0-4h.01"/>
             </svg>
-            <h3>Haute Spatial Keyboard Engine</h3>
+            <h3>Keyboard Shortcuts</h3>
           </div>
           <button class="modal-close-icon" data-close-modal="modal-shortcuts">✕</button>
         </div>
@@ -2283,19 +2104,19 @@
           <div class="shortcuts-table">
             <div class="shortcut-entry">
               <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>⌥ Alt</kbd><kbd>E</kbd></div>
-              <span class="shortcut-legend">Open Universal Data Vault (صندوق جامع داده‌ها و پشتیبان‌گیری)</span>
+              <span class="shortcut-legend">Open Universal Data Vault</span>
             </div>
             <div class="shortcut-entry">
               <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>⌥ Alt</kbd><kbd>S</kbd></div>
-              <span class="shortcut-legend">Convene The Silk Symposium (Infinite Multi-AI Roundtable Agora)</span>
+              <span class="shortcut-legend">Convene The Silk Symposium</span>
             </div>
             <div class="shortcut-entry">
               <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>⌥ Alt</kbd><kbd>C</kbd></div>
-              <span class="shortcut-legend">Convene The Celestial Council (LLM Council Chamber)</span>
+              <span class="shortcut-legend">Convene The Celestial Council</span>
             </div>
             <div class="shortcut-entry">
               <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>P</kbd></div>
-              <span class="shortcut-legend">Open Silk Pavilion (Atelier Studio Chamber)</span>
+              <span class="shortcut-legend">Open Silk Pavilion (Atelier Chamber)</span>
             </div>
             <div class="shortcut-entry">
               <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>K</kbd></div>
@@ -2311,7 +2132,7 @@
             </div>
             <div class="shortcut-entry">
               <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd> + <kbd>Wheel</kbd></div>
-              <span class="shortcut-legend">Pinch or zoom infinite canvas</span>
+              <span class="shortcut-legend">Zoom infinite canvas</span>
             </div>
             <div class="shortcut-entry">
               <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>⇧ Shift</kbd><kbd>L</kbd></div>
@@ -2323,11 +2144,11 @@
             </div>
             <div class="shortcut-entry">
               <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>0</kbd></div>
-              <span class="shortcut-legend">Fit all sanctuary cards into view</span>
+              <span class="shortcut-legend">Fit all cards into view</span>
             </div>
             <div class="shortcut-entry">
               <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>Z</kbd></div>
-              <span class="shortcut-legend">Toggle Zen Mode (Zero-waste full immersion)</span>
+              <span class="shortcut-legend">Toggle Zen Mode</span>
             </div>
             <div class="shortcut-entry">
               <div class="shortcut-keys-combo"><kbd>Escape</kbd></div>

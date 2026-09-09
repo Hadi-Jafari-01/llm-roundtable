@@ -1,5 +1,5 @@
 /**
- * OmniAI Hub — Reset & Base Stylesheet
+ * OmniAI Hub — Reset & Base Stylesheet (Clean Dark Architecture)
  */
 
 *, *::before, *::after {
@@ -35,29 +35,33 @@ button, input, textarea, select {
 
 input::placeholder,
 textarea::placeholder {
-  color: #64748b;
+  color: #8e8e8e;
   opacity: 0.85;
 }
 
-/* Custom Sleek Glass Scrollbars for all inputs & textareas */
+/* Sleek Minimalist Scrollbars */
 textarea::-webkit-scrollbar,
-input::-webkit-scrollbar {
+input::-webkit-scrollbar,
+div::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
 textarea::-webkit-scrollbar-track,
-input::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.02);
+input::-webkit-scrollbar-track,
+div::-webkit-scrollbar-track {
+  background: transparent;
   border-radius: 4px;
 }
 textarea::-webkit-scrollbar-thumb,
-input::-webkit-scrollbar-thumb {
-  background: rgba(192, 132, 252, 0.28);
+input::-webkit-scrollbar-thumb,
+div::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
   border-radius: 4px;
 }
 textarea::-webkit-scrollbar-thumb:hover,
-input::-webkit-scrollbar-thumb:hover {
-  background: rgba(192, 132, 252, 0.55);
+input::-webkit-scrollbar-thumb:hover,
+div::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.32);
 }
 
 button {

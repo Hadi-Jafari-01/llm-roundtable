@@ -1,30 +1,29 @@
 /* ==========================================================================
    OmniAI Hub — Universal Data Vault & Backup Studio Stylesheet
-   Quiet Luxury • Cupertino × Teenage Engineering Translucency
+   Clean Dark Architecture (#212121 & #171717) • ChatGPT / DeepSeek Charcoal
    ========================================================================== */
 
 .data-vault-modal-card {
   width: 820px !important;
   max-width: calc(100vw - 32px) !important;
   max-height: calc(100vh - 40px) !important;
-  background: linear-gradient(175deg, rgba(18, 14, 32, 0.97) 0%, rgba(10, 8, 20, 0.99) 100%) !important;
-  border: 1px solid rgba(192, 132, 252, 0.32) !important;
-  box-shadow: 0 32px 85px -10px rgba(0, 0, 0, 0.92),
-              0 0 35px rgba(192, 132, 252, 0.2),
-              inset 0 1px 1px rgba(255, 255, 255, 0.18) !important;
-  border-radius: 20px !important;
+  background: #212121 !important; /* Authentic ChatGPT dark theme modal */
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8) !important;
+  border-radius: 16px !important;
   display: flex !important;
   flex-direction: column !important;
   overflow: hidden !important;
   padding: 0 !important;
+  color: #ececec !important;
 }
 
 .vault-header-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 24px;
-  background: rgba(255, 255, 255, 0.03);
+  padding: 14px 22px;
+  background: #171717; /* Sidebar & header tone */
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -35,21 +34,20 @@
 }
 
 .vault-gem-badge {
-  width: 38px;
-  height: 38px;
-  border-radius: 11px;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(129, 140, 248, 0.3) 50%, rgba(192, 132, 252, 0.3) 100%);
-  border: 1px solid rgba(16, 185, 129, 0.5);
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #262626;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6ee7b7;
-  box-shadow: 0 0 16px rgba(16, 185, 129, 0.35);
+  color: #10a37f;
 }
 
 .vault-title-group h3 {
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 14.5px;
+  font-weight: 600;
   color: #ffffff;
   margin: 0;
   letter-spacing: -0.01em;
@@ -57,7 +55,7 @@
 
 .vault-title-group p {
   font-size: 11px;
-  color: #94a3b8;
+  color: #9ca3af;
   margin: 2px 0 0;
 }
 
@@ -66,8 +64,8 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 10px 24px;
-  background: rgba(0, 0, 0, 0.25);
+  padding: 8px 22px;
+  background: #1a1a1a;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -76,37 +74,37 @@
   align-items: center;
   gap: 6px;
   padding: 6px 14px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.035);
+  border-radius: 8px;
+  background: #262626;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #94a3b8;
+  color: #9ca3af;
   font-size: 11.5px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: all 0.16s ease;
   font-family: inherit;
 }
 
 .vault-tab-btn:hover {
-  background: rgba(255, 255, 255, 0.07);
+  background: #2f2f2f;
   color: #ffffff;
 }
 
 .vault-tab-btn.active {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.22) 0%, rgba(129, 140, 248, 0.25) 100%);
-  border-color: rgba(16, 185, 129, 0.6);
+  background: #333333;
+  border-color: rgba(255, 255, 255, 0.25);
   color: #ffffff;
   font-weight: 600;
-  box-shadow: 0 0 14px rgba(16, 185, 129, 0.25);
 }
 
 .vault-body-content {
   flex: 1;
   overflow-y: auto;
-  padding: 20px 24px;
+  padding: 20px 22px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  background: #212121;
 }
 
 /* Master Hero Box */
@@ -117,102 +115,92 @@
 }
 
 .vault-action-card {
-  padding: 20px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  padding: 18px;
+  border-radius: 12px;
+  background: #262626;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
   gap: 12px;
-  transition: all 0.22s ease;
+  transition: all 0.18s ease;
 }
 
 .vault-action-card:hover {
-  background: rgba(255, 255, 255, 0.055);
-  border-color: rgba(192, 132, 252, 0.35);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  background: #2a2a2a;
+  border-color: rgba(255, 255, 255, 0.16);
 }
 
-.vault-action-card.hero-export {
-  border-color: rgba(16, 185, 129, 0.4);
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(129, 140, 248, 0.06) 100%);
-}
-
+.vault-action-card.hero-export,
 .vault-action-card.hero-import {
-  border-color: rgba(192, 132, 252, 0.4);
-  background: linear-gradient(135deg, rgba(192, 132, 252, 0.08) 0%, rgba(244, 114, 182, 0.06) 100%);
+  background: #262626;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .vault-card-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #202020;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  font-size: 18px;
 }
 
 .vault-action-card h4 {
-  font-size: 14.5px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   color: #ffffff;
   margin: 0;
 }
 
 .vault-action-card p {
   font-size: 11.5px;
-  color: #94a3b8;
+  color: #9ca3af;
   line-height: 1.55;
   margin: 0;
 }
 
 .btn-vault-hero-action {
-  height: 40px;
+  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border-radius: 10px;
+  border-radius: 8px;
   border: none;
   font-size: 12.5px;
   font-weight: 600;
   cursor: pointer;
   margin-top: auto;
-  transition: all 0.2s ease;
+  transition: all 0.16s ease;
   font-family: inherit;
 }
 
 .btn-vault-hero-action.export {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: #10a37f;
   color: #ffffff;
-  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.4);
 }
 
 .btn-vault-hero-action.export:hover {
-  transform: translateY(-1.5px);
-  box-shadow: 0 6px 24px rgba(16, 185, 129, 0.6);
-  filter: brightness(1.08);
+  background: #0d8a6a;
 }
 
 .btn-vault-hero-action.import {
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+  background: #333333;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: #ffffff;
-  box-shadow: 0 4px 18px rgba(139, 92, 246, 0.4);
 }
 
 .btn-vault-hero-action.import:hover {
-  transform: translateY(-1.5px);
-  box-shadow: 0 6px 24px rgba(139, 92, 246, 0.6);
-  filter: brightness(1.08);
+  background: #3d3d3d;
 }
 
 /* Master Drag & Drop Zone */
 .vault-dropzone {
-  border: 2px dashed rgba(192, 132, 252, 0.35);
-  border-radius: 12px;
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
   padding: 16px;
   text-align: center;
   display: flex;
@@ -220,16 +208,15 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  background: rgba(192, 132, 252, 0.04);
-  transition: all 0.2s ease;
+  background: #1a1a1a;
+  transition: all 0.18s ease;
   cursor: pointer;
 }
 
 .vault-dropzone:hover,
 .vault-dropzone.drag-over {
-  border-color: #c084fc;
-  background: rgba(192, 132, 252, 0.12);
-  box-shadow: 0 0 20px rgba(192, 132, 252, 0.3);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: #222222;
 }
 
 /* Granular Modules List */
@@ -244,16 +231,16 @@
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  padding: 14px 18px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.035);
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #262626;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: all 0.18s ease;
+  transition: all 0.16s ease;
 }
 
 .vault-module-row:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(192, 132, 252, 0.3);
+  background: #2a2a2a;
+  border-color: rgba(255, 255, 255, 0.16);
 }
 
 .module-row-info {
@@ -264,20 +251,20 @@
 }
 
 .module-icon-gem {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #202020;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 15px;
   flex-shrink: 0;
 }
 
 .module-text-stack h5 {
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
   color: #ffffff;
   margin: 0;
@@ -285,7 +272,7 @@
 
 .module-text-stack p {
   font-size: 11px;
-  color: #94a3b8;
+  color: #9ca3af;
   margin: 2px 0 0;
 }
 
@@ -301,9 +288,9 @@
   align-items: center;
   gap: 5px;
   padding: 5px 12px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  background: #212121;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: #cbd5e1;
   font-size: 11px;
   font-weight: 500;
@@ -313,23 +300,22 @@
 }
 
 .btn-vault-chip-action:hover {
-  background: rgba(192, 132, 252, 0.18);
-  border-color: rgba(192, 132, 252, 0.45);
+  background: #2d2d2d;
+  border-color: rgba(255, 255, 255, 0.2);
   color: #ffffff;
-  transform: translateY(-1px);
 }
 
 .btn-vault-chip-action.export:hover {
-  background: rgba(16, 185, 129, 0.18);
-  border-color: rgba(16, 185, 129, 0.45);
-  color: #6ee7b7;
+  background: #1e332a;
+  border-color: #10a37f;
+  color: #10a37f;
 }
 
 /* Danger Zone */
 .vault-danger-box {
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  background: rgba(239, 68, 68, 0.05);
-  border-radius: 14px;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.06);
+  border-radius: 12px;
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -358,14 +344,14 @@
 
 .danger-item-info p {
   font-size: 10.5px;
-  color: #94a3b8;
+  color: #9ca3af;
   margin: 1px 0 0;
 }
 
 .btn-danger-action {
   padding: 5px 12px;
-  border-radius: 8px;
-  background: rgba(239, 68, 68, 0.15);
+  border-radius: 6px;
+  background: rgba(239, 68, 68, 0.18);
   border: 1px solid rgba(239, 68, 68, 0.4);
   color: #fca5a5;
   font-size: 11px;
@@ -377,6 +363,6 @@
 
 .btn-danger-action:hover {
   background: rgba(239, 68, 68, 0.35);
-  border-color: rgba(239, 68, 68, 0.7);
+  border-color: rgba(239, 68, 68, 0.6);
   color: #ffffff;
-}
+}
