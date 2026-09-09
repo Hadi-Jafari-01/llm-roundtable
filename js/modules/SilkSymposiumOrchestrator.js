@@ -1,22 +1,18 @@
 /**
  * OmniAI Hub — The Silk Symposium Orchestrator (تالار هم‌اندیشی و میزگرد زنده انسان و هوش مصنوعی‌ها)
- * Haute Digital Spatial Architecture: VisionOS Frosted Glass & Obsidian Rose
- *
- * Implements an infinite, multi-turn, multi-model cognitive dialectic agora:
- *   - Visual Amphitheater Dais (The Celestial Chairs)
- *   - Dialectic Engine Topologies: Socratic, Delphi, Red Team vs. Blue Team, Autonomous, Maestro
- *   - The Logic Sanctum: Custom Macro Formulas & Context Distillation
- *   - Milestone Consensus Ledger: Agreements, Divergences, Open Hypotheses
- *   - Strictly Client-Side & Zero-API via iframe postMessage & MutationObserver scraping
- */
-
-/**
- * OmniAI Hub — The Silk Symposium Orchestrator (تالار هم‌اندیشی و میزگرد زنده انسان و هوش مصنوعی‌ها)
- * Lean Master Coordinator & Event Gateway
+* Lean Master Coordinator & Event Gateway (ChatGPT UI/UX Paradigm × Left-Rail Dais)
  * Wires together SymposiumState, TurnSequencer, SymposiumDais, SymposiumTranscript, and ConsensusLedger.
  */
 
-import { SymposiumState, COGNITIVE_PERSONAS } from './symposium/SymposiumState.js';
+import {
+  SymposiumState,
+  COGNITIVE_PERSONAS,
+  DEFAULT_DIALECTIC_TEMPLATE,
+  DIALECTIC_PROMPT_TEMPLATES,
+  GLOBAL_DIRECTIVE_PRESETS,
+  USER_ROLE_PRESETS,
+  SYMPOSIUM_SCENARIOS
+} from './symposium/SymposiumState.js';
 import { TurnSequencer } from './symposium/TurnSequencer.js';
 import { SymposiumDais } from './symposium/SymposiumDais.js';
 import { SymposiumTranscript } from './symposium/SymposiumTranscript.js';
@@ -38,11 +34,13 @@ export class SilkSymposiumOrchestrator {
       onRoundAdvanced: () => this.updateHeaderStats(),
       onSessionPaused: () => this.updateHeaderStats(),
       onSessionResumed: () => this.updateHeaderStats(),
-      onSessionCompleted: () => this.handleSessionCompleted()
+      onSessionCompleted: () => this.handleSessionCompleted(),
+      onSessionWaitingForMaestro: () => this.updateHeaderStats()
     });
 
     this.activeSanctumSeatIndex = 0;
-    this.currentSanctumTab = 'personas';
+    this.currentSanctumTab = 'scenarios';
+    this.toastTimer = null;
 
     this.initElements();
     this.initSubModules();
@@ -53,6 +51,7 @@ export class SilkSymposiumOrchestrator {
     this.overlayEl = document.getElementById('silk-symposium-chamber');
     this.btnClose = document.getElementById('btn-close-symposium-chamber');
     this.btnToggleDais = document.getElementById('btn-symposium-toggle-dais');
+    this.btnToggleRail = document.getElementById('btn-symposium-toggle-rail');
     this.btnToggleLedger = document.getElementById('btn-symposium-toggle-ledger');
     this.btnToggleUserSeat = document.getElementById('btn-symposium-toggle-user-seat');
     this.btnOpenSanctum = document.getElementById('btn-symposium-open-sanctum');
@@ -61,12 +60,18 @@ export class SilkSymposiumOrchestrator {
     this.topologyBadge = document.getElementById('symposium-topology-badge');
     this.roundCounter = document.getElementById('symposium-round-counter');
 
-    this.dockContainer = document.querySelector('.symposium-maestro-dock');
+    // Centered ChatGPT Floating Pill Composer Elements
+    this.composerContainer = document.querySelector('.symposium-composer-container');
+    this.composerBox = document.querySelector('.symposium-chatgpt-composer');
+    this.composerSpeakerHint = document.getElementById('composer-speaker-hint');
+    this.composerSpeakerName = document.getElementById('composer-speaker-name');
     this.inputPrompt = document.getElementById('symposium-prompt-input');
-    this.inputBox = document.querySelector('.symposium-input-box');
     this.btnSendMaestro = document.getElementById('btn-symposium-send-maestro');
+    this.btnNextTurn = document.getElementById('btn-symposium-next-turn');
     this.btnAutoplayToggle = document.getElementById('btn-symposium-autoplay-toggle');
-    this.batonSelect = document.getElementById('symposium-baton-select');
+
+    // Left Rail Container
+    this.leftRail = document.getElementById('symposium-dais-container');
 
     // Logic Sanctum Drawer & Tabs
     this.sanctumDrawer = document.getElementById('logic-sanctum-drawer');
@@ -74,11 +79,15 @@ export class SilkSymposiumOrchestrator {
     this.btnCloseSanctum = document.getElementById('btn-close-sanctum');
     this.sanctumTabBtns = document.querySelectorAll('.sanctum-tab-btn');
     this.sanctumSections = {
+      scenarios: document.getElementById('sanctum-section-scenarios'),
       personas: document.getElementById('sanctum-section-personas'),
       presets: document.getElementById('sanctum-section-presets'),
       protocols: document.getElementById('sanctum-section-protocols'),
       userRole: document.getElementById('sanctum-section-user')
     };
+
+    // Scenarios Grid
+    this.scenariosGrid = document.getElementById('sanctum-scenarios-grid');
 
     // Tab 1: Model Personas & Directives Form Fields
     this.sanctumSeatPicker = document.getElementById('sanctum-seat-picker-select');
@@ -89,6 +98,7 @@ export class SilkSymposiumOrchestrator {
     this.sanctumSeatWeightInput = document.getElementById('sanctum-seat-weight');
     this.sanctumSeatMuteCheck = document.getElementById('sanctum-seat-mute-check');
     this.sanctumSeatCustomTemplateTextarea = document.getElementById('sanctum-seat-custom-template');
+    this.sanctumGlobalDirectivePresetPicker = document.getElementById('sanctum-global-directive-preset-select');
     this.sanctumGlobalDirectiveTextarea = document.getElementById('sanctum-global-directive');
 
     this.btnSaveSeatSettings = document.getElementById('btn-save-seat-settings');
@@ -102,6 +112,7 @@ export class SilkSymposiumOrchestrator {
 
     // Tab 3: Protocols
     this.topologySelect = document.getElementById('sanctum-topology-select');
+    this.promptTemplatePresetPicker = document.getElementById('sanctum-prompt-template-preset-select');
     this.maxRoundsInput = document.getElementById('sanctum-max-rounds');
     this.distillSelect = document.getElementById('sanctum-distill-select');
     this.templateTextarea = document.getElementById('sanctum-template-textarea');
@@ -111,6 +122,7 @@ export class SilkSymposiumOrchestrator {
     // Tab 4: User Seat Sanctum Inputs
     this.sanctumUserSeatedCheck = document.getElementById('sanctum-user-seated-check');
     this.sanctumUserNameInput = document.getElementById('sanctum-user-name');
+    this.sanctumUserRolePresetPicker = document.getElementById('sanctum-user-role-preset-select');
     this.sanctumUserPersonaSelect = document.getElementById('sanctum-user-persona-select');
     this.sanctumUserWeightInput = document.getElementById('sanctum-user-weight');
     this.sanctumUserDirectiveTextarea = document.getElementById('sanctum-user-directive');
@@ -144,8 +156,14 @@ export class SilkSymposiumOrchestrator {
 
   bindEvents() {
     this.btnClose?.addEventListener('click', () => this.close());
+
+    // Left Rail collapse/expand toggles
+    this.btnToggleRail?.addEventListener('click', () => {
+      this.leftRail?.classList.toggle('expanded');
+    });
+
     this.btnToggleDais?.addEventListener('click', () => {
-      const isCollapsed = document.getElementById('symposium-dais-container')?.classList.toggle('collapsed');
+      const isCollapsed = this.leftRail?.classList.toggle('collapsed');
       this.btnToggleDais.classList.toggle('active', !isCollapsed);
     });
 
@@ -162,7 +180,7 @@ export class SilkSymposiumOrchestrator {
       this.renderAll();
     });
 
-    this.btnOpenSanctum?.addEventListener('click', () => this.openSanctum('protocols'));
+    this.btnOpenSanctum?.addEventListener('click', () => this.openSanctum('scenarios'));
     this.btnOpenPersonas?.addEventListener('click', () => this.openSanctum('personas'));
     this.btnCloseSanctum?.addEventListener('click', () => this.closeSanctum());
     this.sanctumBackdrop?.addEventListener('click', () => this.closeSanctum());
@@ -196,6 +214,13 @@ export class SilkSymposiumOrchestrator {
           this.syncTextareaDirection(this.sanctumSeatDirectiveTextarea);
         }
       }
+    });
+
+    // Auto-resizing and text-direction detection on inputPrompt
+    this.inputPrompt?.addEventListener('input', () => {
+      this.syncTextareaDirection(this.inputPrompt);
+      this.inputPrompt.style.height = 'auto';
+      this.inputPrompt.style.height = Math.min(this.inputPrompt.scrollHeight, 160) + 'px';
     });
 
     // Auto text direction detection on custom directive textareas
@@ -239,6 +264,33 @@ export class SilkSymposiumOrchestrator {
       }
     });
 
+    // Preset choosers for global directive, user roles, and prompt templates
+    this.sanctumGlobalDirectivePresetPicker?.addEventListener('change', () => {
+      const key = this.sanctumGlobalDirectivePresetPicker.value;
+      if (key && GLOBAL_DIRECTIVE_PRESETS[key]) {
+        this.sanctumGlobalDirectiveTextarea.value = GLOBAL_DIRECTIVE_PRESETS[key].directive;
+        this.syncTextareaDirection(this.sanctumGlobalDirectiveTextarea);
+      }
+    });
+
+    this.promptTemplatePresetPicker?.addEventListener('change', () => {
+      const key = this.promptTemplatePresetPicker.value;
+      if (key && DIALECTIC_PROMPT_TEMPLATES[key]) {
+        this.templateTextarea.value = DIALECTIC_PROMPT_TEMPLATES[key].template;
+      }
+    });
+
+    this.sanctumUserRolePresetPicker?.addEventListener('change', () => {
+      const key = this.sanctumUserRolePresetPicker.value;
+      if (key && USER_ROLE_PRESETS[key]) {
+        const p = USER_ROLE_PRESETS[key];
+        if (this.sanctumUserDirectiveTextarea) {
+          this.sanctumUserDirectiveTextarea.value = p.directive;
+          this.syncTextareaDirection(this.sanctumUserDirectiveTextarea);
+        }
+      }
+    });
+
     // Save protocols
     this.btnSaveProtocols?.addEventListener('click', () => {
       this.saveProtocolsConfig();
@@ -249,7 +301,12 @@ export class SilkSymposiumOrchestrator {
       this.saveUserRoleConfig();
     });
 
+    // Send and Next Turn Baton Handlers
     this.btnSendMaestro?.addEventListener('click', () => this.handleUserInputSubmit());
+    this.btnNextTurn?.addEventListener('click', () => {
+      this.turnSequencer.advanceNext();
+    });
+
     this.inputPrompt?.addEventListener('keydown', (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
         e.preventDefault();
@@ -263,11 +320,6 @@ export class SilkSymposiumOrchestrator {
       } else {
         this.turnSequencer.resume();
       }
-    });
-
-    this.batonSelect?.addEventListener('change', () => {
-      const selected = parseInt(this.batonSelect.value, 10);
-      if (!isNaN(selected)) this.turnSequencer.passBaton(selected);
     });
 
     this.btnExportBriefing?.addEventListener('click', () => this.exportMarkdown());
@@ -308,8 +360,12 @@ export class SilkSymposiumOrchestrator {
     this.overlayEl?.classList.add('open');
     this.syncSeats();
     this.renderAll();
+    this.renderScenariosGrid();
     this.renderPresetsDropdown();
     this.renderPresetsLibrary();
+    this.renderPromptTemplatesDropdown();
+    this.renderGlobalDirectivesDropdown();
+    this.renderUserRolesDropdown();
     requestAnimationFrame(() => this.inputPrompt?.focus());
     globalBus.emit('SILK_SYMPOSIUM_OPENED');
   }
@@ -330,9 +386,9 @@ export class SilkSymposiumOrchestrator {
   syncSeats() {
     const cards = this.stateStore?.getCards() || [];
     this.symposiumState.syncWithCanvasCards(cards);
-    this.updateBatonSelector();
     this.updateSanctumSeatSelector();
     this.updateUserSeatButtonUI();
+    this.updateComposerSpeakerHint();
   }
 
   updateSanctumSeatSelector() {
@@ -352,28 +408,31 @@ export class SilkSymposiumOrchestrator {
     if (!seat) return;
     const nextMuted = !seat.isMuted;
     this.symposiumState.setSeatMuted(seatIndex, nextMuted);
-    this.dais.render(this.symposiumState.seats, this.symposiumState.activeSpeakerIndex, this.symposiumState.sessionStatus === 'WAITING_FOR_USER');
+    this.dais.render(
+      this.symposiumState.seats,
+      this.symposiumState.activeSpeakerIndex,
+      this.symposiumState.sessionStatus === 'WAITING_FOR_USER',
+      this.symposiumState.recommendedNextSpeakerIndex,
+      this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO'
+    );
     this.showToast(`${seat.name} ${nextMuted ? 'بی‌صدا شد 🔇' : 'فعال شد 🔊'}`);
   }
 
   renderAll() {
     const waitingForUser = this.symposiumState.sessionStatus === 'WAITING_FOR_USER';
-    this.dais.render(this.symposiumState.seats, this.symposiumState.activeSpeakerIndex, waitingForUser);
+    const waitingForMaestro = this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO';
+
+    this.dais.render(
+      this.symposiumState.seats,
+      this.symposiumState.activeSpeakerIndex,
+      waitingForUser,
+      this.symposiumState.recommendedNextSpeakerIndex,
+      waitingForMaestro
+    );
     this.transcriptView.render(this.symposiumState.transcript);
     this.ledgerView.render(this.symposiumState.ledger);
     this.updateHeaderStats();
-  }
-
-  updateBatonSelector() {
-    if (!this.batonSelect) return;
-    this.batonSelect.innerHTML = '';
-    this.symposiumState.seats.forEach((seat, idx) => {
-      const opt = document.createElement('option');
-      opt.value = idx;
-      opt.textContent = `${seat.name} (${seat.personaBadge || ''})`;
-      if (idx === this.symposiumState.activeSpeakerIndex) opt.selected = true;
-      this.batonSelect.appendChild(opt);
-    });
+    this.updateComposerSpeakerHint();
   }
 
   updateUserSeatButtonUI() {
@@ -401,8 +460,34 @@ export class SilkSymposiumOrchestrator {
     }
     if (this.btnAutoplayToggle) {
       const isActive = this.symposiumState.sessionStatus === 'ACTIVE';
-      this.btnAutoplayToggle.textContent = isActive ? '⏸️ Pause Flow' : '▶️ Resume Flow';
+      this.btnAutoplayToggle.textContent = isActive ? '⏸️ توقف جریان' : '▶️ شروع جریان خودکار';
       this.btnAutoplayToggle.classList.toggle('active', isActive);
+    }
+    this.updateComposerSpeakerHint();
+  }
+
+  updateComposerSpeakerHint() {
+    if (!this.composerSpeakerName) return;
+
+    const { sessionStatus, seats, activeSpeakerIndex, recommendedNextSpeakerIndex, isSpeakerStreaming } = this.symposiumState;
+    const activeSeat = seats[activeSpeakerIndex];
+    const recSeat = seats[recommendedNextSpeakerIndex];
+
+    if (sessionStatus === 'WAITING_FOR_USER') {
+      this.composerSpeakerName.textContent = 'نوبت شما در شورا فرا رسیده است (Your Turn) 👑';
+      this.composerBox?.classList.add('user-turn-active');
+    } else if (isSpeakerStreaming && activeSeat) {
+      this.composerSpeakerName.textContent = `در حال تفکر و پاسخ: ${activeSeat.name} (${activeSeat.personaBadge || ''}) ⚡`;
+      this.composerBox?.classList.remove('user-turn-active');
+    } else if (sessionStatus === 'WAITING_FOR_MAESTRO' && recSeat) {
+      this.composerSpeakerName.textContent = `نوبت بعد با عصا: ${recSeat.name} (${recSeat.personaBadge || ''}) 🪄`;
+      this.composerBox?.classList.remove('user-turn-active');
+    } else if (activeSeat) {
+      this.composerSpeakerName.textContent = `سخنران بعدی: ${activeSeat.name} (${activeSeat.personaBadge || ''})`;
+      this.composerBox?.classList.remove('user-turn-active');
+    } else {
+      this.composerSpeakerName.textContent = 'Auto Conductor';
+      this.composerBox?.classList.remove('user-turn-active');
     }
   }
 
@@ -425,6 +510,7 @@ export class SilkSymposiumOrchestrator {
       });
 
       this.inputPrompt.value = '';
+      this.inputPrompt.style.height = 'auto';
       this.clearUserTurnHighlight();
       this.renderAll();
       this.turnSequencer.completeTurn(text, true);
@@ -448,12 +534,12 @@ export class SilkSymposiumOrchestrator {
     });
 
     this.inputPrompt.value = '';
+    this.inputPrompt.style.height = 'auto';
     this.renderAll();
 
     if (this.symposiumState.sessionStatus !== 'ACTIVE') {
-      const targetIdx = parseInt(this.batonSelect?.value, 10) || 0;
-      this.turnSequencer.start();
-      this.turnSequencer.passBaton(targetIdx);
+      const recIdx = this.symposiumState.recommendedNextSpeakerIndex || 0;
+      this.turnSequencer.start(text, recIdx);
     } else {
       this.turnSequencer.advanceNext();
     }
@@ -461,23 +547,25 @@ export class SilkSymposiumOrchestrator {
 
   handleUserTurnPrompted({ seat, seatIndex }) {
     this.dais.render(this.symposiumState.seats, seatIndex, true);
-    this.inputBox?.classList.add('user-turn-active');
+    this.composerBox?.classList.add('user-turn-active');
     if (this.inputPrompt) {
       this.inputPrompt.placeholder = `🌟 Your turn to address the Dais as ${seat.personaTitle}... (⌘↵ to speak)`;
       this.inputPrompt.focus();
     }
+    this.updateComposerSpeakerHint();
   }
 
   clearUserTurnHighlight() {
-    this.inputBox?.classList.remove('user-turn-active');
+    this.composerBox?.classList.remove('user-turn-active');
     if (this.inputPrompt) {
-      this.inputPrompt.placeholder = 'Interject into the symposium, challenge a premise, or steer the debate... (⌘↵ to send)';
+      this.inputPrompt.placeholder = 'Message the symposium or pass the baton... (⌘↵ to send)';
     }
   }
 
   handleSeatDispatched({ seat, seatIndex, immediateContext }) {
     this.clearUserTurnHighlight();
     this.dais.highlightActiveSeat(seatIndex, false);
+    this.updateComposerSpeakerHint();
 
     const promptToSend = this.composeSeatPrompt(seat, immediateContext);
 
@@ -656,13 +744,17 @@ export class SilkSymposiumOrchestrator {
 
   // ── Logic Sanctum & Persona Customizer Engine ──
 
-  openSanctum(tab = 'personas', seatIndex = null) {
+  openSanctum(tab = 'scenarios', seatIndex = null) {
     this.sanctumDrawer?.classList.add('open');
     this.sanctumBackdrop?.classList.add('open');
 
     this.updateSanctumSeatSelector();
+    this.renderScenariosGrid();
     this.renderPresetsDropdown();
     this.renderPresetsLibrary();
+    this.renderPromptTemplatesDropdown();
+    this.renderGlobalDirectivesDropdown();
+    this.renderUserRolesDropdown();
 
     if (typeof seatIndex === 'number' && this.symposiumState.seats[seatIndex]) {
       this.activeSanctumSeatIndex = seatIndex;
@@ -687,10 +779,95 @@ export class SilkSymposiumOrchestrator {
       btn.classList.toggle('active', btn.dataset.tab === tabKey);
     });
 
+    if (this.sanctumSections.scenarios) this.sanctumSections.scenarios.style.display = tabKey === 'scenarios' ? 'flex' : 'none';
     if (this.sanctumSections.personas) this.sanctumSections.personas.style.display = tabKey === 'personas' ? 'flex' : 'none';
     if (this.sanctumSections.presets) this.sanctumSections.presets.style.display = tabKey === 'presets' ? 'flex' : 'none';
     if (this.sanctumSections.protocols) this.sanctumSections.protocols.style.display = tabKey === 'protocols' ? 'flex' : 'none';
     if (this.sanctumSections.userRole) this.sanctumSections.userRole.style.display = tabKey === 'user-role' ? 'flex' : 'none';
+  }
+
+  renderScenariosGrid() {
+    if (!this.scenariosGrid) return;
+    const scenarios = this.symposiumState.getScenarios();
+    this.scenariosGrid.innerHTML = '';
+
+    Object.keys(scenarios).forEach(key => {
+      const sc = scenarios[key];
+      const card = document.createElement('div');
+      card.className = `symposium-scenario-card ${this.symposiumState.activeScenarioKey === key ? 'active' : ''}`;
+      card.innerHTML = `
+        <div class="scenario-card-top">
+          <span class="scenario-badge-pill" style="background:${sc.color}25;color:${sc.color};border:1px solid ${sc.color}50;">
+            ${sc.badge}
+          </span>
+          <span style="font-size:10px;color:#94a3b8;text-transform:uppercase;">${sc.debateMode}</span>
+        </div>
+        <h4 class="scenario-card-title">${this.escapeHtml(sc.title)}</h4>
+        <p class="scenario-card-desc">${this.escapeHtml(sc.description)}</p>
+        <button type="button" class="btn-load-scenario" data-scenario-key="${key}">
+          <span>اجرا و بارگذاری این سناریو ⚡</span>
+        </button>
+      `;
+
+      card.querySelector('.btn-load-scenario')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.symposiumState.applyScenario(key);
+        this.syncSeats();
+        this.renderAll();
+        if (sc.initialPrompt && this.inputPrompt) {
+          this.inputPrompt.value = sc.initialPrompt;
+        }
+        this.closeSanctum();
+        this.showToast(`سناریوی "${sc.title}" بارگذاری و بر شورا اعمال شد ✓`);
+      });
+
+      this.scenariosGrid.appendChild(card);
+    });
+  }
+
+  renderPromptTemplatesDropdown() {
+    if (!this.promptTemplatePresetPicker) return;
+    const templates = this.symposiumState.getPromptTemplates();
+    this.promptTemplatePresetPicker.innerHTML = '<option value="">-- انتخاب از الگوهای آماده فرمول پرومپت --</option>';
+
+    Object.keys(templates).forEach(key => {
+      const t = templates[key];
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = `${t.title}`;
+      if (key === this.symposiumState.config.activeTemplateKey) opt.selected = true;
+      this.promptTemplatePresetPicker.appendChild(opt);
+    });
+  }
+
+  renderGlobalDirectivesDropdown() {
+    if (!this.sanctumGlobalDirectivePresetPicker) return;
+    const directives = this.symposiumState.getGlobalDirectivePresets();
+    this.sanctumGlobalDirectivePresetPicker.innerHTML = '<option value="">-- انتخاب دستور کلی آماده شورا --</option>';
+
+    Object.keys(directives).forEach(key => {
+      const d = directives[key];
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = d.title;
+      if (key === this.symposiumState.config.activeGlobalDirectiveKey) opt.selected = true;
+      this.sanctumGlobalDirectivePresetPicker.appendChild(opt);
+    });
+  }
+
+  renderUserRolesDropdown() {
+    if (!this.sanctumUserRolePresetPicker) return;
+    const roles = this.symposiumState.getUserRolePresets();
+    this.sanctumUserRolePresetPicker.innerHTML = '<option value="">-- انتخاب از الگوهای آماده نقش کاربر --</option>';
+
+    Object.keys(roles).forEach(key => {
+      const r = roles[key];
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = `${r.badge} ${r.title}`;
+      if (key === this.symposiumState.userParticipant.personaKey) opt.selected = true;
+      this.sanctumUserRolePresetPicker.appendChild(opt);
+    });
   }
 
   renderPresetsDropdown() {
@@ -820,9 +997,15 @@ export class SilkSymposiumOrchestrator {
     });
 
     this.symposiumState.persistConfig();
-    this.dais.render(this.symposiumState.seats, this.symposiumState.activeSpeakerIndex, this.symposiumState.sessionStatus === 'WAITING_FOR_USER');
-    this.updateBatonSelector();
+    this.dais.render(
+      this.symposiumState.seats,
+      this.symposiumState.activeSpeakerIndex,
+      this.symposiumState.sessionStatus === 'WAITING_FOR_USER',
+      this.symposiumState.recommendedNextSpeakerIndex,
+      this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO'
+    );
     this.updateSanctumSeatSelector();
+    this.updateComposerSpeakerHint();
     this.showToast(`تنظیمات و پرومپت "${seat.name}" با موفقیت ذخیره شد ✓`);
   }
 
@@ -851,8 +1034,13 @@ export class SilkSymposiumOrchestrator {
     });
 
     this.symposiumState.persistConfig();
-    this.dais.render(this.symposiumState.seats, this.symposiumState.activeSpeakerIndex, this.symposiumState.sessionStatus === 'WAITING_FOR_USER');
-    this.updateBatonSelector();
+    this.dais.render(
+      this.symposiumState.seats,
+      this.symposiumState.activeSpeakerIndex,
+      this.symposiumState.sessionStatus === 'WAITING_FOR_USER',
+      this.symposiumState.recommendedNextSpeakerIndex,
+      this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO'
+    );
     this.showToast('شخصیت و دستورات به تمام مدل‌های میزگرد اعمال شد ✓');
   }
 
@@ -973,6 +1161,34 @@ export class SilkSymposiumOrchestrator {
     const dir = this.detectTextDirection(el.value || '');
     el.setAttribute('dir', dir);
     el.classList.toggle('is-rtl', dir === 'rtl');
+  }
+
+  detectTextDirection(text) {
+    if (!text || typeof text !== 'string') return 'ltr';
+    const stripped = text
+      .replace(/```[\s\S]*?```/g, ' ')
+      .replace(/`[^`]+`/g, ' ')
+      .replace(/https?:\/\/\S+/g, ' ')
+      .replace(/<[^>]+>/g, ' ')
+      .trim();
+    if (!stripped) return 'ltr';
+    const rtlRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u0590-\u05FF]/g;
+    const ltrRegex = /[A-Za-z\u00C0-\u024F]/g;
+    const rtlMatches = stripped.match(rtlRegex) || [];
+    const ltrMatches = stripped.match(ltrRegex) || [];
+    if (rtlMatches.length === 0) return 'ltr';
+    if (ltrMatches.length === 0) return 'rtl';
+    return rtlMatches.length >= ltrMatches.length * 0.25 ? 'rtl' : 'ltr';
+  }
+
+  escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
 
   showToast(msg) {

@@ -1,7 +1,7 @@
 /**
- * OmniAI Hub — The Amphitheater Dais (The Celestial Chairs)
- * Pure UI component responsible for rendering the floating crystal seats,
- * real-time thinking pulses, active speaker highlights, and baton controls.
+ * OmniAI Hub — The Left-Rail Amphitheater Dais (Celestial Models Rail)
+ * Pure UI component responsible for rendering the vertical jewel pods on the left rail,
+ * avatar jewel badges, expandable persona details, status glows, and interactive baton tools.
  */
 
 export class SymposiumDais {
@@ -22,8 +22,8 @@ export class SymposiumDais {
 
     if (!seats || seats.length === 0) {
       this.ribbonEl.innerHTML = `
-        <div style="font-size: 11.5px; color: #94a3b8; padding: 10px 14px;">
-          No active intelligence seats on canvas. Open models on workspace to convene.
+        <div style="font-size: 10px; color: #94a3b8; padding: 12px 6px; text-align: center;">
+          No active models on canvas.
         </div>
       `;
       return;
@@ -43,71 +43,56 @@ export class SymposiumDais {
       seatCard.dataset.seatIndex = idx;
       seatCard.style.setProperty('--model-color', seat.color || '#c084fc');
 
-      let statusLabel = (seat.status || 'IDLE').toUpperCase();
-      if (isUserSeat && waitingForUser) {
-        statusLabel = 'YOUR TURN';
-      } else if (isCurrentSpeaker) {
-        statusLabel = 'SPEAKING';
-      } else if (isRecommendedNext) {
-        statusLabel = 'NEXT 🪄';
+      let avatarSymbol = seat.personaBadge?.trim().slice(0, 2) || (isUserSeat ? '👑' : '🤖');
+      if (avatarSymbol.length > 2 && !avatarSymbol.startsWith('&#')) {
+        avatarSymbol = avatarSymbol.slice(0, 2);
       }
 
       seatCard.innerHTML = `
-        <div class="seat-top-row">
-          <div class="seat-identity">
-            <span class="seat-status-dot" style="background: ${seat.color}; color: ${seat.color};"></span>
-            <span class="seat-name-text" title="${this.escapeHtml(seat.name)}">
-              ${this.escapeHtml(seat.name)}
-            </span>
+        <div class="seat-jewel-avatar" style="--model-color: ${seat.color || '#c084fc'};" title="${this.escapeHtml(seat.name)}">
+          <span>${avatarSymbol}</span>
+        </div>
+        <div class="seat-details-expandable">
+          <div class="seat-name-row">
+            <span class="seat-name-text" title="${this.escapeHtml(seat.name)}">${this.escapeHtml(seat.name)}</span>
+            ${seat.isCustomized ? '<span class="seat-custom-indicator" title="Customized Persona">✦</span>' : ''}
           </div>
-          <div class="seat-top-actions">
-            ${!isUserSeat ? `
-              <button type="button" class="seat-action-btn btn-seat-mute ${seat.isMuted ? 'muted' : ''}" title="${seat.isMuted ? 'فعال‌سازی مجدد مدل (Unmute)' : 'بی‌صدا کردن این مدل (Mute)'}">
-                ${seat.isMuted ? '🔇' : '🔊'}
-              </button>
-            ` : ''}
-            <button type="button" class="seat-action-btn btn-seat-edit" title="تنظیم آزادانه شخصیت، دستور سیستمی و پرومپت این مدل">
-              ⚙️
+          <span class="seat-persona-subtext" title="${this.escapeHtml(seat.personaTitle)}">
+            ${this.escapeHtml(seat.personaTitle ? seat.personaTitle.split('(')[0].trim() : 'AI Chair')}
+          </span>
+        </div>
+        <div class="seat-hover-actions">
+          <button type="button" class="btn-seat-quick-action btn-seat-edit" title="Configure Persona & Directives">⚙️</button>
+          ${!isUserSeat ? `
+            <button type="button" class="btn-seat-quick-action btn-seat-mute ${seat.isMuted ? 'muted' : ''}" title="${seat.isMuted ? 'Unmute' : 'Mute'}">
+              ${seat.isMuted ? '🔇' : '🔊'}
             </button>
-            <span class="seat-status-pill">${statusLabel}</span>
-          </div>
-        </div>
-
-        <div class="seat-persona-badge" title="${this.escapeHtml(seat.personaDirective || seat.personaTitle)}">
-          <span class="persona-icon">${seat.personaBadge || '🏛️'}</span>
-          <span class="persona-text">${this.escapeHtml(seat.personaTitle.split('(')[0].trim())}</span>
-          ${seat.isCustomized ? '<span class="seat-custom-indicator" title="شخصیت و دستورات سفارشی‌سازی شده">✦</span>' : ''}
-        </div>
-
-        <div class="seat-bottom-row">
-          <button type="button" class="btn-pass-baton" title="Pass the speaking baton directly to this seat">
-            <span>Pass Baton 🪄</span>
-          </button>
-          <span class="seat-weight-tag">${seat.weight || 100}% weight</span>
+          ` : ''}
+          <button type="button" class="btn-seat-quick-action btn-pass-baton-icon" title="Pass Speaking Baton (🪄)">🪄</button>
         </div>
       `;
 
-      // Edit persona and directives button click
+      // 1. Configure Seat
       seatCard.querySelector('.btn-seat-edit')?.addEventListener('click', (e) => {
         e.stopPropagation();
         this.callbacks.onConfigureSeat(idx);
       });
 
-      // Mute / Unmute quick toggle
+      // 2. Mute / Unmute
       seatCard.querySelector('.btn-seat-mute')?.addEventListener('click', (e) => {
         e.stopPropagation();
         this.callbacks.onToggleMute(idx);
       });
 
-      // Pass baton button click
-      seatCard.querySelector('.btn-pass-baton')?.addEventListener('click', (e) => {
+      // 3. Pass Baton Icon
+      seatCard.querySelector('.btn-pass-baton-icon')?.addEventListener('click', (e) => {
         e.stopPropagation();
         this.callbacks.onPassBaton(idx);
       });
 
-      // Configure seat by clicking seat card
+      // 4. Clicking the Pod passes the speaking baton or targets the seat
       seatCard.addEventListener('click', () => {
-        this.callbacks.onConfigureSeat(idx);
+        this.callbacks.onPassBaton(idx);
       });
 
       this.ribbonEl.appendChild(seatCard);
@@ -125,19 +110,6 @@ export class SymposiumDais {
 
       if (card.classList.contains('user-seat')) {
         card.classList.toggle('your-turn', isCurrentSpeaker && waitingForUser);
-      }
-
-      const pill = card.querySelector('.seat-status-pill');
-      if (pill) {
-        if (card.classList.contains('user-seat') && waitingForUser) {
-          pill.textContent = 'YOUR TURN';
-        } else if (isCurrentSpeaker) {
-          pill.textContent = 'SPEAKING';
-        } else if (isRecommendedNext) {
-          pill.textContent = 'NEXT 🪄';
-        } else {
-          pill.textContent = 'IDLE';
-        }
       }
     });
   }

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   OmniAI Hub — The Silk Symposium (تالار هم‌اندیشی و میزگرد زنده انسان و هوش مصنوعی‌ها)
+   OmniAI Hub — The Silk Symposium (ChatGPT Ergonomics × Left Vertical Rail)
    Haute Digital Spatial Architecture: VisionOS Translucency × Obsidian Rose Glass
    Infinite Multi-Turn Deliberation Agora • Socratic Dialectics • Delphi Consensus
    ========================================================================== */
@@ -69,55 +69,57 @@
   opacity: 0.2;
 }
 
-/* ── 3. Top Master Navigation Bar (48px) ── */
+/* ── 3. Top Master Navigation Bar (46px) ── */
 .symposium-header-bar {
   position: relative;
-  z-index: 20;
+  z-index: 30;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  padding: 10px 22px;
-  background: rgba(18, 14, 30, 0.78);
-  border-bottom: 1px solid rgba(251, 207, 232, 0.16);
+  padding: 8px 20px;
+  height: 46px;
+  background: rgba(18, 14, 30, 0.82);
+  border-bottom: 1px solid rgba(251, 207, 232, 0.14);
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
   box-shadow: 0 4px 28px rgba(0, 0, 0, 0.45);
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .symposium-brand-cluster {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .symposium-gem-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
   background: linear-gradient(135deg, rgba(254, 215, 170, 0.35) 0%, rgba(192, 132, 252, 0.4) 50%, rgba(244, 114, 182, 0.3) 100%);
   border: 1px solid rgba(254, 215, 170, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fef3c7;
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.3);
   animation: symposiumGemBreathe 4s infinite ease-in-out alternate;
 }
 
 @keyframes symposiumGemBreathe {
-  0% { transform: scale(0.96); box-shadow: 0 0 14px rgba(245, 158, 11, 0.3); }
-  100% { transform: scale(1.04); box-shadow: 0 0 28px rgba(192, 132, 252, 0.55); }
+  0% { transform: scale(0.96); box-shadow: 0 0 12px rgba(245, 158, 11, 0.3); }
+  100% { transform: scale(1.04); box-shadow: 0 0 24px rgba(192, 132, 252, 0.5); }
 }
 
 .symposium-gem-icon svg {
-  width: 20px;
-  height: 20px;
+  width: 17px;
+  height: 17px;
 }
 
 .symposium-title-stack h2 {
-  font-size: 14.5px;
+  font-size: 13.5px;
   font-weight: 700;
   letter-spacing: -0.01em;
   margin: 0;
@@ -127,7 +129,7 @@
 }
 
 .symposium-title-stack p {
-  font-size: 10px;
+  font-size: 9.5px;
   color: #a5b4fc;
   margin: 1px 0 0 0;
   letter-spacing: 0.02em;
@@ -140,12 +142,12 @@
   gap: 8px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.09);
-  padding: 4px 12px;
-  border-radius: 20px;
+  padding: 3px 10px;
+  border-radius: 18px;
 }
 
 .topology-mode-badge {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 600;
   color: #fde68a;
   display: flex;
@@ -154,37 +156,37 @@
 }
 
 .topology-mode-badge .dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #f59e0b;
   box-shadow: 0 0 8px #f59e0b;
 }
 
 .round-counter-badge {
-  font-size: 10px;
+  font-size: 9.5px;
   color: #cbd5e1;
   background: rgba(255, 255, 255, 0.06);
-  padding: 2px 7px;
-  border-radius: 10px;
+  padding: 1px 6px;
+  border-radius: 8px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
-/* Header Control Tools */
+/* Header Tools */
 .symposium-header-tools {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .symposium-tool-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  height: 30px;
-  padding: 0 11px;
-  border-radius: 8px;
+  gap: 5px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 7px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.04);
   color: #cbd5e1;
@@ -193,11 +195,12 @@
   cursor: pointer;
   transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: inherit;
+  white-space: nowrap;
 }
 
 .symposium-tool-btn svg {
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
 }
 
 .symposium-tool-btn:hover {
@@ -211,319 +214,30 @@
   background: rgba(192, 132, 252, 0.2);
   border-color: rgba(192, 132, 252, 0.6);
   color: #ffffff;
-  box-shadow: 0 0 14px rgba(192, 132, 252, 0.28);
+  box-shadow: 0 0 12px rgba(192, 132, 252, 0.28);
 }
 
 .symposium-tool-btn.primary-gold {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(217, 119, 6, 0.2) 100%);
-  border-color: rgba(245, 158, 11, 0.5);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(217, 119, 6, 0.18) 100%);
+  border-color: rgba(245, 158, 11, 0.45);
   color: #fef08a;
   font-weight: 600;
 }
 
 .symposium-tool-btn.primary-gold:hover {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.38) 0%, rgba(217, 119, 6, 0.3) 100%);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.35) 0%, rgba(217, 119, 6, 0.28) 100%);
   border-color: rgba(245, 158, 11, 0.7);
-  box-shadow: 0 0 18px rgba(245, 158, 11, 0.35);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.35);
 }
 
 .symposium-tool-btn.btn-close {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   padding: 0;
-  font-size: 14px;
+  font-size: 13px;
 }
 
-/* ── 4. The Visual Amphitheater Dais (Celestial Chairs Ribbon) ── */
-.symposium-dais-container {
-  position: relative;
-  z-index: 15;
-  background: rgba(13, 10, 24, 0.85);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  padding: 12px 22px;
-  flex-shrink: 0;
-  transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
-  overflow: hidden;
-}
-
-.symposium-dais-container.collapsed {
-  max-height: 0 !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  opacity: 0;
-  pointer-events: none;
-  border-bottom: none;
-}
-
-.symposium-dais-ribbon {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-  scrollbar-width: thin;
-}
-
-.symposium-dais-ribbon::-webkit-scrollbar {
-  height: 4px;
-}
-.symposium-dais-ribbon::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
-  border-radius: 4px;
-}
-
-/* Model Seat Card */
-.symposium-seat-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 175px;
-  max-width: 230px;
-  padding: 10px 13px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  user-select: none;
-  flex-shrink: 0;
-}
-
-.symposium-seat-card:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(192, 132, 252, 0.38);
-  transform: translateY(-2px);
-}
-
-.symposium-seat-card.active-speaker {
-  background: linear-gradient(135deg, rgba(129, 140, 248, 0.18) 0%, rgba(192, 132, 252, 0.22) 100%);
-  border-color: rgba(192, 132, 252, 0.7);
-  box-shadow: 0 0 24px rgba(192, 132, 252, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  animation: seatSpeakerBreathe 2s infinite ease-in-out alternate;
-}
-
-@keyframes seatSpeakerBreathe {
-  0% { box-shadow: 0 0 14px rgba(192, 132, 252, 0.3); }
-  100% { box-shadow: 0 0 28px rgba(244, 114, 182, 0.5); }
-}
-
-/* User Seated Participant Card (Distinguished Haute Antique Gold & Rose Sheen) */
-.symposium-seat-card.user-seat {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.14) 0%, rgba(244, 114, 182, 0.12) 50%, rgba(192, 132, 252, 0.08) 100%);
-  border: 1px solid rgba(245, 158, 11, 0.45);
-  box-shadow: 0 4px 18px rgba(245, 158, 11, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2);
-}
-
-.symposium-seat-card.user-seat:hover {
-  border-color: rgba(245, 158, 11, 0.75);
-  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.28);
-}
-
-.symposium-seat-card.user-seat .seat-name-text {
-  color: #fef08a;
-  font-weight: 700;
-}
-
-.symposium-seat-card.user-seat.your-turn {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.28) 0%, rgba(236, 72, 153, 0.25) 100%);
-  border-color: #fbbf24;
-  box-shadow: 0 0 32px rgba(245, 158, 11, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.4);
-  animation: userTurnGlowPulse 1.8s infinite alternate ease-in-out;
-}
-
-@keyframes userTurnGlowPulse {
-  0% { transform: scale(0.98); box-shadow: 0 0 16px rgba(245, 158, 11, 0.35); }
-  100% { transform: scale(1.03); box-shadow: 0 0 36px rgba(245, 158, 11, 0.65); }
-}
-
-.symposium-seat-card.user-seat.your-turn .seat-status-pill {
-  background: rgba(245, 158, 11, 0.4);
-  color: #fef3c7;
-  font-weight: 800;
-}
-
-.symposium-seat-card.reflecting {
-  border-color: rgba(245, 158, 11, 0.5);
-  box-shadow: 0 0 16px rgba(245, 158, 11, 0.25);
-}
-
-.symposium-seat-card.challenged {
-  border-color: rgba(239, 68, 68, 0.6);
-  box-shadow: 0 0 18px rgba(239, 68, 68, 0.3);
-}
-
-.symposium-seat-card.muted {
-  opacity: 0.45;
-  filter: grayscale(0.6);
-}
-
-/* Seat Header: Identity & Status Dot */
-.seat-top-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.seat-identity {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  min-width: 0;
-}
-
-.seat-status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  box-shadow: 0 0 6px currentColor;
-}
-
-.seat-name-text {
-  font-size: 11.5px;
-  font-weight: 600;
-  color: #f1f5f9;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.seat-top-actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.seat-action-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
-  color: #cbd5e1;
-  font-size: 10px;
-  cursor: pointer;
-  transition: all 0.16s ease;
-  padding: 0;
-}
-
-.seat-action-btn:hover {
-  background: rgba(192, 132, 252, 0.2);
-  color: #ffffff;
-  border-color: rgba(192, 132, 252, 0.4);
-  transform: scale(1.08);
-}
-
-.seat-action-btn.muted {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: rgba(239, 68, 68, 0.4);
-}
-
-.seat-status-pill {
-  font-size: 8.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  padding: 1px 5px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.08);
-  color: #cbd5e1;
-}
-
-.active-speaker .seat-status-pill {
-  background: rgba(244, 114, 182, 0.25);
-  color: #fbcfe8;
-}
-
-/* Recommended Next Speaker (نوبت بعدی پیشنهادی در حالت دستی) */
-.symposium-seat-card.recommended-next {
-  border-color: rgba(245, 158, 11, 0.85) !important;
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.35), inset 0 0 0 1px rgba(245, 158, 11, 0.4) !important;
-  animation: recommendedSeatPulse 2s infinite ease-in-out alternate;
-}
-
-@keyframes recommendedSeatPulse {
-  0% { transform: translateY(0); box-shadow: 0 0 12px rgba(245, 158, 11, 0.25); }
-  100% { transform: translateY(-2px); box-shadow: 0 0 24px rgba(245, 158, 11, 0.55); }
-}
-
-.symposium-seat-card.recommended-next .seat-status-pill {
-  background: rgba(245, 158, 11, 0.35);
-  color: #fef08a;
-  font-weight: 700;
-}
-
-.seat-custom-indicator {
-  color: #fde047;
-  font-size: 11px;
-  margin-inline-start: auto;
-  text-shadow: 0 0 6px #fde047;
-}
-
-/* Persona Archetype Badge */
-.seat-persona-badge {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 7px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  font-size: 10px;
-  color: #e2e8f0;
-}
-
-.seat-persona-badge .persona-icon {
-  font-size: 11px;
-  flex-shrink: 0;
-}
-
-.seat-persona-badge .persona-text {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Seat Footer: Baton Button & Weight Readout */
-.seat-bottom-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 2px;
-}
-
-.btn-pass-baton {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 7px;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #cbd5e1;
-  font-size: 9.5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.16s ease;
-}
-
-.btn-pass-baton:hover {
-  background: rgba(245, 158, 11, 0.25);
-  border-color: rgba(245, 158, 11, 0.55);
-  color: #fef08a;
-}
-
-.seat-weight-tag {
-  font-size: 9px;
-  color: #94a3b8;
-  font-family: ui-monospace, monospace;
-}
-
-/* ── 5. Main Workspace Layout (Dialogue Stream + Consensus Ledger) ── */
+/* ── 4. Main Body Workspace Layout ── */
 .symposium-body-layout {
   position: relative;
   z-index: 10;
@@ -533,15 +247,307 @@
   box-sizing: border-box;
 }
 
-/* Transcript Viewport */
+/* ── 5. Left Dais Rail (مینی‌مال، عمودی و جواهری) ── */
+.symposium-dais-left-rail {
+  width: 68px; /* Ultra-compact resting state */
+  min-width: 68px;
+  max-width: 68px;
+  background: rgba(14, 11, 24, 0.72);
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  display: flex;
+  flex-direction: column;
+  padding: 12px 6px;
+  gap: 10px;
+  transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              min-width 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              max-width 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              padding 0.28s ease,
+              box-shadow 0.28s ease;
+  z-index: 25;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.symposium-dais-left-rail::-webkit-scrollbar {
+  width: 3px;
+}
+.symposium-dais-left-rail::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+}
+
+/* Hover or Expanded State for Left Rail */
+.symposium-dais-left-rail:hover,
+.symposium-dais-left-rail.expanded {
+  width: 220px;
+  min-width: 220px;
+  max-width: 220px;
+  padding: 12px 10px;
+  box-shadow: 14px 0 36px rgba(0, 0, 0, 0.45), 0 0 20px rgba(192, 132, 252, 0.1);
+}
+
+.symposium-dais-left-rail.collapsed {
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  padding: 0 !important;
+  border-right: none !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.dais-rail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+}
+
+.rail-title-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+.symposium-dais-left-rail:hover .rail-title-label,
+.symposium-dais-left-rail.expanded .rail-title-label {
+  opacity: 1;
+}
+
+.btn-rail-collapse {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.18s ease;
+}
+
+.btn-rail-collapse svg {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.22s ease;
+}
+
+.symposium-dais-left-rail.expanded .btn-rail-collapse svg {
+  transform: rotate(180deg);
+}
+
+.btn-rail-collapse:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #ffffff;
+  border-color: rgba(192, 132, 252, 0.35);
+}
+
+.dais-vertical-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Minimalist Seat Pod (کارت فشرده مدل در ریل چپ) */
+.symposium-seat-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  min-height: 48px;
+  padding: 0 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.symposium-seat-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(192, 132, 252, 0.4);
+  transform: translateX(2px);
+}
+
+.symposium-seat-card.active-speaker {
+  background: linear-gradient(135deg, rgba(129, 140, 248, 0.22) 0%, rgba(192, 132, 252, 0.28) 100%);
+  border-color: rgba(192, 132, 252, 0.75);
+  box-shadow: 0 0 16px rgba(192, 132, 252, 0.38);
+  animation: seatSpeakerBreathe 2.4s infinite ease-in-out alternate;
+}
+
+@keyframes seatSpeakerBreathe {
+  0% { box-shadow: 0 0 10px rgba(192, 132, 252, 0.25); }
+  100% { box-shadow: 0 0 20px rgba(244, 114, 182, 0.45); }
+}
+
+.symposium-seat-card.user-seat {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.14) 0%, rgba(244, 114, 182, 0.1) 100%);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.symposium-seat-card.user-seat.your-turn {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.28) 0%, rgba(236, 72, 153, 0.24) 100%);
+  border-color: #fbbf24;
+  box-shadow: 0 0 22px rgba(245, 158, 11, 0.5);
+  animation: userTurnPulse 1.8s infinite alternate ease-in-out;
+}
+
+@keyframes userTurnPulse {
+  0% { transform: scale(0.98); box-shadow: 0 0 12px rgba(245, 158, 11, 0.3); }
+  100% { transform: scale(1.02); box-shadow: 0 0 24px rgba(245, 158, 11, 0.6); }
+}
+
+.symposium-seat-card.recommended-next {
+  border-color: rgba(245, 158, 11, 0.8) !important;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.3) !important;
+}
+
+.symposium-seat-card.muted {
+  opacity: 0.4;
+  filter: grayscale(0.65);
+}
+
+/* Avatar Pearl Jewel */
+.seat-jewel-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13.5px;
+  background: radial-gradient(circle, var(--model-color, #c084fc) 25%, rgba(13, 10, 22, 0.85) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+  box-shadow: 0 0 10px var(--model-color, #c084fc);
+  color: #ffffff;
+}
+
+.seat-details-expandable {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.symposium-dais-left-rail:hover .seat-details-expandable,
+.symposium-dais-left-rail.expanded .seat-details-expandable {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.seat-name-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.seat-name-text {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #f1f5f9;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.seat-persona-subtext {
+  font-size: 9.5px;
+  color: #94a3b8;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  line-height: 1.25;
+}
+
+.seat-custom-indicator {
+  font-size: 10px;
+  color: #fde047;
+  text-shadow: 0 0 6px #fde047;
+}
+
+/* Hover Quick Actions on Pods */
+.seat-hover-actions {
+  display: none;
+  align-items: center;
+  gap: 3px;
+  margin-left: auto;
+}
+
+.symposium-dais-left-rail:hover .seat-hover-actions,
+.symposium-dais-left-rail.expanded .seat-hover-actions {
+  display: flex;
+}
+
+.btn-seat-quick-action {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #cbd5e1;
+  font-size: 10px;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.15s ease;
+}
+
+.btn-seat-quick-action:hover {
+  background: rgba(192, 132, 252, 0.2);
+  border-color: rgba(192, 132, 252, 0.45);
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+.btn-seat-quick-action.muted {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* ── 6. Central ChatGPT Conversation Stage (استیج مکالمه چت‌جی‌پی‌تی) ── */
+.symposium-chat-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+}
+
 .symposium-transcript-viewport {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 22px 28px;
+  padding: 28px 20px 145px; /* Generous bottom padding for floating capsule composer */
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  align-items: center;
   box-sizing: border-box;
 }
 
@@ -549,48 +555,58 @@
   width: 6px;
 }
 .symposium-transcript-viewport::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 4px;
 }
 
-/* Empty State Sanctuary */
+.chat-centered-container {
+  width: 100%;
+  max-width: 780px; /* Golden ChatGPT reading measure */
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  box-sizing: border-box;
+}
+
+/* Empty State Sanctuary inside Centered Stage */
 .symposium-empty-sanctuary {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin: auto 0;
-  padding: 40px 20px;
+  margin: 60px auto;
+  padding: 30px 20px;
   gap: 14px;
+  max-width: 520px;
 }
 
 .symposium-empty-orb {
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(254, 215, 170, 0.4) 0%, rgba(192, 132, 252, 0.2) 60%, transparent 100%);
-  border: 1px solid rgba(254, 215, 170, 0.4);
+  background: radial-gradient(circle, rgba(254, 215, 170, 0.35) 0%, rgba(192, 132, 252, 0.18) 60%, transparent 100%);
+  border: 1px solid rgba(254, 215, 170, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fde68a;
-  box-shadow: 0 0 36px rgba(245, 158, 11, 0.35);
+  box-shadow: 0 0 32px rgba(245, 158, 11, 0.3);
   animation: emptyOrbPulse 3.8s infinite ease-in-out alternate;
 }
 
 @keyframes emptyOrbPulse {
-  0% { transform: scale(0.95); box-shadow: 0 0 20px rgba(245, 158, 11, 0.25); }
-  100% { transform: scale(1.05); box-shadow: 0 0 45px rgba(192, 132, 252, 0.5); }
+  0% { transform: scale(0.95); box-shadow: 0 0 16px rgba(245, 158, 11, 0.2); }
+  100% { transform: scale(1.05); box-shadow: 0 0 38px rgba(192, 132, 252, 0.45); }
 }
 
 .symposium-empty-orb svg {
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
 }
 
 .symposium-empty-sanctuary h3 {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
   color: #ffffff;
   margin: 0;
@@ -599,54 +615,49 @@
 .symposium-empty-sanctuary p {
   font-size: 12.5px;
   color: #94a3b8;
-  max-width: 440px;
   line-height: 1.6;
   margin: 0;
 }
 
-/* ── 6. Dialogue Bubble Turns (Haute Obsidian Frosted Silk) ── */
+/* ChatGPT Message Rows (Clean, Borderless or Soft Glass) */
 .symposium-turn-row {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  max-width: 90%;
-  animation: turnSlideIn 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: chatFadeUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes turnSlideIn {
-  from { opacity: 0; transform: translateY(8px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.symposium-turn-row.user {
-  align-self: flex-end;
-  max-width: 82%;
-}
-
-.symposium-turn-row.model {
-  align-self: flex-start;
-  max-width: 95%;
+@keyframes chatFadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .symposium-turn-meta {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 0 8px;
-  font-size: 10.5px;
+  font-size: 11px;
+  font-weight: 600;
   color: #94a3b8;
 }
 
-.symposium-turn-row.user .symposium-turn-meta {
-  justify-content: flex-end;
+.turn-avatar-badge {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: #ffffff;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
 .turn-speaker-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 600;
   color: #f1f5f9;
+  letter-spacing: -0.01em;
 }
 
 .turn-persona-tag {
@@ -654,8 +665,8 @@
   font-weight: 500;
   padding: 1px 6px;
   border-radius: 4px;
-  background: rgba(192, 132, 252, 0.15);
-  border: 1px solid rgba(192, 132, 252, 0.3);
+  background: rgba(192, 132, 252, 0.14);
+  border: 1px solid rgba(192, 132, 252, 0.28);
   color: #e9d5ff;
 }
 
@@ -665,57 +676,67 @@
   font-family: ui-monospace, monospace;
 }
 
-/* Bubble Card */
-.symposium-bubble-card {
-  padding: 15px 18px;
-  border-radius: 16px;
-  font-size: 13.5px;
-  line-height: 1.68;
-  word-break: break-word;
-  user-select: text;
-  box-sizing: border-box;
-  unicode-bidi: plaintext;
-  text-align: start;
-  transition: all 0.2s ease;
+/* User Message: Elegant subtle right-aligned capsule */
+.symposium-turn-row.user {
+  align-self: flex-end;
+  max-width: 82%;
 }
 
-/* User Bubble: Amethyst Rose Velvet */
+.symposium-turn-row.user .symposium-turn-meta {
+  justify-content: flex-end;
+}
+
 .symposium-turn-row.user .symposium-bubble-card {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.32) 0%, rgba(168, 85, 247, 0.36) 50%, rgba(236, 72, 153, 0.28) 100%);
-  border: 1px solid rgba(192, 132, 252, 0.45);
+  background: rgba(45, 35, 65, 0.65);
+  border: 1px solid rgba(192, 132, 252, 0.32);
   color: #ffffff;
-  border-top-right-radius: 4px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  border-radius: 18px;
+  padding: 12px 18px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  font-size: 13.5px;
+  line-height: 1.65;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
 }
 
-/* Seated User Bubble: Warm Champagne Gold & Amethyst */
 .symposium-turn-row.user.seated-user .symposium-bubble-card {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.28) 0%, rgba(236, 72, 153, 0.25) 50%, rgba(168, 85, 247, 0.24) 100%);
-  border: 1px solid rgba(245, 158, 11, 0.6);
-  box-shadow: 0 8px 28px rgba(245, 158, 11, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.24) 0%, rgba(236, 72, 153, 0.22) 50%, rgba(168, 85, 247, 0.2) 100%);
+  border-color: rgba(245, 158, 11, 0.55);
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.22);
 }
 
-/* Model Bubble: Deep Frosted Silk Glass */
+/* Model Message: Pure ChatGPT Markdown stream with natural flow */
+.symposium-turn-row.model {
+  align-self: flex-start;
+  width: 100%;
+}
+
 .symposium-turn-row.model .symposium-bubble-card {
-  background: rgba(19, 15, 33, 0.78);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-left: 3px solid var(--model-color, #c084fc);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 2px 0 0 0;
   color: #f8fafc;
-  border-top-left-radius: 4px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  font-size: 14.5px;
+  line-height: 1.75;
+  word-break: break-word;
 }
 
-/* RTL Specific Rules for Model Bubble */
-.symposium-turn-row.model .symposium-bubble-card[dir="rtl"],
-.symposium-turn-row.model .symposium-bubble-card.is-rtl {
-  border-left: 1px solid rgba(255, 255, 255, 0.09);
-  border-right: 3px solid var(--model-color, #c084fc);
-  border-top-left-radius: 16px;
-  border-top-right-radius: 4px;
+/* RTL Specific Typography Rules */
+.symposium-bubble-card[dir="rtl"],
+.symposium-bubble-card.is-rtl,
+.symposium-markdown[dir="rtl"],
+.symposium-markdown.is-rtl {
   direction: rtl !important;
   text-align: right !important;
-  font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "Segoe UI", Tahoma, Roboto, sans-serif;
-  line-height: 1.82;
+  font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "Segoe UI", Tahoma, Roboto, sans-serif !important;
+  line-height: 1.82 !important;
+}
+
+.symposium-bubble-card[dir="ltr"],
+.symposium-bubble-card.is-ltr {
+  direction: ltr !important;
+  text-align: left !important;
 }
 
 /* In-Bubble Action Chips Bar */
@@ -724,44 +745,40 @@
   align-items: center;
   gap: 6px;
   margin-top: 10px;
-  padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .btn-bubble-chip {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 3px 9px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.045);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: #cbd5e1;
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: inherit;
 }
 
 .btn-bubble-chip:hover {
-  background: rgba(192, 132, 252, 0.2);
-  border-color: rgba(192, 132, 252, 0.55);
+  background: rgba(192, 132, 252, 0.18);
+  border-color: rgba(192, 132, 252, 0.45);
   color: #ffffff;
   transform: translateY(-1px);
 }
 
-.btn-bubble-chip:active {
-  transform: scale(0.98);
-}
-
 .btn-bubble-chip.crown-chip:hover {
-  background: rgba(245, 158, 11, 0.2);
+  background: rgba(245, 158, 11, 0.18);
   border-color: rgba(245, 158, 11, 0.5);
   color: #fef08a;
 }
 
-/* ── 7. Bidirectional Markdown & Code Formatting ── */
+/* Bidirectional Markdown & Code Formatting */
 .symposium-markdown p {
   margin: 0 0 10px 0;
   unicode-bidi: plaintext;
@@ -783,10 +800,10 @@
   text-align: left !important;
   margin: 12px 0;
   border-radius: 10px;
-  background: #090b14 !important;
+  background: #080a14 !important;
   border: 1px solid rgba(192, 132, 252, 0.22) !important;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
 }
 
 .symposium-code-header {
@@ -812,9 +829,165 @@
   white-space: pre;
 }
 
-/* ── 8. Collapsible Milestone Consensus Ledger (Side-Tray) ── */
+/* ── 7. Floating ChatGPT Capsule Composer (Docked Bottom Center) ── */
+.symposium-composer-container {
+  position: absolute;
+  bottom: 16px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 30;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.symposium-composer-container > .chat-centered-container {
+  pointer-events: auto;
+}
+
+.symposium-chatgpt-composer {
+  background: rgba(20, 16, 34, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  padding: 9px 16px;
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  box-shadow: 0 16px 48px -8px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(192, 132, 252, 0.16) inset;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transition: all 0.22s ease;
+  box-sizing: border-box;
+}
+
+.symposium-chatgpt-composer:focus-within {
+  border-color: rgba(192, 132, 252, 0.55);
+  box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.85), 0 0 24px rgba(192, 132, 252, 0.25);
+}
+
+.symposium-chatgpt-composer.user-turn-active {
+  border-color: rgba(245, 158, 11, 0.85);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(236, 72, 153, 0.08) 100%);
+  box-shadow: 0 0 32px rgba(245, 158, 11, 0.35), 0 0 0 1px rgba(245, 158, 11, 0.6) inset;
+}
+
+.composer-top-context-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #fde68a;
+  user-select: none;
+}
+
+.composer-top-context-pill .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f59e0b;
+  box-shadow: 0 0 8px #f59e0b;
+}
+
+.composer-input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.chatgpt-textarea {
+  flex: 1;
+  min-height: 24px;
+  max-height: 160px;
+  border: none;
+  background: transparent;
+  outline: none;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13.5px;
+  line-height: 1.5;
+  resize: none;
+  padding: 4px 0;
+  box-sizing: border-box;
+}
+
+.chatgpt-textarea::placeholder {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.composer-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.btn-composer-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fde68a;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-composer-icon:hover {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.5);
+  transform: scale(1.06);
+}
+
+.btn-chatgpt-send {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #ffffff;
+  color: #0d0a15;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-chatgpt-send svg {
+  width: 14px;
+  height: 14px;
+  stroke: #0d0a15;
+}
+
+.btn-chatgpt-send:hover {
+  background: #fbcfe8;
+  transform: scale(1.06);
+}
+
+.btn-chatgpt-send:active {
+  transform: scale(0.96);
+}
+
+.composer-disclaimer {
+  text-align: center;
+  font-size: 10px;
+  color: #64748b;
+  margin-top: 4px;
+  user-select: none;
+}
+
+/* ── 8. Collapsible Milestone Consensus Ledger (Right-Tray) ── */
 .symposium-ledger-tray {
-  width: 320px;
+  width: 310px;
   background: rgba(14, 11, 24, 0.92);
   border-left: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
@@ -942,162 +1115,123 @@
   background: rgba(192, 132, 252, 0.07);
 }
 
-/* ── 9. Bottom Maestro Command Dock ── */
-.symposium-maestro-dock {
-  position: relative;
-  z-index: 20;
-  padding: 12px 22px 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(12, 9, 21, 0.94);
+/* ── 9. The Logic Sanctum Drawer ── */
+.logic-sanctum-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 520px;
+  max-width: 100vw;
+  height: 100vh;
+  z-index: 1400;
+  background: linear-gradient(175deg, rgba(17, 13, 29, 0.98) 0%, rgba(9, 7, 17, 0.99) 100%);
+  backdrop-filter: blur(48px) saturate(220%);
+  -webkit-backdrop-filter: blur(48px) saturate(220%);
+  border-left: 1px solid rgba(254, 215, 170, 0.3);
+  box-shadow: -32px 0 85px rgba(0, 0, 0, 0.92);
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  flex-shrink: 0;
+  transform: translateX(100%);
+  transition: transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
 }
 
-.dock-controls-strip {
+.logic-sanctum-drawer.open {
+  transform: translateX(0);
+}
+
+.sanctum-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 4, 12, 0.65);
+  backdrop-filter: blur(6px);
+  z-index: 1390;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+
+.sanctum-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sanctum-drawer-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 100%);
 }
 
-.dock-left-actions {
+.sanctum-nav-tabs {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  padding: 8px 18px;
+  background: rgba(0, 0, 0, 0.28);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  overflow-x: auto;
+  flex-shrink: 0;
 }
 
-.baton-picker-select {
-  height: 28px;
-  padding: 0 24px 0 10px;
-  border-radius: 7px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  color: #f1f5f9;
-  font-size: 11px;
-  font-weight: 500;
-  outline: none;
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23c084fc' stroke-width='2.2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-}
-
-.baton-picker-select option {
-  background: #110d1f;
-  color: #ffffff;
-}
-
-/* Maestro Text Input Box */
-.symposium-input-box {
-  display: flex;
-  align-items: flex-end;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  padding: 8px 14px;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-}
-
-.symposium-input-box:focus-within {
-  border-color: rgba(192, 132, 252, 0.55);
-  box-shadow: 0 0 24px rgba(192, 132, 252, 0.25);
-}
-
-/* When it is user's active turn to speak on the Dais */
-.symposium-input-box.user-turn-active {
-  border-color: rgba(245, 158, 11, 0.85);
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(236, 72, 153, 0.06) 100%);
-  box-shadow: 0 0 32px rgba(245, 158, 11, 0.35), 0 0 0 1px rgba(245, 158, 11, 0.6) inset;
-  animation: userDockBreathe 2s infinite ease-in-out alternate;
-}
-
-@keyframes userDockBreathe {
-  0% { box-shadow: 0 0 18px rgba(245, 158, 11, 0.25); }
-  100% { box-shadow: 0 0 36px rgba(245, 158, 11, 0.55); }
-}
-
-.symposium-input-box.user-turn-active::before {
-  content: '🌟 Your Turn to Address the Symposium Dais';
-  position: absolute;
-  top: -22px;
-  left: 12px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #fde68a;
-  text-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
-}
-
-.symposium-textarea {
-  flex: 1;
-  min-height: 42px;
-  max-height: 160px;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #ffffff;
-  font-family: inherit;
-  font-size: 13.5px;
-  line-height: 1.5;
-  resize: none;
-}
-
-.symposium-textarea::placeholder {
-  color: #64748b;
-  font-size: 12.5px;
-}
-
-/* Hero Manual Next Turn Button & Conductor Indicators */
-.btn-manual-next-turn {
+.sanctum-tab-btn {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 5px;
-  height: 28px;
-  padding: 0 12px;
-  border-radius: 7px;
-  border: 1px solid rgba(245, 158, 11, 0.6);
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.28) 0%, rgba(217, 119, 6, 0.3) 100%);
-  color: #fef3c7;
+  padding: 5px 11px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: #94a3b8;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 500;
   cursor: pointer;
+  white-space: nowrap;
   transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 0 14px rgba(245, 158, 11, 0.25);
   font-family: inherit;
-  white-space: nowrap;
 }
 
-.btn-manual-next-turn:hover {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.45) 0%, rgba(217, 119, 6, 0.45) 100%);
-  border-color: rgba(245, 158, 11, 0.85);
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.45);
-  transform: translateY(-1px);
+.sanctum-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #f1f5f9;
 }
 
-.btn-manual-next-turn:active {
-  transform: translateY(1px) scale(0.98);
-}
-
-.symposium-conductor-badge {
-  font-size: 10px;
+.sanctum-tab-btn.active {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(192, 132, 252, 0.25) 100%);
+  border-color: rgba(245, 158, 11, 0.55);
+  color: #ffffff;
   font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #fde68a;
-  white-space: nowrap;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.22);
 }
 
-/* Scenarios Grid & Cards Styling */
+.sanctum-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sanctum-tab-section {
+  animation: sanctumFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes sanctumFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.sanctum-action-buttons-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Scenarios Grid & Cards */
 .scenario-presets-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -1183,151 +1317,6 @@
   background: rgba(192, 132, 252, 0.28);
   border-color: rgba(192, 132, 252, 0.7);
   color: #ffffff;
-}
-
-.btn-maestro-send {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 36px;
-  padding: 0 15px;
-  border-radius: 9px;
-  border: none;
-  background: linear-gradient(135deg, #f59e0b 0%, #ec4899 50%, #8b5cf6 100%);
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-  flex-shrink: 0;
-}
-
-.btn-maestro-send:hover {
-  transform: translateY(-1.5px);
-  box-shadow: 0 6px 22px rgba(245, 158, 11, 0.5);
-  filter: brightness(1.08);
-}
-
-.btn-maestro-send:active {
-  transform: translateY(0.5px) scale(0.99);
-}
-
-/* ── 10. The Logic Sanctum Drawer (Deep Protocol Customizer) ── */
-.logic-sanctum-drawer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 520px;
-  max-width: 100vw;
-  height: 100vh;
-  z-index: 1400;
-  background: linear-gradient(175deg, rgba(17, 13, 29, 0.98) 0%, rgba(9, 7, 17, 0.99) 100%);
-  backdrop-filter: blur(48px) saturate(220%);
-  -webkit-backdrop-filter: blur(48px) saturate(220%);
-  border-left: 1px solid rgba(254, 215, 170, 0.3);
-  box-shadow: -32px 0 85px rgba(0, 0, 0, 0.92);
-  display: flex;
-  flex-direction: column;
-  transform: translateX(100%);
-  transition: transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
-  box-sizing: border-box;
-}
-
-.logic-sanctum-drawer.open {
-  transform: translateX(0);
-}
-
-.sanctum-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(6, 4, 12, 0.65);
-  backdrop-filter: blur(6px);
-  z-index: 1390;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.28s ease;
-}
-
-.sanctum-backdrop.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.sanctum-drawer-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 100%);
-}
-
-/* Sanctum Navigation Tabs Ribbon */
-.sanctum-nav-tabs {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 18px;
-  background: rgba(0, 0, 0, 0.28);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  overflow-x: auto;
-  flex-shrink: 0;
-}
-
-.sanctum-tab-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 11px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
-  color: #94a3b8;
-  font-size: 11px;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-  font-family: inherit;
-}
-
-.sanctum-tab-btn:hover {
-  background: rgba(255, 255, 255, 0.09);
-  color: #f1f5f9;
-}
-
-.sanctum-tab-btn.active {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(192, 132, 252, 0.25) 100%);
-  border-color: rgba(245, 158, 11, 0.55);
-  color: #ffffff;
-  font-weight: 600;
-  box-shadow: 0 0 14px rgba(245, 158, 11, 0.22);
-}
-
-.sanctum-drawer-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 18px 22px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.sanctum-tab-section {
-  animation: sanctumFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes sanctumFadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.sanctum-action-buttons-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 4px;
 }
 
 /* Presets Library Grid */

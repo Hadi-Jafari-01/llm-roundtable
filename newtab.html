@@ -435,411 +435,6 @@
       transform: translateY(0.5px) scale(0.99) !important;
       box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3) !important;
     }
-
-    /* ==========================================================================
-       Haute Omnibar Floating Dock & Studio (Ultra Sleek & Non-Intrusive)
-       ========================================================================== */
-    .omnibar-capsule-island {
-      position: fixed !important;
-      bottom: 16px !important;
-      left: 50% !important;
-      transform: translateX(-50%) !important;
-      z-index: 1100 !important;
-      pointer-events: none !important; /* Never block canvas clicks outside the bar itself */
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      transition: bottom 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-                  opacity 0.25s ease,
-                  transform 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    }
-
-    /* Zen Mode: tuck away smoothly to the bottom edge, reveal on hover */
-    .zen-mode .omnibar-capsule-island {
-      bottom: 6px !important;
-      opacity: 0.35 !important;
-    }
-    .zen-mode .omnibar-capsule-island:hover,
-    .zen-mode .omnibar-capsule-island.expanded {
-      bottom: 16px !important;
-      opacity: 1 !important;
-    }
-
-    /* 1. Resting Compact Pill */
-    .omnibar-compact-bar {
-      pointer-events: auto !important;
-      display: flex !important;
-      align-items: center !important;
-      gap: 10px !important;
-      height: 38px !important;
-      padding: 0 14px 0 10px !important;
-      border-radius: 999px !important;
-      background: rgba(13, 16, 26, 0.78) !important;
-      backdrop-filter: blur(24px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-      border: 1px solid rgba(255, 255, 255, 0.09) !important;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 
-                  0 0 0 1px rgba(129, 140, 248, 0.1) inset,
-                  0 2px 10px rgba(0, 0, 0, 0.3) !important;
-      cursor: pointer !important;
-      user-select: none !important;
-      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      max-width: 480px !important;
-      min-width: 330px !important;
-    }
-
-    .omnibar-compact-bar:hover {
-      background: rgba(18, 22, 36, 0.88) !important;
-      border-color: rgba(192, 132, 252, 0.35) !important;
-      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55),
-                  0 0 20px rgba(192, 132, 252, 0.2),
-                  0 0 0 1px rgba(192, 132, 252, 0.25) inset !important;
-      transform: translateY(-2px) !important;
-    }
-
-    .capsule-spark-gem {
-      width: 24px !important;
-      height: 24px !important;
-      border-radius: 50% !important;
-      background: linear-gradient(135deg, rgba(129, 140, 248, 0.25) 0%, rgba(192, 132, 252, 0.25) 100%) !important;
-      border: 1px solid rgba(192, 132, 252, 0.4) !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      flex-shrink: 0 !important;
-      color: #c084fc !important;
-      box-shadow: 0 0 10px rgba(192, 132, 252, 0.3) !important;
-      transition: transform 0.22s ease !important;
-    }
-
-    .omnibar-compact-bar:hover .capsule-spark-gem {
-      transform: rotate(15deg) scale(1.08) !important;
-      color: #f472b6 !important;
-    }
-
-    .capsule-spark-gem svg {
-      width: 13px !important;
-      height: 13px !important;
-    }
-
-    .capsule-placeholder {
-      font-size: 11.5px !important;
-      font-weight: 500 !important;
-      color: #94a3b8 !important;
-      letter-spacing: -0.01em !important;
-      white-space: nowrap !important;
-      overflow: hidden !important;
-      text-overflow: ellipsis !important;
-      flex: 1 !important;
-      transition: color 0.18s ease !important;
-    }
-
-    .omnibar-compact-bar:hover .capsule-placeholder {
-      color: #e2e8f0 !important;
-    }
-
-    .capsule-hotkey-tags {
-      display: flex !important;
-      align-items: center !important;
-      gap: 5px !important;
-      flex-shrink: 0 !important;
-    }
-
-    .hotkey-badge {
-      display: inline-flex !important;
-      align-items: center !important;
-      gap: 2px !important;
-      padding: 1px 5px !important;
-      background: rgba(255, 255, 255, 0.06) !important;
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      border-radius: 5px !important;
-      font-size: 9.5px !important;
-      color: #94a3b8 !important;
-      font-family: inherit !important;
-    }
-
-    .hotkey-badge kbd {
-      font-family: inherit !important;
-      font-size: 9.5px !important;
-      font-weight: 600 !important;
-    }
-
-    /* Dispatched pulse feedback on compact pill */
-    @keyframes pillDispatchedPulse {
-      0% {
-        box-shadow: 0 0 0 0 rgba(192, 132, 252, 0.8), 0 8px 32px rgba(0, 0, 0, 0.5);
-        border-color: rgba(192, 132, 252, 0.9);
-        transform: translateY(-3px) scale(1.03);
-      }
-      50% {
-        box-shadow: 0 0 28px 4px rgba(192, 132, 252, 0.5), 0 12px 40px rgba(0, 0, 0, 0.6);
-        border-color: rgba(244, 114, 182, 0.9);
-      }
-      100% {
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
-        border-color: rgba(255, 255, 255, 0.09);
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    .omnibar-compact-bar.pill-dispatched {
-      animation: pillDispatchedPulse 1.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    }
-    .omnibar-compact-bar.pill-dispatched .capsule-spark-gem {
-      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%) !important;
-      color: #ffffff !important;
-    }
-
-    /* 2. Expanded Multi-Line Prompt Studio */
-    .omnibar-studio-layout {
-      pointer-events: auto !important;
-      width: 660px !important;
-      max-width: calc(100vw - 32px) !important;
-      background: linear-gradient(170deg, rgba(19, 23, 37, 0.96) 0%, rgba(11, 13, 22, 0.98) 100%) !important;
-      backdrop-filter: blur(32px) saturate(190%) !important;
-      -webkit-backdrop-filter: blur(32px) saturate(190%) !important;
-      border: 1px solid rgba(192, 132, 252, 0.28) !important;
-      border-radius: 16px !important;
-      box-shadow: 0 28px 70px -12px rgba(0, 0, 0, 0.88),
-                  0 0 0 1px rgba(255, 255, 255, 0.08) inset,
-                  0 8px 32px rgba(129, 140, 248, 0.18) !important;
-      padding: 10px 12px !important;
-      box-sizing: border-box !important;
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 8px !important;
-      transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      transform-origin: bottom center !important;
-      animation: studioPopIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
-    }
-
-    @keyframes studioPopIn {
-      from {
-        opacity: 0;
-        transform: translateY(12px) scale(0.97);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    .omnibar-capsule-island:not(.expanded) .omnibar-studio-layout,
-    .omnibar-studio-layout.hidden {
-      display: none !important;
-    }
-
-    .omnibar-capsule-island.expanded .omnibar-compact-bar,
-    .omnibar-compact-bar.hidden {
-      display: none !important;
-    }
-
-    .studio-accessory-strip {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      gap: 8px !important;
-      padding-bottom: 6px !important;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
-    }
-
-    .sync-scope-cluster {
-      display: flex !important;
-      align-items: center !important;
-      gap: 4px !important;
-      background: rgba(255, 255, 255, 0.04) !important;
-      padding: 2px !important;
-      border-radius: 8px !important;
-      border: 1px solid rgba(255, 255, 255, 0.06) !important;
-    }
-
-    .sync-scope-btn {
-      display: inline-flex !important;
-      align-items: center !important;
-      gap: 5px !important;
-      padding: 4px 9px !important;
-      border-radius: 6px !important;
-      border: none !important;
-      background: transparent !important;
-      color: #94a3b8 !important;
-      font-size: 10.5px !important;
-      font-weight: 500 !important;
-      cursor: pointer !important;
-      transition: all 0.16s ease !important;
-      font-family: inherit !important;
-    }
-
-    .sync-scope-btn svg {
-      width: 12px !important;
-      height: 12px !important;
-      opacity: 0.8 !important;
-    }
-
-    .sync-scope-btn:hover {
-      color: #f1f5f9 !important;
-      background: rgba(255, 255, 255, 0.06) !important;
-    }
-
-    .sync-scope-btn.active {
-      background: rgba(129, 140, 248, 0.2) !important;
-      color: #ffffff !important;
-      font-weight: 600 !important;
-      box-shadow: 0 0 10px rgba(129, 140, 248, 0.25) !important;
-    }
-
-    .sync-scope-btn.active svg {
-      opacity: 1 !important;
-      stroke: #a5b4fc !important;
-    }
-
-    .studio-bots-ribbon {
-      display: flex !important;
-      align-items: center !important;
-      gap: 5px !important;
-      overflow-x: auto !important;
-      max-width: 220px !important;
-      padding: 0 4px !important;
-    }
-    .studio-bots-ribbon::-webkit-scrollbar {
-      display: none !important;
-    }
-
-    .btn-collapse-studio {
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      width: 24px !important;
-      height: 24px !important;
-      border-radius: 6px !important;
-      border: 1px solid rgba(255, 255, 255, 0.08) !important;
-      background: rgba(255, 255, 255, 0.04) !important;
-      color: #94a3b8 !important;
-      cursor: pointer !important;
-      transition: all 0.16s ease !important;
-      padding: 0 !important;
-      margin-left: auto !important;
-      flex-shrink: 0 !important;
-    }
-
-    .btn-collapse-studio svg {
-      width: 13px !important;
-      height: 13px !important;
-    }
-
-    .btn-collapse-studio:hover {
-      background: rgba(255, 255, 255, 0.1) !important;
-      color: #ffffff !important;
-      border-color: rgba(255, 255, 255, 0.18) !important;
-    }
-
-    .studio-input-row {
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 8px !important;
-    }
-
-    .studio-textarea {
-      width: 100% !important;
-      min-height: 48px !important;
-      max-height: 160px !important;
-      background: transparent !important;
-      border: none !important;
-      outline: none !important;
-      color: #f8fafc !important;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif !important;
-      font-size: 13px !important;
-      line-height: 1.5 !important;
-      resize: none !important;
-      padding: 4px 2px !important;
-      box-sizing: border-box !important;
-    }
-
-    .studio-textarea::placeholder {
-      color: #64748b !important;
-      font-size: 12.5px !important;
-    }
-
-    .studio-actions-dock {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: flex-end !important;
-      gap: 8px !important;
-    }
-
-    .char-counter {
-      font-size: 10px !important;
-      font-weight: 500 !important;
-      color: #64748b !important;
-      margin-right: auto !important;
-      font-variant-numeric: tabular-nums !important;
-    }
-
-    .btn-clear-input {
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      width: 24px !important;
-      height: 24px !important;
-      border: none !important;
-      background: transparent !important;
-      color: #64748b !important;
-      border-radius: 4px !important;
-      cursor: pointer !important;
-      padding: 0 !important;
-      transition: all 0.15s ease !important;
-    }
-    .btn-clear-input svg {
-      width: 13px !important;
-      height: 13px !important;
-    }
-    .btn-clear-input:hover {
-      color: #e2e8f0 !important;
-      background: rgba(255, 255, 255, 0.08) !important;
-    }
-
-    .btn-dispatch-jewel {
-      display: inline-flex !important;
-      align-items: center !important;
-      gap: 6px !important;
-      padding: 5px 12px 5px 14px !important;
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%) !important;
-      border: none !important;
-      border-radius: 8px !important;
-      color: #ffffff !important;
-      font-size: 12px !important;
-      font-weight: 600 !important;
-      cursor: pointer !important;
-      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.15) inset !important;
-      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    }
-
-    .btn-dispatch-jewel svg {
-      width: 13px !important;
-      height: 13px !important;
-    }
-
-    .btn-dispatch-jewel .key-pill {
-      display: inline-flex !important;
-      align-items: center !important;
-      gap: 2px !important;
-      padding: 1px 4px !important;
-      border-radius: 4px !important;
-      background: rgba(0, 0, 0, 0.28) !important;
-      border: 1px solid rgba(255, 255, 255, 0.2) !important;
-      font-size: 9.5px !important;
-      margin-left: 2px !important;
-    }
-
-    .btn-dispatch-jewel:hover {
-      transform: translateY(-1px) !important;
-      box-shadow: 0 6px 22px rgba(139, 92, 246, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.25) inset !important;
-      filter: brightness(1.08) !important;
-    }
-
-    .btn-dispatch-jewel:active {
-      transform: translateY(1px) scale(0.98) !important;
-      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.35) !important;
-    }
   </style>
 </head>
 <body>
@@ -1679,7 +1274,7 @@
       </div>
     </aside>
 
-    <!-- Module E: The Silk Symposium Chamber (Infinite Roundtable Agora) -->
+    <!-- Module E: The Silk Symposium Chamber (Infinite Roundtable Agora — ChatGPT Ergonomics & Left-Rail Dais) -->
     <div id="silk-symposium-chamber" class="silk-symposium-overlay" aria-label="The Silk Symposium">
       <div class="symposium-aurora symposium-aurora-top"></div>
       <div class="symposium-aurora symposium-aurora-left"></div>
@@ -1719,13 +1314,16 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5v2a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5Z"/><path d="M19 14v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
             <span>🎭 شخصیت و پرومپت مدل‌ها</span>
           </button>
-          <button type="button" id="btn-symposium-toggle-user-seat" class="symposium-tool-btn" title="Toggle seating yourself directly on the Dais Amphitheater as a peer participant">
+          <button type="button" id="btn-symposium-toggle-user-seat" class="symposium-tool-btn" title="Toggle seating yourself directly on the Dais as a peer participant">
             <span>🪑 Seat Yourself</span>
           </button>
-          <button type="button" id="btn-symposium-toggle-dais" class="symposium-tool-btn active" title="Toggle Celestial Chairs Dais">
-            <span>Dais Chairs</span>
+          <button type="button" id="btn-symposium-autoplay-toggle" class="symposium-tool-btn" title="پخش / توقف جریان خودکار">
+            ▶️ شروع جریان خودکار
           </button>
-          <button type="button" id="btn-symposium-toggle-ledger" class="symposium-tool-btn active" title="Toggle Consensus Ledger">
+          <button type="button" id="btn-symposium-toggle-dais" class="symposium-tool-btn active" title="Toggle Models Left Rail">
+            <span>Dais Rail</span>
+          </button>
+          <button type="button" id="btn-symposium-toggle-ledger" class="symposium-tool-btn" title="Toggle Consensus Ledger">
             <span>Ledger</span>
           </button>
           <button type="button" id="btn-symposium-open-sanctum" class="symposium-tool-btn" title="Configure Logic Sanctum (Macros, User Persona & Topologies)">
@@ -1739,18 +1337,58 @@
         </div>
       </header>
 
-      <!-- The Amphitheater Dais (Celestial Chairs Ribbon) -->
-      <section id="symposium-dais-container" class="symposium-dais-container">
-        <div id="symposium-dais-ribbon" class="symposium-dais-ribbon"></div>
-      </section>
-
-      <!-- Main Workspace: Dialogue Stream + Consensus Ledger -->
+      <!-- Main Workspace Layout: Left Model Dais Rail + Centered ChatGPT Stage + Collapsible Ledger -->
       <div class="symposium-body-layout">
-        <!-- Transcript Viewport -->
-        <main id="symposium-transcript-viewport" class="symposium-transcript-viewport"></main>
+        <!-- 1. Ultra-Minimal Left Model Rail (Vertical Dais) -->
+        <aside id="symposium-dais-container" class="symposium-dais-left-rail" aria-label="Celestial Models Rail">
+          <div class="dais-rail-header">
+            <span class="rail-title-label">MODELS</span>
+            <button type="button" id="btn-symposium-toggle-rail" class="btn-rail-collapse" title="Collapse / Expand Rail">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+          </div>
+          <div id="symposium-dais-ribbon" class="dais-vertical-stack">
+            <!-- Rendered by SymposiumDais.js as compact jewel pods -->
+          </div>
+        </aside>
 
-        <!-- Collapsible Consensus Ledger Tray -->
-        <aside id="symposium-ledger-tray" class="symposium-ledger-tray">
+        <!-- 2. Centered ChatGPT-Style Dialogue Column -->
+        <section class="symposium-chat-stage">
+          <div id="symposium-transcript-viewport" class="symposium-transcript-viewport">
+            <div class="chat-centered-container">
+              <!-- Turns rendered here by SymposiumTranscript.js -->
+            </div>
+          </div>
+
+          <!-- Floating ChatGPT Pill Composer -->
+          <div class="symposium-composer-container">
+            <div class="chat-centered-container">
+              <div class="symposium-chatgpt-composer">
+                <div class="composer-top-context-pill" id="composer-speaker-hint">
+                  <span class="dot"></span>
+                  <span id="composer-speaker-name">Next: Auto Conductor</span>
+                </div>
+                <div class="composer-input-row">
+                  <textarea id="symposium-prompt-input" class="chatgpt-textarea" placeholder="Message the symposium or pass the baton... (⌘↵ to send)" rows="1" dir="auto"></textarea>
+                  <div class="composer-actions-right">
+                    <button type="button" id="btn-symposium-next-turn" class="btn-composer-icon" title="Pass Baton to Next Model (🪄)">
+                      🪄
+                    </button>
+                    <button type="button" id="btn-symposium-send-maestro" class="btn-chatgpt-send" title="Send (⌘↵)">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="composer-disclaimer">
+                OmniAI Silk Symposium • High-Order Cognitive Dialectic • Autonomous Client-Side Relay
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Collapsible Consensus Ledger (Right Tray) -->
+        <aside id="symposium-ledger-tray" class="symposium-ledger-tray collapsed">
           <div class="ledger-tray-header">
             <div class="ledger-title-group">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15 8 22 9 17 14 18 21 12 18 6 21 7 14 2 9 9 8 12 2"/></svg>
@@ -1786,39 +1424,6 @@
           </div>
         </aside>
       </div>
-
-      <!-- Bottom Maestro Command Dock (Coordinated for Manual Turn-Taking) -->
-      <footer class="symposium-maestro-dock">
-        <div class="dock-controls-strip">
-          <div class="dock-left-actions">
-            <span style="font-size:11px;color:#fde68a;font-weight:600;">نوبت سخنران بعدی:</span>
-            <select id="symposium-baton-select" class="baton-picker-select"></select>
-            <button type="button" id="btn-symposium-next-turn" class="btn-manual-next-turn" title="شروع یا انتقال نوبت به مدل انتخاب‌شده (نوبت‌دهی دستی)">
-              <span>نوبت بعد 🪄</span>
-            </button>
-          </div>
-
-          <div style="display:flex;align-items:center;gap:8px;">
-            <button type="button" id="btn-symposium-mode-toggle" class="symposium-tool-btn" title="تغییر میان نوبت‌دهی دستی و خودکار">
-              <span id="symposium-mode-toggle-text">🕹️ نوبت‌دهی: دستی</span>
-            </button>
-            <button type="button" id="btn-symposium-autoplay-toggle" class="symposium-tool-btn" title="پخش / توقف جریان خودکار">
-              ▶️ شروع جریان خودکار
-            </button>
-            <span id="symposium-turn-status-badge" class="symposium-conductor-badge">
-              منتظر فرمان نوبت‌دهی دستی
-            </span>
-          </div>
-        </div>
-
-        <div class="symposium-input-box">
-          <textarea id="symposium-prompt-input" class="symposium-textarea" placeholder="پرسش یا نظر خود را بنویسید؛ در حالت دستی مستقیماً به مدل انتخاب‌شده نوبت داده می‌شود... (⌘↵ to send)" rows="1"></textarea>
-          <button type="button" id="btn-symposium-send-maestro" class="btn-maestro-send">
-            <span>ارسال به شورا</span>
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </button>
-        </div>
-      </footer>
 
       <!-- The Logic Sanctum Drawer (Deep Protocol Customizer & Personas Studio) -->
       <div id="sanctum-backdrop" class="sanctum-backdrop"></div>

@@ -1,7 +1,12 @@
 /**
  * OmniAI Hub — The Silk Symposium Transcript & Bubble Engine
- * Renders dialogue turns, bidirectional Persian/English typography,
- * code blocks with copy utilities, and interactive argument chips (Challenge, Crown, Synthesize).
+ * Renders dialogue turns with modern ChatGPT aesthetics:
+ *   - Centered column within reading measure (max-width: 780px)
+ *   - Subtle right-aligned user floating capsules
+ *   - Model responses flowing naturally without heavy artificial card boxes
+ *   - Bidirectional Persian/English typography (Vazirmatn font-family, direction auto/rtl)
+ *   - Isolated LTR code blocks with header language tags and copy button
+ *   - Reasoning fold integration (🧠 Thinking Process)
  */
 
 export class SymposiumTranscript {
@@ -39,13 +44,15 @@ export class SymposiumTranscript {
 
       const copyBtn = e.target.closest('.btn-copy-code');
       if (copyBtn) {
-        const codeBlock = copyBtn.closest('.symposium-code-box')?.querySelector('.symposium-code-body code');
+        const codeBlock = copyBtn.closest('.symposium-code-box')?.querySelector('.symposium-code-body code') ||
+                          copyBtn.closest('.symposium-code-box')?.querySelector('.symposium-code-body');
         if (codeBlock) {
           navigator.clipboard.writeText(codeBlock.textContent || codeBlock.innerText);
           const orig = copyBtn.textContent;
           copyBtn.textContent = '✓ Copied';
           setTimeout(() => { copyBtn.textContent = orig; }, 1800);
         }
+        return;
       }
 
       const foldTrigger = e.target.closest('.reasoning-fold-trigger');
@@ -66,25 +73,31 @@ export class SymposiumTranscript {
 
     if (!turns || turns.length === 0) {
       this.viewportEl.innerHTML = `
-        <div class="symposium-empty-sanctuary">
-          <div class="symposium-empty-orb">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="5"/>
-            </svg>
+        <div class="chat-centered-container">
+          <div class="symposium-empty-sanctuary">
+            <div class="symposium-empty-orb">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="5"/>
+              </svg>
+            </div>
+            <h3>The Silk Symposium Agora</h3>
+            <p>Convene a high-order cognitive roundtable. Enter an inquiry in the capsule below or pass the baton to initiate deliberation.</p>
           </div>
-          <h3>The Silk Symposium Agora</h3>
-          <p>Convene a high-order cognitive roundtable. Enter an inquiry below or pass the baton to initiate deliberation.</p>
         </div>
       `;
       return;
     }
 
     this.viewportEl.innerHTML = '';
+    const container = document.createElement('div');
+    container.className = 'chat-centered-container';
+
     turns.forEach(turn => {
       const row = this.createTurnElement(turn);
-      this.viewportEl.appendChild(row);
+      container.appendChild(row);
     });
 
+    this.viewportEl.appendChild(container);
     this.scrollToBottom();
   }
 
@@ -100,13 +113,17 @@ export class SymposiumTranscript {
     const isRTL = textDir === 'rtl';
 
     if (isUser) {
-      const speakerBadge = isSeatedUser ? `${turn.speakerName} (${turn.personaBadge || '👑 You'})` : 'Human Maestro (Observer)';
+      const speakerBadge = isSeatedUser
+        ? `${turn.speakerName} (${turn.personaBadge || '👑 You'})`
+        : 'Human Maestro (Observer)';
+
       row.innerHTML = `
         <div class="symposium-turn-meta">
-          <span class="turn-speaker-badge" style="color: ${turn.color || '#f59e0b'}; font-weight: 600;">
-            ${this.escapeHtml(speakerBadge)}
+          <span class="turn-avatar-badge" style="background: ${turn.color || '#f59e0b'};">
+            ${isSeatedUser ? '👑' : '👤'}
           </span>
-          • <span>Round ${turn.round || 1}</span> • <span>${turn.timestamp || ''}</span>
+          <span class="turn-speaker-badge">${this.escapeHtml(speakerBadge)}</span>
+          <span class="turn-round-tag">Round ${turn.round || 1} • ${turn.timestamp || ''}</span>
         </div>
         <div class="symposium-bubble-card ${isRTL ? 'is-rtl' : 'is-ltr'}" dir="${textDir}">
           ${this.escapeHtml(turn.text)}
@@ -128,19 +145,23 @@ export class SymposiumTranscript {
         <div class="mirror-streaming-pulse"><span></span><span></span><span></span></div>
       ` : '';
 
+      const avatarBadgeSymbol = turn.personaBadge?.slice(0, 2) || '🤖';
+
       row.innerHTML = `
         <div class="symposium-turn-meta">
-          <span class="turn-speaker-badge" style="color: ${turn.color};">
-            <span style="width:7px;height:7px;border-radius:50%;background:currentColor;"></span>
+          <span class="turn-avatar-badge" style="background: ${turn.color || '#c084fc'};">
+            ${avatarBadgeSymbol}
+          </span>
+          <span class="turn-speaker-badge" style="color: ${turn.color || '#f1f5f9'};">
             ${this.escapeHtml(turn.speakerName)}
           </span>
           <span class="turn-persona-tag">${this.escapeHtml(turn.personaBadge || 'Chair')}</span>
-          <span class="turn-round-tag">Round ${turn.round || 1}</span> • <span>${turn.timestamp || ''}</span>
+          <span class="turn-round-tag">Round ${turn.round || 1} • ${turn.timestamp || ''}</span>
         </div>
 
         <div class="symposium-bubble-card ${isRTL ? 'is-rtl' : 'is-ltr'}" dir="${textDir}" style="--model-color: ${turn.color};">
           ${thinkingHtml}
-          <div class="symposium-markdown">${renderedMd}</div>
+          <div class="symposium-markdown ${isRTL ? 'is-rtl' : 'is-ltr'}">${renderedMd}</div>
           ${pulseHtml}
 
           <div class="symposium-bubble-actions">
@@ -177,6 +198,9 @@ export class SymposiumTranscript {
     }
     if (mdContainer) {
       mdContainer.innerHTML = this.renderMarkdown(turn.text || '');
+      mdContainer.setAttribute('dir', textDir);
+      mdContainer.classList.toggle('is-rtl', textDir === 'rtl');
+      mdContainer.classList.toggle('is-ltr', textDir === 'ltr');
     }
 
     this.scrollToBottom();
@@ -266,4 +290,4 @@ export class SymposiumTranscript {
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;');
   }
-}
+}
