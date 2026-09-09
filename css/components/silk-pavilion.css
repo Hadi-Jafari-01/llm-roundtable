@@ -1,0 +1,503 @@
+/* ==========================================================================
+   OmniAI Hub — The Silk Pavilion (Atelier Studio Chamber)
+   Haute Digital Spatial Architecture: Cupertino Minimalism × VisionOS Glass
+   Quiet Luxury • Luminous Amethyst & Frosted Silk • Tactile Precision
+   ========================================================================== */
+
+/* ── 1. Root Slide-Over Chamber Drawer ── */
+.silk-pavilion-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 560px;
+  max-width: calc(100vw - 24px);
+  height: 100vh;
+  z-index: 1270;
+  background: linear-gradient(175deg, rgba(16, 20, 35, 0.97) 0%, rgba(9, 11, 20, 0.99) 100%);
+  backdrop-filter: blur(48px) saturate(220%);
+  -webkit-backdrop-filter: blur(48px) saturate(220%);
+  border-left: 1px solid rgba(192, 132, 252, 0.32);
+  box-shadow: -32px 0 85px rgba(0, 0, 0, 0.92),
+              inset 1px 0 0 rgba(255, 255, 255, 0.12),
+              -12px 0 45px rgba(129, 140, 248, 0.18);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  color: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  user-select: none;
+}
+
+.silk-pavilion-drawer.open {
+  transform: translateX(0);
+}
+
+/* ── 2. Atmospheric Backdrop ── */
+.silk-pavilion-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 8, 16, 0.68);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1260;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.silk-pavilion-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── 3. Drawer Header Bar ── */
+.pavilion-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+  flex-shrink: 0;
+}
+
+.pavilion-header-title-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.pavilion-gem-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(129, 140, 248, 0.35) 0%, rgba(192, 132, 252, 0.35) 50%, rgba(244, 114, 182, 0.28) 100%);
+  border: 1px solid rgba(192, 132, 252, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fbcfe8;
+  box-shadow: 0 0 20px rgba(192, 132, 252, 0.38), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.pavilion-gem-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.pavilion-header-title-group h2 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.pavilion-header-title-group p {
+  font-size: 11px;
+  color: #94a3b8;
+  margin: 2px 0 0 0;
+}
+
+.pavilion-close-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pavilion-close-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
+}
+
+/* ── 4. Search Filter Bar ── */
+.pavilion-search-bar {
+  padding: 12px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.22);
+  flex-shrink: 0;
+}
+
+.pavilion-search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 11px;
+  padding: 7px 12px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.pavilion-search-wrapper:focus-within {
+  border-color: rgba(192, 132, 252, 0.55);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 0 16px rgba(192, 132, 252, 0.3), inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.pavilion-search-wrapper .icon-search {
+  width: 14px;
+  height: 14px;
+  color: #94a3b8;
+  flex-shrink: 0;
+  transition: color 0.18s ease;
+}
+
+.pavilion-search-wrapper:focus-within .icon-search {
+  color: #c084fc;
+}
+
+.pavilion-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #f8fafc;
+  font-family: inherit;
+  font-size: 12.5px;
+}
+
+.pavilion-search-input::placeholder {
+  color: #64748b;
+  font-size: 11.5px;
+}
+
+.search-kbd-hint kbd {
+  font-size: 9.5px;
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  font-family: inherit;
+}
+
+/* ── 5. Drawer Body & Studios Grid ── */
+.pavilion-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.pavilion-drawer-body::-webkit-scrollbar {
+  width: 5px;
+}
+.pavilion-drawer-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
+}
+
+.pavilion-section-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  padding-bottom: 2px;
+}
+
+.pavilion-counter-pill {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #c084fc;
+  background: rgba(192, 132, 252, 0.12);
+  border: 1px solid rgba(192, 132, 252, 0.28);
+  padding: 2px 7px;
+  border-radius: 12px;
+}
+
+.pavilion-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── 6. Studio Cards (Jewel Tiles) ── */
+.pavilion-studio-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.pavilion-studio-card:hover {
+  background: rgba(255, 255, 255, 0.065);
+  border-color: rgba(192, 132, 252, 0.45);
+  transform: translateY(-2px) scale(1.012);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.52),
+              0 0 24px rgba(192, 132, 252, 0.2),
+              inset 0 1px 1px rgba(255, 255, 255, 0.16);
+}
+
+.pavilion-studio-card:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.pavilion-gem-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid transparent;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.pavilion-gem-badge svg {
+  width: 19px;
+  height: 19px;
+  transition: transform 0.22s ease;
+}
+
+.pavilion-studio-card:hover .pavilion-gem-badge svg {
+  transform: scale(1.08);
+}
+
+.pavilion-studio-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.pavilion-studio-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.pavilion-studio-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pavilion-studio-badge {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.pavilion-studio-subtitle {
+  font-size: 11px;
+  color: #94a3b8;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.35;
+}
+
+.pavilion-card-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.pavilion-hotkey-chip {
+  font-size: 9.5px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #cbd5e1;
+  font-family: inherit;
+  font-weight: 600;
+}
+
+.pavilion-arrow-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.pavilion-arrow-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.pavilion-studio-card:hover .pavilion-arrow-icon {
+  color: #c084fc;
+  transform: translateX(3px);
+}
+
+/* Empty search feedback */
+.pavilion-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 12px;
+  text-align: center;
+}
+
+.pavilion-empty-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+}
+
+.pavilion-empty-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.pavilion-empty-state p {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.btn-clear-pavilion-search {
+  padding: 5px 12px;
+  border-radius: 7px;
+  background: rgba(192, 132, 252, 0.15);
+  border: 1px solid rgba(192, 132, 252, 0.35);
+  color: #e9d5ff;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.btn-clear-pavilion-search:hover {
+  background: rgba(192, 132, 252, 0.28);
+  color: #ffffff;
+}
+
+/* ── 7. Drawer Footer Live Statistics ── */
+.pavilion-drawer-footer {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(9, 11, 20, 0.85);
+  flex-shrink: 0;
+}
+
+.pavilion-footer-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.pavilion-stat-card {
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: all 0.18s ease;
+}
+
+.pavilion-stat-card:hover {
+  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.pavilion-stat-label {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pavilion-stat-value {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pavilion-stat-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 8px #34d399;
+  flex-shrink: 0;
+}
+
+/* ── 8. Top-Nav Trigger Button Jewel Styling ── */
+#btn-silk-pavilion {
+  background: linear-gradient(135deg, rgba(129, 140, 248, 0.14) 0%, rgba(192, 132, 252, 0.16) 50%, rgba(244, 114, 182, 0.12) 100%);
+  border-color: rgba(192, 132, 252, 0.3);
+  color: #f1f5f9;
+}
+
+#btn-silk-pavilion svg.icon-pavilion {
+  color: #c084fc;
+}
+
+#btn-silk-pavilion:hover {
+  background: linear-gradient(135deg, rgba(129, 140, 248, 0.24) 0%, rgba(192, 132, 252, 0.28) 50%, rgba(244, 114, 182, 0.2) 100%);
+  border-color: rgba(192, 132, 252, 0.55);
+  box-shadow: 0 0 16px rgba(192, 132, 252, 0.32);
+  color: #ffffff;
+}
+
+#btn-silk-pavilion.active {
+  background: linear-gradient(135deg, rgba(129, 140, 248, 0.35) 0%, rgba(192, 132, 252, 0.4) 50%, rgba(244, 114, 182, 0.3) 100%);
+  border-color: rgba(192, 132, 252, 0.7);
+  box-shadow: 0 0 20px rgba(192, 132, 252, 0.45);
+  color: #ffffff;
+}

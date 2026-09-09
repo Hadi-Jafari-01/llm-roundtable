@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="css/components/modals.css">
   <link rel="stylesheet" href="css/components/selector-studio.css">
   <link rel="stylesheet" href="css/components/mirror-chat.css">
+  <link rel="stylesheet" href="css/components/silk-pavilion.css">
   <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
   <style>
     html, body {
@@ -946,22 +947,14 @@
 
       <!-- 3. RIGHT ZONE: Modular Collapsible Drawers & OS Window Controls -->
       <div class="nav-cluster right">
-        <!-- Native Mirror Chat Studio Jewel Trigger -->
-        <button id="btn-mirror-chat" class="nano-jewel-btn" title="Open Native Silk Mirror Chat (⌘J)">
-          <svg class="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        <!-- The Silk Pavilion Studio Chamber Trigger -->
+        <button id="btn-silk-pavilion" class="nano-jewel-btn" title="Silk Pavilion — Studio Chamber (⌘P / ⌘⌥P)">
+          <svg class="icon-pavilion" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>
+            <path d="M12 2v20M2 8.5l20 7M2 15.5l20-7"/>
           </svg>
-          <span>Mirror Sanctuary</span>
-          <kbd style="font-size: 9.5px; opacity: 0.7; margin-left: 2px;">⌘J</kbd>
-        </button>
-
-        <!-- Neural DOM Driver Studio Trigger -->
-        <button id="btn-driver-studio" class="nano-jewel-btn" title="Neural DOM Driver Studio (⌘⇧S)">
-          <svg class="icon-chip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/>
-          </svg>
-          <span>DOM Drivers</span>
-          <kbd style="font-size: 9.5px; opacity: 0.7; margin-left: 2px;">⌘⇧S</kbd>
+          <span>Pavilion</span>
+          <kbd style="font-size: 9.5px; opacity: 0.7; margin-left: 2px;">⌘P</kbd>
         </button>
 
         <!-- Layout Architecture & Auto-Arrange Popover Trigger -->
@@ -1638,6 +1631,52 @@
 
     </div>
 
+    <!-- Module C: The Silk Pavilion (Haute Atelier Studio Chamber) -->
+    <div id="silk-pavilion-backdrop" class="silk-pavilion-backdrop"></div>
+    <aside id="silk-pavilion-drawer" class="silk-pavilion-drawer" aria-label="Silk Pavilion Chamber">
+      <div class="pavilion-drawer-header">
+        <div class="pavilion-header-title-group">
+          <div class="pavilion-gem-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>
+              <path d="M12 2v20M2 8.5l20 7M2 15.5l20-7"/>
+            </svg>
+          </div>
+          <div>
+            <h2>The Silk Pavilion</h2>
+            <p>Haute Atelier & Central Chamber of Studios</p>
+          </div>
+        </div>
+        <button id="btn-close-pavilion-drawer" class="pavilion-close-btn" title="Close Pavilion (Esc)">✕</button>
+      </div>
+
+      <div class="pavilion-search-bar">
+        <div class="pavilion-search-wrapper">
+          <svg class="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="pavilion-search-input" class="pavilion-search-input" placeholder="Search studios, tools & accelerators... (Type to filter)" autocomplete="off" spellcheck="false" />
+          <span class="search-kbd-hint"><kbd>Esc</kbd></span>
+        </div>
+      </div>
+
+      <div class="pavilion-drawer-body">
+        <div class="pavilion-section-label">
+          <span>Curated Atelier Chambers</span>
+          <span id="pavilion-studios-count" class="pavilion-counter-pill">2 Studios</span>
+        </div>
+        <div class="pavilion-grid" id="pavilion-studios-grid">
+          <!-- Dynamically injected studio jewel cards -->
+        </div>
+      </div>
+
+      <div class="pavilion-drawer-footer">
+        <div class="pavilion-footer-stats" id="pavilion-footer-stats">
+          <!-- Dynamically injected live workspace stats -->
+        </div>
+      </div>
+    </aside>
+
     <!-- Modal: Add Custom AI Model -->
     <div id="modal-custom-bot" class="modal-veil hidden">
       <div class="modal-card">
@@ -1698,6 +1737,10 @@
 
         <div class="modal-content-body">
           <div class="shortcuts-table">
+            <div class="shortcut-entry">
+              <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>P</kbd></div>
+              <span class="shortcut-legend">Open Silk Pavilion (Atelier Studio Chamber)</span>
+            </div>
             <div class="shortcut-entry">
               <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>K</kbd></div>
               <span class="shortcut-legend">Focus Master Omnibar Studio</span>

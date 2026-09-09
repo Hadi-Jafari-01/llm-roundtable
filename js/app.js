@@ -10,6 +10,7 @@ import { globalBus } from './modules/EventBus.js';
 import { domDriverRegistry } from './modules/DomDriverRegistry.js';
 import { SelectorStudioDrawer } from './modules/SelectorStudioDrawer.js';
 import { MirrorChatStudio } from './modules/MirrorChatStudio.js';
+import { SilkPavilionDrawer } from './modules/SilkPavilionDrawer.js';
 
 class PopoverManager {
   constructor() {
@@ -516,10 +517,12 @@ class OmniApp {
     this.setupOmnibarInteractions(omnibarDom);
     this.popoverManager = new PopoverManager();
 
-    // Initialize Module A (Neural DOM Driver Studio) & Module B (The Silk Mirror Sanctuary)
+    // Initialize Module A (Neural DOM Driver Studio), Module B (The Silk Mirror Sanctuary) & Module C (The Silk Pavilion)
     this.selectorStudio = new SelectorStudioDrawer(stateStore);
     this.mirrorChat = new MirrorChatStudio(stateStore);
+    this.silkPavilion = new SilkPavilionDrawer(stateStore);
 
+    this.setupStudioEventRelays();
     this.setupTopNavigation();
     this.setupModals();
     this.setupGlobalHotkeys();
@@ -538,6 +541,43 @@ class OmniApp {
     }, 150);
 
     console.log('[OmniAI Hub] Obsidian Silk Spatial Canvas Active.');
+  }
+
+  setupStudioEventRelays() {
+    // Decoupled bus relays for sub-studios triggered from the Silk Pavilion
+    globalBus.on('TRIGGER_MIRROR_STUDIO', () => {
+      this.popoverManager?.closeAll();
+      this.silkPavilion?.close();
+      const focusedCard = this.getFocusedCard();
+      if (focusedCard) {
+        this.mirrorChat.selectTargetCard(focusedCard.id);
+      }
+      this.mirrorChat?.open();
+    });
+
+    globalBus.on('TRIGGER_DRIVER_STUDIO', () => {
+      this.popoverManager?.closeAll();
+      this.silkPavilion?.close();
+      this.selectorStudio?.open();
+    });
+
+    globalBus.on('TRIGGER_LAYOUT_MENU', () => {
+      this.silkPavilion?.close();
+      const btnLayout = document.getElementById('btn-layout-menu') || document.getElementById('btn-auto-arrange-menu');
+      btnLayout?.click();
+    });
+
+    globalBus.on('TRIGGER_CUSTOM_BOT_MODAL', () => {
+      this.silkPavilion?.close();
+      this.popoverManager?.closeAll();
+      document.getElementById('modal-custom-bot')?.classList.remove('hidden');
+      document.getElementById('custom-bot-name')?.focus();
+    });
+
+    globalBus.on('TRIGGER_SILK_PAVILION', () => {
+      this.popoverManager?.closeAll();
+      this.silkPavilion?.toggle();
+    });
   }
 
   setupOmnibarInteractions(dom) {
@@ -842,24 +882,12 @@ class OmniApp {
     const wrapperTools = document.getElementById('wrapper-tools-menu');
     this.popoverManager.register(btnToolsMenu, popoverTools, wrapperTools);
 
-    // Module A: Trigger Neural DOM Driver Studio
-    const btnDriverStudio = document.getElementById('btn-driver-studio');
-    btnDriverStudio?.addEventListener('click', (e) => {
+    // Module C: Trigger Silk Pavilion (Atelier Studio Chamber)
+    const btnSilkPavilion = document.getElementById('btn-silk-pavilion');
+    btnSilkPavilion?.addEventListener('click', (e) => {
       e.stopPropagation();
       this.popoverManager.closeAll();
-      this.selectorStudio?.toggle();
-    });
-
-    // Module B: Trigger Native Silk Mirror Sanctuary Chat
-    const btnMirrorChat = document.getElementById('btn-mirror-chat');
-    btnMirrorChat?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.popoverManager.closeAll();
-      const focusedCard = this.getFocusedCard();
-      if (focusedCard) {
-        this.mirrorChat.selectTargetCard(focusedCard.id);
-      }
-      this.mirrorChat?.toggle();
+      this.silkPavilion?.toggle();
     });
 
     // Global Click Outside Listener for Popovers
@@ -1372,6 +1400,14 @@ class OmniApp {
 
   setupGlobalHotkeys() {
     window.addEventListener('keydown', (e) => {
+      // Cmd/Ctrl + P or Cmd/Ctrl + Alt + P: Toggle Silk Pavilion Chamber
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'p') {
+        e.preventDefault();
+        e.stopPropagation();
+        this.popoverManager?.closeAll();
+        this.silkPavilion?.toggle();
+      }
+
       // Cmd/Ctrl + K: Focus Omnibar Studio
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
@@ -1417,8 +1453,14 @@ class OmniApp {
         document.getElementById('modal-shortcuts')?.classList.toggle('hidden');
       }
 
-      // Escape: layered dismissal (Studio Drawer -> Mirror Chat -> Popovers -> Modals -> Omnibar)
+      // Escape: layered dismissal (Silk Pavilion -> Studio Drawer -> Mirror Chat -> Popovers -> Modals -> Omnibar)
       if (e.key === 'Escape') {
+        if (this.silkPavilion?.isOpen) {
+          e.preventDefault();
+          this.silkPavilion.close();
+          return;
+        }
+
         if (this.selectorStudio?.isOpen) {
           e.preventDefault();
           this.selectorStudio.close();
