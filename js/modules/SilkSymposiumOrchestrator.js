@@ -55,6 +55,11 @@ export class SilkSymposiumOrchestrator {
     this.btnToggleUserSeat = document.getElementById('btn-symposium-toggle-user-seat');
     this.btnOpenSanctum = document.getElementById('btn-symposium-open-sanctum');
     this.btnExportBriefing = document.getElementById('btn-symposium-export-briefing');
+    this.btnImportBriefing = document.getElementById('btn-symposium-import-briefing');
+    this.fileImportBriefing = document.getElementById('file-symposium-import');
+    this.btnSanctumExportAll = document.getElementById('btn-sanctum-export-all');
+    this.btnSanctumImportAll = document.getElementById('btn-sanctum-import-all');
+    this.fileSanctumImport = document.getElementById('file-sanctum-import');
     this.btnSwitchScenarioPill = document.getElementById('btn-header-switch-scenario');
     this.activeScenarioTitle = document.getElementById('header-active-scenario-title');
     this.topologyBadge = document.getElementById('symposium-topology-badge');
@@ -562,6 +567,60 @@ export class SilkSymposiumOrchestrator {
     });
 
     this.btnExportBriefing?.addEventListener('click', () => this.exportMarkdown());
+
+    // Import Symposium Session JSON
+    this.btnImportBriefing?.addEventListener('click', () => {
+      this.fileImportBriefing?.click();
+    });
+
+    this.fileImportBriefing?.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const text = await file.text();
+      const res = this.symposiumState.importSymposiumData(text, true);
+      if (res.success) {
+        this.renderAll();
+        this.showToast('جلسه و تاریخچه میزگرد بازیابی شد ✓');
+      } else {
+        alert(`خطا در بازیابی جلسه: ${res.error}`);
+      }
+      this.fileImportBriefing.value = '';
+    });
+
+    // Sanctum Drawer Full Export & Import
+    this.btnSanctumExportAll?.addEventListener('click', () => {
+      const json = this.symposiumState.exportSymposiumData(true);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `symposium_sanctum_${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      this.showToast('تمام سناریوها و الگوهای آتلیه استخراج شدند ✓');
+    });
+
+    this.btnSanctumImportAll?.addEventListener('click', () => {
+      this.fileSanctumImport?.click();
+    });
+
+    this.fileSanctumImport?.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const text = await file.text();
+      const res = this.symposiumState.importSymposiumData(text, false);
+      if (res.success) {
+        this.renderScenariosGrid();
+        this.renderPersonasGrid();
+        this.renderPromptTemplatesDropdown();
+        this.renderGlobalDirectivesDropdown();
+        this.renderFlowPresetsDropdown();
+        this.showToast(`سناریوها و پرسوناها با موفقیت درون‌ریزی شدند ✓`);
+      } else {
+        alert(`خطا: ${res.error}`);
+      }
+      this.fileSanctumImport.value = '';
+    });
 
     this.macroChipsContainer?.addEventListener('click', (e) => {
       const chip = e.target.closest('.macro-chip-btn');

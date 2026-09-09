@@ -13,12 +13,89 @@ export class MirrorChatStudio {
     this.activeCardId = null;
     this.isOpen = false;
     this.isGenerating = false;
+    this.STORAGE_KEY = 'omni_mirror_conversations_v1';
     this.conversations = new Map(); // cardId -> Array of message objects
     this.currentStreamingTurn = null;
 
+    this.loadPersistedConversations();
     this.initElements();
     this.bindEvents();
     this.setupResizeHandle();
+  }
+
+  loadPersistedConversations() {
+    try {
+      const raw = localStorage.getItem(this.STORAGE_KEY);
+      if (raw) {
+        const entries = JSON.parse(raw);
+        if (Array.isArray(entries)) {
+          this.conversations = new Map(entries);
+        }
+      }
+    } catch (err) {
+      console.warn('[MirrorChatStudio] Could not load conversations:', err);
+    }
+  }
+
+  persistConversations() {
+    try {
+      const entries = Array.from(this.conversations.entries());
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(entries));
+    } catch (_) {}
+  }
+
+  exportAllConversationsJson() {
+    const payload = {
+      schema: 'OmniAI_Mirror_Conversations',
+      version: '2.0.0',
+      exportedAt: Date.now(),
+      conversations: Array.from(this.conversations.entries())
+    };
+    return JSON.stringify(payload, null, 2);
+  }
+
+  importConversationsJson(jsonInput) {
+    try {
+      const parsed = typeof jsonInput === 'string' ? JSON.parse(jsonInput) : jsonInput;
+      const convEntries = parsed.conversations || (Array.isArray(parsed) ? parsed : null);
+      if (!convEntries || !Array.isArray(convEntries)) {
+        throw new Error('قالب فایل گفتگو نامعتبر است.');
+      }
+
+      convEntries.forEach(([cardId, turns]) => {
+        if (cardId && Array.isArray(turns)) {
+          this.conversations.set(cardId, turns);
+        }
+      });
+
+      this.persistConversations();
+      this.renderConversation();
+      return { success: true, count: this.conversations.size };
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
+  }
+
+  exportCurrentChatMarkdown() {
+    const turns = this.conversations.get(this.activeCardId) || [];
+    const state = this.stateStore.getState();
+    const card = state?.cards?.find(c => c.id === this.activeCardId);
+    const cardName = card ? (card.title || card.name) : 'AI Intelligence';
+
+    let md = `# 💬 Chat Transcript: ${cardName}\n`;
+    md += `**Exported:** ${new Date().toLocaleString()}\n`;
+    md += `**Card ID:** ${this.activeCardId || 'N/A'}\n\n---\n\n`;
+
+    turns.forEach(t => {
+      const role = t.role === 'user' ? '👤 User' : `🤖 ${cardName}`;
+      md += `### ${role} • ${t.time || ''}\n\n`;
+      if (t.thinkingText) {
+        md += `> 🧠 Thinking:\n> ${t.thinkingText.replace(/\n/g, '\n> ')}\n\n`;
+      }
+      md += `${t.text || ''}\n\n---\n\n`;
+    });
+
+    return md;
   }
 
   initElements() {
@@ -35,6 +112,9 @@ export class MirrorChatStudio {
     this.targetModelNameEl = document.getElementById('mirror-target-model-name');
     this.btnStealthToggle = document.getElementById('btn-mirror-toggle-stealth');
     this.stealthLabel = document.getElementById('mirror-stealth-mode-label');
+    this.btnExportChat = document.getElementById('btn-mirror-export-chat');
+    this.btnImportChat = document.getElementById('btn-mirror-import-chat');
+    this.fileImportChat = document.getElementById('file-mirror-import-chat');
   }
 
   bindEvents() {
@@ -105,6 +185,70 @@ export class MirrorChatStudio {
     // Sync / Extract History
     this.btnSyncHistory?.addEventListener('click', () => {
       this.extractHistoryFromTarget();
+    });
+
+    // Export Current Chat (Options: Markdown or JSON)
+    this.btnExportChat?.addEventListener('click', () => {
+      if (!this.activeCardId || !this.conversations.has(this.activeCardId)) {
+        alert('هیچ گفتگویی برای استخراج در این کارت یافت نشد.');
+        return;
+      }
+      const choice = confirm('آیا می‌خواهید گفتگو را به صورت Markdown ذخیره کنید؟\n(Cancel برای دریافت فایل کامل JSON)');
+      if (choice) {
+        const md = this.exportCurrentChatMarkdown();
+        const blob = new Blob([md], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `chat_${this.activeCardId}_${Date.now()}.md`;
+        a.click();
+        URL.revokeObjectURL(url);
+      } else {
+        const payload = {
+          schema: 'OmniAI_Single_Chat',
+          cardId: this.activeCardId,
+          turns: this.conversations.get(this.activeCardId) || []
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `chat_${this.activeCardId}_${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    });
+
+    // Import Chat (JSON)
+    this.btnImportChat?.addEventListener('click', () => {
+      this.fileImportChat?.click();
+    });
+
+    this.fileImportChat?.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+
+        if (parsed.conversations) {
+          this.importConversationsJson(parsed);
+          alert('تمام گفتگوهای استودیو با موفقیت بازیابی شدند.');
+        } else if (Array.isArray(parsed.turns) && this.activeCardId) {
+          this.conversations.set(this.activeCardId, parsed.turns);
+          this.persistConversations();
+          this.renderConversation();
+          alert('گفتگو برای این مدل بازیابی شد.');
+        } else if (Array.isArray(parsed)) {
+          this.conversations.set(this.activeCardId || 'imported', parsed);
+          this.persistConversations();
+          this.renderConversation();
+          alert('پیام‌ها با موفقیت درون‌ریزی شدند.');
+        }
+      } catch (err) {
+        alert(`خطا در درون‌ریزی فایل: ${err.message}`);
+      }
+      this.fileImportChat.value = '';
     });
 
     // Copy code blocks
@@ -374,6 +518,7 @@ export class MirrorChatStudio {
 
     // Render Stream
     this.renderConversation();
+    this.persistConversations();
     this.setGenerating(true);
 
     // Reset textarea
@@ -425,11 +570,12 @@ export class MirrorChatStudio {
             this.currentStreamingTurn.text = '✓ Prompt dispatched to model card.';
           }
         }
-        this.currentStreamingTurn = null;
-        this.setGenerating(false);
-        this.renderConversation();
-      }
-    }, 45000);
+      this.currentStreamingTurn = null;
+      this.setGenerating(false);
+      this.renderConversation();
+      this.persistConversations();
+    }
+  }, 45000);
   }
 
   handleStreamChunk(data) {

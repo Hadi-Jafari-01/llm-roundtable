@@ -68,6 +68,74 @@ export class CouncilOrchestrator {
     this.btnExportBriefing = document.getElementById('btn-council-export-briefing');
     this.btnCopySynthesis = document.getElementById('btn-council-copy-synthesis');
     this.btnRestartCouncil = document.getElementById('btn-council-restart');
+    this.btnExportJson = document.getElementById('btn-council-export-json');
+    this.btnImportJson = document.getElementById('btn-council-import-json');
+    this.fileImportJson = document.getElementById('file-council-import');
+  }
+
+  exportCouncilJson() {
+    const payload = {
+      schema: 'OmniAI_Celestial_Council',
+      version: '2.0.0',
+      exportedAt: Date.now(),
+      userQuery: this.userQuery,
+      stage: this.stage,
+      selectedCardIds: this.selectedCardIds,
+      chairmanCardId: this.chairmanCardId,
+      candidates: Array.from(this.candidateMap.entries()),
+      stage1Data: Array.from(this.stage1Data.entries()),
+      stage2Data: Array.from(this.stage2Data.entries()),
+      stage3Data: this.stage3Data
+    };
+    return JSON.stringify(payload, null, 2);
+  }
+
+  importCouncilJson(jsonInput) {
+    try {
+      const parsed = typeof jsonInput === 'string' ? JSON.parse(jsonInput) : jsonInput;
+      const data = parsed.council || parsed;
+      if (!data || typeof data !== 'object') {
+        throw new Error('داده‌های جلسه شورای افلاک نامعتبر است.');
+      }
+
+      if (data.userQuery) this.userQuery = data.userQuery;
+      if (data.stage) this.stage = data.stage;
+      if (Array.isArray(data.selectedCardIds)) this.selectedCardIds = data.selectedCardIds;
+      if (data.chairmanCardId) this.chairmanCardId = data.chairmanCardId;
+
+      if (Array.isArray(data.candidates)) {
+        this.candidateMap = new Map(data.candidates);
+      }
+      if (Array.isArray(data.stage1Data)) {
+        this.stage1Data = new Map(data.stage1Data);
+      }
+      if (Array.isArray(data.stage2Data)) {
+        this.stage2Data = new Map(data.stage2Data);
+      }
+      if (data.stage3Data && typeof data.stage3Data === 'object') {
+        this.stage3Data = data.stage3Data;
+      }
+
+      if (this.setupView) this.setupView.style.display = 'none';
+      if (this.stageView) this.stageView.style.display = 'flex';
+
+      this.renderStage1UI();
+      this.selectedCardIds.forEach(id => this.updateStage1CardDOM(id));
+
+      if (this.stage === 'STAGE_2' || this.stage === 'STAGE_3' || this.stage === 'COMPLETED') {
+        this.renderStage2UI();
+        this.selectedCardIds.forEach(id => this.updateStage2CardDOM(id));
+      }
+      if (this.stage === 'STAGE_3' || this.stage === 'COMPLETED') {
+        this.renderStage3UI();
+      }
+
+      this.updateTimelineUI();
+      return { success: true };
+    } catch (err) {
+      console.error('[CouncilOrchestrator] Import failed:', err);
+      return { success: false, error: err.message };
+    }
   }
 
   bindEvents() {
@@ -116,6 +184,36 @@ export class CouncilOrchestrator {
     // Export Full Council Briefing as Markdown
     this.btnExportBriefing?.addEventListener('click', () => {
       this.exportCouncilMarkdown();
+    });
+
+    // Export Full Council as JSON
+    this.btnExportJson?.addEventListener('click', () => {
+      const json = this.exportCouncilJson();
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `council_session_${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Import Council from JSON
+    this.btnImportJson?.addEventListener('click', () => {
+      this.fileImportJson?.click();
+    });
+
+    this.fileImportJson?.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const text = await file.text();
+      const res = this.importCouncilJson(text);
+      if (res.success) {
+        alert('جلسه شورای افلاک با موفقیت بازیابی شد.');
+      } else {
+        alert(`خطا در بازیابی جلسه شورا: ${res.error}`);
+      }
+      this.fileImportJson.value = '';
     });
 
     // Restart / New Query

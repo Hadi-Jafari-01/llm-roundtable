@@ -13,6 +13,7 @@ import { MirrorChatStudio } from './modules/MirrorChatStudio.js';
 import { SilkPavilionDrawer } from './modules/SilkPavilionDrawer.js';
 import { CouncilOrchestrator } from './modules/CouncilOrchestrator.js';
 import { SilkSymposiumOrchestrator } from './modules/SilkSymposiumOrchestrator.js';
+import { DataVaultManager } from './modules/DataVaultManager.js';
 
 class PopoverManager {
   constructor() {
@@ -563,6 +564,18 @@ class OmniApp {
       console.error('[OmniAI Hub] SilkSymposiumOrchestrator init error:', e);
     }
 
+    try {
+      this.dataVaultManager = new DataVaultManager({
+        stateStore,
+        domDriverRegistry,
+        symposiumState: this.symposiumOrchestrator?.symposiumState,
+        mirrorChat: this.mirrorChat,
+        councilOrchestrator: this.councilOrchestrator
+      });
+    } catch (e) {
+      console.error('[OmniAI Hub] DataVaultManager init error:', e);
+    }
+
     this.setupStudioEventRelays();
     this.setupTopNavigation();
     this.setupModals();
@@ -630,6 +643,24 @@ class OmniApp {
     globalBus.on('TRIGGER_SILK_PAVILION', () => {
       this.popoverManager?.closeAll();
       this.silkPavilion?.toggle();
+    });
+
+    globalBus.on('TRIGGER_DATA_VAULT', () => {
+      this.popoverManager?.closeAll();
+      this.silkPavilion?.close();
+      this.dataVaultManager?.openVaultModal('master');
+    });
+
+    globalBus.on('TRIGGER_DATA_VAULT_TAB', (tab) => {
+      this.popoverManager?.closeAll();
+      this.silkPavilion?.close();
+      this.dataVaultManager?.openVaultModal(tab);
+    });
+
+    globalBus.on('DATA_VAULT_RESTORED', () => {
+      this.syncIframesIdentity();
+      this.updateStudioRibbon();
+      this.canvas?.render();
     });
   }
 
@@ -1072,6 +1103,11 @@ class OmniApp {
       document.getElementById('custom-bot-name')?.focus();
     });
 
+    document.getElementById('menu-item-data-vault')?.addEventListener('click', () => {
+      this.popoverManager.closeAll();
+      this.dataVaultManager?.openVaultModal('master');
+    });
+
     document.getElementById('menu-item-shortcuts')?.addEventListener('click', () => {
       this.popoverManager.closeAll();
       document.getElementById('modal-shortcuts')?.classList.remove('hidden');
@@ -1453,6 +1489,15 @@ class OmniApp {
 
   setupGlobalHotkeys() {
     window.addEventListener('keydown', (e) => {
+      // Cmd/Ctrl + Alt + E: Open Universal Data Vault (صندوق پشتیبان‌گیری و انتقال همه‌چیز)
+      if ((e.metaKey || e.ctrlKey) && e.altKey && e.key.toLowerCase() === 'e') {
+        e.preventDefault();
+        e.stopPropagation();
+        this.popoverManager?.closeAll();
+        this.silkPavilion?.close();
+        this.dataVaultManager?.toggleVaultModal();
+      }
+
       // Cmd/Ctrl + Alt + S: Convene The Silk Symposium (Infinite Multi-AI Roundtable Agora)
       if ((e.metaKey || e.ctrlKey) && e.altKey && e.key.toLowerCase() === 's') {
         e.preventDefault();
@@ -1524,8 +1569,14 @@ class OmniApp {
         document.getElementById('modal-shortcuts')?.classList.toggle('hidden');
       }
 
-      // Escape: layered dismissal (Symposium Chamber -> Council Chamber -> Silk Pavilion -> Studio Drawer -> Mirror Chat -> Popovers -> Modals -> Omnibar)
+      // Escape: layered dismissal (Data Vault -> Symposium Chamber -> Council Chamber -> Silk Pavilion -> Studio Drawer -> Mirror Chat -> Popovers -> Modals -> Omnibar)
       if (e.key === 'Escape') {
+        if (this.dataVaultManager?.isOpen) {
+          e.preventDefault();
+          this.dataVaultManager.closeVaultModal();
+          return;
+        }
+
         if (this.symposiumOrchestrator?.isOpen) {
           e.preventDefault();
           this.symposiumOrchestrator.close();

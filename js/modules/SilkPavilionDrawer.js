@@ -58,6 +58,17 @@ export class SilkPavilionDrawer {
         iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>`,
         hotkey: '⌘⇧S',
         action: () => globalBus.emit('TRIGGER_DRIVER_STUDIO')
+      },
+      {
+        id: 'universal-data-vault',
+        title: 'Universal Data Vault',
+        subtitle: 'صندوق جامع پشتیبان‌گیری، درون‌ریزی و برون‌ریزی همه‌چیز',
+        badge: 'Backup & Restore',
+        badgeColor: '#6ee7b7',
+        color: '#10b981',
+        iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`,
+        hotkey: '⌘⌥E',
+        action: () => globalBus.emit('TRIGGER_DATA_VAULT')
       }
     ];
 

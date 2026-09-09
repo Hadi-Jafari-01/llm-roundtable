@@ -678,6 +678,129 @@ export class SymposiumState {
     this.resetAllSeatStatuses();
   }
 
+  exportSymposiumData(includeSession = true) {
+    const payload = {
+      schema: 'OmniAI_Silk_Symposium',
+      version: '2.0.0',
+      exportedAt: Date.now(),
+      debateMode: this.debateMode,
+      config: this.config,
+      userParticipant: this.userParticipant,
+      customPersonas: this.customPersonas,
+      customScenarios: this.customScenarios,
+      customPromptTemplates: this.customPromptTemplates,
+      customGlobalDirectives: this.customGlobalDirectives,
+      customTopologies: this.customTopologies,
+      seatCustomizations: this.seatCustomizations,
+      activeScenarioKey: this.activeScenarioKey
+    };
+
+    if (includeSession) {
+      payload.session = {
+        sessionStatus: this.sessionStatus,
+        roundIndex: this.roundIndex,
+        userCorePrompt: this.userCorePrompt,
+        transcript: this.transcript,
+        ledger: this.ledger
+      };
+    }
+
+    return JSON.stringify(payload, null, 2);
+  }
+
+  importSymposiumData(jsonInput, importSession = true) {
+    try {
+      const parsed = typeof jsonInput === 'string' ? JSON.parse(jsonInput) : jsonInput;
+      const data = parsed.data?.symposium || parsed.symposium || parsed;
+      if (!data || typeof data !== 'object') {
+        throw new Error('داده‌های فایل پشتیبان تالار هم‌اندیشی نامعتبر است.');
+      }
+
+      if (data.debateMode) this.debateMode = data.debateMode;
+      if (data.config && typeof data.config === 'object') Object.assign(this.config, data.config);
+      if (data.userParticipant && typeof data.userParticipant === 'object') Object.assign(this.userParticipant, data.userParticipant);
+
+      if (data.customPersonas && typeof data.customPersonas === 'object') {
+        this.customPersonas = { ...this.customPersonas, ...data.customPersonas };
+      }
+      if (data.customScenarios && typeof data.customScenarios === 'object') {
+        this.customScenarios = { ...this.customScenarios, ...data.customScenarios };
+      }
+      if (data.customPromptTemplates && typeof data.customPromptTemplates === 'object') {
+        this.customPromptTemplates = { ...this.customPromptTemplates, ...data.customPromptTemplates };
+      }
+      if (data.customGlobalDirectives && typeof data.customGlobalDirectives === 'object') {
+        this.customGlobalDirectives = { ...this.customGlobalDirectives, ...data.customGlobalDirectives };
+      }
+      if (data.customTopologies && typeof data.customTopologies === 'object') {
+        this.customTopologies = { ...this.customTopologies, ...data.customTopologies };
+      }
+      if (data.seatCustomizations && typeof data.seatCustomizations === 'object') {
+        this.seatCustomizations = { ...this.seatCustomizations, ...data.seatCustomizations };
+      }
+      if (data.activeScenarioKey) {
+        this.activeScenarioKey = data.activeScenarioKey;
+      }
+
+      if (importSession && data.session && typeof data.session === 'object') {
+        if (data.session.roundIndex) this.roundIndex = data.session.roundIndex;
+        if (data.session.userCorePrompt) this.userCorePrompt = data.session.userCorePrompt;
+        if (Array.isArray(data.session.transcript)) this.transcript = data.session.transcript;
+        if (data.session.ledger && typeof data.session.ledger === 'object') {
+          this.ledger = {
+            agreements: Array.isArray(data.session.ledger.agreements) ? data.session.ledger.agreements : [],
+            divergences: Array.isArray(data.session.ledger.divergences) ? data.session.ledger.divergences : [],
+            openQuestions: Array.isArray(data.session.ledger.openQuestions) ? data.session.ledger.openQuestions : []
+          };
+        }
+      }
+
+      this.persistConfig();
+      return {
+        success: true,
+        scenariosCount: Object.keys(this.customScenarios).length,
+        personasCount: Object.keys(this.customPersonas).length,
+        templatesCount: Object.keys(this.customPromptTemplates).length,
+        transcriptTurns: this.transcript.length
+      };
+    } catch (err) {
+      console.error('[SymposiumState] Import failed:', err);
+      return { success: false, error: err.message };
+    }
+  }
+
+  exportCategory(category) {
+    let data = {};
+    if (category === 'scenarios') data = this.customScenarios;
+    else if (category === 'personas') data = this.customPersonas;
+    else if (category === 'templates') data = this.customPromptTemplates;
+    else if (category === 'directives') data = this.customGlobalDirectives;
+    else if (category === 'topologies') data = this.customTopologies;
+    return JSON.stringify({ category, data, exportedAt: Date.now() }, null, 2);
+  }
+
+  importCategory(category, jsonInput) {
+    try {
+      const parsed = typeof jsonInput === 'string' ? JSON.parse(jsonInput) : jsonInput;
+      const data = parsed.data || parsed;
+      if (category === 'scenarios' && typeof data === 'object') {
+        this.customScenarios = { ...this.customScenarios, ...data };
+      } else if (category === 'personas' && typeof data === 'object') {
+        this.customPersonas = { ...this.customPersonas, ...data };
+      } else if (category === 'templates' && typeof data === 'object') {
+        this.customPromptTemplates = { ...this.customPromptTemplates, ...data };
+      } else if (category === 'directives' && typeof data === 'object') {
+        this.customGlobalDirectives = { ...this.customGlobalDirectives, ...data };
+      } else if (category === 'topologies' && typeof data === 'object') {
+        this.customTopologies = { ...this.customTopologies, ...data };
+      }
+      this.persistConfig();
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
+  }
+
   persistConfig() {
     try {
       const payload = {
@@ -690,7 +813,13 @@ export class SymposiumState {
         customGlobalDirectives: this.customGlobalDirectives,
         customTopologies: this.customTopologies,
         seatCustomizations: this.seatCustomizations,
-        activeScenarioKey: this.activeScenarioKey
+        activeScenarioKey: this.activeScenarioKey,
+        session: {
+          roundIndex: this.roundIndex,
+          userCorePrompt: this.userCorePrompt,
+          transcript: this.transcript,
+          ledger: this.ledger
+        }
       };
       localStorage.setItem('omni_symposium_state_v2', JSON.stringify(payload));
     } catch (_) {}
@@ -724,6 +853,18 @@ export class SymposiumState {
         }
         if (parsed.seatCustomizations && typeof parsed.seatCustomizations === 'object') {
           this.seatCustomizations = parsed.seatCustomizations;
+        }
+        if (parsed.session && typeof parsed.session === 'object') {
+          if (parsed.session.roundIndex) this.roundIndex = parsed.session.roundIndex;
+          if (parsed.session.userCorePrompt) this.userCorePrompt = parsed.session.userCorePrompt;
+          if (Array.isArray(parsed.session.transcript)) this.transcript = parsed.session.transcript;
+          if (parsed.session.ledger && typeof parsed.session.ledger === 'object') {
+            this.ledger = {
+              agreements: Array.isArray(parsed.session.ledger.agreements) ? parsed.session.ledger.agreements : [],
+              divergences: Array.isArray(parsed.session.ledger.divergences) ? parsed.session.ledger.divergences : [],
+              openQuestions: Array.isArray(parsed.session.ledger.openQuestions) ? parsed.session.ledger.openQuestions : []
+            };
+          }
         }
       }
     } catch (_) {}

@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="css/components/silk-pavilion.css">
   <link rel="stylesheet" href="css/components/council-chamber.css">
   <link rel="stylesheet" href="css/components/silk-symposium.css">
+  <link rel="stylesheet" href="css/components/data-vault.css">
   <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
   <style>
     html, body {
@@ -698,6 +699,15 @@
             </svg>
           </button>
           <div id="popover-tools-menu" class="spatial-popover-menu dropdown-right hidden">
+            <button id="menu-item-data-vault" class="popover-menu-item" title="صندوق جامع پشتیبان‌گیری، درون‌ریزی و برون‌ریزی همه‌چیز (⌘⌥E)">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                صندوق جامع داده‌ها (Data Vault)
+              </span>
+              <kbd>⌘⌥E</kbd>
+            </button>
             <button id="menu-item-custom-bot" class="popover-menu-item">
               <span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1115,6 +1125,13 @@
         </div>
 
         <div class="mirror-header-actions">
+          <input type="file" id="file-mirror-import-chat" accept=".json" style="display: none;" />
+          <button id="btn-mirror-export-chat" class="mirror-icon-btn" title="خروجی گرفتن از گفتگو (Markdown / JSON)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+          <button id="btn-mirror-import-chat" class="mirror-icon-btn" title="درون‌ریزی گفتگو (JSON)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </button>
           <button id="btn-mirror-sync-history" class="mirror-icon-btn" title="Sync / Extract Conversation History">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
           </button>
@@ -1320,6 +1337,7 @@
 
         <!-- Capsule 3: Right Action Cluster -->
         <div class="symposium-header-capsule right">
+          <input type="file" id="file-symposium-import" accept=".json" style="display: none;" />
           <button type="button" id="btn-symposium-toggle-user-seat" class="symposium-tool-btn" title="حضور رسمی کاربر به عنوان عضو هم‌پایه در سکو">
             <span>🪑 Seat Yourself</span>
           </button>
@@ -1330,8 +1348,11 @@
             <span>Ledger</span>
           </button>
           <button type="button" id="btn-symposium-open-sanctum" class="symposium-tool-btn primary-gold" title="آتلیه جامع تفکر، سناریوها و موتور دیالکتیک">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
             <span>Sanctum</span>
+          </button>
+          <button type="button" id="btn-symposium-import-briefing" class="symposium-tool-btn" title="بازیابی جلسه و پرونده مذاکرات از فایل JSON">
+            <span>Import</span>
           </button>
           <button type="button" id="btn-symposium-export-briefing" class="symposium-tool-btn" title="خروجی مارک‌داون از کل پرونده مذاکرات">
             <span>Export</span>
@@ -1493,10 +1514,19 @@
             </div>
             <div>
               <h3 style="margin:0;font-size:14px;color:#ffffff;">The Logic Sanctum Atelier</h3>
-              <p style="margin:2px 0 0;font-size:10.5px;color:#94a3b8;">استودیوی جامع ۳ منطقه‌ای: سناریوها، سکو و موتور دیالکتیک</p>
+              <p style="margin:2px 0 0;font-size:10.5px;color:#94a3b8;">استودیوی جامع ۴ منطقه‌ای: سناریوها، پرسوناها، سکو و موتور دیالکتیک</p>
             </div>
           </div>
-          <button type="button" id="btn-close-sanctum" class="symposium-tool-btn btn-close">✕</button>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <input type="file" id="file-sanctum-import" accept=".json" style="display: none;" />
+            <button type="button" id="btn-sanctum-import-all" class="symposium-tool-btn" style="height: 28px; font-size: 10px;" title="درون‌ریزی سناریوها و الگوها از فایل JSON">
+              درون‌ریزی 📥
+            </button>
+            <button type="button" id="btn-sanctum-export-all" class="symposium-tool-btn" style="height: 28px; font-size: 10px;" title="استخراج تمام سناریوها و الگوها به عنوان JSON">
+              استخراج 📤
+            </button>
+            <button type="button" id="btn-close-sanctum" class="symposium-tool-btn btn-close">✕</button>
+          </div>
         </div>
 
         <!-- 4-Zone Navigation Tabs -->
@@ -1872,6 +1902,16 @@
 
         <!-- Header Actions: Chairman Pill & Close -->
         <div class="council-header-actions">
+          <input type="file" id="file-council-import" accept=".json" style="display: none;" />
+          <button type="button" id="btn-council-import-json" class="btn-council-action" title="بازیابی جلسه شورا از فایل JSON">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span>Import Session</span>
+          </button>
+          <button type="button" id="btn-council-export-json" class="btn-council-action" title="استخراج کل جلسه شورا به عنوان JSON">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Export JSON</span>
+          </button>
+
           <div id="council-chairman-header-badge" class="chairman-pill-badge">
             <span>👑 Chairman</span>
           </div>
@@ -1961,6 +2001,226 @@
       </main>
     </div>
 
+    <!-- Modal: Universal Data Vault (صندوق جامع پشتیبان‌گیری و انتقال داده‌ها) -->
+    <div id="modal-data-vault" class="modal-veil hidden">
+      <div class="modal-card data-vault-modal-card">
+        <!-- Vault Header -->
+        <div class="vault-header-bar">
+          <div class="vault-title-group">
+            <div class="vault-gem-badge">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+            </div>
+            <div>
+              <h3>صندوق جامع داده‌ها (Universal Data Vault)</h3>
+              <p>پشتیبان‌گیری کامل، انتقال یکپارچه داده‌ها، ایمپورت و اکسپورت تفکیکی تمام بخش‌ها</p>
+            </div>
+          </div>
+          <button id="btn-close-data-vault" class="modal-close-icon" title="بستن (Esc)">✕</button>
+        </div>
+
+        <!-- Vault Tabs Switcher -->
+        <div class="vault-tabs-nav">
+          <button type="button" class="vault-tab-btn active" data-tab="master">
+            <span>🌟 پشتیبان کامل (Master Backup)</span>
+          </button>
+          <button type="button" class="vault-tab-btn" data-tab="granular">
+            <span>📦 استخراج و بازیابی تفکیکی (Granular)</span>
+          </button>
+          <button type="button" class="vault-tab-btn" data-tab="maintenance">
+            <span>⚙️ نگهداری و بازنشانی (Maintenance)</span>
+          </button>
+        </div>
+
+        <!-- Vault Body Content -->
+        <div class="vault-body-content">
+          <!-- Panel 1: Master Backup -->
+          <div id="vault-tab-master" style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="vault-master-hero">
+              <!-- Export All Card -->
+              <div class="vault-action-card hero-export">
+                <div class="vault-card-icon" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">
+                  💾
+                </div>
+                <h4>پشتیبان‌گیری یکپارچه از همه‌چیز</h4>
+                <p>دریافت یک فایل جامع (.omniai.json) شامل تمام بوم و کارت‌ها، درایورهای DOM، سناریوها، پرسوناهای تالار هم‌اندیشی، تمام گفتگوها و جلسات شورا.</p>
+                <button type="button" id="btn-vault-export-master" class="btn-vault-hero-action export">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  <span>دانلود پشتیبان کامل (.omniai.json)</span>
+                </button>
+              </div>
+
+              <!-- Import All Card -->
+              <div class="vault-action-card hero-import">
+                <div class="vault-card-icon" style="background: rgba(192, 132, 252, 0.2); color: #c084fc;">
+                  🔄
+                </div>
+                <h4>بازیابی و درون‌ریزی کامل</h4>
+                <p>بارگذاری فایل پشتیبان جامع برای بازیابی آنی تمام تنظیمات، کارت‌ها، درایورها، چت‌ها و سناریوها در یک کلیک.</p>
+                
+                <div id="vault-master-dropzone" class="vault-dropzone">
+                  <span style="font-size: 20px;">📁</span>
+                  <span style="font-size: 11.5px; color: #f1f5f9; font-weight: 500;">فایل پشتیبان را اینجا بکشید و رها کنید</span>
+                  <span style="font-size: 10px; color: #94a3b8;">یا روی دکمه زیر کلیک نمایید</span>
+                </div>
+
+                <input type="file" id="file-vault-import-master" accept=".json,.omniai.json" style="display: none;" />
+                <button type="button" id="btn-trigger-import-master" class="btn-vault-hero-action import">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  <span>انتخاب فایل و بازیابی همه‌چیز</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 2: Granular Modules -->
+          <div id="vault-tab-granular" style="display: none; flex-direction: column; gap: 10px;">
+            <div class="vault-modules-grid">
+              <!-- Module: Canvas & Cards -->
+              <div class="vault-module-row">
+                <div class="module-row-info">
+                  <div class="module-icon-gem">🖼️</div>
+                  <div class="module-text-stack">
+                    <h5>بوم فضایی و کارت‌های مدل (Spatial Canvas)</h5>
+                    <p>موقعیت کارت‌ها، اندازه، چیدمان فعال، بات‌های سفارشی و تنظیمات زوم</p>
+                  </div>
+                </div>
+                <div class="module-actions-stack">
+                  <input type="file" id="file-vault-import-canvas" accept=".json" style="display: none;" />
+                  <button type="button" id="btn-vault-import-canvas" class="btn-vault-chip-action">
+                    <span>درون‌ریزی 📥</span>
+                  </button>
+                  <button type="button" id="btn-vault-export-canvas" class="btn-vault-chip-action export">
+                    <span>استخراج 📤</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Module: Neural DOM Drivers -->
+              <div class="vault-module-row">
+                <div class="module-row-info">
+                  <div class="module-icon-gem">🧠</div>
+                  <div class="module-text-stack">
+                    <h5>درایورهای DOM و زره ضد بات (Neural Drivers & Anti-Bot)</h5>
+                    <p>سلکتورهای استخراج، الگوهای کلیک، تنظیمات تایپ ارگونومیک و پایشگرها</p>
+                  </div>
+                </div>
+                <div class="module-actions-stack">
+                  <input type="file" id="file-vault-import-drivers" accept=".json" style="display: none;" />
+                  <button type="button" id="btn-vault-import-drivers" class="btn-vault-chip-action">
+                    <span>درون‌ریزی 📥</span>
+                  </button>
+                  <button type="button" id="btn-vault-export-drivers" class="btn-vault-chip-action export">
+                    <span>استخراج 📤</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Module: Silk Symposium -->
+              <div class="vault-module-row">
+                <div class="module-row-info">
+                  <div class="module-icon-gem">🏛️</div>
+                  <div class="module-text-stack">
+                    <h5>تالار هم‌اندیشی و سناریوها (Silk Symposium & Sanctum)</h5>
+                    <p>سناریوهای شورا، پرسوناهای شناختی، الگوهای فرمول پرومپت، دستورات و تاریخچه دورها</p>
+                  </div>
+                </div>
+                <div class="module-actions-stack">
+                  <input type="file" id="file-vault-import-symposium" accept=".json" style="display: none;" />
+                  <button type="button" id="btn-vault-import-symposium" class="btn-vault-chip-action">
+                    <span>درون‌ریزی 📥</span>
+                  </button>
+                  <button type="button" id="btn-vault-export-symposium" class="btn-vault-chip-action export">
+                    <span>استخراج 📤</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Module: Mirror Chats -->
+              <div class="vault-module-row">
+                <div class="module-row-info">
+                  <div class="module-icon-gem">💬</div>
+                  <div class="module-text-stack">
+                    <h5>تاریخچه گفتگوهای استودیو چت (Mirror Sanctuary Chats)</h5>
+                    <p>تمام پیام‌ها، تفکیک استدلال‌ها و متن‌های اسکرپ شده چت‌های انفرادی</p>
+                  </div>
+                </div>
+                <div class="module-actions-stack">
+                  <input type="file" id="file-vault-import-chats" accept=".json" style="display: none;" />
+                  <button type="button" id="btn-vault-import-chats" class="btn-vault-chip-action">
+                    <span>درون‌ریزی 📥</span>
+                  </button>
+                  <button type="button" id="btn-vault-export-chats" class="btn-vault-chip-action export">
+                    <span>استخراج 📤</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Module: Celestial Council -->
+              <div class="vault-module-row">
+                <div class="module-row-info">
+                  <div class="module-icon-gem">👑</div>
+                  <div class="module-text-stack">
+                    <h5>شورای افلاک و داوری مدل‌ها (Celestial Council)</h5>
+                    <p>جلسه فعال شورا، آرا و بررسی همتایان ناشناس و سنتز نهایی رئیس شورا</p>
+                  </div>
+                </div>
+                <div class="module-actions-stack">
+                  <input type="file" id="file-vault-import-council" accept=".json" style="display: none;" />
+                  <button type="button" id="btn-vault-import-council" class="btn-vault-chip-action">
+                    <span>درون‌ریزی 📥</span>
+                  </button>
+                  <button type="button" id="btn-vault-export-council" class="btn-vault-chip-action export">
+                    <span>استخراج 📤</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 3: Maintenance & Reset -->
+          <div id="vault-tab-maintenance" style="display: none; flex-direction: column; gap: 14px;">
+            <div class="vault-danger-box">
+              <div class="danger-item-row">
+                <div class="danger-item-info">
+                  <h6>بازنشانی درایورهای DOM به حالت پیش‌فرض</h6>
+                  <p>تمام سلکتورها و تنظیمات تایپ به تنظیمات استاندارد کارخانه بازمی‌گردد.</p>
+                </div>
+                <button type="button" id="btn-vault-reset-drivers" class="btn-danger-action">بازنشانی درایورها</button>
+              </div>
+
+              <div class="danger-item-row">
+                <div class="danger-item-info">
+                  <h6>پاک‌سازی تاریخچه گفتگوهای ذخیره‌شده (Mirror Chats)</h6>
+                  <p>تمام چت‌های ذخیره شده در حافظه محلی پاک می‌شوند (کارت‌ها و بوم دست‌نخورده می‌مانند).</p>
+                </div>
+                <button type="button" id="btn-vault-clear-chats" class="btn-danger-action">پاک‌سازی چت‌ها</button>
+              </div>
+
+              <div class="danger-item-row">
+                <div class="danger-item-info">
+                  <h6>بازنشانی بوم به کارت‌های اولیه</h6>
+                  <p>کارت‌های روی بوم حذف شده و به ۳ کارت پیش‌فرض (ChatGPT, Claude, Perplexity) بازمی‌گردد.</p>
+                </div>
+                <button type="button" id="btn-vault-reset-canvas" class="btn-danger-action">بازنشانی بوم</button>
+              </div>
+
+              <div class="danger-item-row">
+                <div class="danger-item-info">
+                  <h6>پاک‌سازی کامل و نوسازی برنامه (Factory Reset)</h6>
+                  <p>⚠️ تمام داده‌ها، کارت‌ها، تاریخچه‌ها و سناریوهای شما کاملاً پاک و مرورگر نوسازی می‌شود.</p>
+                </div>
+                <button type="button" id="btn-vault-wipe-all" class="btn-danger-action" style="background: rgba(239, 68, 68, 0.35); border-color: #ef4444; color: #ffffff;">حذف تمام داده‌ها</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal: Add Custom AI Model -->
     <div id="modal-custom-bot" class="modal-veil hidden">
       <div class="modal-card">
@@ -2021,6 +2281,10 @@
 
         <div class="modal-content-body">
           <div class="shortcuts-table">
+            <div class="shortcut-entry">
+              <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>⌥ Alt</kbd><kbd>E</kbd></div>
+              <span class="shortcut-legend">Open Universal Data Vault (صندوق جامع داده‌ها و پشتیبان‌گیری)</span>
+            </div>
             <div class="shortcut-entry">
               <div class="shortcut-keys-combo"><kbd>⌘ / Ctrl</kbd><kbd>⌥ Alt</kbd><kbd>S</kbd></div>
               <span class="shortcut-legend">Convene The Silk Symposium (Infinite Multi-AI Roundtable Agora)</span>

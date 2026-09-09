@@ -180,6 +180,70 @@ class StateStore {
     return { ...this.modelCatalog };
   }
 
+  exportSpatialStateJson() {
+    const payload = {
+      schema: 'OmniAI_Spatial_Canvas',
+      version: '2.0.0',
+      exportedAt: Date.now(),
+      state: {
+        cards: this.state.cards,
+        activeCardId: this.state.activeCardId,
+        activeLayoutPreset: this.state.activeLayoutPreset,
+        autoArrangeOnAdd: this.state.autoArrangeOnAdd,
+        autoFitOnArrange: this.state.autoFitOnArrange,
+        cardSpacing: this.state.cardSpacing,
+        cardSizePreset: this.state.cardSizePreset,
+        syncScope: this.state.syncScope,
+        zenMode: this.state.zenMode,
+        customBots: this.state.customBots
+      }
+    };
+    return JSON.stringify(payload, null, 2);
+  }
+
+  async importSpatialStateJson(jsonInput) {
+    try {
+      const parsed = typeof jsonInput === 'string' ? JSON.parse(jsonInput) : jsonInput;
+      const incoming = parsed.state || parsed.spatialCanvas || parsed;
+      if (!incoming || typeof incoming !== 'object') {
+        throw new Error('ساختار فایل پشتیبان بوم نامعتبر است.');
+      }
+
+      if (incoming.customBots && typeof incoming.customBots === 'object') {
+        this.state.customBots = { ...this.state.customBots, ...incoming.customBots };
+        Object.assign(this.modelCatalog, incoming.customBots);
+      }
+
+      if (Array.isArray(incoming.cards)) {
+        this.state.cards = incoming.cards.map(c => ({
+          ...c,
+          name: c.name || c.title || 'AI Intelligence',
+          title: c.title || c.name || 'AI Intelligence'
+        }));
+      }
+
+      if (incoming.activeCardId) this.state.activeCardId = incoming.activeCardId;
+      if (incoming.activeLayoutPreset) this.state.activeLayoutPreset = incoming.activeLayoutPreset;
+      if (typeof incoming.autoArrangeOnAdd === 'boolean') this.state.autoArrangeOnAdd = incoming.autoArrangeOnAdd;
+      if (typeof incoming.autoFitOnArrange === 'boolean') this.state.autoFitOnArrange = incoming.autoFitOnArrange;
+      if (typeof incoming.cardSpacing === 'number') this.state.cardSpacing = incoming.cardSpacing;
+      if (incoming.cardSizePreset) this.state.cardSizePreset = incoming.cardSizePreset;
+      if (typeof incoming.zenMode === 'boolean') this.state.zenMode = incoming.zenMode;
+
+      await this.saveState();
+      this.notify();
+
+      if (this.state.autoFitOnArrange) {
+        setTimeout(() => globalBus.emit('FIT_VIEWPORT'), 100);
+      }
+
+      return { success: true, count: this.state.cards.length };
+    } catch (err) {
+      console.error('[StateStore] Import failed:', err);
+      return { success: false, error: err.message };
+    }
+  }
+
   getCards() {
     return [...this.state.cards];
   }
