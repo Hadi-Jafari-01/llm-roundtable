@@ -138,16 +138,26 @@ export class SilkSymposiumOrchestrator {
 
     // Zone 4: Dialectic Engine & Templates
     this.topologySelect = document.getElementById('sanctum-topology-select');
-    this.topologyCardsGrid = document.getElementById('topology-cards-grid');
+    this.flowPresetsSelect = document.getElementById('sanctum-flow-presets-select');
+    this.btnSaveCurrentFlowPreset = document.getElementById('btn-save-current-flow-preset');
+    this.btnDelFlowPreset = document.getElementById('btn-del-flow-preset');
+    this.flowDelayInput = document.getElementById('sanctum-flow-delay');
+
     this.promptTemplatePresetPicker = document.getElementById('sanctum-prompt-template-preset-select');
+    this.btnSaveCurrentFormulaPreset = document.getElementById('btn-save-current-formula-preset');
+    this.btnDelFormulaPreset = document.getElementById('btn-del-formula-preset');
     this.templateTextarea = document.getElementById('sanctum-template-textarea');
-    this.btnResetFormula = document.getElementById('btn-reset-formula-default');
+    this.btnClearFormula = document.getElementById('btn-clear-formula');
     this.btnCopyFormula = document.getElementById('btn-copy-formula');
     this.formulaStatsBadge = document.getElementById('formula-stats-badge');
+
     this.maxRoundsInput = document.getElementById('sanctum-max-rounds');
     this.distillSelect = document.getElementById('sanctum-distill-select');
     this.macroChipsContainer = document.getElementById('sanctum-macro-chips');
+
     this.sanctumGlobalDirectivePresetPicker = document.getElementById('sanctum-global-directive-preset-select');
+    this.btnSaveCurrentGlobalDirectivePreset = document.getElementById('btn-save-current-global-directive-preset');
+    this.btnDelGlobalDirectivePreset = document.getElementById('btn-del-global-directive-preset');
     this.sanctumGlobalDirectiveTextarea = document.getElementById('sanctum-global-directive');
     this.btnSaveProtocols = document.getElementById('btn-save-protocols');
   }
@@ -308,56 +318,163 @@ export class SilkSymposiumOrchestrator {
       this.syncTextareaDirection(this.sanctumGlobalDirectiveTextarea);
     });
 
-    // Instant Preset choosers for global directive and prompt templates
-    this.sanctumGlobalDirectivePresetPicker?.addEventListener('change', () => {
-      const key = this.sanctumGlobalDirectivePresetPicker.value;
-      if (key && GLOBAL_DIRECTIVE_PRESETS[key]) {
-        this.sanctumGlobalDirectiveTextarea.value = GLOBAL_DIRECTIVE_PRESETS[key].directive;
-        this.syncTextareaDirection(this.sanctumGlobalDirectiveTextarea);
-        this.symposiumState.applyGlobalDirectivePreset(key);
-        this.showToast(`دستور کلی شورا "${GLOBAL_DIRECTIVE_PRESETS[key].title}" اعمال شد ✓`);
+    // --- Flow / Topology Controls ---
+    this.flowPresetsSelect?.addEventListener('change', () => {
+      const key = this.flowPresetsSelect.value;
+      if (this.btnDelFlowPreset) {
+        this.btnDelFlowPreset.style.display = key ? 'inline' : 'none';
+      }
+      if (key) {
+        this.symposiumState.applyTopology(key);
+        this.loadProtocolsIntoEditor();
+        this.updateHeaderStats();
+        this.showToast('الگوی جریان بارگذاری شد ✓');
       }
     });
 
+    this.btnSaveCurrentFlowPreset?.addEventListener('click', () => {
+      const title = prompt('عنوان الگوی جریان مذاکره جدید:');
+      if (!title) return;
+      const flowType = this.topologySelect?.value || 'manual';
+      const delay = parseInt(this.flowDelayInput?.value, 10) || 2400;
+      const rounds = parseInt(this.maxRoundsInput?.value, 10) || 10;
+      const distill = this.distillSelect?.value || 'digest';
+
+      const saved = this.symposiumState.saveCustomTopology({
+        title,
+        flowType,
+        autoAdvanceDelayMs: delay,
+        maxRounds: rounds,
+        contextDistillation: distill
+      });
+
+      if (saved) {
+        this.renderFlowPresetsDropdown();
+        this.showToast(`الگوی جریان "${saved.title}" ذخیره شد ✓`);
+      }
+    });
+
+    this.btnDelFlowPreset?.addEventListener('click', () => {
+      const key = this.flowPresetsSelect?.value;
+      if (!key) return;
+      if (confirm('آیا از حذف این الگوی جریان مذاکره اطمینان دارید؟')) {
+        this.symposiumState.deleteCustomTopology(key);
+        this.renderFlowPresetsDropdown();
+        this.showToast('الگوی جریان حذف شد.');
+      }
+    });
+
+    // --- Prompt Injection Formula Controls ---
     this.promptTemplatePresetPicker?.addEventListener('change', () => {
       const key = this.promptTemplatePresetPicker.value;
-      if (key && DIALECTIC_PROMPT_TEMPLATES[key]) {
-        if (this.templateTextarea) {
-          this.templateTextarea.value = DIALECTIC_PROMPT_TEMPLATES[key].template;
+      if (this.btnDelFormulaPreset) {
+        this.btnDelFormulaPreset.style.display = key ? 'inline' : 'none';
+      }
+      if (key) {
+        const tpls = this.symposiumState.getPromptTemplates();
+        if (tpls[key] && this.templateTextarea) {
+          this.templateTextarea.value = tpls[key].template;
           this.syncTextareaDirection(this.templateTextarea);
           this.updateFormulaStats();
+          this.symposiumState.applyPromptTemplate(key);
+          this.showToast(`الگوی پرومپت "${tpls[key].title}" بارگذاری شد ✓`);
         }
-        this.symposiumState.applyPromptTemplate(key);
-        this.showToast(`فرمول پرومپت "${DIALECTIC_PROMPT_TEMPLATES[key].title}" اعمال شد ✓`);
       }
+    });
+
+    this.btnSaveCurrentFormulaPreset?.addEventListener('click', () => {
+      const title = prompt('عنوان الگوی پرومپت جدید:');
+      if (!title) return;
+      const template = this.templateTextarea?.value || '';
+
+      const saved = this.symposiumState.saveCustomPromptTemplate({
+        title,
+        template
+      });
+
+      if (saved) {
+        this.renderPromptTemplatesDropdown();
+        this.showToast(`الگوی پرومپت "${saved.title}" ذخیره شد ✓`);
+      }
+    });
+
+    this.btnDelFormulaPreset?.addEventListener('click', () => {
+      const key = this.promptTemplatePresetPicker?.value;
+      if (!key) return;
+      if (confirm('آیا از حذف این الگوی پرومپت اطمینان دارید؟')) {
+        this.symposiumState.deleteCustomPromptTemplate(key);
+        this.renderPromptTemplatesDropdown();
+        this.showToast('الگوی پرومپت حذف شد.');
+      }
+    });
+
+    this.btnClearFormula?.addEventListener('click', () => {
+      if (this.templateTextarea) {
+        this.templateTextarea.value = '';
+        this.updateFormulaStats();
+        this.templateTextarea.focus();
+      }
+    });
+
+    this.btnCopyFormula?.addEventListener('click', () => {
+      if (this.templateTextarea?.value) {
+        navigator.clipboard.writeText(this.templateTextarea.value);
+        this.showToast('فرمول در کلیپ‌بورد کپی شد 📋');
+      }
+    });
+
+    // --- Global Directive Controls ---
+    this.sanctumGlobalDirectivePresetPicker?.addEventListener('change', () => {
+      const key = this.sanctumGlobalDirectivePresetPicker.value;
+      if (this.btnDelGlobalDirectivePreset) {
+        this.btnDelGlobalDirectivePreset.style.display = key ? 'inline' : 'none';
+      }
+      if (key) {
+        const dirs = this.symposiumState.getGlobalDirectivePresets();
+        if (dirs[key] && this.sanctumGlobalDirectiveTextarea) {
+          this.sanctumGlobalDirectiveTextarea.value = dirs[key].directive;
+          this.syncTextareaDirection(this.sanctumGlobalDirectiveTextarea);
+          this.symposiumState.applyGlobalDirectivePreset(key);
+          this.showToast(`دستور مشترک "${dirs[key].title}" بارگذاری شد ✓`);
+        }
+      }
+    });
+
+    this.btnSaveCurrentGlobalDirectivePreset?.addEventListener('click', () => {
+      const title = prompt('عنوان الگوی دستورالعمل مشترک جدید:');
+      if (!title) return;
+      const directive = this.sanctumGlobalDirectiveTextarea?.value || '';
+
+      const saved = this.symposiumState.saveCustomGlobalDirective({
+        title,
+        directive
+      });
+
+      if (saved) {
+        this.renderGlobalDirectivesDropdown();
+        this.showToast(`دستور مشترک "${saved.title}" ذخیره شد ✓`);
+      }
+    });
+
+    this.btnDelGlobalDirectivePreset?.addEventListener('click', () => {
+      const key = this.sanctumGlobalDirectivePresetPicker?.value;
+      if (!key) return;
+      if (confirm('آیا از حذف این الگوی دستورالعمل مشترک اطمینان دارید؟')) {
+        this.symposiumState.deleteCustomGlobalDirective(key);
+        this.renderGlobalDirectivesDropdown();
+        this.showToast('الگوی دستورالعمل مشترک حذف شد.');
+      }
+    });
+
+    this.topologySelect?.addEventListener('change', () => {
+      this.symposiumState.debateMode = this.topologySelect.value;
+      this.updateHeaderStats();
     });
 
     // Formula Textarea live input monitoring
     this.templateTextarea?.addEventListener('input', () => {
       this.syncTextareaDirection(this.templateTextarea);
       this.updateFormulaStats();
-    });
-
-    // Reset current formula to preset default
-    this.btnResetFormula?.addEventListener('click', () => {
-      const currentKey = this.symposiumState.config.activeTemplateKey || 'manual_conductor';
-      const tpl = DIALECTIC_PROMPT_TEMPLATES[currentKey] || DIALECTIC_PROMPT_TEMPLATES.manual_conductor;
-      if (tpl && this.templateTextarea) {
-        this.templateTextarea.value = tpl.template;
-        this.syncTextareaDirection(this.templateTextarea);
-        this.updateFormulaStats();
-        this.symposiumState.config.promptTemplate = tpl.template;
-        this.symposiumState.persistConfig();
-        this.showToast(`فرمول به پیش‌فرض الگوی "${tpl.title}" بازنشانی شد ↺`);
-      }
-    });
-
-    // Copy formula to clipboard
-    this.btnCopyFormula?.addEventListener('click', () => {
-      if (this.templateTextarea?.value) {
-        navigator.clipboard.writeText(this.templateTextarea.value);
-        this.showToast('فرمول پرومپت در کلیپ‌بورد کپی شد 📋');
-      }
     });
 
     // Instant Distillation and Max Rounds updates
@@ -370,22 +487,6 @@ export class SilkSymposiumOrchestrator {
     this.maxRoundsInput?.addEventListener('change', () => {
       this.symposiumState.config.maxRounds = parseInt(this.maxRoundsInput.value, 10) || 10;
       this.symposiumState.persistConfig();
-    });
-
-    // Visual Topology Cards Click Listeners: Immediately applies and persists
-    this.topologyCardsGrid?.addEventListener('click', (e) => {
-      const card = e.target.closest('.topology-card');
-      if (!card) return;
-      const val = card.dataset.value;
-      if (val) {
-        if (this.topologySelect) this.topologySelect.value = val;
-        this.topologyCardsGrid.querySelectorAll('.topology-card').forEach(c => c.classList.remove('active'));
-        card.classList.add('active');
-        this.symposiumState.debateMode = val;
-        this.symposiumState.persistConfig();
-        this.updateHeaderStats();
-        this.showToast(`متدولوژی نوبت‌دهی به ${val} تغییر یافت ✓`);
-      }
     });
 
     // Save protocols
@@ -507,6 +608,7 @@ export class SilkSymposiumOrchestrator {
     this.renderDaisFloorPlan();
     this.renderPromptTemplatesDropdown();
     this.renderGlobalDirectivesDropdown();
+    this.renderFlowPresetsDropdown();
     this.updateScenarioHeaderBadge();
     requestAnimationFrame(() => this.inputPrompt?.focus());
     globalBus.emit('SILK_SYMPOSIUM_OPENED');
@@ -580,6 +682,7 @@ export class SilkSymposiumOrchestrator {
         round_robin: 'Orderly Round-Robin',
         socratic: 'Socratic Dialectic',
         delphi: 'Delphi Convergence',
+        random: 'Dynamic Random',
         autonomous: 'Autonomous Agora'
       };
       this.topologyBadge.innerHTML = `<span class="dot"></span> ${labels[this.symposiumState.debateMode] || this.symposiumState.debateMode}`;
@@ -822,7 +925,7 @@ export class SilkSymposiumOrchestrator {
   composeSeatPrompt(seat, immediateContext = '') {
     const template = (seat.customPromptTemplate && seat.customPromptTemplate.trim())
       ? seat.customPromptTemplate.trim()
-      : this.symposiumState.config.promptTemplate;
+      : (this.symposiumState.config.promptTemplate || DEFAULT_DIALECTIC_TEMPLATE);
 
     const turns = this.symposiumState.transcript.filter(t => !t.isStreaming);
     const lastTurn = turns[turns.length - 1];
@@ -870,24 +973,26 @@ export class SilkSymposiumOrchestrator {
     const turn = this.symposiumState.transcript.find(t => t.id === turnId);
     if (!turn) return;
 
-    const adversaryIdx = this.symposiumState.seats.findIndex(s => s.personaKey === 'devils_advocate' && !s.isMuted);
-    const targetIdx = adversaryIdx >= 0 ? adversaryIdx : (this.symposiumState.activeSpeakerIndex + 1) % this.symposiumState.seats.length;
+    const seats = this.symposiumState.seats;
+    const currentIdx = typeof turn.seatIndex === 'number' ? turn.seatIndex : this.symposiumState.activeSpeakerIndex;
+    let targetIdx = (currentIdx + 1) % seats.length;
+    let checked = 0;
+    while (seats[targetIdx]?.isMuted && checked < seats.length) {
+      targetIdx = (targetIdx + 1) % seats.length;
+      checked++;
+    }
 
     const directive = `CRITICAL CHALLENGE to ${turn.speakerName}: Falsify and challenge this specific proposition: "${turn.text.slice(0, 180)}..."`;
     this.turnSequencer.dispatchTurn(targetIdx, directive);
   }
 
-  handleCrownInsight(turnId) {
-    const turn = this.symposiumState.transcript.find(t => t.id === turnId);
-    if (!turn) return;
-    const summary = `${turn.speakerName}: "${turn.text.slice(0, 150)}..."`;
-    this.symposiumState.addLedgerItem('agreements', summary);
-    this.ledgerView.render(this.symposiumState.ledger);
-  }
-
   handleSynthesize() {
-    const synthIdx = this.symposiumState.seats.findIndex(s => s.personaKey === 'synthesizer' && !s.isMuted);
-    const targetIdx = synthIdx >= 0 ? synthIdx : 0;
+    const seats = this.symposiumState.seats;
+    let targetIdx = this.symposiumState.activeSpeakerIndex >= 0 ? this.symposiumState.activeSpeakerIndex : 0;
+    if (seats[targetIdx]?.isMuted) {
+      targetIdx = seats.findIndex(s => !s.isMuted);
+      if (targetIdx < 0) targetIdx = 0;
+    }
     const directive = 'MILESTONE CONSENSUS MANDATE: Reconcile all current positions and synthesize a master framework.';
     this.turnSequencer.dispatchTurn(targetIdx, directive);
   }
@@ -990,8 +1095,8 @@ export class SilkSymposiumOrchestrator {
 
     if (personaKeys.length === 0) {
       const emptySpan = document.createElement('span');
-      emptySpan.style.cssText = 'font-size:10.5px;color:#94a3b8;font-style:italic;padding:4px 6px;';
-      emptySpan.textContent = 'هنوز پرسونایی تعریف نشده است.';
+      emptySpan.style.cssText = 'font-size:10.5px;color:#94a3b8;padding:4px 6px;';
+      emptySpan.textContent = 'هنوز پرسونایی تعریف نشده است (می‌توانید مستقیم در کادر زیر بنویسید یا الگو بسازید).';
       this.inspectorChipsCarousel.appendChild(emptySpan);
     } else {
       personaKeys.forEach(key => {
@@ -1691,12 +1796,32 @@ export class SilkSymposiumOrchestrator {
     });
   }
 
+  renderFlowPresetsDropdown() {
+    if (!this.flowPresetsSelect) return;
+    const flows = this.symposiumState.getTopologies();
+    const flowKeys = Object.keys(flows);
+    this.flowPresetsSelect.innerHTML = '<option value="">-- الگوهای سفارشی ذخیره‌شده جریان مذاکره --</option>';
+
+    flowKeys.forEach(key => {
+      const f = flows[key];
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = `${f.badge || '🔄'} ${f.title}`;
+      this.flowPresetsSelect.appendChild(opt);
+    });
+
+    if (this.btnDelFlowPreset) {
+      this.btnDelFlowPreset.style.display = 'none';
+    }
+  }
+
   renderPromptTemplatesDropdown() {
     if (!this.promptTemplatePresetPicker) return;
     const templates = this.symposiumState.getPromptTemplates();
-    this.promptTemplatePresetPicker.innerHTML = '<option value="">-- انتخاب از الگوهای آماده فرمول پرومپت --</option>';
+    const tplKeys = Object.keys(templates);
+    this.promptTemplatePresetPicker.innerHTML = '<option value="">-- هیچ الگوی پرومپتی ذخیره نشده است (آزادانه در کادر زیر بنویسید) --</option>';
 
-    Object.keys(templates).forEach(key => {
+    tplKeys.forEach(key => {
       const t = templates[key];
       const opt = document.createElement('option');
       opt.value = key;
@@ -1704,14 +1829,19 @@ export class SilkSymposiumOrchestrator {
       if (key === this.symposiumState.config.activeTemplateKey) opt.selected = true;
       this.promptTemplatePresetPicker.appendChild(opt);
     });
+
+    if (this.btnDelFormulaPreset) {
+      this.btnDelFormulaPreset.style.display = 'none';
+    }
   }
 
   renderGlobalDirectivesDropdown() {
     if (!this.sanctumGlobalDirectivePresetPicker) return;
     const directives = this.symposiumState.getGlobalDirectivePresets();
-    this.sanctumGlobalDirectivePresetPicker.innerHTML = '<option value="">-- انتخاب دستور کلی آماده شورا --</option>';
+    const dirKeys = Object.keys(directives);
+    this.sanctumGlobalDirectivePresetPicker.innerHTML = '<option value="">-- الگوهای ذخیره‌شده دستورالعمل مشترک (می‌توانید مستقیم بنویسید) --</option>';
 
-    Object.keys(directives).forEach(key => {
+    dirKeys.forEach(key => {
       const d = directives[key];
       const opt = document.createElement('option');
       opt.value = key;
@@ -1719,6 +1849,10 @@ export class SilkSymposiumOrchestrator {
       if (key === this.symposiumState.config.activeGlobalDirectiveKey) opt.selected = true;
       this.sanctumGlobalDirectivePresetPicker.appendChild(opt);
     });
+
+    if (this.btnDelGlobalDirectivePreset) {
+      this.btnDelGlobalDirectivePreset.style.display = 'none';
+    }
   }
 
   updateFormulaStats() {
@@ -1731,18 +1865,11 @@ export class SilkSymposiumOrchestrator {
 
   loadProtocolsIntoEditor() {
     if (this.topologySelect) this.topologySelect.value = this.symposiumState.debateMode;
-
-    // Update active state in visual topology cards
-    if (this.topologyCardsGrid) {
-      this.topologyCardsGrid.querySelectorAll('.topology-card').forEach(card => {
-        card.classList.toggle('active', card.dataset.value === this.symposiumState.debateMode);
-      });
-    }
-
+    if (this.flowDelayInput) this.flowDelayInput.value = this.symposiumState.config.autoAdvanceDelayMs || 2400;
     if (this.maxRoundsInput) this.maxRoundsInput.value = this.symposiumState.config.maxRounds;
     if (this.distillSelect) this.distillSelect.value = this.symposiumState.config.contextDistillation;
     if (this.templateTextarea) {
-      this.templateTextarea.value = this.symposiumState.config.promptTemplate;
+      this.templateTextarea.value = this.symposiumState.config.promptTemplate || DEFAULT_DIALECTIC_TEMPLATE;
       this.syncTextareaDirection(this.templateTextarea);
       this.updateFormulaStats();
     }
@@ -1750,10 +1877,14 @@ export class SilkSymposiumOrchestrator {
       this.sanctumGlobalDirectiveTextarea.value = this.symposiumState.config.globalDirective || '';
       this.syncTextareaDirection(this.sanctumGlobalDirectiveTextarea);
     }
+    this.renderFlowPresetsDropdown();
+    this.renderPromptTemplatesDropdown();
+    this.renderGlobalDirectivesDropdown();
   }
 
   saveProtocolsConfig() {
     if (this.topologySelect) this.symposiumState.debateMode = this.topologySelect.value;
+    if (this.flowDelayInput) this.symposiumState.config.autoAdvanceDelayMs = parseInt(this.flowDelayInput.value, 10) || 2400;
     if (this.maxRoundsInput) this.symposiumState.config.maxRounds = parseInt(this.maxRoundsInput.value, 10) || 10;
     if (this.distillSelect) this.symposiumState.config.contextDistillation = this.distillSelect.value;
     if (this.templateTextarea) this.symposiumState.config.promptTemplate = this.templateTextarea.value.trim() || DEFAULT_DIALECTIC_TEMPLATE;

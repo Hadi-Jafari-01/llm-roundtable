@@ -203,47 +203,27 @@ export class TurnSequencer {
         return next;
       }
 
-      case 'socratic': {
-        // Socratic Dialectic: Picks the seat with maximum theoretical tension with the last speaker
-        const lastSpeaker = seats[activeSpeakerIndex];
-        let candidateIdx = -1;
-
-        if (lastSpeaker?.personaKey === 'architect' || lastSpeaker?.personaKey === 'empiricist') {
-          candidateIdx = seats.findIndex(s => s.personaKey === 'devils_advocate' && !s.isMuted);
-        } else if (lastSpeaker?.personaKey === 'devils_advocate') {
-          candidateIdx = seats.findIndex(s => s.personaKey === 'synthesizer' && !s.isMuted);
-        } else if (lastSpeaker?.personaKey === 'innovator') {
-          candidateIdx = seats.findIndex(s => s.personaKey === 'cynic' && !s.isMuted);
-        }
-
-        if (candidateIdx === -1 || candidateIdx === activeSpeakerIndex) {
-          candidateIdx = (activeSpeakerIndex + 1) % count;
-          while (seats[candidateIdx]?.isMuted && candidateIdx !== activeSpeakerIndex) {
-            candidateIdx = (candidateIdx + 1) % count;
-          }
-        }
-
-        if (candidateIdx <= activeSpeakerIndex) {
-          this.advanceRound();
-        }
-        return candidateIdx;
-      }
-
+      case 'socratic':
       case 'delphi': {
-        // Delphi Convergence: Cycles through participants until round limit, then calls synthesizer
-        if (roundIndex >= config.maxRounds) {
-          const synthIdx = seats.findIndex(s => s.personaKey === 'synthesizer' && !s.isMuted);
-          return synthIdx >= 0 ? synthIdx : activeSpeakerIndex;
-        }
-
         let next = (activeSpeakerIndex + 1) % count;
-        while (seats[next]?.isMuted) {
+        let checked = 0;
+        while (seats[next]?.isMuted && checked < count) {
           next = (next + 1) % count;
+          checked++;
         }
         if (next <= activeSpeakerIndex) {
           this.advanceRound();
         }
         return next;
+      }
+
+      case 'random': {
+        const available = [];
+        seats.forEach((s, i) => {
+          if (!s.isMuted && i !== activeSpeakerIndex) available.push(i);
+        });
+        if (available.length === 0) return (activeSpeakerIndex + 1) % count;
+        return available[Math.floor(Math.random() * available.length)];
       }
 
       default:
@@ -268,13 +248,6 @@ export class TurnSequencer {
     this.callbacks.onRoundAdvanced(this.state.roundIndex);
 
     if (this.state.config.maxRounds > 0 && this.state.roundIndex > this.state.config.maxRounds) {
-      if (this.state.config.autoSynthesizeOnFinish) {
-        const synthIdx = this.state.seats.findIndex(s => s.personaKey === 'synthesizer');
-        if (synthIdx >= 0) {
-          this.dispatchTurn(synthIdx, 'FINAL CONSENSUS MANDATE: Formulate the definitive synthesis.');
-          return;
-        }
-      }
       this.pause();
       this.callbacks.onSessionCompleted();
     }
