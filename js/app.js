@@ -1539,7 +1539,13 @@ class OmniApp {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+const bootstrapApp = () => {
   const app = new OmniApp();
   app.init();
-});
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootstrapApp);
+} else {
+  bootstrapApp();
+}

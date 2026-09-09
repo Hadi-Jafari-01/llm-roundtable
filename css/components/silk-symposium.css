@@ -278,10 +278,10 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  min-width: 170px;
-  max-width: 220px;
-  padding: 9px 12px;
-  border-radius: 12px;
+  min-width: 175px;
+  max-width: 230px;
+  padding: 10px 13px;
+  border-radius: 14px;
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
@@ -307,6 +307,41 @@
 @keyframes seatSpeakerBreathe {
   0% { box-shadow: 0 0 14px rgba(192, 132, 252, 0.3); }
   100% { box-shadow: 0 0 28px rgba(244, 114, 182, 0.5); }
+}
+
+/* User Seated Participant Card (Distinguished Haute Antique Gold & Rose Sheen) */
+.symposium-seat-card.user-seat {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.14) 0%, rgba(244, 114, 182, 0.12) 50%, rgba(192, 132, 252, 0.08) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  box-shadow: 0 4px 18px rgba(245, 158, 11, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.symposium-seat-card.user-seat:hover {
+  border-color: rgba(245, 158, 11, 0.75);
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.28);
+}
+
+.symposium-seat-card.user-seat .seat-name-text {
+  color: #fef08a;
+  font-weight: 700;
+}
+
+.symposium-seat-card.user-seat.your-turn {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.28) 0%, rgba(236, 72, 153, 0.25) 100%);
+  border-color: #fbbf24;
+  box-shadow: 0 0 32px rgba(245, 158, 11, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  animation: userTurnGlowPulse 1.8s infinite alternate ease-in-out;
+}
+
+@keyframes userTurnGlowPulse {
+  0% { transform: scale(0.98); box-shadow: 0 0 16px rgba(245, 158, 11, 0.35); }
+  100% { transform: scale(1.03); box-shadow: 0 0 36px rgba(245, 158, 11, 0.65); }
+}
+
+.symposium-seat-card.user-seat.your-turn .seat-status-pill {
+  background: rgba(245, 158, 11, 0.4);
+  color: #fef3c7;
+  font-weight: 800;
 }
 
 .symposium-seat-card.reflecting {
@@ -355,6 +390,40 @@
   text-overflow: ellipsis;
 }
 
+.seat-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.seat-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: #cbd5e1;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  padding: 0;
+}
+
+.seat-action-btn:hover {
+  background: rgba(192, 132, 252, 0.2);
+  color: #ffffff;
+  border-color: rgba(192, 132, 252, 0.4);
+  transform: scale(1.08);
+}
+
+.seat-action-btn.muted {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
 .seat-status-pill {
   font-size: 8.5px;
   font-weight: 700;
@@ -370,6 +439,13 @@
   color: #fbcfe8;
 }
 
+.seat-custom-indicator {
+  color: #fde047;
+  font-size: 11px;
+  margin-inline-start: auto;
+  text-shadow: 0 0 6px #fde047;
+}
+
 /* Persona Archetype Badge */
 .seat-persona-badge {
   display: flex;
@@ -383,14 +459,12 @@
   color: #e2e8f0;
 }
 
-.seat-persona-badge svg {
-  width: 12px;
-  height: 12px;
-  color: #c084fc;
+.seat-persona-badge .persona-icon {
+  font-size: 11px;
   flex-shrink: 0;
 }
 
-.seat-persona-badge span {
+.seat-persona-badge .persona-text {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -596,6 +670,13 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.25);
 }
 
+/* Seated User Bubble: Warm Champagne Gold & Amethyst */
+.symposium-turn-row.user.seated-user .symposium-bubble-card {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.28) 0%, rgba(236, 72, 153, 0.25) 50%, rgba(168, 85, 247, 0.24) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.6);
+  box-shadow: 0 8px 28px rgba(245, 158, 11, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
 /* Model Bubble: Deep Frosted Silk Glass */
 .symposium-turn-row.model .symposium-bubble-card {
   background: rgba(19, 15, 33, 0.78);
@@ -632,23 +713,28 @@
 .btn-bubble-chip {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 8px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: #cbd5e1;
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.16s ease;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: inherit;
 }
 
 .btn-bubble-chip:hover {
-  background: rgba(192, 132, 252, 0.18);
-  border-color: rgba(192, 132, 252, 0.45);
+  background: rgba(192, 132, 252, 0.2);
+  border-color: rgba(192, 132, 252, 0.55);
   color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn-bubble-chip:active {
+  transform: scale(0.98);
 }
 
 .btn-bubble-chip.crown-chip:hover {
@@ -772,6 +858,10 @@
 }
 
 .ledger-item-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
   padding: 8px 10px;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.035);
@@ -780,6 +870,43 @@
   line-height: 1.5;
   color: #e2e8f0;
   position: relative;
+  transition: all 0.18s ease;
+}
+
+.ledger-item-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.ledger-item-text {
+  flex: 1;
+  word-break: break-word;
+}
+
+.btn-delete-ledger-item {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 9px;
+  opacity: 0.6;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.ledger-item-card:hover .btn-delete-ledger-item {
+  opacity: 1;
+}
+
+.btn-delete-ledger-item:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
 }
 
 .ledger-item-card.agreement {
@@ -853,14 +980,41 @@
   gap: 10px;
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 8px 12px;
-  transition: all 0.2s ease;
+  border-radius: 14px;
+  padding: 8px 14px;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
 }
 
 .symposium-input-box:focus-within {
-  border-color: rgba(192, 132, 252, 0.5);
-  box-shadow: 0 0 20px rgba(192, 132, 252, 0.22);
+  border-color: rgba(192, 132, 252, 0.55);
+  box-shadow: 0 0 24px rgba(192, 132, 252, 0.25);
+}
+
+/* When it is user's active turn to speak on the Dais */
+.symposium-input-box.user-turn-active {
+  border-color: rgba(245, 158, 11, 0.85);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(236, 72, 153, 0.06) 100%);
+  box-shadow: 0 0 32px rgba(245, 158, 11, 0.35), 0 0 0 1px rgba(245, 158, 11, 0.6) inset;
+  animation: userDockBreathe 2s infinite ease-in-out alternate;
+}
+
+@keyframes userDockBreathe {
+  0% { box-shadow: 0 0 18px rgba(245, 158, 11, 0.25); }
+  100% { box-shadow: 0 0 36px rgba(245, 158, 11, 0.55); }
+}
+
+.symposium-input-box.user-turn-active::before {
+  content: '🌟 Your Turn to Address the Symposium Dais';
+  position: absolute;
+  top: -22px;
+  left: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fde68a;
+  text-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
 }
 
 .symposium-textarea {
@@ -955,9 +1109,51 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 22px;
+  padding: 14px 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 100%);
+}
+
+/* Sanctum Navigation Tabs Ribbon */
+.sanctum-nav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: rgba(0, 0, 0, 0.28);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.sanctum-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: inherit;
+}
+
+.sanctum-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #f1f5f9;
+}
+
+.sanctum-tab-btn.active {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(192, 132, 252, 0.25) 100%);
+  border-color: rgba(245, 158, 11, 0.55);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.22);
 }
 
 .sanctum-drawer-body {
@@ -967,6 +1163,155 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.sanctum-tab-section {
+  animation: sanctumFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes sanctumFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.sanctum-action-buttons-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Presets Library Grid */
+.persona-presets-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.persona-preset-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.18s ease;
+}
+
+.persona-preset-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(192, 132, 252, 0.35);
+}
+
+.persona-preset-card.is-custom {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.preset-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.preset-identity {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.preset-badge {
+  font-size: 13px;
+}
+
+.preset-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.preset-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-preset-use {
+  padding: 3px 8px;
+  border-radius: 5px;
+  border: 1px solid rgba(192, 132, 252, 0.4);
+  background: rgba(192, 132, 252, 0.15);
+  color: #e9d5ff;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.btn-preset-use:hover {
+  background: rgba(192, 132, 252, 0.3);
+  color: #ffffff;
+  border-color: rgba(192, 132, 252, 0.7);
+}
+
+.btn-preset-del {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: none;
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-preset-del:hover {
+  background: rgba(239, 68, 68, 0.35);
+  color: #ffffff;
+}
+
+.preset-directive-preview {
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.45;
+  max-height: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Dynamic Live Toast */
+.symposium-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: linear-gradient(135deg, rgba(20, 16, 32, 0.96) 0%, rgba(12, 9, 21, 0.98) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(245, 158, 11, 0.3);
+  backdrop-filter: blur(20px);
+  color: #fef08a;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 20px;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.symposium-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 /* Macro Tags Flow */
@@ -995,4 +1340,4 @@
 .macro-chip-btn:hover {
   background: rgba(192, 132, 252, 0.25);
   color: #ffffff;
-}
+}

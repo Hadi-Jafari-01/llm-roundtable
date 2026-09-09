@@ -367,9 +367,10 @@ export class WorkspaceCanvas {
         tab.style.setProperty('--tab-border-active', `${card.color}70`);
       }
 
+      const cardTitle = card.title || card.name || 'AI Model';
       tab.innerHTML = `
         <span class="silk-tab-dot" style="color: ${card.color}; background: ${card.color};"></span>
-        <span class="silk-tab-title">${card.title}</span>
+        <span class="silk-tab-title">${cardTitle}</span>
         <button class="silk-tab-close" title="Close Tab">✕</button>
       `;
 
@@ -394,7 +395,7 @@ export class WorkspaceCanvas {
     addBtn.title = 'Quick Add Model';
     addBtn.textContent = '+';
     addBtn.addEventListener('click', () => {
-      document.getElementById('btn-quick-launcher')?.click();
+      (document.getElementById('btn-quick-add-tab') || document.getElementById('btn-quick-launcher'))?.click();
     });
     this.tabsContainerEl.appendChild(addBtn);
   }

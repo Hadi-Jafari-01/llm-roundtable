@@ -307,7 +307,8 @@ header.top-nano-nav {
 
 .tab-title,
 .tab-name,
-.silk-tab-name {
+.silk-tab-name,
+.silk-tab-title {
   max-width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;

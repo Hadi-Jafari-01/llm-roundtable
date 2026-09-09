@@ -1715,13 +1715,20 @@
 
         <!-- Header Tools -->
         <div class="symposium-header-tools">
+          <button type="button" id="btn-symposium-open-personas" class="symposium-tool-btn primary-gold" title="تنظیم آزادانه شخصیت، دستورات سیستمی و پرومپت هر مدل">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5v2a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5Z"/><path d="M19 14v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
+            <span>🎭 شخصیت و پرومپت مدل‌ها</span>
+          </button>
+          <button type="button" id="btn-symposium-toggle-user-seat" class="symposium-tool-btn" title="Toggle seating yourself directly on the Dais Amphitheater as a peer participant">
+            <span>🪑 Seat Yourself</span>
+          </button>
           <button type="button" id="btn-symposium-toggle-dais" class="symposium-tool-btn active" title="Toggle Celestial Chairs Dais">
             <span>Dais Chairs</span>
           </button>
           <button type="button" id="btn-symposium-toggle-ledger" class="symposium-tool-btn active" title="Toggle Consensus Ledger">
             <span>Ledger</span>
           </button>
-          <button type="button" id="btn-symposium-open-sanctum" class="symposium-tool-btn primary-gold" title="Configure Logic Sanctum (Macros & Topologies)">
+          <button type="button" id="btn-symposium-open-sanctum" class="symposium-tool-btn" title="Configure Logic Sanctum (Macros, User Persona & Topologies)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
             <span>Logic Sanctum</span>
           </button>
@@ -1804,67 +1811,273 @@
         </div>
       </footer>
 
-      <!-- The Logic Sanctum Drawer (Deep Protocol Customizer) -->
+      <!-- The Logic Sanctum Drawer (Deep Protocol Customizer & Personas Studio) -->
       <div id="sanctum-backdrop" class="sanctum-backdrop"></div>
       <aside id="logic-sanctum-drawer" class="logic-sanctum-drawer">
         <div class="sanctum-drawer-header">
           <div style="display:flex;align-items:center;gap:10px;">
-            <div style="width:32px;height:32px;border-radius:10px;background:rgba(245,158,11,0.25);border:1px solid rgba(245,158,11,0.5);display:flex;align-items:center;justify-content:center;color:#fde68a;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>
+            <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg, rgba(245,158,11,0.3) 0%, rgba(244,114,182,0.25) 100%);border:1px solid rgba(245,158,11,0.5);display:flex;align-items:center;justify-content:center;color:#fde68a;">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="4"/></svg>
             </div>
             <div>
-              <h3 style="margin:0;font-size:14px;color:#ffffff;">The Logic Sanctum</h3>
-              <p style="margin:2px 0 0;font-size:10.5px;color:#94a3b8;">Deliberation Topology & Macro Protocol</p>
+              <h3 style="margin:0;font-size:14px;color:#ffffff;">The Logic Sanctum & Personas Studio</h3>
+              <p style="margin:2px 0 0;font-size:10.5px;color:#94a3b8;">شخصیت‌ها، پرومپت‌های سیستمی، الگوها و توپولوژی مناظره</p>
             </div>
           </div>
           <button type="button" id="btn-close-sanctum" class="symposium-tool-btn btn-close">✕</button>
         </div>
 
+        <!-- Sanctum Navigation Tabs -->
+        <div class="sanctum-nav-tabs">
+          <button type="button" class="sanctum-tab-btn active" data-tab="personas">
+            <span>🎭 شخصیت مدل‌ها</span>
+          </button>
+          <button type="button" class="sanctum-tab-btn" data-tab="presets">
+            <span>📚 الگوهای آماده</span>
+          </button>
+          <button type="button" class="sanctum-tab-btn" data-tab="protocols">
+            <span>⚙️ پروتکل شورا</span>
+          </button>
+          <button type="button" class="sanctum-tab-btn" data-tab="user-role">
+            <span>👑 نقش کاربر</span>
+          </button>
+        </div>
+
         <div class="sanctum-drawer-body">
-          <div class="driver-field-card">
-            <label class="driver-field-label">Turn-Taking Topology</label>
-            <select id="sanctum-topology-select" class="driver-select-input">
-              <option value="socratic">Socratic Dialectic (مناظره سقراطی و تشکیک در پیش‌فرض‌ها)</option>
-              <option value="delphi">Delphi Consensus (روش دلفی و همگرایی تدریجی)</option>
-              <option value="red_blue">Red Team vs Blue Team (سناریوی تهاجمی / دفاعی)</option>
-              <option value="autonomous">Fully Autonomous Flow (جریان خودکار مداوم)</option>
-              <option value="maestro">Human Maestro (هدایت دستی و پاس عصای ابریشمی)</option>
-            </select>
+
+          <!-- TAB 1: MODEL PERSONAS & DIRECTIVES STUDIO -->
+          <div id="sanctum-section-personas" class="sanctum-tab-section" style="display: flex; flex-direction: column; gap: 14px;">
+            
+            <div class="driver-field-card" style="background: rgba(129, 140, 248, 0.08); border-color: rgba(192, 132, 252, 0.35);">
+              <div class="driver-field-top">
+                <label class="driver-field-label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
+                  <span>انتخاب مدل برای ویرایش شخصیت (Target Model Chair)</span>
+                </label>
+                <span class="driver-field-badge">Active Model</span>
+              </div>
+              <select id="sanctum-seat-picker-select" class="driver-select-input"></select>
+            </div>
+
+            <!-- Preset Chooser -->
+            <div class="driver-field-card">
+              <div class="driver-field-top">
+                <label class="driver-field-label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                  <span>بارگذاری از الگوهای آماده (Preset Templates)</span>
+                </label>
+                <span class="driver-field-badge">Template</span>
+              </div>
+              <select id="sanctum-persona-preset-select" class="driver-select-input"></select>
+              <span class="field-tip">با انتخاب الگو، متن پرومپت و عنوان بارگذاری شده و می‌توانید آن را آزادانه ویرایش کنید.</span>
+            </div>
+
+            <!-- Free Title & Badge Inputs -->
+            <div class="driver-sub-grid">
+              <div class="driver-field-card">
+                <label class="driver-sub-label">عنوان یا تخصص شخصیت (Persona Title)</label>
+                <input type="text" id="sanctum-seat-title" class="driver-text-input" placeholder="e.g. The Architect (معمار سیستم)" />
+              </div>
+              <div class="driver-field-card">
+                <label class="driver-sub-label">نشان یا ایموجی کوتاه (Badge)</label>
+                <input type="text" id="sanctum-seat-badge" class="driver-text-input" placeholder="e.g. 🏛️ Architecture" />
+              </div>
+            </div>
+
+            <!-- Free System Directive Textarea -->
+            <div class="driver-field-card" style="border-color: rgba(244, 114, 182, 0.35);">
+              <div class="driver-field-top">
+                <label class="driver-field-label" style="color: #fbcfe8;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                  <span>دستورالعمل سیستمی و پرومپت شخصیت مدل (System Directive)</span>
+                </label>
+                <span class="driver-field-badge" style="background: rgba(244, 114, 182, 0.15); color: #fbcfe8;">کاملاً آزاد</span>
+              </div>
+              <textarea id="sanctum-seat-directive" class="driver-text-input" style="height: 130px; resize: vertical; line-height: 1.6; font-size: 12px; padding: 10px;" placeholder="دستور سیستمی و هویت فکری این مدل را کاملاً آزادانه بنویسید (فارسی، انگلیسی، یا فنی)..." dir="auto"></textarea>
+              <span class="field-tip">این دستور مستقیماً به عنوان پارامتر {{speaker_role}} در هنگام نوبت‌دهی به این مدل تزریق می‌شود.</span>
+            </div>
+
+            <!-- Seat Parameters (Weight, Mute) -->
+            <div class="driver-sub-grid">
+              <div class="driver-field-card">
+                <label class="driver-sub-label">وزن نفوذ در شورا (Weight)</label>
+                <div class="driver-input-row">
+                  <input type="number" id="sanctum-seat-weight" class="driver-text-input" min="10" max="250" step="10" value="100" />
+                  <span class="unit-tag">%</span>
+                </div>
+              </div>
+              <div class="driver-field-card" style="justify-content: center;">
+                <label class="toggle-row" for="sanctum-seat-mute-check">
+                  <div class="toggle-info">
+                    <span class="toggle-title">بی‌صدا کردن صندلی (Mute)</span>
+                    <span class="toggle-sub">در دورهای مناظره شرکت داده نمی‌شود</span>
+                  </div>
+                  <input type="checkbox" id="sanctum-seat-mute-check" class="silk-switch" />
+                </label>
+              </div>
+            </div>
+
+            <!-- Model Custom Message Formula (Optional) -->
+            <details class="driver-field-card" style="cursor: pointer;">
+              <summary class="driver-sub-label" style="margin: 0; color: #a5b4fc;">
+                ⚙️ قالب پیام اختصاصی برای این مدل (اختیاری - Override Global Formula)
+              </summary>
+              <div style="margin-top: 10px;">
+                <textarea id="sanctum-seat-custom-template" class="driver-text-input" style="height: 90px; resize: vertical; font-family: ui-monospace, monospace; font-size: 11px;" placeholder="خالی بگذارید تا از قالب کلی شورا استفاده کند..."></textarea>
+              </div>
+            </details>
+
+            <!-- Action Buttons for Model Persona -->
+            <div class="sanctum-action-buttons-stack">
+              <button type="button" id="btn-save-seat-settings" class="btn-save-driver-master">
+                <span>ذخیره تنظیمات این مدل</span>
+              </button>
+              <div style="display: flex; gap: 8px;">
+                <button type="button" id="btn-apply-seat-to-all" class="btn-utility-ghost" style="flex: 1; justify-content: center; height: 34px;" title="اعمال این پرومپت و شخصیت به تمام مدل‌های حاضر در میزگرد">
+                  <span>اعمال به همه مدل‌ها 🌐</span>
+                </button>
+                <button type="button" id="btn-save-as-new-preset" class="btn-utility-ghost" style="flex: 1; justify-content: center; height: 34px; color: #fde68a; border-color: rgba(245, 158, 11, 0.4);" title="ذخیره این شخصیت به عنوان یک الگوی آماده جدید در کتابخانه">
+                  <span>+ ذخیره به عنوان الگوی آماده 💾</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Global Directive Field -->
+            <div class="driver-field-card" style="margin-top: 10px; border-style: dashed; border-color: rgba(255, 255, 255, 0.2);">
+              <div class="driver-field-top">
+                <label class="driver-field-label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                  <span>دستور کلی شورا (Global Symposium Mandate - اختیاری)</span>
+                </label>
+                <span class="driver-field-badge">All Models</span>
+              </div>
+              <textarea id="sanctum-global-directive" class="driver-text-input" style="height: 70px; resize: vertical; font-size: 11.5px; line-height: 1.5;" placeholder="دستوری که علاوه بر شخصیت انفرادی، به ابتدای پرومپت تمام مدل‌ها الصاق می‌شود (مثلاً: 'پاسخ‌ها را حتماً به زبان فارسی بنویسید و مثال‌های عددی بزنید')..." dir="auto"></textarea>
+            </div>
+
           </div>
 
-          <div class="driver-sub-grid">
-            <div class="driver-field-card">
-              <label class="driver-sub-label">Max Rounds</label>
-              <input type="number" id="sanctum-max-rounds" class="driver-text-input" min="1" max="50" value="10" />
+          <!-- TAB 2: PRESETS TEMPLATES LIBRARY -->
+          <div id="sanctum-section-presets" class="sanctum-tab-section" style="display: none; flex-direction: column; gap: 14px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #cbd5e1;">الگوهای آماده شخصیت و پرومپت</span>
+              <button type="button" id="btn-create-new-preset" class="btn-test-typing-jewel" style="height: 28px; padding: 0 10px;">
+                <span>+ ایجاد الگوی تازه</span>
+              </button>
             </div>
+
+            <div id="sanctum-presets-list" class="persona-presets-grid"></div>
+
+            <div style="margin-top: 10px; display: flex; justify-content: flex-end;">
+              <button type="button" id="btn-reset-factory-presets" class="btn-utility-ghost" style="color: #f87171; font-size: 10px;">
+                <span>بازنشانی به الگوهای پیش‌فرض کارخانه</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- TAB 3: PROTOCOLS & TOPOLOGIES -->
+          <div id="sanctum-section-protocols" class="sanctum-tab-section" style="display: none; flex-direction: column; gap: 14px;">
             <div class="driver-field-card">
-              <label class="driver-sub-label">Context Distillation</label>
-              <select id="sanctum-distill-select" class="driver-select-input">
-                <option value="digest">Executive Digest (خلاصه چرخان برای حفاظت از زمینه)</option>
-                <option value="verbatim">Full Verbatim (ارسال کامل متن بدون تلخیص)</option>
+              <div class="driver-field-top">
+                <label class="driver-field-label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg>
+                  <span>الگوی نوبت‌دهی و مناظره (Turn-Taking Topology)</span>
+                </label>
+                <span class="driver-field-badge">Engine</span>
+              </div>
+              <select id="sanctum-topology-select" class="driver-select-input">
+                <option value="socratic">Socratic Dialectic (مناظره سقراطی اولویت‌محور و تشکیک در پیش‌فرض‌ها)</option>
+                <option value="round_robin">Orderly Round-Robin (چرخش ترتیبی و ساختاریافته میان صندلی‌ها)</option>
+                <option value="manual">Manual Conductor (نوبت‌دهی کاملاً دستی توسط کاربر با عصای نوبت)</option>
+                <option value="delphi">Delphi Convergence (همگرایی دلفی به سوی اجماع تدریجی)</option>
+                <option value="autonomous">Fully Autonomous Flow (جریان پیوسته و خودگردان با توقف اضطراری)</option>
               </select>
             </div>
-          </div>
 
-          <div class="driver-field-card">
-            <label class="driver-field-label">Turn-Injection Formula Template</label>
-            <textarea id="sanctum-template-textarea" class="driver-text-input" style="height:140px;resize:vertical;font-family:ui-monospace,monospace;font-size:11px;padding:8px;line-height:1.45;"></textarea>
-            
-            <div style="font-size:10px;color:#94a3b8;margin-top:6px;">Available Macro Tags (Click to insert):</div>
-            <div id="sanctum-macro-chips" class="macro-chips-flow">
-              <button type="button" class="macro-chip-btn" data-macro="{{speaker_role}}">{{speaker_role}}</button>
-              <button type="button" class="macro-chip-btn" data-macro="{{user_core_prompt}}">{{user_core_prompt}}</button>
-              <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_name}}">{{last_speaker_name}}</button>
-              <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_argument}}">{{last_speaker_argument}}</button>
-              <button type="button" class="macro-chip-btn" data-macro="{{round_context_brief}}">{{round_context_brief}}</button>
-              <button type="button" class="macro-chip-btn" data-macro="{{consensus_agreements}}">{{consensus_agreements}}</button>
-              <button type="button" class="macro-chip-btn" data-macro="{{consensus_gaps}}">{{consensus_gaps}}</button>
+            <div class="driver-sub-grid">
+              <div class="driver-field-card">
+                <label class="driver-sub-label">سقف تعداد دورها (Max Rounds)</label>
+                <input type="number" id="sanctum-max-rounds" class="driver-text-input" min="1" max="50" value="10" />
+              </div>
+              <div class="driver-field-card">
+                <label class="driver-sub-label">روش تلخیص تاریخچه (Distillation)</label>
+                <select id="sanctum-distill-select" class="driver-select-input">
+                  <option value="digest">Executive Digest (خلاصه چرخان برای بهینه‌سازی کانتکست)</option>
+                  <option value="verbatim">Full Verbatim (ارسال کامل متن بدون تلخیص)</option>
+                </select>
+              </div>
             </div>
+
+            <div class="driver-field-card">
+              <label class="driver-field-label">قالب فرمول تزریق نوبت (Turn-Injection Formula)</label>
+              <textarea id="sanctum-template-textarea" class="driver-text-input" style="height:130px;resize:vertical;font-family:ui-monospace,monospace;font-size:11px;padding:8px;line-height:1.45;"></textarea>
+              
+              <div style="font-size:10px;color:#94a3b8;margin-top:6px;">ماکروهای پویا (کلیک برای درج):</div>
+              <div id="sanctum-macro-chips" class="macro-chips-flow">
+                <button type="button" class="macro-chip-btn" data-macro="{{speaker_role}}">{{speaker_role}}</button>
+                <button type="button" class="macro-chip-btn" data-macro="{{user_core_prompt}}">{{user_core_prompt}}</button>
+                <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_name}}">{{last_speaker_name}}</button>
+                <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_argument}}">{{last_speaker_argument}}</button>
+                <button type="button" class="macro-chip-btn" data-macro="{{round_context_brief}}">{{round_context_brief}}</button>
+                <button type="button" class="macro-chip-btn" data-macro="{{consensus_agreements}}">{{consensus_agreements}}</button>
+                <button type="button" class="macro-chip-btn" data-macro="{{consensus_gaps}}">{{consensus_gaps}}</button>
+                <button type="button" class="macro-chip-btn" data-macro="{{round_number}}">{{round_number}}</button>
+              </div>
+            </div>
+
+            <button type="button" id="btn-save-protocols" class="btn-save-driver-master">
+              <span>ذخیره و اعمال پروتکل‌های مناظره</span>
+            </button>
           </div>
 
-          <button type="button" id="btn-save-sanctum" class="btn-save-driver-master" style="margin-top:10px;">
-            <span>Save & Apply Sanctum Settings</span>
-          </button>
+          <!-- TAB 4: USER AS SEATED PARTICIPANT -->
+          <div id="sanctum-section-user" class="sanctum-tab-section" style="display: none; flex-direction: column; gap: 14px;">
+            <div class="driver-field-card" style="border-color: rgba(245, 158, 11, 0.45); background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(244, 114, 182, 0.06) 100%);">
+              <div class="driver-field-top">
+                <label class="driver-field-label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a6 6 0 0 1 12 0v2"/></svg>
+                  <span>جایگاه کاربر در تالار (User Seated Role)</span>
+                </label>
+                <span class="driver-field-badge" style="background: rgba(245, 158, 11, 0.2); color: #fde68a;">Peer Seat</span>
+              </div>
+
+              <label class="toggle-row" for="sanctum-user-seated-check" style="margin-top: 4px;">
+                <div class="toggle-info">
+                  <span class="toggle-title">نشستن کاربر روی سکوی آمفی‌تئاتر (Seated Participant)</span>
+                  <span class="toggle-sub">کاربر به عنوان یک عضو هم‌پایه با صندلی و نوبت رسمی در حلقه مناظره می‌نشیند</span>
+                </div>
+                <input type="checkbox" id="sanctum-user-seated-check" class="silk-switch" />
+              </label>
+
+              <div class="driver-sub-grid" style="margin-top: 8px;">
+                <div>
+                  <label class="driver-sub-label">نام نمایشی کاربر</label>
+                  <input type="text" id="sanctum-user-name" class="driver-text-input" placeholder="Human Maestro" value="Human Maestro" />
+                </div>
+                <div>
+                  <label class="driver-sub-label">وزن رای و نفوذ کاربر</label>
+                  <div class="driver-input-row">
+                    <input type="number" id="sanctum-user-weight" class="driver-text-input" min="50" max="200" step="10" value="120" />
+                    <span class="unit-tag">%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top: 8px;">
+                <label class="driver-sub-label">پرسونای فکری پیش‌فرض کاربر</label>
+                <select id="sanctum-user-persona-select" class="driver-select-input"></select>
+              </div>
+
+              <div style="margin-top: 8px;">
+                <label class="driver-sub-label">دستورالعمل سیستمی کاربر (اختیاری)</label>
+                <textarea id="sanctum-user-directive" class="driver-text-input" style="height: 60px; resize: vertical;" placeholder="تعریف هویت فکری خودتان در مناظره..."></textarea>
+              </div>
+            </div>
+
+            <button type="button" id="btn-save-user-role" class="btn-save-driver-master">
+              <span>ذخیره و اعمال جایگاه کاربر</span>
+            </button>
+          </div>
+
         </div>
       </aside>
     </div>
