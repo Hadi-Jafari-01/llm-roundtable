@@ -48,7 +48,6 @@ export class SilkSymposiumOrchestrator {
 
   initElements() {
     this.overlayEl = document.getElementById('silk-symposium-chamber');
-    this.btnClose = document.getElementById('btn-close-symposium-chamber');
     this.btnToggleDais = document.getElementById('btn-symposium-toggle-dais');
     this.btnToggleRail = document.getElementById('btn-symposium-toggle-rail');
     this.btnToggleLedger = document.getElementById('btn-symposium-toggle-ledger');
@@ -246,8 +245,6 @@ export class SilkSymposiumOrchestrator {
   }
 
   bindEvents() {
-    this.btnClose?.addEventListener('click', () => this.close());
-
     // Left Rail collapse/expand toggles
     this.btnToggleRail?.addEventListener('click', () => {
       this.leftRail?.classList.toggle('expanded');
