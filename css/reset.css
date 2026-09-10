@@ -33,6 +33,23 @@ button, input, textarea, select {
   box-sizing: border-box;
 }
 
+input, textarea, select, [contenteditable="true"], [contenteditable="plaintext-only"] {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  cursor: text !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+}
+
+.omnibar-capsule-island,
+.mirror-chat-studio,
+.mirror-input-box,
+.mirror-textarea,
+.studio-textarea,
+.omnibar-compact-bar {
+  pointer-events: auto !important;
+}
+
 input::placeholder,
 textarea::placeholder {
   color: #8e8e8e;

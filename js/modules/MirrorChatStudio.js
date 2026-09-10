@@ -120,6 +120,13 @@ export class MirrorChatStudio {
   bindEvents() {
     this.btnClose?.addEventListener('click', () => this.close());
 
+    // Clicking anywhere in input box ensures focus on textarea
+    this.studioEl?.querySelector('.mirror-input-box')?.addEventListener('click', (e) => {
+      if (!e.target.closest('button')) {
+        this.textarea?.focus();
+      }
+    });
+
     // Switch model card when clicking a pearl
     this.pearlBar?.addEventListener('click', (e) => {
       const pearl = e.target.closest('.mirror-pearl-btn');

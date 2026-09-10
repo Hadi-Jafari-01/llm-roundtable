@@ -149,27 +149,31 @@ export class WorkspaceCanvas {
       }
     });
 
-    window.addEventListener('mouseup', () => {
+    const clearInteractions = () => {
       if (this.isPanning) {
         this.isPanning = false;
-        this.viewportEl.classList.remove('panning');
-        this.setIframeShields(false);
+        this.viewportEl?.classList.remove('panning');
       }
 
       if (this.activeDragCard) {
         const card = this.activeDragCard;
         this.activeDragCard = null;
-        this.setIframeShields(false);
         this.stateStore.updateCard(card.id, { x: card.x, y: card.y });
       }
 
       if (this.activeResizeCard) {
         const card = this.activeResizeCard;
         this.activeResizeCard = null;
-        this.setIframeShields(false);
         this.stateStore.updateCard(card.id, { width: card.width, height: card.height });
       }
-    });
+
+      this.setIframeShields(false);
+    };
+
+    window.addEventListener('mouseup', clearInteractions);
+    window.addEventListener('pointerup', clearInteractions);
+    window.addEventListener('blur', clearInteractions);
+    document.addEventListener('pointerup', clearInteractions);
 
     // Zoom on wheel with Ctrl/Cmd or trackpad pinch
     this.viewportEl.addEventListener('wheel', (e) => {
@@ -486,6 +490,31 @@ export class WorkspaceCanvas {
   setupCardInteractions(cardEl, card) {
     const header = cardEl.querySelector('.card-header');
     const resizeHandle = cardEl.querySelector('.card-resize-handle');
+    const shield = cardEl.querySelector('.card-iframe-shield');
+
+    if (shield) {
+      const dismissShield = () => {
+        if (!this.isPanning && !this.activeDragCard && !this.activeResizeCard) {
+          this.setIframeShields(false);
+        }
+      };
+      shield.addEventListener('pointerdown', dismissShield);
+      shield.addEventListener('click', dismissShield);
+    }
+
+    // Click card brings to front and ensures shields are cleared
+    cardEl.addEventListener('pointerdown', (e) => {
+      if (!this.isPanning && !this.activeDragCard && !this.activeResizeCard) {
+        this.setIframeShields(false);
+      }
+      this.stateStore.setActiveCard(card.id);
+    });
+
+    cardEl.addEventListener('mouseenter', () => {
+      if (!this.isPanning && !this.activeDragCard && !this.activeResizeCard) {
+        this.setIframeShields(false);
+      }
+    });
 
     // Click card brings to front
     cardEl.addEventListener('mousedown', () => {

@@ -123,10 +123,6 @@
     element.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
   }
 
-  function setLexicalValue(element, text) {
-    setContentEditableValue(element, text);
-  }
-
   function applyInputStrategy(element, text, strategy = 'auto') {
     if (!element || !text) return;
     element.focus();
@@ -200,7 +196,7 @@
     el.dispatchEvent(new PointerEvent('pointerup', { ...baseOpts, buttons: 0, pressure: 0 }));
     el.dispatchEvent(new MouseEvent('mouseup', { ...baseOpts, buttons: 0 }));
 
-    // 5. Final Click (تک رویداد کلیک برای جلوگیری از ارسال مجدد)
+    // 5. Final Click
     el.dispatchEvent(new MouseEvent('click', { ...baseOpts, buttons: 0 }));
     return true;
   }
@@ -390,7 +386,6 @@
   // Mode 2: Adaptive Human Burst (Syllable / Word Chunks)
   async function simulateHumanBurstTyping(element, text, strategy, kinematics, abortSignal) {
     element.focus();
-    // Split into natural human burst chunks (2 to 6 characters, honoring punctuation)
     const chunks = [];
     let cur = '';
 
@@ -460,9 +455,9 @@
         transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
         pointer-events: none;
       `;
-      badge.innerText = '⚡ Dispatched';
       document.body.appendChild(badge);
     }
+    badge.innerText = modeText;
 
     requestAnimationFrame(() => {
       badge.style.opacity = '1';
@@ -487,15 +482,22 @@
       if (HOST.includes('chatgpt.com') || HOST.includes('openai.com')) {
         inputEl = document.querySelector('#prompt-textarea') ||
                   document.querySelector('div[contenteditable="true"]#prompt-textarea') ||
-                  document.querySelector('textarea[data-id="root"]');
+                  document.querySelector('div[contenteditable="true"][data-placeholder]') ||
+                  document.querySelector('textarea[data-id="root"]') ||
+                  document.querySelector('textarea');
       } else if (HOST.includes('claude.ai')) {
         inputEl = document.querySelector('div.ProseMirror[contenteditable="true"]') ||
+                  document.querySelector('div[contenteditable="true"][aria-label*="Claude" i]') ||
                   document.querySelector('div[contenteditable="true"]');
       } else if (HOST.includes('gemini.google.com')) {
         inputEl = document.querySelector('.ql-editor[contenteditable="true"]') ||
-                  document.querySelector('rich-textarea div[contenteditable="true"]');
+                  document.querySelector('rich-textarea div[contenteditable="true"]') ||
+                  document.querySelector('textarea[aria-label*="prompt" i]') ||
+                  document.querySelector('div[contenteditable="true"]');
       } else if (HOST.includes('deepseek.com')) {
-        inputEl = document.querySelector('textarea#chat-input');
+        inputEl = document.querySelector('textarea#chat-input') ||
+                  document.querySelector('textarea[placeholder*="DeepSeek" i]') ||
+                  document.querySelector('textarea');
       } else if (HOST.includes('grok.com')) {
         inputEl = document.querySelector('textarea[placeholder*="Ask" i]') ||
                   document.querySelector('div[contenteditable="true"]') ||
@@ -503,11 +505,14 @@
       } else if (HOST.includes('z.ai') || HOST.includes('chatglm.cn')) {
         inputEl = document.querySelector('#chat-input') ||
                   document.querySelector('textarea[placeholder*="Ask" i]') ||
-                  document.querySelector('textarea');
+                  document.querySelector('textarea[placeholder*="Type" i]') ||
+                  document.querySelector('textarea') ||
+                  document.querySelector('div[contenteditable="true"]');
       } else if (HOST.includes('qwen.ai') || HOST.includes('qwenlm.ai')) {
         inputEl = document.querySelector('textarea[placeholder*="Qwen" i]') ||
                   document.querySelector('textarea.chat-input') ||
-                  document.querySelector('textarea');
+                  document.querySelector('textarea') ||
+                  document.querySelector('div[contenteditable="true"]');
       } else if (HOST.includes('kimi.ai') || HOST.includes('kimi.moonshot.cn')) {
         inputEl = document.querySelector('div.chat-input-editor[contenteditable="true"]') ||
                   document.querySelector('div[data-testid="msh-chatinput-editor"]') ||
@@ -517,14 +522,17 @@
         inputEl = document.querySelector('textarea[aria-label="Type something"]') ||
                   document.querySelector('ms-autosize-textarea textarea') ||
                   document.querySelector('textarea[placeholder*="Type something" i]') ||
-                  document.querySelector('textarea');
+                  document.querySelector('textarea') ||
+                  document.querySelector('div[contenteditable="true"]');
       } else if (HOST.includes('lmarena.ai') || HOST.includes('arena.ai') || HOST.includes('lmsys.org')) {
         inputEl = document.querySelector('textarea[name="message"]') ||
                   document.querySelector('textarea[placeholder*="Send a message" i]') ||
-                  document.querySelector('textarea');
+                  document.querySelector('textarea') ||
+                  document.querySelector('div[contenteditable="true"]');
       } else if (HOST.includes('mistral.ai')) {
         inputEl = document.querySelector('textarea[placeholder*="Ask" i]') ||
-                  document.querySelector('textarea');
+                  document.querySelector('textarea') ||
+                  document.querySelector('div[contenteditable="true"]');
       }
     }
 
@@ -582,9 +590,6 @@
     return { inputEl, submitBtn };
   }
 
-  /**
-   * استخراج ساختاریافته محتوای پیام از مدل با حفظ بلوک‌های کد و حذف دکمه‌های مزاحم (Run, Copy و...)
-   */
   function extractStructuredContent(element) {
     if (!element) return '';
 
@@ -594,13 +599,11 @@
 
     const clone = element.cloneNode(true);
 
-    // ۱. حذف دکمه‌های رابط کاربری، آیکون‌ها، دکمه‌های Run، نوار ابزار و موارد نامربوط
     clone.querySelectorAll(
       'button, svg, [role="button"], [class*="copy"], [class*="toolbar"], ' +
       '[class*="actions"], [class*="feedback"], .sr-only, [aria-hidden="true"]'
     ).forEach(el => el.remove());
 
-    // ۲. تبدیل تگ‌های <pre> به بلوک‌های کد استاندارد مارک‌داون (```lang ... ```)
     clone.querySelectorAll('pre').forEach(pre => {
       const codeEl = pre.querySelector('code') || pre;
       let lang = '';
@@ -624,7 +627,6 @@
       pre.replaceWith(document.createTextNode(codeFence));
     });
 
-    // ۳. تبدیل کدهای درون‌خطی <code> به `code`
     clone.querySelectorAll('code').forEach(code => {
       const inlineText = (code.textContent || '').trim();
       if (inlineText && !inlineText.includes('`')) {
@@ -651,7 +653,6 @@
     userNodes.forEach(node => allElements.push({ node, role: 'user' }));
     botNodes.forEach(node => allElements.push({ node, role: 'assistant' }));
 
-    // Sort by chronological DOM appearance
     allElements.sort((a, b) => {
       const pos = a.node.compareDocumentPosition(b.node);
       if (pos & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
@@ -684,7 +685,6 @@
     }
   }
 
-  // Real-Time Response Scraping via MutationObserver
   function startStreamingScraper(driver) {
     stopStreamingScraper();
 
@@ -810,21 +810,16 @@
     const trimmedPrompt = promptText.trim();
     const now = Date.now();
 
-    // سیستم جلوگیری قاطع از ارسال دوباره پیام تکراری
-    if (messageId && handledMessageIds.has(messageId)) {
-      return;
+    // بررسی محافظت تکرار فقط در تلاش اول تا در صورت نیاز به ریتری درخواست مسدود نشود
+    if (attempt === 1) {
+      if (messageId && handledMessageIds.has(messageId)) {
+        return;
+      }
+      if (lastInjectedPrompt === trimmedPrompt && (now - lastInjectedTime) < 2000) {
+        console.log('[OmniAI Hub] Duplicate prompt dispatch blocked:', trimmedPrompt);
+        return;
+      }
     }
-    if (lastInjectedPrompt === trimmedPrompt && (now - lastInjectedTime) < 2500) {
-      console.log('[OmniAI Hub] Duplicate prompt dispatch blocked:', trimmedPrompt);
-      return;
-    }
-
-    if (messageId) {
-      handledMessageIds.add(messageId);
-      setTimeout(() => handledMessageIds.delete(messageId), 30000);
-    }
-    lastInjectedPrompt = trimmedPrompt;
-    lastInjectedTime = now;
 
     if (activeTypingAbortCtrl) {
       activeTypingAbortCtrl.abort();
@@ -836,11 +831,17 @@
     const { inputEl } = locateElementsWithDriver(driver);
 
     if (inputEl) {
+      if (messageId) {
+        handledMessageIds.add(messageId);
+        setTimeout(() => handledMessageIds.delete(messageId), 30000);
+      }
+      lastInjectedPrompt = trimmedPrompt;
+      lastInjectedTime = now;
+
       const mode = driver.humanizeEnabled === false ? 'instant' : (driver.humanizeMode || 'burst');
       const strategy = driver.inputStrategy || 'auto';
 
-      // پاکسازی کادر ورودی قبل از تایپ برای جلوگیری از الحاق به متن قبلی
-      if (inputEl.isContentEditable || inputEl.getAttribute('contenteditable') === 'true') {
+      if (inputEl.isContentEditable || elementIsEditable(inputEl)) {
         const sel = window.getSelection();
         const range = document.createRange();
         range.selectNodeContents(inputEl);
@@ -848,7 +849,7 @@
         sel.addRange(range);
       }
 
-      // 1. اجرای استراتژی تایپ بدون تکرار متن
+      // 1. تایپ با متد انتخابی
       if (mode === 'cadence') {
         await simulateHumanCadenceTyping(inputEl, promptText, strategy, driver, abortSignal);
       } else if (mode === 'burst') {
@@ -861,13 +862,13 @@
 
       if (abortSignal.aborted) return;
 
-      // 2. تاخیر کوتاه طبیعی
+      // 2. تاخیر طبیعی قبل از سابمیت
       if (driver.humanizeEnabled !== false && driver.preSubmitDelayMs > 0) {
         const dwellTime = Math.round(driver.preSubmitDelayMs + (Math.random() - 0.5) * 80);
         await sleep(Math.max(100, dwellTime));
       }
 
-      // 3. ارسال تنها یک‌بار با قفل وضعیت
+      // 3. ارسال فقط یک‌بار
       const pollStartTime = Date.now();
       const maxWaitMs = 3200;
       let submitted = false;
@@ -889,7 +890,6 @@
           return;
         }
 
-        // ارسال fallback نهایی تنها با یکی از روش‌ها (نه همه با هم)
         submitted = true;
         if (submitBtn) {
           await dispatchHumanClick(submitBtn, driver);
@@ -911,7 +911,11 @@
     }
   }
 
-  // Live Test Typing Simulation (Without Submitting)
+  function elementIsEditable(el) {
+    if (!el) return false;
+    return el.isContentEditable || el.getAttribute('contenteditable') === 'true';
+  }
+
   async function testHumanTypingSimulation(sampleText, driverData) {
     if (activeTypingAbortCtrl) activeTypingAbortCtrl.abort();
     activeTypingAbortCtrl = new AbortController();
@@ -938,7 +942,6 @@
     return { success: true, count: testPrompt.length, mode };
   }
 
-  // Live Selector Probing Engine
   function probeSelectorOnPage(selector, probeId) {
     let found = false;
     let count = 0;

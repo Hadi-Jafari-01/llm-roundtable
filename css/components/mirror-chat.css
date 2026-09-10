@@ -9,15 +9,15 @@
   top: 50px;
   right: 18px;
   bottom: 18px;
-  width: 560px;
-  min-width: 420px;
+  width: 520px;
+  min-width: 380px;
   max-width: calc(100vw - 36px);
-  z-index: 1050;
+  z-index: 1200;
   background: #212121; /* Authentic ChatGPT dark theme card */
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
-  display: flex;
+  display: none !important;
   flex-direction: column;
   overflow: hidden;
   box-sizing: border-box;
@@ -25,16 +25,17 @@
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
   transform: translateX(125%);
   opacity: 0;
-  pointer-events: none;
+  pointer-events: none !important;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
               opacity 0.24s ease,
               width 0.2s ease;
 }
 
 .mirror-chat-studio.open {
+  display: flex !important;
   transform: translateX(0);
   opacity: 1;
-  pointer-events: auto;
+  pointer-events: auto !important;
 }
 
 /* Resizable Left Edge Drag Handle */
@@ -521,31 +522,39 @@
   align-items: flex-end;
   gap: 8px;
   background: #2f2f2f; /* Exact ChatGPT input box */
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 24px;
-  padding: 8px 12px 8px 16px;
+  padding: 6px 12px 6px 16px;
   transition: all 0.18s ease;
+  cursor: text;
+  pointer-events: auto !important;
+  user-select: text !important;
 }
 
 .mirror-input-box:focus-within {
-  border-color: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.35);
+  background: #333333;
 }
 
 .mirror-textarea {
   flex: 1;
-  min-height: 36px;
+  min-height: 32px;
   max-height: 160px;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #f3f4f6;
-  font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
-  font-size: 14px;
-  line-height: 1.75;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  color: #f3f4f6 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Vazirmatn", "SF Pro Text", "Segoe UI", Roboto, sans-serif !important;
+  font-size: 13.5px !important;
+  line-height: 1.5 !important;
   resize: none;
   padding: 4px 0;
   box-sizing: border-box;
   unicode-bidi: plaintext;
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  pointer-events: auto !important;
+  cursor: text !important;
 }
 
 .mirror-textarea::placeholder {

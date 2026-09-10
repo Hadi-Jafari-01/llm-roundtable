@@ -913,9 +913,55 @@ class OmniApp {
       }
     });
 
-    // Clicking compact resting pill opens studio
-    compactTrigger?.addEventListener('click', () => {
+    // Direct input support for resting pill
+    const directInput = document.getElementById('main-omnibar-input');
+    const directSendBtn = document.getElementById('btn-main-omnibar-send');
+    const expandToggleBtn = document.getElementById('btn-omnibar-expand-toggle');
+
+    if (directInput) {
+      directInput.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+      });
+      directInput.addEventListener('click', (e) => {
+        e.stopPropagation();
+        directInput.focus();
+      });
+      directInput.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+          e.preventDefault();
+          executeDispatch(directInput.value);
+          directInput.value = '';
+        }
+      });
+    }
+
+    directSendBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (directInput && directInput.value.trim()) {
+        executeDispatch(directInput.value);
+        directInput.value = '';
+      }
+    });
+
+    expandToggleBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
       expandOmnibar();
+    });
+
+    compactTrigger?.addEventListener('click', (e) => {
+      if (e.target.closest('textarea, input, button')) return;
+      if (directInput) {
+        directInput.focus();
+      } else {
+        expandOmnibar();
+      }
+    });
+
+    // Clicking input row focuses textarea directly
+    studio?.querySelector('.studio-input-row')?.addEventListener('click', (e) => {
+      if (!e.target.closest('button')) {
+        textarea?.focus();
+      }
     });
 
     // Collapse button in studio header

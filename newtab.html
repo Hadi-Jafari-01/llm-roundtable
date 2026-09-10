@@ -1098,17 +1098,29 @@
     <!-- The Floating Omnibar (#2f2f2f & #212121) -->
     <div class="omnibar-capsule-island" id="omnibar-island">
       
-      <!-- Resting Compact Pill -->
+      <!-- Direct Responsive Input Bar -->
       <div class="omnibar-compact-bar" id="capsule-compact-trigger">
         <div class="capsule-spark-gem">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <path d="M12 2l2.4 7.2L21 12l-6.6 2.8L12 22l-2.4-7.2L3 12l6.6-2.8L12 2z" />
           </svg>
         </div>
-        <span class="capsule-placeholder">Dispatch prompt across active intelligences...</span>
+        <textarea 
+          id="main-omnibar-input" 
+          class="omnibar-direct-input" 
+          placeholder="Dispatch prompt across active intelligences... (⌘↵ to send)"
+          rows="1"
+          autocomplete="off"
+          spellcheck="false"
+          dir="auto"
+        ></textarea>
         <div class="capsule-hotkey-tags">
-          <span class="hotkey-badge"><kbd>⌘</kbd><kbd>K</kbd></span>
-          <span class="hotkey-badge"><kbd>⌘</kbd><kbd>↵</kbd></span>
+          <button type="button" id="btn-omnibar-expand-toggle" class="btn-omnibar-tool" title="Expand Studio Mode (⌘K)">
+            <kbd>⌘</kbd><kbd>K</kbd>
+          </button>
+          <button type="button" id="btn-main-omnibar-send" class="btn-direct-send-jewel" title="Dispatch (⌘↵)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
         </div>
       </div>
 
