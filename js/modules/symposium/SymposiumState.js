@@ -1,7 +1,8 @@
 /**
  * OmniAI Hub — The Silk Symposium State & Persistence Engine
  * Manages symposium seats, active participants, user seating status,
- * chronological turn transcript, and milestone consensus ledger.
+ * chronological turn transcript, milestone consensus ledger,
+ * and multi-session roundtable history.
  */
 
 /* ── نقش‌های کاربر (User Role Presets - خالی، تماماً قابل ساخت توسط کاربر) ── */
@@ -78,6 +79,10 @@ export class SymposiumState {
       openQuestions: []
     };
 
+    // Multi-session architecture
+    this.sessions = [];
+    this.currentSessionId = null;
+
     this.config = {
       maxRounds: 10,
       autoAdvanceDelayMs: 2400,
@@ -91,6 +96,211 @@ export class SymposiumState {
 
     this.loadPersistedConfig();
   }
+
+  // ── Multi-Session History Management ──
+
+  createSessionObject(title = '', options = {}) {
+    const now = Date.now();
+    return {
+      id: options.id || `session_${now}_${Math.random().toString(36).substring(2, 7)}`,
+      title: (title || options.title || `میزگرد ${this.sessions.length + 1}`).trim(),
+      createdAt: options.createdAt || now,
+      updatedAt: options.updatedAt || now,
+      roundIndex: options.roundIndex || 1,
+      userCorePrompt: options.userCorePrompt || '',
+      transcript: Array.isArray(options.transcript) ? JSON.parse(JSON.stringify(options.transcript)) : [],
+      ledger: options.ledger ? JSON.parse(JSON.stringify(options.ledger)) : {
+        agreements: [],
+        divergences: [],
+        openQuestions: []
+      },
+      activeScenarioKey: options.activeScenarioKey || this.activeScenarioKey || '',
+      debateMode: options.debateMode || this.debateMode || 'manual',
+      participants: Array.isArray(options.participants) ? JSON.parse(JSON.stringify(options.participants)) : this.getCurrentParticipantsSummary()
+    };
+  }
+
+  getCurrentParticipantsSummary() {
+    return (this.seats || []).map(s => ({
+      name: s.name,
+      color: s.color,
+      personaBadge: s.personaBadge || '',
+      isUser: Boolean(s.isUser)
+    }));
+  }
+
+  saveCurrentSessionSnapshot() {
+    if (!this.currentSessionId) {
+      const defaultTitle = this.userCorePrompt ? this.userCorePrompt.slice(0, 36) : 'میزگرد ۱';
+      const newSession = this.createSessionObject(defaultTitle);
+      this.currentSessionId = newSession.id;
+      this.sessions.unshift(newSession);
+      return newSession;
+    }
+
+    let session = this.sessions.find(s => s.id === this.currentSessionId);
+    if (!session) {
+      const defaultTitle = this.userCorePrompt ? this.userCorePrompt.slice(0, 36) : 'میزگرد ۱';
+      session = this.createSessionObject(defaultTitle, { id: this.currentSessionId });
+      this.sessions.unshift(session);
+    }
+
+    session.updatedAt = Date.now();
+    session.roundIndex = this.roundIndex;
+    session.userCorePrompt = this.userCorePrompt;
+    session.transcript = JSON.parse(JSON.stringify(this.transcript));
+    session.ledger = JSON.parse(JSON.stringify(this.ledger));
+    session.activeScenarioKey = this.activeScenarioKey;
+    session.debateMode = this.debateMode;
+    session.participants = this.getCurrentParticipantsSummary();
+
+    if ((!session.title || session.title.startsWith('میزگرد ')) && this.userCorePrompt) {
+      const clean = this.userCorePrompt.replace(/[\n\r]+/g, ' ').trim().slice(0, 36);
+      if (clean) {
+        session.title = clean;
+      }
+    }
+
+    return session;
+  }
+
+  loadSessionData(session) {
+    if (!session) return;
+    this.roundIndex = session.roundIndex || 1;
+    this.userCorePrompt = session.userCorePrompt || '';
+    this.transcript = Array.isArray(session.transcript) ? JSON.parse(JSON.stringify(session.transcript)) : [];
+    this.ledger = session.ledger ? JSON.parse(JSON.stringify(session.ledger)) : {
+      agreements: [],
+      divergences: [],
+      openQuestions: []
+    };
+    if (session.activeScenarioKey) {
+      this.activeScenarioKey = session.activeScenarioKey;
+    }
+    if (session.debateMode) {
+      this.debateMode = session.debateMode;
+    }
+    this.resetAllSeatStatuses();
+  }
+
+  createNewSession(title = '', options = {}) {
+    this.saveCurrentSessionSnapshot();
+
+    const sessionCount = this.sessions.length + 1;
+    const sessionTitle = title || `میزگرد ${sessionCount}`;
+    const newSession = this.createSessionObject(sessionTitle, options);
+
+    this.sessions.unshift(newSession);
+    this.currentSessionId = newSession.id;
+    this.loadSessionData(newSession);
+
+    this.sessionStatus = 'IDLE';
+    this.activeSpeakerIndex = -1;
+    this.recommendedNextSpeakerIndex = -1;
+    this.isSpeakerStreaming = false;
+
+    this.persistConfig();
+    return newSession;
+  }
+
+  switchSession(sessionId) {
+    if (!sessionId || sessionId === this.currentSessionId) return true;
+    this.saveCurrentSessionSnapshot();
+
+    const target = this.sessions.find(s => s.id === sessionId);
+    if (!target) return false;
+
+    this.currentSessionId = sessionId;
+    this.loadSessionData(target);
+
+    this.sessionStatus = 'IDLE';
+    this.activeSpeakerIndex = -1;
+    this.recommendedNextSpeakerIndex = -1;
+    this.isSpeakerStreaming = false;
+
+    this.persistConfig();
+    return target;
+  }
+
+  deleteSession(sessionId) {
+    const idx = this.sessions.findIndex(s => s.id === sessionId);
+    if (idx === -1) return false;
+
+    this.sessions.splice(idx, 1);
+
+    if (this.currentSessionId === sessionId) {
+      if (this.sessions.length > 0) {
+        this.currentSessionId = this.sessions[0].id;
+        this.loadSessionData(this.sessions[0]);
+      } else {
+        const fresh = this.createSessionObject('میزگرد ۱');
+        this.sessions = [fresh];
+        this.currentSessionId = fresh.id;
+        this.loadSessionData(fresh);
+      }
+    }
+
+    this.persistConfig();
+    return true;
+  }
+
+  renameSession(sessionId, newTitle) {
+    if (!newTitle || !newTitle.trim()) return false;
+    const session = this.sessions.find(s => s.id === sessionId);
+    if (!session) return false;
+
+    session.title = newTitle.trim();
+    session.updatedAt = Date.now();
+    this.persistConfig();
+    return true;
+  }
+
+  clearAllSessions() {
+    const fresh = this.createSessionObject('میزگرد ۱');
+    this.sessions = [fresh];
+    this.currentSessionId = fresh.id;
+    this.loadSessionData(fresh);
+    this.sessionStatus = 'IDLE';
+    this.activeSpeakerIndex = -1;
+    this.recommendedNextSpeakerIndex = -1;
+    this.isSpeakerStreaming = false;
+    this.persistConfig();
+    return fresh;
+  }
+
+  getSessions(searchQuery = '') {
+    this.saveCurrentSessionSnapshot();
+    const query = searchQuery ? searchQuery.trim().toLowerCase() : '';
+    let list = [...this.sessions];
+
+    if (query) {
+      list = list.filter(s => {
+        const titleMatch = s.title && s.title.toLowerCase().includes(query);
+        const promptMatch = s.userCorePrompt && s.userCorePrompt.toLowerCase().includes(query);
+        const transcriptMatch = Array.isArray(s.transcript) && s.transcript.some(t => t.text && t.text.toLowerCase().includes(query));
+        return titleMatch || promptMatch || transcriptMatch;
+      });
+    }
+
+    list.sort((a, b) => (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0));
+    return list;
+  }
+
+  getCurrentSession() {
+    if (!this.currentSessionId && this.sessions.length > 0) {
+      this.currentSessionId = this.sessions[0].id;
+    }
+    return this.sessions.find(s => s.id === this.currentSessionId) || null;
+  }
+
+  getPreviousSessions() {
+    this.saveCurrentSessionSnapshot();
+    return this.sessions
+      .filter(s => s.id !== this.currentSessionId && s.transcript && s.transcript.length > 0)
+      .sort((a, b) => (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0));
+  }
+
+  // ── Cognitive Personas & Schemas ──
 
   getAllPersonas() {
     return {
@@ -290,7 +500,6 @@ export class SymposiumState {
       this.userCorePrompt = scenario.initialPrompt;
     }
 
-    // Apply recommended cognitive personas if available
     const allPersonas = this.getAllPersonas();
     const personasToAssign = scenario.recommendedPersonas || [];
     const aiSeats = this.seats.filter(s => !s.isUser);
@@ -503,6 +712,27 @@ export class SymposiumState {
 
   addTurn(turn) {
     this.transcript.push(turn);
+    if (turn.role === 'user' && turn.text && (!this.userCorePrompt || this.userCorePrompt === 'Foundational inquiry.')) {
+      this.userCorePrompt = turn.text;
+    }
+
+    const cur = this.getCurrentSession();
+    if (cur) {
+      cur.updatedAt = Date.now();
+      cur.roundIndex = this.roundIndex;
+      cur.transcript = this.transcript;
+      cur.ledger = this.ledger;
+      cur.participants = this.getCurrentParticipantsSummary();
+
+      if ((!cur.title || cur.title.startsWith('میزگرد ')) && turn.text) {
+        const preview = turn.text.replace(/[\n\r]+/g, ' ').trim().slice(0, 36);
+        if (preview) {
+          cur.title = preview;
+        }
+      }
+    }
+
+    this.persistConfig();
     return turn;
   }
 
@@ -511,12 +741,10 @@ export class SymposiumState {
     if (idx === -1) return null;
     const [removed] = this.transcript.splice(idx, 1);
 
-    // If turn was actively streaming, halt streaming flag
     if (removed.isStreaming) {
       this.isSpeakerStreaming = false;
     }
 
-    // If this turn came from a seat, decrement that seat's turnCount if > 0
     if (typeof removed.seatIndex === 'number' && this.seats[removed.seatIndex]) {
       const seat = this.seats[removed.seatIndex];
       if (seat.turnCount && seat.turnCount > 0) {
@@ -527,7 +755,6 @@ export class SymposiumState {
       }
     }
 
-    // Clean up userCorePrompt if the removed turn was the opening user turn
     const remainingUserTurns = this.transcript.filter(t => t.role === 'user');
     if (remainingUserTurns.length > 0) {
       this.userCorePrompt = remainingUserTurns[0].text;
@@ -535,7 +762,6 @@ export class SymposiumState {
       this.userCorePrompt = '';
     }
 
-    // Purge any ledger items extracted directly from this turn
     if (removed.speakerName && removed.text) {
       ['agreements', 'divergences', 'openQuestions'].forEach(cat => {
         if (Array.isArray(this.ledger[cat])) {
@@ -552,6 +778,16 @@ export class SymposiumState {
       });
     }
 
+    const cur = this.getCurrentSession();
+    if (cur) {
+      cur.updatedAt = Date.now();
+      cur.transcript = this.transcript;
+      cur.ledger = this.ledger;
+      cur.userCorePrompt = this.userCorePrompt;
+      cur.roundIndex = this.roundIndex;
+    }
+
+    this.persistConfig();
     return removed;
   }
 
@@ -652,6 +888,13 @@ export class SymposiumState {
     const list = this.ledger[category];
     if (Array.isArray(list) && !list.includes(clean)) {
       list.push(clean);
+
+      const cur = this.getCurrentSession();
+      if (cur) {
+        cur.ledger = this.ledger;
+        cur.updatedAt = Date.now();
+      }
+      this.persistConfig();
       return true;
     }
     return false;
@@ -660,6 +903,12 @@ export class SymposiumState {
   removeLedgerItem(category, index) {
     if (Array.isArray(this.ledger[category])) {
       this.ledger[category].splice(index, 1);
+      const cur = this.getCurrentSession();
+      if (cur) {
+        cur.ledger = this.ledger;
+        cur.updatedAt = Date.now();
+      }
+      this.persistConfig();
     }
   }
 
@@ -676,9 +925,19 @@ export class SymposiumState {
       openQuestions: []
     };
     this.resetAllSeatStatuses();
+
+    const cur = this.getCurrentSession();
+    if (cur) {
+      cur.roundIndex = 1;
+      cur.transcript = [];
+      cur.ledger = { agreements: [], divergences: [], openQuestions: [] };
+      cur.updatedAt = Date.now();
+    }
+    this.persistConfig();
   }
 
   exportSymposiumData(includeSession = true) {
+    this.saveCurrentSessionSnapshot();
     const payload = {
       schema: 'OmniAI_Silk_Symposium',
       version: '2.0.0',
@@ -692,10 +951,12 @@ export class SymposiumState {
       customGlobalDirectives: this.customGlobalDirectives,
       customTopologies: this.customTopologies,
       seatCustomizations: this.seatCustomizations,
-      activeScenarioKey: this.activeScenarioKey
+      activeScenarioKey: this.activeScenarioKey,
+      currentSessionId: this.currentSessionId
     };
 
     if (includeSession) {
+      payload.sessions = this.sessions;
       payload.session = {
         sessionStatus: this.sessionStatus,
         roundIndex: this.roundIndex,
@@ -742,16 +1003,26 @@ export class SymposiumState {
         this.activeScenarioKey = data.activeScenarioKey;
       }
 
-      if (importSession && data.session && typeof data.session === 'object') {
-        if (data.session.roundIndex) this.roundIndex = data.session.roundIndex;
-        if (data.session.userCorePrompt) this.userCorePrompt = data.session.userCorePrompt;
-        if (Array.isArray(data.session.transcript)) this.transcript = data.session.transcript;
-        if (data.session.ledger && typeof data.session.ledger === 'object') {
-          this.ledger = {
-            agreements: Array.isArray(data.session.ledger.agreements) ? data.session.ledger.agreements : [],
-            divergences: Array.isArray(data.session.ledger.divergences) ? data.session.ledger.divergences : [],
-            openQuestions: Array.isArray(data.session.ledger.openQuestions) ? data.session.ledger.openQuestions : []
-          };
+      if (importSession) {
+        if (Array.isArray(data.sessions) && data.sessions.length > 0) {
+          this.sessions = data.sessions;
+          this.currentSessionId = data.currentSessionId || this.sessions[0].id;
+          const target = this.sessions.find(s => s.id === this.currentSessionId) || this.sessions[0];
+          this.currentSessionId = target.id;
+          this.loadSessionData(target);
+        } else if (data.session && typeof data.session === 'object') {
+          const importedSession = this.createSessionObject(
+            data.session.userCorePrompt ? data.session.userCorePrompt.slice(0, 36) : 'میزگرد درون‌ریزی‌شده',
+            {
+              roundIndex: data.session.roundIndex || 1,
+              userCorePrompt: data.session.userCorePrompt || '',
+              transcript: Array.isArray(data.session.transcript) ? data.session.transcript : [],
+              ledger: data.session.ledger || { agreements: [], divergences: [], openQuestions: [] }
+            }
+          );
+          this.sessions = [importedSession];
+          this.currentSessionId = importedSession.id;
+          this.loadSessionData(importedSession);
         }
       }
 
@@ -761,7 +1032,8 @@ export class SymposiumState {
         scenariosCount: Object.keys(this.customScenarios).length,
         personasCount: Object.keys(this.customPersonas).length,
         templatesCount: Object.keys(this.customPromptTemplates).length,
-        transcriptTurns: this.transcript.length
+        transcriptTurns: this.transcript.length,
+        sessionsCount: this.sessions.length
       };
     } catch (err) {
       console.error('[SymposiumState] Import failed:', err);
@@ -803,6 +1075,7 @@ export class SymposiumState {
 
   persistConfig() {
     try {
+      this.saveCurrentSessionSnapshot();
       const payload = {
         debateMode: this.debateMode,
         config: this.config,
@@ -814,6 +1087,8 @@ export class SymposiumState {
         customTopologies: this.customTopologies,
         seatCustomizations: this.seatCustomizations,
         activeScenarioKey: this.activeScenarioKey,
+        currentSessionId: this.currentSessionId,
+        sessions: this.sessions,
         session: {
           roundIndex: this.roundIndex,
           userCorePrompt: this.userCorePrompt,
@@ -854,18 +1129,37 @@ export class SymposiumState {
         if (parsed.seatCustomizations && typeof parsed.seatCustomizations === 'object') {
           this.seatCustomizations = parsed.seatCustomizations;
         }
-        if (parsed.session && typeof parsed.session === 'object') {
-          if (parsed.session.roundIndex) this.roundIndex = parsed.session.roundIndex;
-          if (parsed.session.userCorePrompt) this.userCorePrompt = parsed.session.userCorePrompt;
-          if (Array.isArray(parsed.session.transcript)) this.transcript = parsed.session.transcript;
-          if (parsed.session.ledger && typeof parsed.session.ledger === 'object') {
-            this.ledger = {
-              agreements: Array.isArray(parsed.session.ledger.agreements) ? parsed.session.ledger.agreements : [],
-              divergences: Array.isArray(parsed.session.ledger.divergences) ? parsed.session.ledger.divergences : [],
-              openQuestions: Array.isArray(parsed.session.ledger.openQuestions) ? parsed.session.ledger.openQuestions : []
-            };
-          }
+
+        if (Array.isArray(parsed.sessions) && parsed.sessions.length > 0) {
+          this.sessions = parsed.sessions;
+          this.currentSessionId = parsed.currentSessionId || this.sessions[0].id;
+          const cur = this.sessions.find(s => s.id === this.currentSessionId) || this.sessions[0];
+          this.currentSessionId = cur.id;
+          this.loadSessionData(cur);
+        } else if (parsed.session && typeof parsed.session === 'object') {
+          const legacySession = this.createSessionObject(
+            parsed.session.userCorePrompt ? parsed.session.userCorePrompt.slice(0, 36) : 'میزگرد ۱',
+            {
+              roundIndex: parsed.session.roundIndex || 1,
+              userCorePrompt: parsed.session.userCorePrompt || '',
+              transcript: Array.isArray(parsed.session.transcript) ? parsed.session.transcript : [],
+              ledger: parsed.session.ledger || { agreements: [], divergences: [], openQuestions: [] }
+            }
+          );
+          this.sessions = [legacySession];
+          this.currentSessionId = legacySession.id;
+          this.loadSessionData(legacySession);
+        } else {
+          const freshSession = this.createSessionObject('میزگرد ۱');
+          this.sessions = [freshSession];
+          this.currentSessionId = freshSession.id;
+          this.loadSessionData(freshSession);
         }
+      } else {
+        const freshSession = this.createSessionObject('میزگرد ۱');
+        this.sessions = [freshSession];
+        this.currentSessionId = freshSession.id;
+        this.loadSessionData(freshSession);
       }
     } catch (_) {}
   }

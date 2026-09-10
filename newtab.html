@@ -1215,8 +1215,16 @@
           </div>
           <div class="symposium-title-stack">
             <h2>The Silk Symposium</h2>
-            <p>تالار هم‌اندیشی و دیالکتیک زنده هوش‌ها</p>
+            <p id="header-active-session-name" title="عنوان میزگرد فعال">تالار هم‌اندیشی و دیالکتیک هوش‌ها</p>
           </div>
+          <button type="button" id="btn-symposium-new-session" class="symposium-tool-btn primary-gold" title="آغاز یک میزگرد جدید (با ذخیره خودکار میزگرد فعلی)">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
+            <span>+ میزگرد جدید</span>
+          </button>
+          <button type="button" id="btn-symposium-history-toggle" class="symposium-tool-btn" title="مدیریت سابقه میزگردها و ادامه جلسات قبلی">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+            <span>سوابق (<span id="symposium-history-count">0</span>)</span>
+          </button>
           <button type="button" id="btn-header-switch-scenario" class="active-scenario-pill" title="کلیک برای تغییر سناریوی میزگرد">
             <span class="scenario-gem-dot"></span>
             <span id="header-active-scenario-title">سناریوهای میزگرد</span>
@@ -1423,6 +1431,9 @@
           </button>
           <button type="button" class="sanctum-zone-tab" data-zone="engine">
             <span>⚙️ موتور دیالکتیک</span>
+          </button>
+          <button type="button" class="sanctum-zone-tab" data-zone="history">
+            <span>📜 سوابق و جلسات</span>
           </button>
         </div>
 
@@ -1707,6 +1718,62 @@
               </button>
             </div>
           </div>
+
+          <div id="sanctum-zone-history" class="sanctum-zone-panel" style="display: none;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+              <div>
+                <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #f3f4f6;">مدیریت سوابق و تاریخچه میزگردها</span>
+                <p style="margin: 2px 0 0; font-size: 10px; color: #9ca3af;">ادامه جلسات قبلی، دریافت گزارشات و آرشیو کامل مذاکرات</p>
+              </div>
+              <button type="button" id="btn-sanctum-new-session" class="btn-load-scenario" style="width: auto; padding: 4px 12px; margin: 0; background: #262626; border-color: rgba(255,255,255,0.15); color: #ffffff;">
+                <span>+ آغاز میزگرد جدید</span>
+              </button>
+            </div>
+            <div id="sanctum-sessions-list" style="display: flex; flex-direction: column; gap: 10px; margin-top: 4px;"></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Slide-over Sessions History Drawer -->
+      <div id="symposium-history-backdrop" class="symposium-history-backdrop"></div>
+      <aside id="symposium-history-drawer" class="symposium-history-drawer" aria-label="Roundtable Sessions History">
+        <div class="history-drawer-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="history-header-gem">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 style="margin:0; font-size:13.5px; font-weight:600; color:#ffffff;">سوابق میزگردها (Roundtable History)</h3>
+              <p style="margin:2px 0 0; font-size:10px; color:#9ca3af;">ادامه میزگردهای پیشین، مدیریت جلسات و بایگانی مذاکرات</p>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <button type="button" id="btn-history-new-session" class="symposium-tool-btn primary-gold" style="height: 28px; font-size: 10.5px;">
+              <span>+ میزگرد جدید</span>
+            </button>
+            <button type="button" id="btn-close-symposium-history" class="symposium-tool-btn btn-close" title="بستن (Esc)">✕</button>
+          </div>
+        </div>
+
+        <div class="history-search-bar">
+          <div class="history-search-wrapper">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" id="symposium-history-search" class="history-search-input" placeholder="جستجو در میان میزگردهای پیشین یا متن پیام‌ها..." dir="auto" />
+          </div>
+        </div>
+
+        <div class="history-drawer-body">
+          <div id="symposium-sessions-list" class="sessions-history-stack"></div>
+        </div>
+
+        <div class="history-drawer-footer">
+          <button type="button" id="btn-clear-all-symposium-history" class="btn-utility-ghost" style="color: #f87171; font-size: 10.5px;">
+            <span>پاک‌سازی همه سوابق 🗑️</span>
+          </button>
         </div>
       </aside>
     </div>

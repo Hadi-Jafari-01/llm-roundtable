@@ -17,6 +17,9 @@ export class SymposiumTranscript {
       onCrownInsight: () => {},
       onSynthesize: () => {},
       onDeleteTurn: () => {},
+      onContinueSession: () => {},
+      onOpenHistory: () => {},
+      onNewSession: () => {},
       ...callbacks
     };
 
@@ -75,10 +78,38 @@ export class SymposiumTranscript {
     });
   }
 
-  render(turns = []) {
+  render(turns = [], previousSessions = [], onContinueSession = null, onOpenHistory = null, onNewSession = null) {
     if (!this.viewportEl) return;
 
+    if (onContinueSession) this.callbacks.onContinueSession = onContinueSession;
+    if (onOpenHistory) this.callbacks.onOpenHistory = onOpenHistory;
+    if (onNewSession) this.callbacks.onNewSession = onNewSession;
+
     if (!turns || turns.length === 0) {
+      let previousSessionsHtml = '';
+      if (previousSessions && previousSessions.length > 0) {
+        const otherSessions = previousSessions.slice(0, 3);
+        const chipsHtml = otherSessions.map(s => `
+          <button type="button" class="btn-quick-resume-chip" data-session-id="${s.id}">
+            <span class="chip-dot"></span>
+            <span class="chip-title">${this.escapeHtml(s.title || 'میزگرد قبلی')}</span>
+            <span class="chip-round">دور ${s.roundIndex || 1} • ${(s.transcript && s.transcript.length) || 0} پیام</span>
+          </button>
+        `).join('');
+
+        previousSessionsHtml = `
+          <div class="symposium-quick-history-box">
+            <span class="quick-history-title">یا ادامه یکی از میزگردهای پیشین:</span>
+            <div class="quick-history-chips">
+              ${chipsHtml}
+            </div>
+            <button type="button" class="btn-open-all-history-link" id="btn-empty-open-history">
+              مشاهده تمام سوابق (${previousSessions.length} جلسه) 📜
+            </button>
+          </div>
+        `;
+      }
+
       this.viewportEl.innerHTML = `
         <div class="chat-centered-container">
           <div class="symposium-empty-sanctuary">
@@ -88,10 +119,27 @@ export class SymposiumTranscript {
               </svg>
             </div>
             <h3>The Silk Symposium Agora</h3>
-            <p>Convene a high-order cognitive roundtable. Enter an inquiry in the capsule below or pass the baton to initiate deliberation.</p>
+            <p>میزگرد نخبگانی جدید آماده آغاز است. پرسش یا مسئله بنیادین خود را در کادر زیر وارد کنید یا نوبت را با عصای نوبت (🪄) به یکی از صندلی‌ها بسپارید.</p>
+            ${previousSessionsHtml}
           </div>
         </div>
       `;
+
+      // Bind quick history resumption chips
+      this.viewportEl.querySelectorAll('.btn-quick-resume-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          if (this.callbacks.onContinueSession) {
+            this.callbacks.onContinueSession(chip.dataset.sessionId);
+          }
+        });
+      });
+
+      this.viewportEl.querySelector('#btn-empty-open-history')?.addEventListener('click', () => {
+        if (this.callbacks.onOpenHistory) {
+          this.callbacks.onOpenHistory();
+        }
+      });
+
       return;
     }
 

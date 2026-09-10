@@ -1579,6 +1579,18 @@ class OmniApp {
 
         if (this.symposiumOrchestrator?.isOpen) {
           e.preventDefault();
+          if (this.symposiumOrchestrator.historyDrawer?.classList.contains('open')) {
+            this.symposiumOrchestrator.closeHistoryDrawer();
+            return;
+          }
+          if (this.symposiumOrchestrator.sanctumDrawer?.classList.contains('open')) {
+            this.symposiumOrchestrator.closeSanctum();
+            return;
+          }
+          if (this.symposiumOrchestrator.seatInspector?.classList.contains('open')) {
+            this.symposiumOrchestrator.closeSeatInspector();
+            return;
+          }
           this.symposiumOrchestrator.close();
           return;
         }

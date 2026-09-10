@@ -2245,6 +2245,412 @@
   -webkit-box-orient: vertical;
 }
 
+/* ── 11. Quick Resume Chips inside Empty Sanctuary ── */
+.symposium-quick-history-box {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 480px;
+}
+
+.quick-history-title {
+  font-size: 11px;
+  font-weight: 500;
+  color: #9ca3af;
+}
+
+.quick-history-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.btn-quick-resume-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: #262626;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #f3f4f6;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  width: 100%;
+  text-align: right;
+  box-sizing: border-box;
+}
+
+.btn-quick-resume-chip:hover {
+  background: #303030;
+  border-color: rgba(16, 163, 127, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-quick-resume-chip .chip-dot {
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 50%;
+  background: #10a37f;
+  box-shadow: 0 0 6px #10a37f;
+  flex-shrink: 0;
+}
+
+.btn-quick-resume-chip .chip-title {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.btn-quick-resume-chip .chip-round {
+  font-size: 10px;
+  color: #9ca3af;
+  font-family: ui-monospace, monospace;
+}
+
+.btn-open-all-history-link {
+  background: none;
+  border: none;
+  color: #10a37f;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 8px;
+  margin-top: 4px;
+  transition: color 0.15s ease;
+}
+
+.btn-open-all-history-link:hover {
+  color: #34d399;
+  text-decoration: underline;
+}
+
+/* ── 12. Slide-over Sessions History Drawer (#171717 / #212121) ── */
+.symposium-history-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 520px;
+  max-width: calc(100vw - 16px);
+  height: 100vh;
+  z-index: 1450;
+  background: #171717;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: -16px 0 40px rgba(0, 0, 0, 0.75);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.symposium-history-drawer.open {
+  transform: translateX(0);
+}
+
+.symposium-history-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 1440;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.24s ease;
+}
+
+.symposium-history-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.history-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #171717;
+  flex-shrink: 0;
+}
+
+.history-header-gem {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #262626;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #10a37f;
+}
+
+.history-search-bar {
+  padding: 10px 18px;
+  background: #1a1a1a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.history-search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: #141414;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transition: border-color 0.16s ease;
+}
+
+.history-search-wrapper:focus-within {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.history-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ececec;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.history-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 18px;
+  box-sizing: border-box;
+}
+
+.history-drawer-body::-webkit-scrollbar {
+  width: 5px;
+}
+.history-drawer-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+}
+
+.sessions-history-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.session-history-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #212121;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.18s ease;
+  position: relative;
+}
+
+.session-history-card:hover {
+  background: #262626;
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.session-history-card.is-active {
+  border-color: #10a37f;
+  background: #242424;
+  box-shadow: 0 2px 12px rgba(16, 163, 127, 0.15);
+}
+
+.session-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.session-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  flex: 1;
+}
+
+.session-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #f3f4f6;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.session-active-pill {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #10a37f;
+  background: rgba(16, 163, 127, 0.15);
+  border: 1px solid rgba(16, 163, 127, 0.35);
+  padding: 1px 6px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.session-time-text {
+  font-size: 9.5px;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.session-prompt-preview {
+  font-size: 11px;
+  color: #9ca3af;
+  line-height: 1.45;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.session-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.session-stats-tags {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.session-stat-tag {
+  font-size: 9.5px;
+  font-weight: 500;
+  color: #d1d5db;
+  background: #2a2a2a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.session-stat-tag.agreement {
+  color: #10a37f;
+  border-color: rgba(16, 163, 127, 0.3);
+}
+
+.session-participants-pearls {
+  display: flex;
+  align-items: center;
+  gap: 3.5px;
+}
+
+.session-participant-dot {
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 50%;
+  box-shadow: 0 0 4px currentColor;
+}
+
+.session-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.btn-continue-session {
+  flex: 1;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: rgba(16, 163, 127, 0.15);
+  border: 1px solid rgba(16, 163, 127, 0.4);
+  color: #10a37f;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  font-family: inherit;
+}
+
+.btn-continue-session:hover {
+  background: #10a37f;
+  color: #ffffff;
+}
+
+.btn-continue-session.is-current {
+  background: #282828;
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #e5e7eb;
+}
+
+.btn-session-tool {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: #282828;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.15s ease;
+}
+
+.btn-session-tool:hover {
+  background: #333333;
+  color: #ffffff;
+}
+
+.btn-session-tool.btn-delete-session:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: #fca5a5;
+}
+
+.history-drawer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: #171717;
+  flex-shrink: 0;
+}
+
+.history-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+  gap: 8px;
+}
+
 /* Toast */
 .symposium-toast {
   position: fixed;
