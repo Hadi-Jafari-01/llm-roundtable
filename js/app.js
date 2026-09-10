@@ -1735,12 +1735,10 @@ class OmniApp {
 
     const btnMin = document.getElementById('btn-win-min');
     const btnMax = document.getElementById('btn-win-max');
-    const btnClose = document.getElementById('btn-win-close');
     const topNav = document.getElementById('top-nav');
 
     btnMin?.addEventListener('click', () => this.minimizeWindow());
     btnMax?.addEventListener('click', () => this.toggleWindowMaximize());
-    btnClose?.addEventListener('click', () => window.close());
 
     // Double-click top navigation ribbon to toggle maximize/restore
     topNav?.addEventListener('dblclick', (e) => {
