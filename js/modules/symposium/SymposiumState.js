@@ -101,15 +101,20 @@ export class SymposiumState {
 
   createSessionObject(title = '', options = {}) {
     const now = Date.now();
+    const count = Array.isArray(this.sessions) ? this.sessions.length + 1 : 1;
     return {
       id: options.id || `session_${now}_${Math.random().toString(36).substring(2, 7)}`,
-      title: (title || options.title || `میزگرد ${this.sessions.length + 1}`).trim(),
-      createdAt: options.createdAt || now,
-      updatedAt: options.updatedAt || now,
+      title: (title || options.title || `میزگرد ${count}`).trim(),
+      createdAt: typeof options.createdAt === 'number' && !isNaN(options.createdAt) ? options.createdAt : now,
+      updatedAt: typeof options.updatedAt === 'number' && !isNaN(options.updatedAt) ? options.updatedAt : now,
       roundIndex: options.roundIndex || 1,
       userCorePrompt: options.userCorePrompt || '',
       transcript: Array.isArray(options.transcript) ? JSON.parse(JSON.stringify(options.transcript)) : [],
-      ledger: options.ledger ? JSON.parse(JSON.stringify(options.ledger)) : {
+      ledger: options.ledger ? {
+        agreements: Array.isArray(options.ledger.agreements) ? JSON.parse(JSON.stringify(options.ledger.agreements)) : [],
+        divergences: Array.isArray(options.ledger.divergences) ? JSON.parse(JSON.stringify(options.ledger.divergences)) : [],
+        openQuestions: Array.isArray(options.ledger.openQuestions) ? JSON.parse(JSON.stringify(options.ledger.openQuestions)) : []
+      } : {
         agreements: [],
         divergences: [],
         openQuestions: []
@@ -146,10 +151,14 @@ export class SymposiumState {
     }
 
     session.updatedAt = Date.now();
-    session.roundIndex = this.roundIndex;
-    session.userCorePrompt = this.userCorePrompt;
-    session.transcript = JSON.parse(JSON.stringify(this.transcript));
-    session.ledger = JSON.parse(JSON.stringify(this.ledger));
+    session.roundIndex = this.roundIndex || 1;
+    session.userCorePrompt = this.userCorePrompt || '';
+    session.transcript = Array.isArray(this.transcript) ? JSON.parse(JSON.stringify(this.transcript)) : [];
+    session.ledger = this.ledger ? {
+      agreements: Array.isArray(this.ledger.agreements) ? [...this.ledger.agreements] : [],
+      divergences: Array.isArray(this.ledger.divergences) ? [...this.ledger.divergences] : [],
+      openQuestions: Array.isArray(this.ledger.openQuestions) ? [...this.ledger.openQuestions] : []
+    } : { agreements: [], divergences: [], openQuestions: [] };
     session.activeScenarioKey = this.activeScenarioKey;
     session.debateMode = this.debateMode;
     session.participants = this.getCurrentParticipantsSummary();
@@ -271,18 +280,22 @@ export class SymposiumState {
   getSessions(searchQuery = '') {
     this.saveCurrentSessionSnapshot();
     const query = searchQuery ? searchQuery.trim().toLowerCase() : '';
-    let list = [...this.sessions];
+    let list = Array.isArray(this.sessions) ? [...this.sessions].filter(Boolean) : [];
 
     if (query) {
       list = list.filter(s => {
         const titleMatch = s.title && s.title.toLowerCase().includes(query);
         const promptMatch = s.userCorePrompt && s.userCorePrompt.toLowerCase().includes(query);
-        const transcriptMatch = Array.isArray(s.transcript) && s.transcript.some(t => t.text && t.text.toLowerCase().includes(query));
+        const transcriptMatch = Array.isArray(s.transcript) && s.transcript.some(t => t && t.text && t.text.toLowerCase().includes(query));
         return titleMatch || promptMatch || transcriptMatch;
       });
     }
 
-    list.sort((a, b) => (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0));
+    list.sort((a, b) => {
+      const timeA = typeof a.updatedAt === 'number' ? a.updatedAt : (typeof a.createdAt === 'number' ? a.createdAt : 0);
+      const timeB = typeof b.updatedAt === 'number' ? b.updatedAt : (typeof b.createdAt === 'number' ? b.createdAt : 0);
+      return timeB - timeA;
+    });
     return list;
   }
 

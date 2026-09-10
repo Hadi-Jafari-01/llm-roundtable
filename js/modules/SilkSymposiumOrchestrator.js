@@ -290,13 +290,29 @@ export class SilkSymposiumOrchestrator {
     this.btnNewSession?.addEventListener('click', () => this.startNewSession());
     this.btnHistoryNewSession?.addEventListener('click', () => this.startNewSession());
     this.btnSanctumNewSession?.addEventListener('click', () => this.startNewSession());
-    this.btnHistoryToggle?.addEventListener('click', () => this.toggleHistoryDrawer());
-    this.btnCloseHistory?.addEventListener('click', () => this.closeHistoryDrawer());
-    this.symposiumHistoryBackdrop?.addEventListener('click', () => this.closeHistoryDrawer());
-    this.historyBackdrop?.addEventListener('click', () => this.closeHistoryDrawer());
+    this.btnHistoryToggle?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggleHistoryDrawer();
+    });
+    this.btnCloseHistory?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.closeHistoryDrawer();
+    });
+    this.historyBackdrop?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.closeHistoryDrawer();
+    });
     this.btnClearAllHistory?.addEventListener('click', () => this.handleClearAllHistory());
     this.historySearchInput?.addEventListener('input', (e) => {
       this.renderSessionsList(e.target.value);
+    });
+
+    // Dedicated keydown guard for instant Escape dismissal
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.historyDrawer?.classList.contains('open')) {
+        e.stopPropagation();
+        this.closeHistoryDrawer();
+      }
     });
 
     this.headerSessionName?.addEventListener('click', () => {
@@ -1174,13 +1190,15 @@ export class SilkSymposiumOrchestrator {
     this.closeSeatInspector();
     this.historyDrawer?.classList.add('open');
     this.historyBackdrop?.classList.add('open');
-    this.renderSessionsList();
+    this.btnHistoryToggle?.classList.add('active');
+    this.renderSessionsList(this.historySearchInput?.value || '');
     requestAnimationFrame(() => this.historySearchInput?.focus());
   }
 
   closeHistoryDrawer() {
     this.historyDrawer?.classList.remove('open');
     this.historyBackdrop?.classList.remove('open');
+    this.btnHistoryToggle?.classList.remove('active');
   }
 
   toggleHistoryDrawer() {
@@ -1255,36 +1273,56 @@ export class SilkSymposiumOrchestrator {
   }
 
   renderSessionsList(searchQuery = '') {
-    const sessions = this.symposiumState.getSessions(searchQuery);
-    const activeId = this.symposiumState.currentSessionId;
+    const sessions = this.symposiumState?.getSessions(searchQuery) || [];
+    const activeId = this.symposiumState?.currentSessionId;
 
     const buildSessionCardHtml = (session) => {
-      const isActive = session.id === activeId;
-      const dateStr = new Date(session.updatedAt || session.createdAt).toLocaleDateString('fa-IR', {
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-      const turnsCount = (session.transcript && session.transcript.length) || 0;
-      const agreementsCount = (session.ledger?.agreements && session.ledger.agreements.length) || 0;
-      const promptSnippet = session.userCorePrompt || (session.transcript?.[0]?.text) || 'میزگرد بدون متن آغازین';
+      if (!session || typeof session !== 'object') return '';
 
-      const participantsHtml = (session.participants || []).slice(0, 6).map(p => `
-        <span class="session-participant-dot" style="background: ${p.color || '#c084fc'};" title="${this.escapeHtml(p.name)}"></span>
-      `).join('');
+      const sessionId = session.id || `session_${Date.now()}`;
+      const isActive = sessionId === activeId;
+
+      let dateStr = '—';
+      try {
+        const rawDate = session.updatedAt || session.createdAt || Date.now();
+        const dObj = new Date(rawDate);
+        if (!isNaN(dObj.getTime())) {
+          dateStr = dObj.toLocaleDateString('fa-IR', {
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+        }
+      } catch (_) {
+        dateStr = '—';
+      }
+
+      const turnsCount = Array.isArray(session.transcript) ? session.transcript.length : 0;
+      const agreementsCount = Array.isArray(session.ledger?.agreements) ? session.ledger.agreements.length : 0;
+      const firstTurnText = Array.isArray(session.transcript) && session.transcript[0] ? (session.transcript[0].text || '') : '';
+      const promptSnippet = session.userCorePrompt || firstTurnText || 'میزگرد بدون متن آغازین';
+      const sessionTitle = session.title || `میزگرد ${session.roundIndex || 1}`;
+
+      const participantsList = Array.isArray(session.participants) ? session.participants : [];
+      const participantsHtml = participantsList.slice(0, 6).map(p => {
+        if (!p || typeof p !== 'object') return '';
+        return `
+          <span class="session-participant-dot" style="background: ${p.color || '#c084fc'};" title="${this.escapeHtml(p.name || '')}"></span>
+        `;
+      }).join('');
 
       return `
-        <div class="session-history-card ${isActive ? 'is-active' : ''}" data-session-id="${session.id}">
+        <div class="session-history-card ${isActive ? 'is-active' : ''}" data-session-id="${this.escapeHtml(sessionId)}">
           <div class="session-card-header">
             <div class="session-title-wrap">
-              <span class="session-title" title="کلیک برای تغییر نام">${this.escapeHtml(session.title)}</span>
+              <span class="session-title" title="کلیک برای تغییر نام">${this.escapeHtml(sessionTitle)}</span>
               ${isActive ? '<span class="session-active-pill">جلسه فعال</span>' : ''}
             </div>
-            <span class="session-time-text">${dateStr}</span>
+            <span class="session-time-text">${this.escapeHtml(dateStr)}</span>
           </div>
 
-          <p class="session-prompt-preview">${this.escapeHtml(promptSnippet)}</p>
+          <p class="session-prompt-preview" dir="auto">${this.escapeHtml(promptSnippet)}</p>
 
           <div class="session-card-meta">
             <div class="session-stats-tags">
@@ -1313,6 +1351,7 @@ export class SilkSymposiumOrchestrator {
       if (!container) return;
       container.querySelectorAll('.session-history-card').forEach(card => {
         const sessionId = card.dataset.sessionId;
+        if (!sessionId) return;
 
         card.querySelector('[data-action="continue"]')?.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -1363,15 +1402,17 @@ export class SilkSymposiumOrchestrator {
   }
 
   exportSessionMarkdown(sessionId) {
-    const session = this.symposiumState.sessions.find(s => s.id === sessionId);
+    const session = this.symposiumState?.sessions?.find(s => s.id === sessionId);
     if (!session) return;
 
+    const title = session.title || 'میزگرد';
     let md = `# 🏛️ The Silk Symposium Briefing & Consensus Dossier\n`;
-    md += `**Session Title:** ${session.title}\n`;
+    md += `**Session Title:** ${title}\n`;
     md += `**Inquiry:** ${session.userCorePrompt || 'Multi-Model Cognitive Dialectic'}\n`;
     md += `**Topology:** ${session.debateMode || 'manual'}\n`;
     md += `**Rounds Completed:** ${session.roundIndex || 1}\n`;
-    md += `**Date:** ${new Date(session.updatedAt || session.createdAt).toLocaleString()}\n\n`;
+    const dateStr = session.updatedAt || session.createdAt ? new Date(session.updatedAt || session.createdAt).toLocaleString() : new Date().toLocaleString();
+    md += `**Date:** ${dateStr}\n\n`;
 
     md += `---\n\n## 💎 Milestone Consensus Ledger\n\n`;
     md += `### Confirmed Agreements (اجماع‌های تأییدشده)\n`;
@@ -1382,14 +1423,15 @@ export class SilkSymposiumOrchestrator {
 
     md += `\n---\n\n## 📜 Chronological Deliberation Transcript\n\n`;
     (session.transcript || []).forEach(t => {
-      md += `### ${t.speakerName} [${t.role.toUpperCase()} • Round ${t.round || 1} • ${t.timestamp || ''}]\n\n${t.text}\n\n`;
+      md += `### ${t.speakerName || 'مدل'} [${(t.role || 'user').toUpperCase()} • Round ${t.round || 1} • ${t.timestamp || ''}]\n\n${t.text || ''}\n\n`;
     });
 
     const blob = new Blob([md], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `symposium_${session.title.replace(/[^\w\u0600-\u06FF]+/g, '_').slice(0, 30)}_${Date.now()}.md`;
+    const safeTitle = (title || 'symposium').replace(/[^\w\u0600-\u06FF]+/g, '_').slice(0, 30);
+    a.download = `symposium_${safeTitle}_${Date.now()}.md`;
     a.click();
     URL.revokeObjectURL(url);
     this.showToast('گزارش جلسه دانلود شد 📤');
