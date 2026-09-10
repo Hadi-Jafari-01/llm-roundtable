@@ -99,6 +99,7 @@ header.top-nano-nav {
   flex-shrink: 0;
   gap: 6px;
   z-index: 2;
+  margin-right: 68px; /* حفظ فاصله ثابت جهت قرارگیری دکمه سوییچ سراسری در right: 48px */
 }
 
 /* ==========================================================================
@@ -147,70 +148,92 @@ header.top-nano-nav {
 
 /* ==========================================================================
    Minimalist Eye Panel Switcher (سوییچ چشم بین پنل اصلی و فرعی)
+   موقعیت کاملاً ثابت و تغییرناپذیر در تمام پنل‌ها و بوم اصلی (top: 7px; right: 48px)
    ========================================================================== */
 .btn-eye-panel-switch {
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  min-height: 28px;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 7px;
-  background: #212121;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #d1d5db;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.16s ease;
-  flex-shrink: 0;
-  outline: none;
-  box-sizing: border-box;
+  position: fixed !important;
+  top: 7px !important;
+  right: 48px !important;
+  z-index: 100000 !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 7px !important;
+  background: #212121 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #d1d5db !important;
+  cursor: pointer !important;
+  transition: all 0.16s ease !important;
+  flex-shrink: 0 !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45) !important;
 }
 
 .btn-eye-panel-switch svg {
-  width: 14.5px;
-  height: 14.5px;
-  flex-shrink: 0;
-  pointer-events: none;
-  transition: transform 0.18s ease, color 0.18s ease;
+  width: 14.5px !important;
+  height: 14.5px !important;
+  flex-shrink: 0 !important;
+  pointer-events: none !important;
+  transition: transform 0.18s ease, color 0.18s ease !important;
 }
 
 .btn-eye-panel-switch:hover {
-  background: #2a2a2a;
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.24);
-  transform: scale(1.05);
+  background: #2a2a2a !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  transform: scale(1.05) !important;
 }
 
 .btn-eye-panel-switch:active {
-  transform: scale(0.94);
+  transform: scale(0.94) !important;
 }
 
 .btn-eye-panel-switch.is-subpanel,
 .btn-eye-panel-switch.active {
-  background: #282828;
-  border-color: rgba(16, 163, 127, 0.5);
-  color: #10a37f;
+  background: #282828 !important;
+  border-color: rgba(16, 163, 127, 0.5) !important;
+  color: #10a37f !important;
 }
 
 .btn-eye-panel-switch .eye-dot-indicator {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #10a37f;
-  box-shadow: 0 0 6px #10a37f;
-  pointer-events: none;
-  transition: all 0.2s ease;
+  position: absolute !important;
+  top: 4px !important;
+  right: 4px !important;
+  width: 5px !important;
+  height: 5px !important;
+  border-radius: 50% !important;
+  background: #10a37f !important;
+  box-shadow: 0 0 6px #10a37f !important;
+  pointer-events: none !important;
+  transition: all 0.2s ease !important;
 }
 
 .btn-eye-panel-switch.is-subpanel .eye-dot-indicator {
-  background: #f59e0b;
-  box-shadow: 0 0 6px #f59e0b;
+  background: #f59e0b !important;
+  box-shadow: 0 0 6px #f59e0b !important;
+}
+
+/* هماهنگی با حالت زن (Zen Mode) */
+.app-root.zen-mode .btn-eye-panel-switch:not(.is-subpanel) {
+  transform: translateY(-12px) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.3s var(--ease-spring), transform 0.3s var(--ease-spring);
+}
+
+.app-root.zen-mode .nano-nav-sensor:hover ~ .btn-eye-panel-switch,
+.app-root.zen-mode header.top-nano-nav:hover ~ .btn-eye-panel-switch,
+.app-root.zen-mode .btn-eye-panel-switch:hover,
+.btn-eye-panel-switch.is-subpanel {
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 
 /* Eye Switch Toast Notification */

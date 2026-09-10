@@ -6,24 +6,25 @@
 
 .mirror-chat-studio {
   position: fixed;
-  top: 50px;
-  right: 18px;
-  bottom: 18px;
+  top: 0;
+  right: 0;
+  bottom: 0;
   width: 520px;
   min-width: 380px;
   max-width: calc(100vw - 36px);
-  z-index: 1200;
+  height: 100vh;
+  z-index: 1270;
   background: #212121; /* Authentic ChatGPT dark theme card */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  box-shadow: -16px 0 48px rgba(0, 0, 0, 0.75);
   display: none !important;
   flex-direction: column;
   overflow: hidden;
   box-sizing: border-box;
   color: #ececec;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
-  transform: translateX(125%);
+  transform: translateX(100%);
   opacity: 0;
   pointer-events: none !important;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),

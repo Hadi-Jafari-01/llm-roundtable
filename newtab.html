@@ -382,6 +382,15 @@
     <!-- Zen Mode Edge Sensor -->
     <div class="nano-nav-sensor" id="nano-nav-sensor"></div>
 
+    <!-- Master Stationary Eye Switcher Button (Exact same screen position across all views) -->
+    <button type="button" class="btn-eye-panel-switch" id="btn-eye-switch-global" title="سوییچ به آخرین پنل فرعی (سوییچ چشم) [Alt+Q]">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+      <span class="eye-dot-indicator"></span>
+    </button>
+
     <!-- Unified Top Horizon Bar (42px Dark Charcoal #171717) -->
     <header class="top-nano-nav" id="top-nav">
 
@@ -477,15 +486,6 @@
 
       <!-- 3. RIGHT ZONE: Modular Drawers & Window Controls -->
       <div class="nav-cluster right">
-        <!-- Minimal Eye Switch Button (Quick Toggle between Main Canvas and Last Sub-Panel) -->
-        <button type="button" class="btn-eye-panel-switch" id="btn-eye-switch-main" title="سوییچ به آخرین پنل فرعی (سوییچ چشم) [Alt+Q]">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-          <span class="eye-dot-indicator"></span>
-        </button>
-
         <!-- The Silk Pavilion Studio Chamber Trigger -->
         <button id="btn-silk-pavilion" class="nano-jewel-btn" title="Silk Pavilion — Studio Chamber (⌘P / ⌘⌥P)">
           <svg class="icon-pavilion" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -719,14 +719,7 @@
             <p>Interactive Selector & Interaction Automation Engine</p>
           </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 6px;">
-          <button type="button" class="btn-eye-panel-switch is-subpanel" id="btn-eye-switch-studio" title="بازگشت به پنل اصلی بوم (سوییچ چشم) [Alt+Q]">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
-              <circle cx="12" cy="12" r="3"/>
-            </svg>
-            <span class="eye-dot-indicator"></span>
-          </button>
+        <div style="display: flex; align-items: center; gap: 6px; padding-right: 36px;">
           <button id="btn-close-studio-drawer" class="studio-drawer-close" title="Close Drawer (Esc)">✕</button>
         </div>
       </div>
@@ -1065,7 +1058,7 @@
           </div>
         </div>
 
-        <div class="mirror-header-actions">
+        <div class="mirror-header-actions" style="padding-right: 36px;">
           <input type="file" id="file-mirror-import-chat" accept=".json" style="display: none;" />
           <button id="btn-mirror-export-chat" class="mirror-icon-btn" title="Export Chat (Markdown / JSON)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -1078,13 +1071,6 @@
           </button>
           <button id="btn-mirror-new-chat" class="mirror-icon-btn" title="Start New Conversation (+)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          </button>
-          <button type="button" class="btn-eye-panel-switch is-subpanel" id="btn-eye-switch-mirror" title="بازگشت به پنل اصلی بوم (سوییچ چشم) [Alt+Q]">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
-              <circle cx="12" cy="12" r="3"/>
-            </svg>
-            <span class="eye-dot-indicator"></span>
           </button>
           <button id="btn-close-mirror-studio" class="mirror-icon-btn" title="Close Sanctuary (Esc)">✕</button>
         </div>
@@ -1213,14 +1199,7 @@
             <p>Haute Atelier & Central Chamber of Studios</p>
           </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 6px;">
-          <button type="button" class="btn-eye-panel-switch is-subpanel" id="btn-eye-switch-pavilion" title="بازگشت به پنل اصلی بوم (سوییچ چشم) [Alt+Q]">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
-              <circle cx="12" cy="12" r="3"/>
-            </svg>
-            <span class="eye-dot-indicator"></span>
-          </button>
+        <div style="display: flex; align-items: center; gap: 6px; padding-right: 36px;">
           <button id="btn-close-pavilion-drawer" class="pavilion-close-btn" title="Close Pavilion (Esc)">✕</button>
         </div>
       </div>
@@ -1284,7 +1263,7 @@
           </button>
         </div>
 
-        <div class="symposium-header-capsule right">
+        <div class="symposium-header-capsule right" style="padding-right: 36px;">
           <input type="file" id="file-symposium-import" accept=".json" style="display: none;" />
           <button type="button" id="btn-symposium-toggle-user-seat" class="symposium-tool-btn" title="حضور رسمی کاربر در شورا">
             <span>🪑 Seat Yourself</span>
@@ -1303,13 +1282,6 @@
           </button>
           <button type="button" id="btn-symposium-export-briefing" class="symposium-tool-btn" title="خروجی مارک‌داون">
             <span>Export</span>
-          </button>
-          <button type="button" class="btn-eye-panel-switch is-subpanel" id="btn-eye-switch-symposium" title="بازگشت به پنل اصلی بوم (سوییچ چشم) [Alt+Q]">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
-              <circle cx="12" cy="12" r="3"/>
-            </svg>
-            <span class="eye-dot-indicator"></span>
           </button>
           <button type="button" id="btn-close-symposium-chamber" class="symposium-tool-btn btn-close" title="خروج از تالار (Esc)">✕</button>
         </div>
@@ -1456,20 +1428,13 @@
               <p style="margin:2px 0 0;font-size:10.5px;color:#9ca3af;">استودیوی جامع ۴ منطقه‌ای: سناریوها، پرسوناها، سکو و موتور دیالکتیک</p>
             </div>
           </div>
-          <div style="display: flex; align-items: center; gap: 6px;">
+          <div style="display: flex; align-items: center; gap: 6px; padding-right: 36px;">
             <input type="file" id="file-sanctum-import" accept=".json" style="display: none;" />
             <button type="button" id="btn-sanctum-import-all" class="symposium-tool-btn" style="height: 28px; font-size: 10px;">
               درون‌ریزی 📥
             </button>
             <button type="button" id="btn-sanctum-export-all" class="symposium-tool-btn" style="height: 28px; font-size: 10px;">
               استخراج 📤
-            </button>
-            <button type="button" class="btn-eye-panel-switch is-subpanel" id="btn-eye-switch-sanctum" title="بازگشت به پنل اصلی بوم (سوییچ چشم) [Alt+Q]">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-              <span class="eye-dot-indicator"></span>
             </button>
             <button type="button" id="btn-close-sanctum" class="symposium-tool-btn btn-close">✕</button>
           </div>
@@ -1869,7 +1834,7 @@
           </div>
         </div>
 
-        <div class="council-header-actions">
+        <div class="council-header-actions" style="padding-right: 36px;">
           <input type="file" id="file-council-import" accept=".json" style="display: none;" />
           <button type="button" id="btn-council-import-json" class="btn-council-action" title="بازیابی جلسه شورا از فایل JSON">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -1883,14 +1848,6 @@
           <div id="council-chairman-header-badge" class="chairman-pill-badge">
             <span>👑 Chairman</span>
           </div>
-
-          <button type="button" class="btn-eye-panel-switch is-subpanel" id="btn-eye-switch-council" title="بازگشت به پنل اصلی بوم (سوییچ چشم) [Alt+Q]">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
-              <circle cx="12" cy="12" r="3"/>
-            </svg>
-            <span class="eye-dot-indicator"></span>
-          </button>
 
           <button type="button" id="btn-close-council-chamber" class="btn-council-action" title="Close Council (Esc)">✕</button>
         </div>
@@ -1983,16 +1940,7 @@
               <p>پشتیبان‌گیری کامل، انتقال یکپارچه داده‌ها، ایمپورت و اکسپورت تفکیکی تمام بخش‌ها</p>
             </div>
           </div>
-          <div style="display: flex; align-items: center; gap: 6px;">
-            <button type="button" class="btn-eye-panel-switch is-subpanel" id="btn-eye-switch-vault" title="بازگشت به پنل اصلی بوم (سوییچ چشم) [Alt+Q]">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-              <span class="eye-dot-indicator"></span>
-            </button>
-            <button id="btn-close-data-vault" class="modal-close-icon" title="بستن (Esc)">✕</button>
-          </div>
+          <button id="btn-close-data-vault" class="modal-close-icon" title="بستن (Esc)">✕</button>
         </div>
 
         <div class="vault-tabs-nav">
@@ -2192,16 +2140,7 @@
             </svg>
             <h3>Add Custom AI Intelligence</h3>
           </div>
-          <div style="display: flex; align-items: center; gap: 6px;">
-            <button type="button" class="btn-eye-panel-switch is-subpanel" id="btn-eye-switch-modal-custom" title="بازگشت به پنل اصلی بوم (سوییچ چشم) [Alt+Q]">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-              <span class="eye-dot-indicator"></span>
-            </button>
-            <button class="modal-close-icon" data-close-modal="modal-custom-bot">✕</button>
-          </div>
+          <button class="modal-close-icon" data-close-modal="modal-custom-bot">✕</button>
         </div>
 
         <form id="form-custom-bot" class="modal-content-body">
@@ -2246,16 +2185,7 @@
             </svg>
             <h3>Keyboard Shortcuts</h3>
           </div>
-          <div style="display: flex; align-items: center; gap: 6px;">
-            <button type="button" class="btn-eye-panel-switch is-subpanel" id="btn-eye-switch-modal-shortcuts" title="بازگشت به پنل اصلی بوم (سوییچ چشم) [Alt+Q]">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-              <span class="eye-dot-indicator"></span>
-            </button>
-            <button class="modal-close-icon" data-close-modal="modal-shortcuts">✕</button>
-          </div>
+          <button class="modal-close-icon" data-close-modal="modal-shortcuts">✕</button>
         </div>
 
         <div class="modal-content-body">
