@@ -85,6 +85,7 @@ class OmniApp {
   constructor() {
     this.currentFocusedCardId = null;
     this.syncScope = 'all';
+    this.lastActiveSubPanelId = 'pavilion';
   }
 
   getFocusedCard() {
@@ -577,6 +578,7 @@ class OmniApp {
     }
 
     this.setupStudioEventRelays();
+    this.setupEyePanelSwitch();
     this.setupTopNavigation();
     this.setupModals();
     this.setupGlobalHotkeys();
@@ -662,6 +664,233 @@ class OmniApp {
       this.updateStudioRibbon();
       this.canvas?.render();
     });
+  }
+
+  setupEyePanelSwitch() {
+    // Registry of all studios, chambers, and sub-panels
+    this.subPanels = {
+      pavilion: {
+        id: 'pavilion',
+        name: 'The Silk Pavilion',
+        nameFa: 'پاویون ابریشم (Silk Pavilion)',
+        isOpen: () => Boolean(this.silkPavilion?.isOpen),
+        open: () => this.silkPavilion?.open(),
+        close: () => this.silkPavilion?.close()
+      },
+      symposium: {
+        id: 'symposium',
+        name: 'The Silk Symposium',
+        nameFa: 'تالار هم‌اندیشی (Silk Symposium)',
+        isOpen: () => Boolean(this.symposiumOrchestrator?.isOpen),
+        open: () => this.symposiumOrchestrator?.open(),
+        close: () => {
+          this.symposiumOrchestrator?.closeHistoryDrawer?.();
+          this.symposiumOrchestrator?.closeSanctum?.();
+          this.symposiumOrchestrator?.closeSeatInspector?.();
+          this.symposiumOrchestrator?.close();
+        }
+      },
+      council: {
+        id: 'council',
+        name: 'The Celestial Council',
+        nameFa: 'شورای افلاک (Celestial Council)',
+        isOpen: () => Boolean(this.councilOrchestrator?.isOpen),
+        open: () => this.councilOrchestrator?.open(),
+        close: () => this.councilOrchestrator?.close()
+      },
+      mirror: {
+        id: 'mirror',
+        name: 'Silk Mirror Sanctuary',
+        nameFa: 'استودیو چت یکپارچه (Mirror Sanctuary)',
+        isOpen: () => Boolean(this.mirrorChat?.isOpen),
+        open: () => {
+          const focusedCard = this.getFocusedCard();
+          if (focusedCard) {
+            this.mirrorChat?.selectTargetCard(focusedCard.id);
+          }
+          this.mirrorChat?.open();
+        },
+        close: () => this.mirrorChat?.close()
+      },
+      drivers: {
+        id: 'drivers',
+        name: 'Neural DOM Driver Studio',
+        nameFa: 'استودیو درایورهای DOM',
+        isOpen: () => Boolean(this.selectorStudio?.isOpen),
+        open: () => this.selectorStudio?.open(),
+        close: () => this.selectorStudio?.close()
+      },
+      vault: {
+        id: 'vault',
+        name: 'Universal Data Vault',
+        nameFa: 'صندوق جامع داده‌ها (Data Vault)',
+        isOpen: () => Boolean(this.dataVaultManager?.isOpen),
+        open: () => this.dataVaultManager?.openVaultModal('master'),
+        close: () => this.dataVaultManager?.closeVaultModal()
+      },
+      customBot: {
+        id: 'customBot',
+        name: 'Custom AI Modal',
+        nameFa: 'افزودن مدل سفارشی',
+        isOpen: () => {
+          const modal = document.getElementById('modal-custom-bot');
+          return Boolean(modal && !modal.classList.contains('hidden'));
+        },
+        open: () => {
+          document.getElementById('modal-custom-bot')?.classList.remove('hidden');
+          document.getElementById('custom-bot-name')?.focus();
+        },
+        close: () => document.getElementById('modal-custom-bot')?.classList.add('hidden')
+      },
+      shortcuts: {
+        id: 'shortcuts',
+        name: 'Keyboard Shortcuts',
+        nameFa: 'کلیدهای میانبر',
+        isOpen: () => {
+          const modal = document.getElementById('modal-shortcuts');
+          return Boolean(modal && !modal.classList.contains('hidden'));
+        },
+        open: () => document.getElementById('modal-shortcuts')?.classList.remove('hidden'),
+        close: () => document.getElementById('modal-shortcuts')?.classList.add('hidden')
+      }
+    };
+
+    // Load persisted last sub-panel ID
+    try {
+      const saved = localStorage.getItem('omni_last_active_subpanel');
+      if (saved && this.subPanels[saved]) {
+        this.lastActiveSubPanelId = saved;
+      }
+    } catch (_) {}
+
+    // Global click delegate for all eye switch buttons across all headers
+    document.addEventListener('click', (e) => {
+      const eyeBtn = e.target.closest('.btn-eye-panel-switch');
+      if (eyeBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.toggleEyePanelSwitch();
+      }
+    }, true);
+
+    // Event bus hooks to keep track of whichever sub-panel opens or closes
+    const watchOpen = (panelKey, eventName) => {
+      globalBus.on(eventName, () => {
+        this.lastActiveSubPanelId = panelKey;
+        try { localStorage.setItem('omni_last_active_subpanel', panelKey); } catch (_) {}
+        this.updateEyeSwitchUI();
+      });
+    };
+
+    const watchClose = (eventName) => {
+      globalBus.on(eventName, () => {
+        this.updateEyeSwitchUI();
+      });
+    };
+
+    watchOpen('pavilion', 'SILK_PAVILION_OPENED');
+    watchClose('SILK_PAVILION_CLOSED');
+
+    watchOpen('symposium', 'SILK_SYMPOSIUM_OPENED');
+    watchClose('SILK_SYMPOSIUM_CLOSED');
+
+    watchOpen('council', 'COUNCIL_CHAMBER_OPENED');
+    watchClose('COUNCIL_CHAMBER_CLOSED');
+
+    watchOpen('mirror', 'MIRROR_STUDIO_OPENED');
+    watchClose('MIRROR_STUDIO_CLOSED');
+
+    watchOpen('drivers', 'SELECTOR_STUDIO_OPENED');
+    watchClose('SELECTOR_STUDIO_CLOSED');
+
+    watchOpen('vault', 'DATA_VAULT_OPENED');
+    watchClose('DATA_VAULT_CLOSED');
+
+    this.updateEyeSwitchUI();
+  }
+
+  getActiveSubPanel() {
+    if (!this.subPanels) return null;
+    const priority = ['vault', 'symposium', 'council', 'pavilion', 'drivers', 'mirror', 'customBot', 'shortcuts'];
+    for (const key of priority) {
+      if (this.subPanels[key]?.isOpen()) {
+        return key;
+      }
+    }
+    return null;
+  }
+
+  closeAllSubPanels() {
+    if (!this.subPanels) return;
+    Object.values(this.subPanels).forEach(panel => {
+      try {
+        if (panel.isOpen()) panel.close();
+      } catch (_) {}
+    });
+  }
+
+  toggleEyePanelSwitch() {
+    const activeKey = this.getActiveSubPanel();
+
+    if (activeKey) {
+      // Currently inside a sub-panel -> Return to Main Spatial Canvas
+      this.lastActiveSubPanelId = activeKey;
+      try { localStorage.setItem('omni_last_active_subpanel', activeKey); } catch (_) {}
+
+      this.closeAllSubPanels();
+      this.popoverManager?.closeAll();
+      this.updateEyeSwitchUI();
+      this.showEyeSwitchToast('بازگشت به پنل اصلی بوم 👁️');
+    } else {
+      // Currently on Main Canvas -> Switch to Last Sub-Panel
+      const targetKey = this.lastActiveSubPanelId || 'pavilion';
+      const targetPanel = this.subPanels[targetKey] || this.subPanels.pavilion;
+
+      this.popoverManager?.closeAll();
+      if (targetPanel && typeof targetPanel.open === 'function') {
+        targetPanel.open();
+        this.lastActiveSubPanelId = targetKey;
+        try { localStorage.setItem('omni_last_active_subpanel', targetKey); } catch (_) {}
+        this.updateEyeSwitchUI();
+        this.showEyeSwitchToast(`سوییچ به ${targetPanel.nameFa || targetPanel.name} 👁️`);
+      }
+    }
+  }
+
+  updateEyeSwitchUI() {
+    const activeKey = this.getActiveSubPanel();
+    const isInSubPanel = Boolean(activeKey);
+    const lastPanel = this.subPanels?.[this.lastActiveSubPanelId] || this.subPanels?.pavilion;
+    const lastPanelTitle = lastPanel ? (lastPanel.nameFa || lastPanel.name) : 'پنل فرعی';
+
+    document.querySelectorAll('.btn-eye-panel-switch').forEach(btn => {
+      btn.classList.toggle('is-subpanel', isInSubPanel);
+      if (isInSubPanel) {
+        btn.setAttribute('title', 'بازگشت به پنل اصلی بوم (سوییچ چشم) [Alt+Q]');
+      } else {
+        btn.setAttribute('title', `سوییچ به ${lastPanelTitle} (سوییچ چشم) [Alt+Q]`);
+      }
+    });
+  }
+
+  showEyeSwitchToast(message) {
+    let toast = document.getElementById('omni-eye-switch-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'omni-eye-switch-toast';
+      toast.className = 'eye-switch-toast';
+      toast.innerHTML = `<span class="toast-gem"></span><span class="toast-text"></span>`;
+      document.body.appendChild(toast);
+    }
+
+    const textEl = toast.querySelector('.toast-text');
+    if (textEl) textEl.textContent = message;
+
+    toast.classList.add('visible');
+    clearTimeout(this.eyeToastTimer);
+    this.eyeToastTimer = setTimeout(() => {
+      toast.classList.remove('visible');
+    }, 1800);
   }
 
   setupOmnibarInteractions(dom) {
@@ -1541,6 +1770,13 @@ class OmniApp {
 
   setupGlobalHotkeys() {
     window.addEventListener('keydown', (e) => {
+      // Alt + Q (or ⌥Q): Quick Eye Switch between Main Panel & Last Active Sub-Panel
+      if (e.altKey && !e.ctrlKey && !e.metaKey && e.key.toLowerCase() === 'q') {
+        e.preventDefault();
+        e.stopPropagation();
+        this.toggleEyePanelSwitch();
+      }
+
       // Cmd/Ctrl + Alt + E: Open Universal Data Vault (صندوق پشتیبان‌گیری و انتقال همه‌چیز)
       if ((e.metaKey || e.ctrlKey) && e.altKey && e.key.toLowerCase() === 'e') {
         e.preventDefault();
