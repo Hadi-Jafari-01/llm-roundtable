@@ -1158,11 +1158,17 @@ class OmniApp {
     const quickGrid = document.getElementById('quick-models-grid');
     if (!quickGrid) return;
 
-    // Populate standard catalog items
+    // Populate standard catalog items without any duplicates
     const catalog = stateStore.getModelCatalog();
     quickGrid.innerHTML = '';
+    const seen = new Set();
+
     Object.keys(catalog).forEach(botKey => {
       const bot = catalog[botKey];
+      const identifier = (bot.url || bot.name || botKey).toLowerCase();
+      if (seen.has(identifier)) return;
+      seen.add(identifier);
+
       const item = document.createElement('button');
       item.type = 'button';
       item.className = 'quick-launcher-chip';

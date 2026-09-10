@@ -34,18 +34,23 @@
       "requestDomains": [
         "chatgpt.com",
         "openai.com",
-        "claude.ai",
-        "anthropic.com",
         "gemini.google.com",
         "google.com",
-        "perplexity.ai",
+        "aistudio.google.com",
         "deepseek.com",
         "grok.com",
         "x.com",
-        "poe.com",
-        "mistral.ai",
-        "phind.com",
-        "microsoft.com"
+        "z.ai",
+        "chatglm.cn",
+        "qwen.ai",
+        "qwenlm.ai",
+        "kimi.ai",
+        "lmarena.ai",
+        "arena.ai",
+        "lmsys.org",
+        "claude.ai",
+        "anthropic.com",
+        "mistral.ai"
       ],
       "resourceTypes": ["sub_frame", "xmlhttprequest"]
     }

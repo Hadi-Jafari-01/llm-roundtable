@@ -238,11 +238,11 @@ export class DataVaultManager {
     });
 
     this.btnResetCanvas?.addEventListener('click', () => {
-      if (confirm('آیا مایلید کارت‌های روی بوم به حالت پیش‌فرض (ChatGPT, Claude, Perplexity) بازنشانی شوند؟')) {
+      if (confirm('آیا مایلید کارت‌های روی بوم به حالت پیش‌فرض (ChatGPT, Claude, Gemini) بازنشانی شوند؟')) {
         this.stateStore.state.cards = [
           this.stateStore.createCardInstance('chatgpt', 60, 60),
           this.stateStore.createCardInstance('claude', 730, 60),
-          this.stateStore.createCardInstance('perplexity', 1400, 60)
+          this.stateStore.createCardInstance('gemini', 1400, 60)
         ];
         this.stateStore.saveState();
         this.stateStore.notify();
@@ -414,4 +414,4 @@ export class DataVaultManager {
       toast.style.transform = 'translateX(-50%) translateY(20px)';
     }, 2500);
   }
-}
+}

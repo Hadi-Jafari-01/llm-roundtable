@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "OmniAI Hub — Obsidian Silk Spatial Workspace",
   "version": "2.0.0",
-  "description": "Infinite 2D spatial AI workspace. Run ChatGPT, Claude, Gemini, Perplexity, DeepSeek, and Grok on an unbounded canvas with synchronized multi-model prompt dispatch.",
+  "description": "Infinite 2D spatial AI workspace. Run ChatGPT, Gemini, DeepSeek, Grok, Z.ai, Qwen, Kimi.ai, Google AI Studio, Arena.ai, Claude, and Mistral on an unbounded canvas with synchronized multi-model prompt dispatch.",
   "author": "OmniAI Haute Digital Architecture",
   "action": {
     "default_title": "OmniAI Hub",

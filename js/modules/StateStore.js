@@ -11,63 +11,77 @@ class StateStore {
       chatgpt: {
         name: 'ChatGPT',
         url: 'https://chatgpt.com',
-        color: '#6ee7b7', /* Soft Mint Sage */
-        defaultWidth: 640,
-        defaultHeight: 820
-      },
-      claude: {
-        name: 'Claude',
-        url: 'https://claude.ai',
-        color: '#fed7aa', /* Warm Champagne Peach */
+        color: '#10a37f',
         defaultWidth: 640,
         defaultHeight: 820
       },
       gemini: {
         name: 'Gemini',
         url: 'https://gemini.google.com',
-        color: '#93c5fd', /* Celestial Opal Blue */
-        defaultWidth: 640,
-        defaultHeight: 820
-      },
-      perplexity: {
-        name: 'Perplexity',
-        url: 'https://www.perplexity.ai',
-        color: '#99f6e4', /* Delicate Aquamarine */
+        color: '#3b82f6',
         defaultWidth: 640,
         defaultHeight: 820
       },
       deepseek: {
         name: 'DeepSeek',
         url: 'https://chat.deepseek.com',
-        color: '#c4b5fd', /* Luminous Lilac */
+        color: '#0ea5e9',
         defaultWidth: 640,
         defaultHeight: 820
       },
       grok: {
         name: 'Grok',
         url: 'https://grok.com',
-        color: '#f1f5f9', /* Frosted Pearl White */
+        color: '#ec4899',
+        defaultWidth: 640,
+        defaultHeight: 820
+      },
+      zai: {
+        name: 'Z.ai',
+        url: 'https://chat.z.ai',
+        color: '#38bdf8',
+        defaultWidth: 640,
+        defaultHeight: 820
+      },
+      qwen: {
+        name: 'Qwen',
+        url: 'https://chat.qwen.ai',
+        color: '#6366f1',
+        defaultWidth: 640,
+        defaultHeight: 820
+      },
+      kimi: {
+        name: 'Kimi.ai',
+        url: 'https://kimi.ai',
+        color: '#06b6d4',
+        defaultWidth: 640,
+        defaultHeight: 820
+      },
+      aistudio: {
+        name: 'Google AI Studio',
+        url: 'https://aistudio.google.com',
+        color: '#4285f4',
+        defaultWidth: 640,
+        defaultHeight: 820
+      },
+      arena: {
+        name: 'Arena.ai',
+        url: 'https://lmarena.ai',
+        color: '#f59e0b',
+        defaultWidth: 640,
+        defaultHeight: 820
+      },
+      claude: {
+        name: 'Claude',
+        url: 'https://claude.ai',
+        color: '#d97706',
         defaultWidth: 640,
         defaultHeight: 820
       },
       mistral: {
         name: 'Mistral Le Chat',
         url: 'https://chat.mistral.ai',
-        color: '#fdba74',
-        defaultWidth: 640,
-        defaultHeight: 820
-      },
-      poe: {
-        name: 'Poe',
-        url: 'https://poe.com',
-        color: '#f472b6',
-        defaultWidth: 640,
-        defaultHeight: 820
-      },
-      phind: {
-        name: 'Phind',
-        url: 'https://www.phind.com',
-        color: '#a7f3d0',
+        color: '#f97316',
         defaultWidth: 640,
         defaultHeight: 820
       }
@@ -89,29 +103,75 @@ class StateStore {
     this.isInitialized = false;
   }
 
+  normalizeUrl(url) {
+    if (!url) return '';
+    try {
+      const u = new URL(url);
+      return u.hostname.replace(/^www\./, '').toLowerCase();
+    } catch {
+      return String(url).toLowerCase().trim().replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
+    }
+  }
+
+  sanitizeCustomBots(customBots) {
+    if (!customBots) return {};
+    const sanitized = {};
+    const botsList = Array.isArray(customBots) ? customBots : Object.values(customBots);
+
+    const builtInDomains = new Set(
+      Object.values(this.modelCatalog).map(b => this.normalizeUrl(b.url))
+    );
+    const builtInNames = new Set(
+      Object.values(this.modelCatalog).map(b => b.name.toLowerCase().trim())
+    );
+
+    botsList.forEach(bot => {
+      if (!bot || !bot.name || !bot.url) return;
+      const domain = this.normalizeUrl(bot.url);
+      const name = bot.name.toLowerCase().trim();
+
+      // جلوگیری از ثبت یا بازماندن بات سفارشی تکراری برای مدل‌های رسمی موجود
+      if (builtInDomains.has(domain) || builtInNames.has(name) || domain.includes('mistral.ai')) {
+        return;
+      }
+
+      const id = bot.id || `custom_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+      sanitized[id] = { ...bot, id };
+    });
+
+    return sanitized;
+  }
+
   async init() {
     if (this.isInitialized) return;
 
     try {
       const stored = await this.getStorageItem('omni_spatial_state');
       if (stored && typeof stored === 'object') {
+        const cleanedCustomBots = this.sanitizeCustomBots(stored.customBots);
         this.state = {
           ...this.state,
           ...stored,
-          customBots: stored.customBots || {}
+          customBots: cleanedCustomBots
         };
-        // Merge custom bots into catalog
-        Object.assign(this.modelCatalog, this.state.customBots);
+        // ادغام انحصاری بات‌های سفارشی معتبر و غیرتکراری
+        Object.assign(this.modelCatalog, cleanedCustomBots);
       }
     } catch (e) {
       console.warn('[StateStore] Could not load state from storage, using defaults:', e);
     }
 
-    // Ensure every card has both title and name defined
+    // پاکسازی کارت‌های قدیمی در صورتی که با آیدی سفارشی قبلی میسترال ساخته شده باشند
     if (this.state.cards && Array.isArray(this.state.cards)) {
       this.state.cards.forEach(c => {
         if (!c.name && c.title) c.name = c.title;
         if (!c.title && c.name) c.title = c.name;
+        if (c.botKey === 'custom_1788954377079' || (c.url && c.url.includes('mistral.ai') && c.botKey !== 'mistral')) {
+          c.botKey = 'mistral';
+          c.title = 'Mistral Le Chat';
+          c.name = 'Mistral Le Chat';
+          c.color = '#f97316';
+        }
       });
     }
 
@@ -120,7 +180,7 @@ class StateStore {
       this.state.cards = [
         this.createCardInstance('chatgpt', 60, 60),
         this.createCardInstance('claude', 730, 60),
-        this.createCardInstance('perplexity', 1400, 60)
+        this.createCardInstance('gemini', 1400, 60)
       ];
       this.state.activeCardId = this.state.cards[0].id;
     }
@@ -128,6 +188,9 @@ class StateStore {
     if (!this.state.activeCardId && this.state.cards.length > 0) {
       this.state.activeCardId = this.state.cards[0].id;
     }
+
+    // ذخیره وضعیت پالایش‌شده در دیتابیس محلی جهت حذف همیشگی موارد تکراری
+    await this.saveState();
 
     this.isInitialized = true;
     this.notify();
@@ -177,7 +240,24 @@ class StateStore {
   }
 
   getModelCatalog() {
-    return { ...this.modelCatalog };
+    const catalog = {};
+    const seenUrls = new Set();
+    const seenNames = new Set();
+
+    Object.entries(this.modelCatalog).forEach(([key, bot]) => {
+      if (!bot || !bot.name || !bot.url) return;
+      const normUrl = this.normalizeUrl(bot.url);
+      const normName = bot.name.toLowerCase().trim();
+
+      if (seenUrls.has(normUrl) || seenNames.has(normName)) {
+        return;
+      }
+      seenUrls.add(normUrl);
+      seenNames.add(normName);
+      catalog[key] = bot;
+    });
+
+    return catalog;
   }
 
   exportSpatialStateJson() {
@@ -209,9 +289,10 @@ class StateStore {
         throw new Error('ساختار فایل پشتیبان بوم نامعتبر است.');
       }
 
-      if (incoming.customBots && typeof incoming.customBots === 'object') {
-        this.state.customBots = { ...this.state.customBots, ...incoming.customBots };
-        Object.assign(this.modelCatalog, incoming.customBots);
+      if (incoming.customBots) {
+        const sanitized = this.sanitizeCustomBots(incoming.customBots);
+        this.state.customBots = { ...sanitized };
+        Object.assign(this.modelCatalog, sanitized);
       }
 
       if (Array.isArray(incoming.cards)) {
@@ -254,9 +335,23 @@ class StateStore {
 
   registerCustomBot(bot) {
     if (!bot || !bot.id) return;
+    const normUrl = this.normalizeUrl(bot.url);
+    const normName = bot.name.toLowerCase().trim();
+
+    // در صورتی که بات ورودی مربوط به یکی از مدل‌های اصلی سیستم باشد، مدل جدید تکراری ساخته نمی‌شود
+    const existingKey = Object.keys(this.modelCatalog).find(k => {
+      const b = this.modelCatalog[k];
+      return this.normalizeUrl(b.url) === normUrl || b.name.toLowerCase().trim() === normName;
+    });
+
+    if (existingKey) {
+      return existingKey;
+    }
+
     this.modelCatalog[bot.id] = bot;
     this.state.customBots[bot.id] = bot;
     this.saveState();
+    return bot.id;
   }
 
   addCard(botKey, customMeta = null) {

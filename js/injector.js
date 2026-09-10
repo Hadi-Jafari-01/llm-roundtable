@@ -496,6 +496,35 @@
                   document.querySelector('rich-textarea div[contenteditable="true"]');
       } else if (HOST.includes('deepseek.com')) {
         inputEl = document.querySelector('textarea#chat-input');
+      } else if (HOST.includes('grok.com')) {
+        inputEl = document.querySelector('textarea[placeholder*="Ask" i]') ||
+                  document.querySelector('div[contenteditable="true"]') ||
+                  document.querySelector('textarea');
+      } else if (HOST.includes('z.ai') || HOST.includes('chatglm.cn')) {
+        inputEl = document.querySelector('#chat-input') ||
+                  document.querySelector('textarea[placeholder*="Ask" i]') ||
+                  document.querySelector('textarea');
+      } else if (HOST.includes('qwen.ai') || HOST.includes('qwenlm.ai')) {
+        inputEl = document.querySelector('textarea[placeholder*="Qwen" i]') ||
+                  document.querySelector('textarea.chat-input') ||
+                  document.querySelector('textarea');
+      } else if (HOST.includes('kimi.ai') || HOST.includes('kimi.moonshot.cn')) {
+        inputEl = document.querySelector('div.chat-input-editor[contenteditable="true"]') ||
+                  document.querySelector('div[data-testid="msh-chatinput-editor"]') ||
+                  document.querySelector('div[contenteditable="true"]') ||
+                  document.querySelector('textarea');
+      } else if (HOST.includes('aistudio.google.com')) {
+        inputEl = document.querySelector('textarea[aria-label="Type something"]') ||
+                  document.querySelector('ms-autosize-textarea textarea') ||
+                  document.querySelector('textarea[placeholder*="Type something" i]') ||
+                  document.querySelector('textarea');
+      } else if (HOST.includes('lmarena.ai') || HOST.includes('arena.ai') || HOST.includes('lmsys.org')) {
+        inputEl = document.querySelector('textarea[name="message"]') ||
+                  document.querySelector('textarea[placeholder*="Send a message" i]') ||
+                  document.querySelector('textarea');
+      } else if (HOST.includes('mistral.ai')) {
+        inputEl = document.querySelector('textarea[placeholder*="Ask" i]') ||
+                  document.querySelector('textarea');
       }
     }
 
@@ -510,9 +539,31 @@
     }
 
     if (!submitBtn) {
+      if (HOST.includes('aistudio.google.com')) {
+        submitBtn = document.querySelector('button.run-button[aria-label="Run"]') ||
+                    document.querySelector('button.run-button') ||
+                    document.querySelector('button[aria-label*="Run" i]');
+      } else if (HOST.includes('z.ai') || HOST.includes('chatglm.cn')) {
+        submitBtn = document.querySelector('#send-message-button') ||
+                    document.querySelector('.message-input-right-button-send button.send-button');
+      } else if (HOST.includes('qwen.ai') || HOST.includes('qwenlm.ai')) {
+        submitBtn = document.querySelector('button.send-button') ||
+                    document.querySelector('.message-input-right-button-send button');
+      } else if (HOST.includes('kimi.ai') || HOST.includes('kimi.moonshot.cn')) {
+        submitBtn = document.querySelector('#send-button') ||
+                    document.querySelector('button[data-testid="send-button"]') ||
+                    document.querySelector('button.send-button');
+      } else if (HOST.includes('lmarena.ai') || HOST.includes('arena.ai') || HOST.includes('lmsys.org')) {
+        submitBtn = document.querySelector('button[data-testid="send-button"]') ||
+                    document.querySelector('button.send-button');
+      }
+    }
+
+    if (!submitBtn) {
       submitBtn = document.querySelector('button[data-testid*="send" i]') ||
                   document.querySelector('button[aria-label*="send" i]') ||
                   document.querySelector('button[aria-label*="submit" i]') ||
+                  document.querySelector('button[aria-label*="run" i]') ||
                   document.querySelector('button[aria-label*="ارسال" i]') ||
                   document.querySelector('div[role="button"][aria-label*="send" i]') ||
                   document.querySelector('div[role="button"][aria-label*="ارسال" i]') ||

@@ -59,16 +59,7 @@
         "cardSizePreset": "balanced",
         "syncScope": "visible",
         "zenMode": false,
-        "customBots": [
-          {
-            "id": "custom_1788954377079",
-            "name": "Mistral Le Chat",
-            "url": "https://chat.mistral.ai",
-            "color": "#c084fc",
-            "defaultWidth": 600,
-            "defaultHeight": 820
-          }
-        ]
+        "customBots": []
       }
     },
     "domDrivers": {

@@ -32,15 +32,16 @@
 
   /* ── AI Intelligence Pearl Signatures ── */
   --ai-chatgpt: #10a37f;
-  --ai-claude: #f59e0b;
-  --ai-gemini: #60a5fa;
-  --ai-perplexity: #2dd4bf;
-  --ai-deepseek: #38bdf8;
-  --ai-grok: #f3f4f6;
-  --ai-mistral: #fb923c;
-  --ai-poe: #a78bfa;
-  --ai-phind: #34d399;
-  --ai-copilot: #38bdf8;
+  --ai-gemini: #3b82f6;
+  --ai-deepseek: #0ea5e9;
+  --ai-grok: #ec4899;
+  --ai-zai: #38bdf8;
+  --ai-qwen: #6366f1;
+  --ai-kimi: #06b6d4;
+  --ai-aistudio: #4285f4;
+  --ai-arena: #f59e0b;
+  --ai-claude: #d97706;
+  --ai-mistral: #f97316;
 
   /* ── Typography ── */
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Vazirmatn", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
