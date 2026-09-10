@@ -67,9 +67,7 @@ export class SilkSymposiumOrchestrator {
 
     // Header Session Management Controls
     this.btnNewSession = document.getElementById('btn-symposium-new-session');
-    this.btnHistoryToggle = document.getElementById('btn-symposium-history-toggle');
     this.headerSessionName = document.getElementById('header-active-session-name');
-    this.historyCountBadge = document.getElementById('symposium-history-count');
 
     // Centered ChatGPT Floating Pill Composer Elements
     this.composerContainer = document.querySelector('.symposium-composer-container');
@@ -229,7 +227,7 @@ export class SilkSymposiumOrchestrator {
       onSynthesize: () => this.handleSynthesize(),
       onDeleteTurn: (turnId) => this.handleDeleteTurn(turnId),
       onContinueSession: (sessionId) => this.switchSession(sessionId),
-      onOpenHistory: () => this.openHistoryDrawer(),
+      onOpenHistory: () => this.openSanctum('history'),
       onNewSession: () => this.startNewSession()
     });
 
@@ -290,10 +288,6 @@ export class SilkSymposiumOrchestrator {
     this.btnNewSession?.addEventListener('click', () => this.startNewSession());
     this.btnHistoryNewSession?.addEventListener('click', () => this.startNewSession());
     this.btnSanctumNewSession?.addEventListener('click', () => this.startNewSession());
-    this.btnHistoryToggle?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.toggleHistoryDrawer();
-    });
     this.btnCloseHistory?.addEventListener('click', (e) => {
       e.stopPropagation();
       this.closeHistoryDrawer();
@@ -830,9 +824,7 @@ export class SilkSymposiumOrchestrator {
       this.btnAutoplayToggle.textContent = isActive ? '⏸️ توقف' : '▶️ خودکار';
       this.btnAutoplayToggle.classList.toggle('active', isActive);
     }
-    if (this.historyCountBadge) {
-      this.historyCountBadge.textContent = String(this.symposiumState.sessions?.length || 0);
-    }
+
     if (this.headerSessionName) {
       const curSession = this.symposiumState.getCurrentSession();
       this.headerSessionName.textContent = curSession ? curSession.title : 'تالار هم‌اندیشی و دیالکتیک هوش‌ها';
@@ -1190,7 +1182,6 @@ export class SilkSymposiumOrchestrator {
     this.closeSeatInspector();
     this.historyDrawer?.classList.add('open');
     this.historyBackdrop?.classList.add('open');
-    this.btnHistoryToggle?.classList.add('active');
     this.renderSessionsList(this.historySearchInput?.value || '');
     requestAnimationFrame(() => this.historySearchInput?.focus());
   }
@@ -1198,7 +1189,6 @@ export class SilkSymposiumOrchestrator {
   closeHistoryDrawer() {
     this.historyDrawer?.classList.remove('open');
     this.historyBackdrop?.classList.remove('open');
-    this.btnHistoryToggle?.classList.remove('active');
   }
 
   toggleHistoryDrawer() {
