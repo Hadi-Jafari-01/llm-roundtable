@@ -5,7 +5,7 @@
  * and multi-session roundtable history.
  */
 
-/* ── ۱. مخزن تمپلیت‌های متدولوژی مناظره (Methodology Templates) ── */
+/* ── ۱. مخزن تمپلیت‌های متدولوژی مناظره و فرمول‌های دیالکتیک یکپارچه (Unified Methodologies & Dialectic Engines) ── */
 export const FACTORY_METHODOLOGIES = {
   hegelian_triad: {
     id: 'hegelian_triad',
@@ -13,35 +13,64 @@ export const FACTORY_METHODOLOGIES = {
     description: 'گردش دورها به گونه‌ای است که مدل اول تز (Thesis) را طرح می‌کند، مدل دوم موظف به خلق قوی‌ترین آنتی‌تز (Antithesis) است، و مدل سوم یا رئیس موظف به استخراج سنتز (Synthesis) و رفع تناقض است.',
     badge: '⚖️ هگل',
     color: '#8b5cf6',
-    stepSequence: ['thesis', 'antithesis', 'synthesis'],
+    stepSequence: ['تز بنیادین (Thesis)', 'آنتی‌تز رادیکال (Antithesis)', 'سنتز دیالکتیکی (Synthesis)'],
     stepInstructions: {
       thesis: 'شما در مقام واضع «تز بنیادین (Thesis)» موظفید روشن‌ترین، مستدل‌ترین و جسورانه‌ترین گزاره را پیرامون مسئله طرح نمایید.',
       antithesis: 'شما در مقام طراح «آنتی‌تز رادیکال (Antithesis)» موظفید تناقضات درونی، نقاط شکست و فرضیات غیرقابل اثبات تز سخنران قبلی را آشکار ساخته و موضع مقابل را مستقر کنید.',
-      synthesis: 'شما در مقام «معمار سنتز دیالکتیکی (Synthesis)» موظفید فراتر از تقابل دو موضع قبلی رفته، هسته حقیقی هر دو را حفظ و در یک نظریه/راهکار متعالی‌تر یکپارچه سازید.'
+      synthesis: 'شما در مقام «معمار سنتز دیالکتیکی (Synthesis)» موظفید فراتر از تقابل دو موضع قبلی رفته، هسته حقیقی هر دو را حفظ و در یک نظریه/راهکار متعالی‌تر یکپارچه سازید.',
+      'تز بنیادین (Thesis)': 'شما در مقام واضع «تز بنیادین (Thesis)» موظفید روشن‌ترین، مستدل‌ترین و جسورانه‌ترین گزاره را پیرامون مسئله طرح نمایید.',
+      'آنتی‌تز رادیکال (Antithesis)': 'شما در مقام طراح «آنتی‌تز رادیکال (Antithesis)» موظفید تناقضات درونی، نقاط شکست و فرضیات غیرقابل اثبات تز سخنران قبلی را آشکار ساخته و موضع مقابل را مستقر کنید.',
+      'سنتز دیالکتیکی (Synthesis)': 'شما در مقام «معمار سنتز دیالکتیکی (Synthesis)» موظفید فراتر از تقابل دو موضع قبلی رفته، هسته حقیقی هر دو را حفظ و در یک نظریه/راهکار متعالی‌تر یکپارچه سازید.'
     },
     template: `{{speaker_role}}
 
-شما در متدولوژی دیالکتیک هگلی (دور {{round_number}}) در جایگاه ویژه زیر قرار دارید:
+شما در دور {{round_number}} از میزگرد نخبگانی «The Silk Symposium» به عنوان یکی از اندیشمندان شورا حضور دارید.
+[متدولوژی جاری: {{methodology_title}} | فاز فعلی: {{methodology_step}}]
+
 [مأموریت این نوبت شما]:
 {{methodology_mandate}}
 
-مسئله محوری شورا:
+══════════════════════════════════════════════════════════════════
+[مأموریت و مسئله بنیادین شورا]:
 """
 {{user_core_prompt}}
 """
 
-موضع پیشین مطرح‌شده توسط {{last_speaker_name}}:
+[وضعیت توافقات و شکاف‌های ثبت‌شده در دفتر اجماع]:
+• توافقات قطعی:
+{{consensus_agreements}}
+
+• نقاط چالش و واگرایی‌های جاری:
+{{consensus_gaps}}
+
+[آخرین موضع مطرح‌شده توسط {{last_speaker_name}}]:
 """
 {{last_speaker_argument}}
 """
 
-سوابق دیالکتیکی ادوار قبل:
+[سوابق فشرده ادوار پیشین]:
 {{round_context_brief}}
+══════════════════════════════════════════════════════════════════
 
-دستورالعمل اجرایی:
-۱. از تعارفات کلامی بپرهیزید و بی‌درنگ وارد استدلال شوید.
-۲. با تمام قوا مأموریت هگلی انتسابی به خود را محقق کنید.
-۳. در پایان یک گزاره برای ثبت در دفتر اجماع ارائه دهید.`
+### پروتکل و احکام قطعی مشارکت در این دور:
+۱. **ممنوعیت مطلق تعارف و تملق:** مستقیماً و بدون مقدمه‌چینی وارد تحلیل شوید.
+۲. **نفی تکرار و خلاصه‌گویی:** فقط گزاره‌هایی را بیان کنید که تا این لحظه مطرح نشده‌اند.
+۳. **تحقق مأموریت دیالکتیک:** با تکیه بر پرسونای خود، مأموریت این فاز را به کامل‌ترین شکل به خط بیاورید.
+۴. **سنتز نهایی و تطابق سیگنال:** در انتهای پیام خود، حتماً ۳ سیگنال زیر را برای ثبت در موتور شورا استخراج کنید.
+
+---
+
+### ساختار اجباری پاسخ شما:
+**۱. موشکافی و نقد موضع {{last_speaker_name}}**
+(نقد منطقی، نقاط ضعف فرضیات، یا شرایطی که استدلال او در آن شکست می‌خورد).
+
+**۲. گزاره و تز نوین شما**
+(طرح زاویه دید بکر، حل گره مسئله و ارائه راهکار عمیق و ملموس بر اساس مأموریت فاز جاری).
+
+**۳. ثبت در دفتر اجماع شورا (الزامی):**
+- **هم‌نظر هستیم که:** [یک گزاره کوتاه و قطعی که مورد پذیرش عقلانی طرفین قرار گرفته است]
+- **نقطه اختلاف:** [یک گره اصلی، پارادوکس یا مسئله اساسی که هنوز بین شما و دیگران حل‌نشده باقی مانده]
+- **پرسش بی‌پاسخ:** [یک سؤال پیش‌برنده و عمیق برای به چالش کشیدن سخنران بعدی]`
   },
 
   popperian_falsification: {
@@ -50,34 +79,58 @@ export const FACTORY_METHODOLOGIES = {
     description: 'هیچ نظری معتبر دانسته نمی‌شود مگر آنکه بی‌رحمانه‌ترین سناریوهای شکست، موارد نقض (Edge Cases) و آزمون‌های تجربی سخت بر آن تحمیل شده و تاب آورده باشد.',
     badge: '🔨 پوپر',
     color: '#ef4444',
-    stepSequence: ['conjecture', 'falsification_attack', 'corroboration'],
+    stepSequence: ['حدس جسورانه (Bold Conjecture)', 'حمله ابطال‌گرایانه (Falsification Attack)', 'اثبات تاب‌آوری (Corroboration)'],
     stepInstructions: {
       conjecture: 'یک حدس علمی و فرضیه شجاعانه (Bold Conjecture) با قابلیت آزمون‌پذیری تجربی و پیش‌بینی‌پذیر ارائه دهید.',
       falsification_attack: 'به عنوان مدعی‌العموم ابطال‌پذیری، سناریوی دقیق شکست، یک مورد نقض تجربی (Counter-example) یا باگ پنهان فرضیه قبلی را اثبات کنید.',
-      corroboration: 'در برابر آزمون ابطال مقاومت کنید؛ نشان دهید فرضیه در چه شرایط تحدیدشده‌ای همچنان صادق است یا آن را اصلاح بنیادین کنید.'
+      corroboration: 'در برابر آزمون ابطال مقاومت کنید؛ نشان دهید فرضیه در چه شرایط تحدیدشده‌ای همچنان صادق است یا آن را اصلاح بنیادین کنید.',
+      'حدس جسورانه (Bold Conjecture)': 'یک حدس علمی و فرضیه شجاعانه (Bold Conjecture) با قابلیت آزمون‌پذیری تجربی و پیش‌بینی‌پذیر ارائه دهید.',
+      'حمله ابطال‌گرایانه (Falsification Attack)': 'به عنوان مدعی‌العموم ابطال‌پذیری، سناریوی دقیق شکست، یک مورد نقض تجربی (Counter-example) یا باگ پنهان فرضیه قبلی را اثبات کنید.',
+      'اثبات تاب‌آوری (Corroboration)': 'در برابر آزمون ابطال مقاومت کنید؛ نشان دهید فرضیه در چه شرایط تحدیدشده‌ای همچنان صادق است یا آن را اصلاح بنیادین کنید.'
     },
     template: `{{speaker_role}}
 
 شما در دادگاه سنجش ابطال‌پذیری کارل پوپر (دور {{round_number}}) حضور دارید.
+[متدولوژی جاری: {{methodology_title}} | فاز فعلی: {{methodology_step}}]
+
 [مأموریت فلسفی این نوبت]:
 {{methodology_mandate}}
 
-مسئله یا گزاره تحت داوری:
+══════════════════════════════════════════════════════════════════
+[مسئله یا گزاره تحت داوری]:
 """
 {{user_core_prompt}}
 """
 
-آخرین موضع مطرح‌شده توسط {{last_speaker_name}}:
+[وضعیت توافقات و شکاف‌های ثبت‌شده در دفتر اجماع]:
+• توافقات قطعی:
+{{consensus_agreements}}
+
+• نقاط چالش و واگرایی‌های جاری:
+{{consensus_gaps}}
+
+[آخرین موضع مطرح‌شده توسط {{last_speaker_name}}]:
 """
 {{last_speaker_argument}}
 """
 
-سوابق آزمون‌های پیشین:
+[سوابق آزمون‌های پیشین]:
 {{round_context_brief}}
+══════════════════════════════════════════════════════════════════
 
-احکام الزامی:
+### احکام الزامی دادگاه پوپر:
 - گزاره‌های توتولوژیک (همگوان)، غیرقابل ابطال یا مبهم مردود هستند.
-- صریحاً مشخص کنید چه مشاهده یا داده‌ای می‌تواند نظریه شما یا همکارتان را کاملاً ابطال نماید.`
+- صریحاً مشخص کنید چه مشاهده، تست یا سناریویی می‌تواند نظریه شما یا همکارتان را کاملاً ابطال نماید.
+
+---
+
+### ساختار اجباری پاسخ شما:
+**۱. ارزیابی ابطال‌پذیری موضع {{last_speaker_name}}**
+**۲. اقامه حدس علمی یا دفاع تجربی شما**
+**۳. ثبت در دفتر اجماع شورا (الزامی):**
+- **هم‌نظر هستیم که:** [اصل تجربی یا منطقی مورد پذیرش طرفین]
+- **نقطه اختلاف:** [آسیب‌پذیری یا مورد نقض آزمون‌نشده]
+- **پرسش بی‌پاسخ:** [تست آزمایشی برای ابطال یا تایید موضع بعدی]`
   },
 
   delphi_convergence: {
@@ -86,32 +139,57 @@ export const FACTORY_METHODOLOGIES = {
     description: 'نوبت‌گردان نظرات چندگانه را جمع‌آوری، نقاط پراکندگی را استخراج و در هر دور از اعضا می‌خواهد با دلایل ریاضی و منطقی مواضع خود را به سمت راهکار نهایی تعدیل کنند.',
     badge: '🎯 دلفی',
     color: '#10a37f',
-    stepSequence: ['variance_mapping', 'rational_adjustment', 'consensus_crystallization'],
+    stepSequence: ['نقشه‌برداری پراکندگی (Variance Mapping)', 'تعدیل عقلانی مواضع (Rational Adjustment)', 'تبلور اجماع نهایی (Consensus Crystallization)'],
     stepInstructions: {
       variance_mapping: 'نقشه‌برداری از ابعاد پراکندگی و سناریوهای متباعد با برآورد احتمالات و ضریب اطمینان.',
       rational_adjustment: 'بررسی ادله همکاران و تعدیل معقول مواضع خود بر پایه داده‌های متقن‌تر و رفع تعصبات فکری.',
-      consensus_crystallization: 'تبلور اجماع استراتژیک، یکپارچه‌سازی متغیرها در فرمول نهایی و حذف ابهامات باقیمانده.'
+      consensus_crystallization: 'تبلور اجماع استراتژیک، یکپارچه‌سازی متغیرها در فرمول نهایی و حذف ابهامات باقیمانده.',
+      'نقشه‌برداری پراکندگی (Variance Mapping)': 'نقشه‌برداری از ابعاد پراکندگی و سناریوهای متباعد با برآورد احتمالات و ضریب اطمینان.',
+      'تعدیل عقلانی مواضع (Rational Adjustment)': 'بررسی ادله همکاران و تعدیل معقول مواضع خود بر پایه داده‌های متقن‌تر و رفع تعصبات فکری.',
+      'تبلور اجماع نهایی (Consensus Crystallization)': 'تبلور اجماع استراتژیک، یکپارچه‌سازی متغیرها در فرمول نهایی و حذف ابهامات باقیمانده.'
     },
     template: `{{speaker_role}}
 
 شما در فرآیند همگرایی استراتژیک دلفی (دور {{round_number}}) شرکت دارید.
+[متدولوژی جاری: {{methodology_title}} | فاز فعلی: {{methodology_step}}]
+
 [مأموریت این گام]:
 {{methodology_mandate}}
 
-مسئله بنیادین مورد مذاکره:
+══════════════════════════════════════════════════════════════════
+[مسئله بنیادین مورد مذاکره]:
 """
 {{user_core_prompt}}
 """
 
-وضعیت نقاط توافق و شکاف‌ها:
-توافقات: {{consensus_agreements}}
-شکاف‌ها: {{consensus_gaps}}
+[وضعیت توافقات و شکاف‌های ثبت‌شده در دفتر اجماع]:
+• توافقات قطعی:
+{{consensus_agreements}}
 
-آخرین موضع:
-{{last_speaker_name}}: """{{last_speaker_argument}}"""
+• نقاط چالش و واگرایی‌های جاری:
+{{consensus_gaps}}
 
-دستورالعمل:
-فاصله میان دیدگاه خود و دیگران را بسنجید و با رویکردی عقلانی و داده‌محور، یک گام مشخص به سمت همگرایی و اجماع بردارید.`
+[آخرین موضع مطرح‌شده توسط {{last_speaker_name}}]:
+"""
+{{last_speaker_argument}}
+"""
+
+[سوابق فشرده ادوار پیشین]:
+{{round_context_brief}}
+══════════════════════════════════════════════════════════════════
+
+### دستورالعمل همگرایی:
+فاصله میان دیدگاه خود و دیگران را بسنجید و با رویکردی عقلانی، داده‌محور و بی‌طرف، یک گام مشخص به سمت همگرایی و فرمول نهایی بردارید.
+
+---
+
+### ساختار اجباری پاسخ شما:
+**۱. تحلیل شکاف میان مواضع**
+**۲. گزاره تعدیل‌شده و راهکار همگرا**
+**۳. ثبت در دفتر اجماع شورا (الزامی):**
+- **هم‌نظر هستیم که:** [اشتراک استراتژیک حاصل‌شده]
+- **نقطه اختلاف:** [فاصله باقیمانده تا اجماع کامل]
+- **پرسش بی‌پاسخ:** [سؤال برای کاهش واریانس در نوبت بعد]`
   },
 
   red_blue_adversarial: {
@@ -120,30 +198,57 @@ export const FACTORY_METHODOLOGIES = {
     description: 'یک جبهه به عنوان طراح استراتژی/کد/معماری و جبهه دیگر به عنوان مهاجم خستگی‌ناپذیر برای کشف حفره‌های امنیتی، استدلالی یا اجرایی.',
     badge: '⚔️ اتاق جنگ',
     color: '#f59e0b',
-    stepSequence: ['blue_defense', 'red_attack', 'purple_hardening'],
+    stepSequence: ['طرح دفاعی تیم آبی (Blue Defense)', 'حمله نفوذ تیم سرخ (Red Attack)', 'استحکام‌بخشی تیم بنفش (Purple Hardening)'],
     stepInstructions: {
       blue_defense: 'تیم آبی (Blue Team): ارائه معماری مستحکم، نقشه عملیاتی جامع و اقدامات حفاظتی/مهندسی.',
       red_attack: 'تیم سرخ (Red Team): نقش مهاجم متخاصم؛ کشف بردار نفوذ، سناریوی بحران، آسیب‌پذیری بحرانی یا فلج سیستم.',
-      purple_hardening: 'تیم بنفش (Purple Team): رفع رخنه کشف‌شده، ایمن‌سازی راهکار و ارتقای استاندارد معماری دفاعی.'
+      purple_hardening: 'تیم بنفش (Purple Team): رفع رخنه کشف‌شده، ایمن‌سازی راهکار و ارتقای استاندارد معماری دفاعی.',
+      'طرح دفاعی تیم آبی (Blue Defense)': 'تیم آبی (Blue Team): ارائه معماری مستحکم، نقشه عملیاتی جامع و اقدامات حفاظتی/مهندسی.',
+      'حمله نفوذ تیم سرخ (Red Attack)': 'تیم سرخ (Red Team): نقش مهاجم متخاصم؛ کشف بردار نفوذ، سناریوی بحران، آسیب‌پذیری بحرانی یا فلج سیستم.',
+      'استحکام‌بخشی تیم بنفش (Purple Hardening)': 'تیم بنفش (Purple Team): رفع رخنه کشف‌شده، ایمن‌سازی راهکار و ارتقای استاندارد معماری دفاعی.'
     },
     template: `{{speaker_role}}
 
 شما در محیط شبیه‌سازی اتاق جنگ استراتژیک (دور {{round_number}}) مستقرید.
+[متدولوژی جاری: {{methodology_title}} | فاز فعلی: {{methodology_step}}]
+
 [نقش و مأموریت تاکتیکی این نوبت]:
 {{methodology_mandate}}
 
-صورت مسئله و هدف عملیات:
+══════════════════════════════════════════════════════════════════
+[صورت مسئله و هدف عملیات]:
 """
 {{user_core_prompt}}
 """
 
-آخرین اقدام حریف ({{last_speaker_name}}):
+[وضعیت توافقات و شکاف‌های ثبت‌شده در دفتر اجماع]:
+• توافقات قطعی:
+{{consensus_agreements}}
+
+• نقاط چالش و واگرایی‌های جاری:
+{{consensus_gaps}}
+
+[آخرین اقدام حریف ({{last_speaker_name}})]:
 """
 {{last_speaker_argument}}
 """
 
-دستور عملیاتی:
-بدون تعارفات دیپلماتیک، حمله یا دفاع فنی خود را با ارقام، شواهد یا کدهای دقیق به خط بیاورید.`
+[سوابق نبردهای پیشین]:
+{{round_context_brief}}
+══════════════════════════════════════════════════════════════════
+
+### دستور عملیاتی:
+بدون تعارفات دیپلماتیک، حمله یا دفاع فنی خود را با ارقام، شواهد یا کدهای دقیق به خط بیاورید.
+
+---
+
+### ساختار اجباری پاسخ شما:
+**۱. ارزیابی بردار حمله / استحکام دفاعی موضع پیشین**
+**۲. عملیات تاکتیکی یا راهکار استحکام‌بخشی شما**
+**۳. ثبت در دفتر اجماع شورا (الزامی):**
+- **هم‌نظر هستیم که:** [آسیب‌پذیری یا استحکام اثبات‌شده]
+- **نقطه اختلاف:** [بردار ریسک مهارنشده فعلی]
+- **پرسش بی‌پاسخ:** [سناریوی تست نفوذ بعدی]`
   },
 
   socratic_elenchus: {
@@ -152,63 +257,119 @@ export const FACTORY_METHODOLOGIES = {
     description: 'نوبت‌گردان گزاره‌های قطعی را با پرسش‌های خردکننده پیرامون پیش‌فرض‌های تعریف‌نشده (Unstated Assumptions) به چالش می‌کشد تا جهل مرکب را آشکار و تعاریف را پالایش کند.',
     badge: '🏛️ سقراط',
     color: '#06b6d4',
-    stepSequence: ['definition_claim', 'elenchus_probe', 'aporia_maieutics'],
+    stepSequence: ['تعریف و تحدید مدعا (Definition Claim)', 'استیضاح و آزمون نقض (Elenchus Probe)', 'مامایی معنا از حیرت (Aporia & Maieutics)'],
     stepInstructions: {
       definition_claim: 'تعریف دقیق و منقح از ماهیت پدیده مورد بحث با تعیین دقیق جنس و فصل منطقی.',
       elenchus_probe: 'استیضاح سقراطی: پرسیدن سوالاتی که نشان دهد تعریف فوق در فلان حالت خاص منجر به تناقض آشکار می‌شود.',
-      aporia_maieutics: 'مامایی معنا از دل حیرت (Aporia): پی‌ریزی تعریفی عمیق‌تر که تناقض آشکارشده را مرتفع سازد.'
+      aporia_maieutics: 'مامایی معنا از دل حیرت (Aporia): پی‌ریزی تعریفی عمیق‌تر که تناقض آشکارشده را مرتفع سازد.',
+      'تعریف و تحدید مدعا (Definition Claim)': 'تعریف دقیق و منقح از ماهیت پدیده مورد بحث با تعیین دقیق جنس و فصل منطقی.',
+      'استیضاح و آزمون نقض (Elenchus Probe)': 'استیضاح سقراطی: پرسیدن سوالاتی که نشان دهد تعریف فوق در فلان حالت خاص منجر به تناقض آشکار می‌شود.',
+      'مامایی معنا از حیرت (Aporia & Maieutics)': 'مامایی معنا از دل حیرت (Aporia): پی‌ریزی تعریفی عمیق‌تر که تناقض آشکارشده را مرتفع سازد.'
     },
     template: `{{speaker_role}}
 
 شما در محفل استیضاح دیالکتیکی سقراط (دور {{round_number}}) حضور یافته‌اید.
+[متدولوژی جاری: {{methodology_title}} | فاز فعلی: {{methodology_step}}]
+
 [فرمان سقراطی برای این نوبت]:
 {{methodology_mandate}}
 
-موضوع پژوهش:
+══════════════════════════════════════════════════════════════════
+[موضوع و پرسش بنیادین]:
 """
 {{user_core_prompt}}
 """
 
-مدعای {{last_speaker_name}}:
+[وضعیت توافقات و شکاف‌های ثبت‌شده در دفتر اجماع]:
+• توافقات قطعی:
+{{consensus_agreements}}
+
+• نقاط چالش و واگرایی‌های جاری:
+{{consensus_gaps}}
+
+[مدعای {{last_speaker_name}}]:
 """
 {{last_speaker_argument}}
 """
 
-احکام:
+[سوابق استیضاح‌های پیشین]:
+{{round_context_brief}}
+══════════════════════════════════════════════════════════════════
+
+### احکام سقراطی:
 ۱. پیش‌فرض‌های ناگفته را کالبدشکافی کنید.
 ۲. با طرح یک مثال نقض یا تناقض منطقی، استحکام مدعا را به آزمایش بگذارید.
-۳. در پایان یک پرسش اساسی طرح نمایید.`
+۳. در پایان یک پرسش اساسی و پیش‌برنده طرح نمایید.
+
+---
+
+### ساختار اجباری پاسخ شما:
+**۱. کالبدشکافی و استیضاح تعاریف ناگفته**
+**۲. تز نوین و پالایش مفاهیم**
+**۳. ثبت در دفتر اجماع شورا (الزامی):**
+- **هم‌نظر هستیم که:** [تعریف مشترک پالایش‌شده]
+- **نقطه اختلاف:** [تناقض درونی یا پیش‌فرض اثبات‌نشده]
+- **پرسش بی‌پاسخ:** [پرسش بنیادین سقراطی]`
   },
 
   first_principles: {
     id: 'first_principles',
-    title: 'کالبدشکافی از اصول اولیه فیزیک و ایلان ماسک (First-Principles Axiomatic Audit)',
+    title: 'کالبدشکافی از اصول اولیه (First-Principles Axiomatic Audit)',
     description: 'ممنوعیت مطلق استناد به عرف یا تجربه دیگران؛ شکستن مسئله به بنیادی‌ترین حقایق غیرقابل انکار و بازسازی راهکار از نقطه صفر.',
     badge: '⚛️ اصول اول',
     color: '#3b82f6',
-    stepSequence: ['axiomatic_deconstruction', 'ground_zero_reconstruction', 'limit_optimization'],
+    stepSequence: ['تجزیه آکسیوماتیک (Axiomatic Deconstruction)', 'بازسازی از نقطه صفر (Ground-Zero Reconstruction)', 'بهینه‌سازی حد نهایی (Limit Optimization)'],
     stepInstructions: {
       axiomatic_deconstruction: 'تجزیه کامل مسئله به قوانین پایه‌ای فیزیک، ریاضیات یا حقایق بدیهی و کنار گذاشتن روال‌های متداول.',
       ground_zero_reconstruction: 'بازسازی راهکار از نقطه صفر صرفاً بر پایه حقایق اولیه اثبات‌شده، فارغ از عرف بازار یا پیشینیان.',
-      limit_optimization: 'بهینه‌سازی برداری تا رسیدن به حد نهایی فیزیکی/ترمودینامیکی مسئله.'
+      limit_optimization: 'بهینه‌سازی برداری تا رسیدن به حد نهایی فیزیکی/ترمودینامیکی مسئله.',
+      'تجزیه آکسیوماتیک (Axiomatic Deconstruction)': 'تجزیه کامل مسئله به قوانین پایه‌ای فیزیک، ریاضیات یا حقایق بدیهی و کنار گذاشتن روال‌های متداول.',
+      'بازسازی از نقطه صفر (Ground-Zero Reconstruction)': 'بازسازی راهکار از نقطه صفر صرفاً بر پایه حقایق اولیه اثبات‌شده، فارغ از عرف بازار یا پیشینیان.',
+      'بهینه‌سازی حد نهایی (Limit Optimization)': 'بهینه‌سازی برداری تا رسیدن به حد نهایی فیزیکی/ترمودینامیکی مسئله.'
     },
     template: `{{speaker_role}}
 
 شما در اتاق ممیزی از اصول اولیه (First Principles - دور {{round_number}}) نشسته‌اید.
+[متدولوژی جاری: {{methodology_title}} | فاز فعلی: {{methodology_step}}]
+
 [مأموریت این گام]:
 {{methodology_mandate}}
 
-مسئله محوری:
+══════════════════════════════════════════════════════════════════
+[مسئله محوری شورا]:
 """
 {{user_core_prompt}}
 """
 
-موضع مطرح‌شده:
-{{last_speaker_name}}: """{{last_speaker_argument}}"""
+[وضعیت توافقات و شکاف‌های ثبت‌شده در دفتر اجماع]:
+• توافقات قطعی:
+{{consensus_agreements}}
 
-قوانین قطعی:
+• نقاط چالش و واگرایی‌های جاری:
+{{consensus_gaps}}
+
+[موضع مطرح‌شده توسط {{last_speaker_name}}]:
+"""
+{{last_speaker_argument}}
+"""
+
+[سوابق ممیزی‌های پیشین]:
+{{round_context_brief}}
+══════════════════════════════════════════════════════════════════
+
+### قوانین قطعی اصول اولیه:
 - استدلال از روی قیاس (Reasoning by Analogy) یا تکیه بر «معمولاً اینطور انجام می‌شود» اکیداً باطل است.
-- فقط بر حقایق بنیادین تکیه کنید و محاسبات اولیه خود را شفاف نشان دهید.`
+- فقط بر حقایق بنیادین تکیه کنید و محاسبات اولیه خود را شفاف نشان دهید.
+
+---
+
+### ساختار اجباری پاسخ شما:
+**۱. شکستن فرضیات موضع قبلی به حقایق بنیادین**
+**۲. بازسازی راهکار از نقطه صفر محاسباتی**
+**۳. ثبت در دفتر اجماع شورا (الزامی):**
+- **هم‌نظر هستیم که:** [حقیقت اولیه غیرقابل انکار اثبات‌شده]
+- **نقطه اختلاف:** [محدودیت فیزیکی یا فرضیه اثبات‌نشده]
+- **پرسش بی‌پاسخ:** [سؤال برای ممیزی حد نهایی]`
   }
 };
 
@@ -337,114 +498,9 @@ export const FACTORY_GOVERNANCE_ROLES = {
   }
 };
 
-/* ── ۳. مخزن تمپلیت‌های فرمول‌های پرومپت تزریقی (Injection Formulas) ── */
-export const FACTORY_INJECTION_FORMULAS = {
-  socratic_scrutiny: {
-    id: 'socratic_scrutiny',
-    title: 'فرمول استیضاح سقراطی (Socratic Scrutiny Formula)',
-    description: 'تمرکز بر استخراج فرضیات ناگفته، کشف ضعف استدلال سخنران قبلی و ارائه زاویه دید عمیق.',
-    template: `{{speaker_role}}
-
-شما در دور {{round_number}} از میزگرد نخبگانی «The Silk Symposium» حضور دارید.
-
-مسئله بنیادین شورا:
-"""
-{{user_core_prompt}}
-"""
-
-آخرین موضع مطرح‌شده توسط {{last_speaker_name}}:
-"""
-{{last_speaker_argument}}
-"""
-
-سوابق فشرده ادوار پیشین:
-{{round_context_brief}}
-
-ساختار الزامی پاسخ شما:
-۱. موشکافی فرضیات ناگفته (Unstated Assumptions) در استدلال {{last_speaker_name}}.
-۲. ارائه تز نوین و راهکار عمیق شما از منظر پرسونای تخصصی‌تان.
-۳. ثبت در دفتر اجماع:
-- هم‌نظر هستیم که: [یک گزاره کوتاه توافق‌شده]
-- نقطه اختلاف: [گره لاینحل فعلی]
-- پرسش پیش‌برنده: [یک سوال برای سخنران بعد]`
-  },
-
-  premortem_disaster: {
-    id: 'premortem_disaster',
-    title: 'فرمول مهندسی معکوس و سناریوی فاجعه (Premortem / Disaster Analysis)',
-    description: 'فرض کنید راه‌حل سخنران قبلی در مقیاس عملیاتی با شکست فاجعه‌بار مواجه شده؛ علت‌یابی و ارائه پادزهر.',
-    template: `{{speaker_role}}
-
-فرمان دور {{round_number}} (سناریوی پیش‌مرگ - Premortem):
-فرض کنید راهکار پیشنهادی {{last_speaker_name}} در عمل پیاده‌سازی شده و منجر به یک شکست مطلق، سقوط معماری و خسارت عظیم گردیده است.
-
-مسئله شورا:
-"""
-{{user_core_prompt}}
-"""
-
-ایده مطرح‌شده توسط {{last_speaker_name}}:
-"""
-{{last_speaker_argument}}
-"""
-
-مأموریت شما:
-۱. کالبدشکافی علت شکست فاجعه‌بار این ایده (ریسک‌های نامرئی، مقیاس‌پذیری، آسیب‌پذیری‌ها).
-۲. ارائه بازطراحی تاب‌آور و ضد شکننده (Antifragile) از زاویه دید خود.
-۳. یک اصل غیرقابل تخطی برای مصون ماندن از شکست ثبت کنید.`
-  },
-
-  actionable_code: {
-    id: 'actionable_code',
-    title: 'فرمول تزریق کد و راهکار عملیاتی (Actionable Code & Proof-of-Concept)',
-    description: 'ممنوعیت تئوری‌بافی محض؛ هر پاسخ باید حاوی کد کامل، معماری فنی یا فرمول تست‌پذیر باشد.',
-    template: `{{speaker_role}}
-
-دستور دور {{round_number}} (راهکار عملیاتی و کد واقعی):
-مذاکرات تئوریک به اندازه کافی انجام شده است؛ اکنون وقت پیاده‌سازی ملموس است.
-
-مسئله محوری:
-"""
-{{user_core_prompt}}
-"""
-
-زمینه و ایده پیشین:
-{{last_speaker_name}}: """{{last_speaker_argument}}"""
-
-الزامات پاسخ:
-۱. تحلیل فنی کوتاه از گره مهندسی مسئله.
-۲. ارائه قطعه کد کامل، تمیز، کامنت‌گذاری‌شده و تست‌پذیر (یا فرمول دقیق محاسباتی).
-۳. بیان پیچیدگی زمانی/فضایی، متغیرهای کلیدی و پیش‌نیازهای اجرایی.`
-  },
-
-  peer_review_standard: {
-    id: 'peer_review_standard',
-    title: 'فرمول داوری همتا آکادمیک (Peer-Review Standard)',
-    description: 'ساختار استاندارد ژورنال‌های علمی: خلاصه ادعا، نقاط قوت، محدودیت‌های منطقی، اصلاحیه پیشنهادی.',
-    template: `{{speaker_role}}
-
-داوری علمی همتا (دور {{round_number}}):
-موضع {{last_speaker_name}} را به عنوان یک مقاله پژوهشی مورد ممیزی دقیق قرار دهید.
-
-مسئله:
-"""
-{{user_core_prompt}}
-"""
-
-مدعای همکار:
-"""
-{{last_speaker_argument}}
-"""
-
-ساختار گزارش داوری شما:
-۱. خلاصه مدعا و نقاط قوت متدولوژیک آن.
-۲. حفره‌های استدلالی، مغالطات احتمالی یا خلأ آماری.
-۳. پیشنهاد مشخص برای ارتقای فرضیه و همگرایی علمی با سایر اعضا.`
-  }
-};
-
-/* ── فرمول پیش‌فرض خام ── */
-export const DEFAULT_DIALECTIC_TEMPLATE = FACTORY_INJECTION_FORMULAS.socratic_scrutiny.template;
+/* ── فرمول پیش‌فرض خام متدولوژی ── */
+export const DEFAULT_DIALECTIC_TEMPLATE = FACTORY_METHODOLOGIES.hegelian_triad.template;
+export const FACTORY_INJECTION_FORMULAS = {};
 
 /* ── پرسوناهای شناختی پیش‌فرض (Cognitive Archetypes) ── */
 export const COGNITIVE_PERSONAS = {
@@ -643,22 +699,63 @@ export class SymposiumState {
   saveCustomMethodology(data) {
     if (!data || !data.title) return null;
     const id = data.id || `methodology_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+
+    let stepSequence = data.stepSequence;
+    if (typeof stepSequence === 'string') {
+      stepSequence = stepSequence.split(/[,،\n]+/).map(s => s.trim()).filter(Boolean);
+    }
+    if (!Array.isArray(stepSequence) || stepSequence.length === 0) {
+      stepSequence = ['تز بنیادین', 'آنتی‌تز رادیکال', 'سنتز دیالکتیکی'];
+    }
+
+    let stepInstructions = (typeof data.stepInstructions === 'object' && data.stepInstructions) ? { ...data.stepInstructions } : {};
+    stepSequence.forEach(step => {
+      if (!stepInstructions[step]) {
+        stepInstructions[step] = `ایفای نقش در فاز [${step}] و پیشبرد دیالکتیک شورا بر اساس این مأموریت.`;
+      }
+    });
+
     const newMethodology = {
       id,
       title: data.title.trim(),
       description: data.description ? data.description.trim() : '',
       badge: data.badge ? data.badge.trim() : '⚖️ متدولوژی',
       color: data.color || '#8b5cf6',
-      stepSequence: Array.isArray(data.stepSequence) && data.stepSequence.length ? data.stepSequence : ['thesis', 'antithesis', 'synthesis'],
-      stepInstructions: data.stepInstructions || {},
-      template: data.template ? data.template.trim() : DEFAULT_DIALECTIC_TEMPLATE,
+      stepSequence,
+      stepInstructions,
+      template: data.template ? data.template.trim() : (this.config.promptTemplate || DEFAULT_DIALECTIC_TEMPLATE),
       isCustom: true,
       lastModified: Date.now()
     };
+
     if (!this.customMethodologies) this.customMethodologies = {};
     this.customMethodologies[id] = newMethodology;
+    this.activeMethodologyKey = id;
+    this.config.promptTemplate = newMethodology.template;
     this.persistConfig();
     return newMethodology;
+  }
+
+  duplicateMethodology(id) {
+    const methodologies = this.getMethodologies();
+    const source = methodologies[id];
+    if (!source) return null;
+
+    const newId = `methodology_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+    const copy = {
+      ...JSON.parse(JSON.stringify(source)),
+      id: newId,
+      title: `${source.title.split('(')[0].trim()} (کپی)`,
+      isCustom: true,
+      lastModified: Date.now()
+    };
+
+    if (!this.customMethodologies) this.customMethodologies = {};
+    this.customMethodologies[newId] = copy;
+    this.activeMethodologyKey = newId;
+    this.config.promptTemplate = copy.template;
+    this.persistConfig();
+    return copy;
   }
 
   deleteCustomMethodology(id) {
@@ -666,6 +763,10 @@ export class SymposiumState {
       delete this.customMethodologies[id];
       if (this.activeMethodologyKey === id) {
         this.activeMethodologyKey = 'hegelian_triad';
+        const fallback = this.getMethodologies().hegelian_triad;
+        if (fallback) {
+          this.config.promptTemplate = fallback.template;
+        }
       }
       this.persistConfig();
       return true;

@@ -137,12 +137,36 @@ export class SilkSymposiumOrchestrator {
     this.radioModeManual = document.getElementById('radio-mode-manual');
     this.radioModeAIChairman = document.getElementById('radio-mode-ai-chairman');
     this.aiChairmanSettingsBlock = document.getElementById('ai-chairman-settings-block');
+    this.checkStepApproval = document.getElementById('sanctum-step-approval-check');
+    this.chairmanCardPicker = document.getElementById('sanctum-chairman-card-picker');
+
+    // موتور متدولوژی و فرمول‌های دیالکتیک یکپارچه (Unified Dialectic Engine)
     this.methodologySelect = document.getElementById('sanctum-methodology-select');
     this.btnCreateMethodology = document.getElementById('btn-create-methodology');
     this.btnEditMethodology = document.getElementById('btn-edit-methodology');
+    this.btnDuplicateMethodology = document.getElementById('btn-duplicate-methodology');
     this.btnDelMethodology = document.getElementById('btn-del-methodology');
-    this.checkStepApproval = document.getElementById('sanctum-step-approval-check');
-    this.chairmanCardPicker = document.getElementById('sanctum-chairman-card-picker');
+    this.stepsFlowBar = document.getElementById('sanctum-steps-flow-bar');
+
+    // فرم کارتی ساخت/ویرایش متدولوژی در آتلیه
+    this.methodologyFormCard = document.getElementById('sanctum-methodology-form-card');
+    this.methodologyFormHeading = document.getElementById('methodology-form-heading');
+    this.methodologyFormId = document.getElementById('methodology-form-id');
+    this.methodologyFormTitle = document.getElementById('methodology-form-title');
+    this.methodologyFormBadge = document.getElementById('methodology-form-badge');
+    this.methodologyFormColor = document.getElementById('methodology-form-color');
+    this.methodologyFormDesc = document.getElementById('methodology-form-desc');
+    this.methodologyFormSteps = document.getElementById('methodology-form-steps');
+    this.methodologyFormTemplate = document.getElementById('methodology-form-template');
+    this.btnSaveMethodologyForm = document.getElementById('btn-save-methodology-form');
+    this.btnCancelMethodologyForm = document.getElementById('btn-cancel-methodology-form');
+    this.btnDismissMethodologyForm = document.getElementById('btn-dismiss-methodology-form');
+
+    // ویرایشگر اسکلت فرمول پرومپت دیالکتیک
+    this.templateTextarea = document.getElementById('sanctum-template-textarea');
+    this.btnClearFormula = document.getElementById('btn-clear-formula');
+    this.btnCopyFormula = document.getElementById('btn-copy-formula');
+    this.formulaStatsBadge = document.getElementById('formula-stats-badge');
 
     // Zone 1: Scenarios Grid & Builder Form
     this.scenariosGrid = document.getElementById('sanctum-scenarios-grid');
@@ -180,7 +204,7 @@ export class SilkSymposiumOrchestrator {
     this.daisSeatEditorContainer = document.getElementById('dais-seat-editor-container');
     this.selectedDaisSeatIndex = 0;
 
-    // Zone 4: Dialectic Engine & Templates
+    // Zone 4: Dialectic Engine & Protocols
     this.topologySelect = document.getElementById('sanctum-topology-select');
     this.flowPresetsSelect = document.getElementById('sanctum-flow-presets-select');
     this.btnSaveCurrentFlowPreset = document.getElementById('btn-save-current-flow-preset');
@@ -190,10 +214,6 @@ export class SilkSymposiumOrchestrator {
     this.promptTemplatePresetPicker = document.getElementById('sanctum-prompt-template-preset-select');
     this.btnSaveCurrentFormulaPreset = document.getElementById('btn-save-current-formula-preset');
     this.btnDelFormulaPreset = document.getElementById('btn-del-formula-preset');
-    this.templateTextarea = document.getElementById('sanctum-template-textarea');
-    this.btnClearFormula = document.getElementById('btn-clear-formula');
-    this.btnCopyFormula = document.getElementById('btn-copy-formula');
-    this.formulaStatsBadge = document.getElementById('formula-stats-badge');
 
     this.maxRoundsInput = document.getElementById('sanctum-max-rounds');
     this.distillSelect = document.getElementById('sanctum-distill-select');
@@ -652,11 +672,58 @@ export class SilkSymposiumOrchestrator {
       const key = this.methodologySelect.value;
       if (key) {
         this.symposiumState.applyMethodology(key);
-        this.loadProtocolsIntoEditor();
+        const meth = this.symposiumState.getActiveMethodology();
+        if (this.templateTextarea && meth?.template) {
+          this.templateTextarea.value = meth.template;
+          this.syncTextareaDirection(this.templateTextarea);
+          this.updateFormulaStats();
+        }
+        this.renderStepsFlowBar(meth);
+        if (this.btnDelMethodology) {
+          this.btnDelMethodology.style.display = meth?.isCustom ? 'inline-flex' : 'none';
+        }
         this.updateHeaderStats();
-        this.showToast('متدولوژی مناظره به‌روز شد ✓');
+        this.showToast(`متدولوژی «${meth.title.split('(')[0].trim()}» فعال شد ⚖️`);
       }
     });
+
+    this.btnCreateMethodology?.addEventListener('click', () => {
+      this.openMethodologyForm();
+    });
+
+    this.btnEditMethodology?.addEventListener('click', () => {
+      const cur = this.symposiumState.getActiveMethodology();
+      this.openMethodologyForm(cur);
+    });
+
+    this.btnDuplicateMethodology?.addEventListener('click', () => {
+      const curId = this.symposiumState.activeMethodologyKey;
+      const copy = this.symposiumState.duplicateMethodology(curId);
+      if (copy) {
+        this.renderMethodologySelect();
+        this.loadProtocolsIntoEditor();
+        this.showToast(`متدولوژی «${copy.title}» تکثیر شد 📋`);
+      }
+    });
+
+    this.btnDelMethodology?.addEventListener('click', () => {
+      const curId = this.symposiumState.activeMethodologyKey;
+      const cur = this.symposiumState.getActiveMethodology();
+      if (!cur?.isCustom) {
+        alert('متدولوژی‌های پیش‌فرض کارخانه قابل حذف نیستند.');
+        return;
+      }
+      if (confirm(`آیا از حذف متدولوژی «${cur.title}» اطمینان دارید؟`)) {
+        this.symposiumState.deleteCustomMethodology(curId);
+        this.renderMethodologySelect();
+        this.loadProtocolsIntoEditor();
+        this.showToast('متدولوژی حذف شد.');
+      }
+    });
+
+    this.btnCancelMethodologyForm?.addEventListener('click', () => this.closeMethodologyForm());
+    this.btnDismissMethodologyForm?.addEventListener('click', () => this.closeMethodologyForm());
+    this.btnSaveMethodologyForm?.addEventListener('click', () => this.handleSaveMethodologyForm());
 
     this.chairmanCardPicker?.addEventListener('change', () => {
       const cardId = this.chairmanCardPicker.value;
@@ -722,22 +789,7 @@ export class SilkSymposiumOrchestrator {
       }
     });
 
-    this.btnCreateMethodology?.addEventListener('click', () => {
-      const title = prompt('عنوان متدولوژی مناظره جدید:');
-      if (!title) return;
-      const desc = prompt('توضیح عملکرد متدولوژی:', '') || '';
-      const badge = prompt('نشانگر یا ایموجی:', '⚖️') || '⚖️';
 
-      const created = this.symposiumState.saveCustomMethodology({
-        title,
-        description: desc,
-        badge
-      });
-      if (created) {
-        this.renderMethodologySelect();
-        this.showToast(`متدولوژی «${created.title}» ذخیره شد ✓`);
-      }
-    });
 
     this.btnSendMaestro?.addEventListener('click', () => this.handleUserInputSubmit());
     this.btnNextTurn?.addEventListener('click', () => {
@@ -1317,9 +1369,10 @@ export class SilkSymposiumOrchestrator {
   }
 
   composeSeatPrompt(seat, immediateContext = '') {
+    const methodology = this.symposiumState.getActiveMethodology();
     const template = (seat.customPromptTemplate && seat.customPromptTemplate.trim())
       ? seat.customPromptTemplate.trim()
-      : (this.symposiumState.config.promptTemplate || DEFAULT_DIALECTIC_TEMPLATE);
+      : (this.symposiumState.config.promptTemplate || methodology?.template || DEFAULT_DIALECTIC_TEMPLATE);
 
     const turns = this.symposiumState.transcript.filter(t => !t.isStreaming);
     const lastTurn = turns[turns.length - 1];
@@ -1351,7 +1404,26 @@ export class SilkSymposiumOrchestrator {
       ? this.symposiumState.ledger.divergences.map((d, i) => `${i + 1}. ${d}`).join('\n')
       : 'None logged yet.';
 
+    // محاسبه گام و مأموریت جاری متدولوژی فعال
+    const seats = this.symposiumState.seats;
+    const seatIndex = seats.findIndex(s => s.id === seat.id);
+    const count = Math.max(1, seats.length);
+    const roundIdx = Math.max(1, this.symposiumState.roundIndex || 1);
+    const stepSeq = (methodology.stepSequence && methodology.stepSequence.length)
+      ? methodology.stepSequence
+      : ['thesis', 'antithesis', 'synthesis'];
+    const stepIndex = Math.max(0, ((roundIdx - 1) * count + Math.max(0, seatIndex))) % stepSeq.length;
+    const currentStepKey = stepSeq[stepIndex];
+
+    const methodologyTitle = methodology.title || 'دیالکتیک نخبگان';
+    const methodologyStepName = currentStepKey || 'گام دیالکتیک';
+    const defaultMandate = methodology.stepInstructions?.[currentStepKey] || methodology.description || 'با تکیه بر استدلال منطقی و زاویه دید تخصصی خود به تحلیل مسئله بپردازید.';
+    const methodologyMandate = (immediateContext && immediateContext.trim()) ? immediateContext.trim() : defaultMandate;
+
     return template
+      .replace(/{{methodology_title}}/g, methodologyTitle)
+      .replace(/{{methodology_step}}/g, methodologyStepName)
+      .replace(/{{methodology_mandate}}/g, methodologyMandate)
       .replace(/{{speaker_role}}/g, directive)
       .replace(/{{speaker_name}}/g, seat.name)
       .replace(/{{user_core_prompt}}/g, this.symposiumState.userCorePrompt || 'Foundational inquiry.')
@@ -2222,11 +2294,121 @@ ${userInquiry}
     if (!this.methodologySelect) return;
     const methodologies = this.symposiumState.getMethodologies();
     const curKey = this.symposiumState.activeMethodologyKey;
+    const curMethodology = this.symposiumState.getActiveMethodology();
 
     this.methodologySelect.innerHTML = Object.keys(methodologies).map(k => {
       const m = methodologies[k];
-      return `<option value="${k}" ${k === curKey ? 'selected' : ''}>${m.badge || '⚖️'} ${m.title}</option>`;
+      const isCustomBadge = m.isCustom ? ' [سفارشی]' : '';
+      return `<option value="${k}" ${k === curKey ? 'selected' : ''}>${m.badge || '⚖️'} ${m.title}${isCustomBadge}</option>`;
     }).join('');
+
+    if (this.btnDelMethodology) {
+      this.btnDelMethodology.style.display = curMethodology?.isCustom ? 'inline-flex' : 'none';
+    }
+
+    this.renderStepsFlowBar(curMethodology);
+  }
+
+  renderStepsFlowBar(methodology = null) {
+    if (!this.stepsFlowBar) return;
+    if (!methodology) methodology = this.symposiumState.getActiveMethodology();
+
+    const steps = (methodology.stepSequence && methodology.stepSequence.length)
+      ? methodology.stepSequence
+      : ['تز بنیادین', 'آنتی‌تز رادیکال', 'سنتز دیالکتیکی'];
+
+    const count = Math.max(1, this.symposiumState.seats.length);
+    const roundIdx = Math.max(1, this.symposiumState.roundIndex || 1);
+    const activeSeatIdx = Math.max(0, this.symposiumState.activeSpeakerIndex);
+    const activeStepIdx = Math.max(0, ((roundIdx - 1) * count + activeSeatIdx)) % steps.length;
+
+    this.stepsFlowBar.innerHTML = steps.map((step, idx) => {
+      const isActive = idx === activeStepIdx && this.symposiumState.sessionStatus === 'ACTIVE';
+      const stepNum = idx + 1;
+      const instruction = methodology.stepInstructions?.[step] || '';
+      return `
+        <div class="dialectic-step-node ${isActive ? 'is-active-phase' : ''}" title="${this.escapeHtml(instruction)}">
+          <span class="step-num-badge">${stepNum}</span>
+          <span class="step-label">${this.escapeHtml(step)}</span>
+        </div>
+      `;
+    }).join('<div class="dialectic-step-arrow">➔</div>');
+  }
+
+  openMethodologyForm(methodology = null) {
+    if (!this.methodologyFormCard) return;
+    this.methodologyFormCard.style.display = 'flex';
+
+    if (methodology) {
+      if (this.methodologyFormHeading) this.methodologyFormHeading.textContent = 'ویرایش متدولوژی دیالکتیک';
+      if (this.methodologyFormId) this.methodologyFormId.value = methodology.id;
+      if (this.methodologyFormTitle) this.methodologyFormTitle.value = methodology.title || '';
+      if (this.methodologyFormBadge) this.methodologyFormBadge.value = methodology.badge || '⚖️ متدولوژی';
+      if (this.methodologyFormColor) this.methodologyFormColor.value = methodology.color || '#8b5cf6';
+      if (this.methodologyFormDesc) this.methodologyFormDesc.value = methodology.description || '';
+      if (this.methodologyFormSteps) {
+        this.methodologyFormSteps.value = Array.isArray(methodology.stepSequence) ? methodology.stepSequence.join(', ') : '';
+      }
+      if (this.methodologyFormTemplate) {
+        this.methodologyFormTemplate.value = methodology.template || this.templateTextarea?.value || DEFAULT_DIALECTIC_TEMPLATE;
+        this.syncTextareaDirection(this.methodologyFormTemplate);
+      }
+    } else {
+      if (this.methodologyFormHeading) this.methodologyFormHeading.textContent = 'ساخت متدولوژی دیالکتیک جدید';
+      if (this.methodologyFormId) this.methodologyFormId.value = '';
+      if (this.methodologyFormTitle) this.methodologyFormTitle.value = '';
+      if (this.methodologyFormBadge) this.methodologyFormBadge.value = '⚖️ متدولوژی';
+      if (this.methodologyFormColor) this.methodologyFormColor.value = '#8b5cf6';
+      if (this.methodologyFormDesc) this.methodologyFormDesc.value = '';
+      if (this.methodologyFormSteps) this.methodologyFormSteps.value = 'تز بنیادین, آنتی‌تز رادیکال, سنتز دیالکتیکی';
+      if (this.methodologyFormTemplate) {
+        this.methodologyFormTemplate.value = this.templateTextarea?.value || DEFAULT_DIALECTIC_TEMPLATE;
+        this.syncTextareaDirection(this.methodologyFormTemplate);
+      }
+    }
+
+    requestAnimationFrame(() => this.methodologyFormTitle?.focus());
+  }
+
+  closeMethodologyForm() {
+    if (this.methodologyFormCard) {
+      this.methodologyFormCard.style.display = 'none';
+    }
+  }
+
+  handleSaveMethodologyForm() {
+    const title = this.methodologyFormTitle?.value?.trim();
+    if (!title) {
+      alert('لطفاً عنوان متدولوژی را وارد نمایید.');
+      this.methodologyFormTitle?.focus();
+      return;
+    }
+
+    const id = this.methodologyFormId?.value || undefined;
+    const badge = this.methodologyFormBadge?.value?.trim() || '⚖️ متدولوژی';
+    const color = this.methodologyFormColor?.value || '#8b5cf6';
+    const desc = this.methodologyFormDesc?.value?.trim() || '';
+    const stepsRaw = this.methodologyFormSteps?.value?.trim() || '';
+    const template = this.methodologyFormTemplate?.value?.trim() || this.templateTextarea?.value?.trim() || DEFAULT_DIALECTIC_TEMPLATE;
+
+    const steps = stepsRaw.split(/[,،\n]+/).map(s => s.trim()).filter(Boolean);
+
+    const saved = this.symposiumState.saveCustomMethodology({
+      id,
+      title,
+      badge,
+      color,
+      description: desc,
+      stepSequence: steps.length ? steps : ['تز بنیادین', 'آنتی‌تز رادیکال', 'سنتز دیالکتیکی'],
+      template
+    });
+
+    if (saved) {
+      this.closeMethodologyForm();
+      this.renderMethodologySelect();
+      this.loadProtocolsIntoEditor();
+      this.showToast(`متدولوژی «${saved.title}» با موفقیت ذخیره و فعال شد ✓`);
+    }
   }
 
   renderChairmanCardPicker() {
@@ -2973,8 +3155,10 @@ ${userInquiry}
     if (this.flowDelayInput) this.flowDelayInput.value = this.symposiumState.config.autoAdvanceDelayMs || 2400;
     if (this.maxRoundsInput) this.maxRoundsInput.value = this.symposiumState.config.maxRounds;
     if (this.distillSelect) this.distillSelect.value = this.symposiumState.config.contextDistillation;
+
+    const meth = this.symposiumState.getActiveMethodology();
     if (this.templateTextarea) {
-      this.templateTextarea.value = this.symposiumState.config.promptTemplate || DEFAULT_DIALECTIC_TEMPLATE;
+      this.templateTextarea.value = this.symposiumState.config.promptTemplate || meth?.template || DEFAULT_DIALECTIC_TEMPLATE;
       this.syncTextareaDirection(this.templateTextarea);
       this.updateFormulaStats();
     }
@@ -2985,6 +3169,7 @@ ${userInquiry}
     this.renderFlowPresetsDropdown();
     this.renderPromptTemplatesDropdown();
     this.renderGlobalDirectivesDropdown();
+    this.renderMethodologySelect();
   }
 
   saveProtocolsConfig() {
@@ -2992,7 +3177,18 @@ ${userInquiry}
     if (this.flowDelayInput) this.flowDelayInput.value = this.symposiumState.config.autoAdvanceDelayMs = parseInt(this.flowDelayInput.value, 10) || 2400;
     if (this.maxRoundsInput) this.symposiumState.config.maxRounds = parseInt(this.maxRoundsInput.value, 10) || 10;
     if (this.distillSelect) this.symposiumState.config.contextDistillation = this.distillSelect.value;
-    if (this.templateTextarea) this.symposiumState.config.promptTemplate = this.templateTextarea.value.trim() || DEFAULT_DIALECTIC_TEMPLATE;
+
+    if (this.templateTextarea) {
+      const tpl = this.templateTextarea.value.trim() || DEFAULT_DIALECTIC_TEMPLATE;
+      this.symposiumState.config.promptTemplate = tpl;
+      const curMeth = this.symposiumState.getActiveMethodology();
+      if (curMeth) {
+        curMeth.template = tpl;
+        if (curMeth.isCustom && this.symposiumState.customMethodologies?.[curMeth.id]) {
+          this.symposiumState.customMethodologies[curMeth.id].template = tpl;
+        }
+      }
+    }
 
     if (this.sanctumGlobalDirectiveTextarea) {
       this.symposiumState.config.globalDirective = this.sanctumGlobalDirectiveTextarea.value.trim();
@@ -3000,7 +3196,7 @@ ${userInquiry}
 
     this.symposiumState.persistConfig();
     this.updateHeaderStats();
-    this.showToast('تنظیمات پروتکل و نوبت‌دهی ذخیره شد ✓');
+    this.showToast('تنظیمات پروتکل، متدولوژی و اسکلت پرومپت تثبیت شد ✓');
   }
 
   syncTextareaDirection(el) {

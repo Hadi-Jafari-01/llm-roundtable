@@ -2477,6 +2477,143 @@
   border-radius: 4px;
 }
 
+/* ── Unified Dialectic Methodology Form & Steps Flow Styles ── */
+.sanctum-methodology-form-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: #212121;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  margin-top: 8px;
+  margin-bottom: 8px;
+  animation: sanctumFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-methodology-tool {
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #2a2a2a;
+  color: #cbd5e1;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.16s ease;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.btn-methodology-tool:hover {
+  background: #333333;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-methodology-tool.primary {
+  background: rgba(16, 163, 127, 0.18);
+  border-color: rgba(16, 163, 127, 0.45);
+  color: #10a37f;
+  font-weight: 600;
+}
+
+.btn-methodology-tool.primary:hover {
+  background: #10a37f;
+  color: #ffffff;
+}
+
+.btn-methodology-tool.danger:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+}
+
+.dialectic-steps-flow-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.steps-flow-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #9ca3af;
+}
+
+.dialectic-steps-flow-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 8px 10px;
+  background: #191919;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+.dialectic-step-node {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  background: #262626;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 11px;
+  color: #d1d5db;
+  transition: all 0.16s ease;
+  user-select: none;
+}
+
+.dialectic-step-node:hover {
+  background: #2d2d2d;
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.dialectic-step-node .step-num-badge {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #333333;
+  color: #ffffff;
+  font-size: 9.5px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: ui-monospace, monospace;
+}
+
+.dialectic-step-node.is-active-phase {
+  background: #2f2a1e;
+  border-color: #f59e0b;
+  color: #fde68a;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+}
+
+.dialectic-step-node.is-active-phase .step-num-badge {
+  background: #f59e0b;
+  color: #000000;
+}
+
+.dialectic-step-arrow {
+  color: #6b7280;
+  font-size: 11px;
+  user-select: none;
+  display: flex;
+  align-items: center;
+}
+
 .formula-macros-wrapper {
   display: flex;
   flex-direction: column;
