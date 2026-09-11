@@ -43,6 +43,8 @@ export class SilkSymposiumOrchestrator {
 
     this.currentSanctumZone = 'scenarios';
     this.toastTimer = null;
+    this.activeGovernanceStreams = new Map(); // cardId -> { assignment, template, govTurn, startTime }
+    this.dispatchedGovEvaluations = new Set(); // جلوگیری قطعی از اجرای تکراری ناظر برای یک نوبت مشخص
 
     this.initElements();
     this.initSubModules();
@@ -121,7 +123,7 @@ export class SilkSymposiumOrchestrator {
       history: document.getElementById('sanctum-zone-history')
     };
 
-    // منطقه جدید: کابینه نظارت و مدیریت (Governance Cabinet Zone)
+    // منطقه کابینه نظارت و مدیریت (Governance Cabinet Zone)
     this.governanceAssignmentsList = document.getElementById('governance-assignments-list');
     this.govCardSelect = document.getElementById('gov-assign-card-select');
     this.govRoleSelect = document.getElementById('gov-assign-role-select');
@@ -248,7 +250,8 @@ export class SilkSymposiumOrchestrator {
       },
       onOpenInspector: (idx, rect) => this.openSeatInspector(idx, rect),
       onConfigureSeat: (idx) => this.openSeatInspector(idx),
-      onToggleMute: (idx) => this.handleToggleSeatMute(idx)
+      onToggleMute: (idx) => this.handleToggleSeatMute(idx),
+      onCallSupervisor: (assignmentId) => this.handleCallSupervisor(assignmentId)
     });
 
     const transcriptViewport = document.getElementById('symposium-transcript-viewport');
@@ -602,7 +605,6 @@ export class SilkSymposiumOrchestrator {
       this.handleSavePersonaForm();
     });
 
-    // Send and Next Turn Baton Handlers
     // تایید و وتوی پیشنهاد نوبت رئیس شورا
     this.btnApproveAIProposal?.addEventListener('click', () => {
       const overrideText = (this.inputPrompt?.value || '').trim();
@@ -677,12 +679,59 @@ export class SilkSymposiumOrchestrator {
         return;
       }
 
+      const cards = this.stateStore?.getCards() || [];
+      const currentActiveSupCardIds = new Set(
+        (this.symposiumState.governanceCabinet?.activeRoles || [])
+          .filter(r => r.isActive !== false)
+          .map(r => r.cardId)
+      );
+      currentActiveSupCardIds.add(cardId);
+      if (cards.length > 1 && currentActiveSupCardIds.size >= cards.length) {
+        alert('خطا: حداقل یک کارت هوش مصنوعی باید بر روی سکوی مناظره برای مباحثه باقی بماند.');
+        return;
+      }
+
       const assigned = this.symposiumState.addActiveGovernanceRole(cardId, roleKey, trigger);
       if (assigned) {
         this.syncSeats();
         this.renderAll();
         this.renderGovernanceCabinetZone();
         this.showToast('ناظر جدید به کابینه مدیریت الصاق گردید 🛡️');
+      }
+    });
+
+    this.btnCreateGovRole?.addEventListener('click', () => {
+      const title = prompt('عنوان نقش نظارتی جدید (مثال: ناظر اصول امنیتی):');
+      if (!title) return;
+      const badge = prompt('نشانگر یا ایموجی (مثال: 🔒):', '🛡️') || '🛡️';
+      const promptText = prompt('دستور سیستمی و شرح وظیفه نظارتی:');
+      if (!promptText) return;
+
+      const created = this.symposiumState.saveCustomGovernanceRole({
+        title,
+        badge,
+        systemPrompt: promptText
+      });
+      if (created) {
+        this.renderGovernanceCabinetZone();
+        this.showToast(`نقش نظارتی «${created.title}» ساخته شد ✓`);
+      }
+    });
+
+    this.btnCreateMethodology?.addEventListener('click', () => {
+      const title = prompt('عنوان متدولوژی مناظره جدید:');
+      if (!title) return;
+      const desc = prompt('توضیح عملکرد متدولوژی:', '') || '';
+      const badge = prompt('نشانگر یا ایموجی:', '⚖️') || '⚖️';
+
+      const created = this.symposiumState.saveCustomMethodology({
+        title,
+        description: desc,
+        badge
+      });
+      if (created) {
+        this.renderMethodologySelect();
+        this.showToast(`متدولوژی «${created.title}» ذخیره شد ✓`);
       }
     });
 
@@ -892,6 +941,8 @@ export class SilkSymposiumOrchestrator {
     const isSpeaking = Boolean(this.symposiumState.isSpeakerStreaming && this.symposiumState.sessionStatus === 'ACTIVE');
     const waitingForUser = this.symposiumState.sessionStatus === 'WAITING_FOR_USER';
     const waitingForMaestro = this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO';
+    const supervisors = this.symposiumState.getSupervisorSeats(this.stateStore?.getCards() || []);
+    const activeSupCardIds = new Set(this.activeGovernanceStreams.keys());
 
     this.dais.render(
       this.symposiumState.seats,
@@ -899,7 +950,9 @@ export class SilkSymposiumOrchestrator {
       waitingForUser,
       waitingForMaestro ? this.symposiumState.recommendedNextSpeakerIndex : -1,
       waitingForMaestro,
-      isSpeaking
+      isSpeaking,
+      supervisors,
+      activeSupCardIds
     );
 
     this.transcriptView.render(
@@ -1146,7 +1199,60 @@ export class SilkSymposiumOrchestrator {
   }
 
   handleStreamChunk(data) {
-    if (!this.isOpen || !this.symposiumState.isSpeakerStreaming) return;
+    if (!this.isOpen) return;
+
+    // ۱. بررسی پاسخ زنده استریم مربوط به ناظران کابینه مدیریت
+    if (this.activeGovernanceStreams.has(data.cardId)) {
+      const govTask = this.activeGovernanceStreams.get(data.cardId);
+      const { text, isThinking, thinkingText, isFinished } = data;
+
+      if (text !== undefined) govTask.govTurn.text = text;
+      if (thinkingText !== undefined) govTask.govTurn.thinkingText = thinkingText;
+      if (isThinking !== undefined) govTask.govTurn.isThinking = isThinking;
+
+      this.transcriptView.updateStreamingTurn(govTask.govTurn);
+
+      if (isFinished) {
+        govTask.govTurn.isStreaming = false;
+        if (!govTask.govTurn.text && govTask.govTurn.thinkingText) {
+          govTask.govTurn.text = govTask.govTurn.thinkingText;
+        }
+
+        const note = this.symposiumState.addGovernanceNote({
+          roleKey: govTask.assignment.roleKey,
+          roleTitle: govTask.template.title,
+          badge: govTask.template.badge,
+          color: govTask.template.color,
+          turnId: govTask.govTurn.targetTurnId,
+          cardId: govTask.assignment.cardId,
+          cardName: govTask.govTurn.speakerName,
+          text: govTask.govTurn.text
+        });
+
+        if (govTask.govTurn.targetTurnId) {
+          const targetTurn = this.symposiumState.transcript.find(t => t.id === govTask.govTurn.targetTurnId);
+          if (targetTurn) {
+            if (!Array.isArray(targetTurn.governanceNotes)) targetTurn.governanceNotes = [];
+            targetTurn.governanceNotes.push(note);
+          }
+        }
+
+        const signals = this.ledgerView.extractSignalsFromText(govTask.govTurn.text, govTask.govTurn.speakerName);
+        if (signals) {
+          (signals.agreements || []).forEach(item => this.symposiumState.addLedgerItem('agreements', item));
+          (signals.divergences || []).forEach(item => this.symposiumState.addLedgerItem('divergences', item));
+          (signals.openQuestions || []).forEach(item => this.symposiumState.addLedgerItem('openQuestions', item));
+        }
+
+        this.activeGovernanceStreams.delete(data.cardId);
+        this.showToast(`نظر نظارتی «${govTask.template.badge || '🛡️'} ${govTask.template.title.split('(')[0].trim()}» ثبت گردید ✓`);
+        this.renderAll();
+      }
+      return;
+    }
+
+    // ۲. بررسی پاسخ زنده استریم مربوط به سخنران اصلی مناظره
+    if (!this.symposiumState.isSpeakerStreaming) return;
     const activeSeat = this.symposiumState.seats[this.symposiumState.activeSpeakerIndex];
     if (!activeSeat || data.cardId !== activeSeat.cardId) return;
 
@@ -1165,6 +1271,7 @@ export class SilkSymposiumOrchestrator {
     this.transcriptView.updateStreamingTurn(lastTurn);
 
     if (isFinished) {
+      if (!this.symposiumState.isSpeakerStreaming) return; // محافظت در برابر دریافت تکراری سیگنال اتمام
       this.turnSequencer.completeTurn(text || thinkingText || '', true);
     }
   }
@@ -1172,9 +1279,9 @@ export class SilkSymposiumOrchestrator {
   handleTurnFinished({ seat, text }) {
     const signals = this.ledgerView.extractSignalsFromText(text, seat.name);
     if (signals) {
-      if (signals.agreement) this.symposiumState.addLedgerItem('agreements', signals.agreement);
-      if (signals.divergence) this.symposiumState.addLedgerItem('divergences', signals.divergence);
-      if (signals.question) this.symposiumState.addLedgerItem('openQuestions', signals.question);
+      (signals.agreements || []).forEach(item => this.symposiumState.addLedgerItem('agreements', item));
+      (signals.divergences || []).forEach(item => this.symposiumState.addLedgerItem('divergences', item));
+      (signals.openQuestions || []).forEach(item => this.symposiumState.addLedgerItem('openQuestions', item));
     }
 
     this.renderAll();
@@ -1324,6 +1431,7 @@ export class SilkSymposiumOrchestrator {
 
   startNewSession() {
     this.turnSequencer.pause();
+    this.dispatchedGovEvaluations.clear();
     const newSession = this.symposiumState.createNewSession();
     this.syncSeats();
     this.renderAll();
@@ -1339,6 +1447,7 @@ export class SilkSymposiumOrchestrator {
   switchSession(sessionId) {
     if (!sessionId) return;
     this.turnSequencer.pause();
+    this.dispatchedGovEvaluations.clear();
     const target = this.symposiumState.switchSession(sessionId);
     if (target) {
       this.syncSeats();
@@ -1377,6 +1486,7 @@ export class SilkSymposiumOrchestrator {
 
   handleClearAllHistory() {
     if (!confirm('آیا از پاک‌سازی تمام سوابق و جلسات قبلی میزگرد اطمینان دارید؟')) return;
+    this.dispatchedGovEvaluations.clear();
     this.symposiumState.clearAllSessions();
     this.syncSeats();
     this.renderAll();
@@ -1497,7 +1607,7 @@ export class SilkSymposiumOrchestrator {
       <div class="history-empty-state">
         <span style="font-size: 26px;">📜</span>
         <span style="font-size: 12px; color: #f1f5f9; font-weight: 600;">هیچ سابقه میزگردی یافت نشد</span>
-        <p style="font-size: 11px; color: #9ca3af; margin: 2px 0 8px;">${searchQuery ? 'موردی مطابق عبارت جستجو وجود ندارد.' : 'با شروع گفتگو، جلسات شما خودکار بایگانی می‌شوند.'}</p>
+        <p style="font-size: 11px; color: #9ca3af; margin: 4px 0 8px;">${searchQuery ? 'موردی مطابق عبارت جستجو وجود ندارد.' : 'با شروع گفتگو، جلسات شما خودکار بایگانی می‌شوند.'}</p>
       </div>
     `;
 
@@ -1771,25 +1881,137 @@ export class SilkSymposiumOrchestrator {
     this.renderAll();
   }
 
-  async handleGovernanceTriggered({ assignment, template, triggerType, turnContext }) {
+  handleCallSupervisor(assignmentId) {
+    const activeRoles = this.symposiumState.governanceCabinet?.activeRoles || [];
+    const assign = activeRoles.find(r => r.id === assignmentId || r.cardId === assignmentId);
+    if (!assign) return;
+
+    if (this.activeGovernanceStreams.has(assign.cardId)) {
+      this.showToast('این ناظر هم‌اکنون در حال پردازش و ارائه نظر است.');
+      return;
+    }
+
+    const templates = this.symposiumState.getGovernanceRoleTemplates();
+    const tpl = templates[assign.roleKey];
+    if (!tpl) return;
+
+    const turns = this.symposiumState.transcript.filter(t => !t.isStreaming && t.role !== 'governance');
+    const lastTurn = turns[turns.length - 1];
+    const textToExamine = (this.inputPrompt?.value || '').trim() || lastTurn?.text || this.symposiumState.userCorePrompt || '';
+    const targetSpeaker = lastTurn?.speakerName || (this.symposiumState.userCorePrompt ? 'کاربر' : 'شورا');
+
+    this.handleGovernanceTriggered({
+      assignment: assign,
+      template: tpl,
+      triggerType: 'manual_call',
+      turnContext: {
+        text: textToExamine,
+        speakerName: targetSpeaker,
+        turnId: lastTurn?.id || null
+      }
+    });
+
+    this.showToast(`ناظر «${tpl.badge || '🛡️'} ${tpl.title.split('(')[0].trim()}» فراخوانی شد ⚡`);
+  }
+
+  async handleGovernanceTriggered({ assignment, template, triggerType, turnContext = {} }) {
     const card = this.stateStore.getCard(assignment.cardId);
     if (!card) return;
 
-    const turns = this.symposiumState.transcript.filter(t => !t.isStreaming);
-    const lastTurn = turns[turns.length - 1];
-    const textToExamine = turnContext.text || lastTurn?.text || '';
+    // جلوگیری قطعی از اجرای ناظر روی نوبت یک ناظر دیگر یا اجرای هم‌زمان روی یک کارت در حال پردازش
+    if (turnContext.turnId?.startsWith('gov_turn_')) return;
+    if (this.activeGovernanceStreams.has(assignment.cardId)) return;
 
-    const promptText = `[حکم نظارتی برای ${card.title || card.name} - نقش: ${template.title}]:
+    const turns = this.symposiumState.transcript.filter(t => !t.isStreaming && t.role !== 'governance');
+    const lastTurn = turns[turns.length - 1];
+    const textToExamine = turnContext.text || lastTurn?.text || this.symposiumState.userCorePrompt || '';
+    const targetSpeaker = turnContext.speakerName || lastTurn?.speakerName || (this.symposiumState.userCorePrompt ? 'کاربر' : 'شورا');
+    const targetTurnId = turnContext.turnId || lastTurn?.id || 'last';
+
+    // جلوگیری قطعی از ممیزی تکراری یک نوبت توسط یک ناظر در صورت تکرار سیگنال‌ها
+    const evalDedupKey = `${assignment.id}_${targetTurnId}`;
+    if (triggerType !== 'manual_call' && this.dispatchedGovEvaluations.has(evalDedupKey)) {
+      return;
+    }
+    this.dispatchedGovEvaluations.add(evalDedupKey);
+
+    if (!textToExamine && !this.symposiumState.userCorePrompt) {
+      this.showToast('هنوز متنی در میزگرد برای ممیزی نظارتی وجود ندارد.');
+      return;
+    }
+
+    const userInquiry = (this.inputPrompt?.value || '').trim();
+    if (userInquiry && triggerType === 'manual_call') {
+      this.inputPrompt.value = '';
+      this.inputPrompt.style.height = 'auto';
+    }
+
+    const govTurn = {
+      id: `gov_turn_${Date.now()}_${assignment.cardId}_${Math.random().toString(36).slice(2, 6)}`,
+      role: 'governance',
+      roleKey: assignment.roleKey,
+      roleTitle: template.title,
+      badge: template.badge || '🛡️',
+      color: template.color || '#10a37f',
+      speakerName: card.title || card.name,
+      cardId: assignment.cardId,
+      targetTurnId: targetTurnId,
+      targetSpeakerName: targetSpeaker,
+      text: '',
+      thinkingText: '',
+      isThinking: false,
+      isStreaming: true,
+      round: this.symposiumState.roundIndex,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+
+    this.symposiumState.addTurn(govTurn);
+    this.activeGovernanceStreams.set(assignment.cardId, {
+      assignment,
+      template,
+      govTurn,
+      startTime: Date.now()
+    });
+
+    this.renderAll();
+
+    let promptText = `[حکم نظارتی ویژه شورای نخبگان - نقش شما: ${template.title}]:
 ${assignment.customPrompt || template.systemPrompt}
 
-متن استدلال مورد بررسی:
+موضوع محوری میزگرد:
+"""
+${this.symposiumState.userCorePrompt || 'مباحثه دیالکتیک'}
+"""
+
+استدلال یا موضع مورد ممیزی (مطرح‌شده توسط ${targetSpeaker}):
 """
 ${textToExamine}
-"""
+"""`;
 
-دستور: نظر نظارتی تخصصی، ممیزی، مغالطات، یا ثبت اجماع را مستقیماً در حداکثر ۲ تا ۳ بند صادر کنید.`;
+    if (userInquiry) {
+      promptText += `\n\nپرسش یا تأکید اختصاصی استاد انسان از ناظر:
+"""
+${userInquiry}
+"""`;
+    }
+
+    promptText += `\n\nدستور صریح:
+تحلیل، ممیزی، مغالطات، یا وضعیت اجماع را مستقیماً، دقیق و بدون تعارف در حداکثر ۲ تا ۳ بند ارائه دهید.`;
 
     this.dispatchToCard(assignment.cardId, promptText);
+
+    // واچ‌داگ ایمنی: عدم گیر کردن استریم ناظر در صورت قطع ارتباط فریم
+    setTimeout(() => {
+      if (this.activeGovernanceStreams.has(assignment.cardId)) {
+        const task = this.activeGovernanceStreams.get(assignment.cardId);
+        task.govTurn.isStreaming = false;
+        if (!task.govTurn.text) {
+          task.govTurn.text = '(پایان مهلت پاسخگویی ناظر شورا)';
+        }
+        this.activeGovernanceStreams.delete(assignment.cardId);
+        this.renderAll();
+      }
+    }, 45000);
   }
 
   updateDualParadigmUI() {
@@ -1821,10 +2043,18 @@ ${textToExamine}
   renderChairmanCardPicker() {
     if (!this.chairmanCardPicker) return;
     const cards = this.stateStore?.getCards() || [];
+    const activeSupervisorCardIds = new Set(
+      (this.symposiumState.governanceCabinet?.activeRoles || [])
+        .filter(r => r.isActive !== false)
+        .map(r => r.cardId)
+        .filter(Boolean)
+    );
+    // رئیس شورا باید از بین مدل‌های حاضر روی سکوی مناظره باشد نه ناظران بی‌طرف
+    const eligibleCards = cards.filter(c => !activeSupervisorCardIds.has(c.id));
     const curChairmanId = this.symposiumState.chairmanCardId;
 
     this.chairmanCardPicker.innerHTML = `<option value="">-- انتخاب مدل به عنوان رئیس شورا --</option>` +
-      cards.map(c => `<option value="${c.id}" ${c.id === curChairmanId ? 'selected' : ''}>👑 ${c.title || c.name}</option>`).join('');
+      eligibleCards.map(c => `<option value="${c.id}" ${c.id === curChairmanId ? 'selected' : ''}>👑 ${c.title || c.name}</option>`).join('');
   }
 
   renderGovernanceCabinetZone() {
@@ -1905,17 +2135,7 @@ ${textToExamine}
 
       this.governanceAssignmentsList.querySelectorAll('.btn-gov-call').forEach(btn => {
         btn.addEventListener('click', () => {
-          const assign = activeRoles.find(r => r.id === btn.dataset.assignId);
-          if (assign) {
-            const tpl = templates[assign.roleKey];
-            this.handleGovernanceTriggered({
-              assignment: assign,
-              template: tpl,
-              triggerType: 'manual_call',
-              turnContext: {}
-            });
-            this.showToast(`ناظر «${tpl.badge} ${tpl.title.split('(')[0]}» فراخوانی شد ⚡`);
-          }
+          this.handleCallSupervisor(btn.dataset.assignId);
         });
       });
     }
@@ -2580,7 +2800,7 @@ ${textToExamine}
 
   saveProtocolsConfig() {
     if (this.topologySelect) this.symposiumState.debateMode = this.topologySelect.value;
-    if (this.flowDelayInput) this.symposiumState.config.autoAdvanceDelayMs = parseInt(this.flowDelayInput.value, 10) || 2400;
+    if (this.flowDelayInput) this.flowDelayInput.value = this.symposiumState.config.autoAdvanceDelayMs = parseInt(this.flowDelayInput.value, 10) || 2400;
     if (this.maxRoundsInput) this.symposiumState.config.maxRounds = parseInt(this.maxRoundsInput.value, 10) || 10;
     if (this.distillSelect) this.symposiumState.config.contextDistillation = this.distillSelect.value;
     if (this.templateTextarea) this.symposiumState.config.promptTemplate = this.templateTextarea.value.trim() || DEFAULT_DIALECTIC_TEMPLATE;

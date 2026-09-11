@@ -73,6 +73,8 @@ export class TurnSequencer {
   }
 
   completeTurn(text = '', isFinished = true) {
+    if (this.isCompletingTurn) return;
+    this.isCompletingTurn = true;
     clearTimeout(this.safetyTimer);
     this.state.concludeStreamingTurn();
 
@@ -82,6 +84,8 @@ export class TurnSequencer {
       activeSeat.status = 'idle';
     }
 
+    const currentTurn = this.state.transcript[this.state.transcript.length - 1];
+
     this.callbacks.onTurnFinished({
       seatIndex: this.state.activeSpeakerIndex,
       seat: activeSeat,
@@ -89,8 +93,19 @@ export class TurnSequencer {
       isFinished
     });
 
-    // فراخوانی بررسی‌های کابینه نظارت (Governance Cabinet) پس از پایان هر نوبت
-    this.triggerGovernanceEvaluation('every_turn', { seat: activeSeat, text });
+    // فراخوانی بررسی‌های کابینه نظارت پس از پایان هر نوبت
+    if (activeSeat && !activeSeat.isMuted) {
+      this.triggerGovernanceEvaluation('every_turn', {
+        seat: activeSeat,
+        text,
+        speakerName: activeSeat?.name,
+        turnId: currentTurn?.id
+      });
+    }
+
+    setTimeout(() => {
+      this.isCompletingTurn = false;
+    }, 600);
 
     // ۱. در حالت مدیریت کاملاً دستی انسان (Human Maestro)
     if (this.state.debateMode === 'manual') {
@@ -241,7 +256,12 @@ export class TurnSequencer {
 
     activeRoles.forEach(roleAssignment => {
       if (!roleAssignment.isActive) return;
-      if (roleAssignment.trigger === triggerType || roleAssignment.trigger === 'every_turn') {
+      const shouldTrigger =
+        triggerType === 'manual_call' ||
+        roleAssignment.trigger === triggerType ||
+        (triggerType === 'every_turn' && roleAssignment.trigger === 'every_turn');
+
+      if (shouldTrigger) {
         const tpl = templates[roleAssignment.roleKey];
         if (tpl) {
           this.callbacks.onGovernanceTriggered({
@@ -362,6 +382,7 @@ export class TurnSequencer {
   advanceRound() {
     this.state.roundIndex++;
     this.callbacks.onRoundAdvanced(this.state.roundIndex);
+    this.triggerGovernanceEvaluation('end_of_round', { roundIndex: this.state.roundIndex });
 
     if (this.state.config.maxRounds > 0 && this.state.roundIndex > this.state.config.maxRounds) {
       this.pause();

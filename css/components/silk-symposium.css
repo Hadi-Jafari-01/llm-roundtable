@@ -1282,6 +1282,186 @@
   color: #ffffff;
 }
 
+/* ── ریل ناظران در سکوی چپ (Left Rail Supervisor Pods) ── */
+.dais-supervisors-divider {
+  margin: 10px 0 4px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.supervisors-section-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #10a37f;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.symposium-dais-left-rail:hover .supervisors-section-label,
+.symposium-dais-left-rail.expanded .supervisors-section-label {
+  opacity: 1;
+}
+
+.symposium-supervisor-pod {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 46px;
+  min-height: 46px;
+  padding: 0 8px;
+  border-radius: 9px;
+  background: #1e1e1e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 3px solid var(--sup-color, #10a37f);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  overflow: hidden;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.symposium-supervisor-pod:hover {
+  background: #282828;
+  border-color: var(--sup-color, #10a37f);
+  transform: translateY(-1px);
+}
+
+.symposium-supervisor-pod.evaluating {
+  background: #23221e;
+  border-color: #10a37f;
+  box-shadow: 0 0 12px rgba(16, 163, 127, 0.25);
+}
+
+.sup-pod-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.sup-jewel-avatar {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  background: #2a2a2a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.sup-status-dot {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1.5px solid #171717;
+  background: #64748b;
+  transition: all 0.2s ease;
+}
+
+.sup-status-dot.evaluating {
+  background: #10a37f;
+  box-shadow: 0 0 6px #10a37f;
+}
+
+.btn-supervisor-call {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #2a2a2a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fde68a;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  font-family: inherit;
+}
+
+.btn-supervisor-call:hover {
+  background: #353535;
+  color: #ffffff;
+  transform: scale(1.04);
+}
+
+.btn-call-text {
+  display: none;
+}
+
+.symposium-dais-left-rail:hover .btn-call-text,
+.symposium-dais-left-rail.expanded .btn-call-text {
+  display: inline;
+}
+
+/* ── رندر نوبت‌های نظارتی در ترنسکریپت گفتگو ── */
+.symposium-turn-row.governance {
+  align-self: center;
+  width: 100%;
+}
+
+.symposium-turn-meta.governance-meta {
+  color: var(--gov-color, #10a37f);
+}
+
+.turn-avatar-badge.gov-badge {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.turn-persona-tag.gov-tag {
+  background: rgba(16, 163, 127, 0.15);
+  border-color: rgba(16, 163, 127, 0.35);
+  color: #a7f3d0;
+}
+
+.symposium-bubble-card.governance-bubble {
+  background: #1c1c1c !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-right: 4px solid var(--model-color, #10a37f) !important;
+  border-radius: 12px !important;
+  padding: 14px 18px !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35) !important;
+}
+
+.governance-card-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 11px;
+  font-weight: 600;
+  color: #fde68a;
+}
+
+.gov-banner-icon {
+  font-size: 14px;
+}
+
+.gov-banner-text {
+  opacity: 0.9;
+}
+
 /* ── یادداشت‌های نظارتی در بدنه ترنسکریپت ── */
 .turn-governance-pill {
   margin: 6px 0 2px;
@@ -1925,7 +2105,7 @@
 
 .sanctum-zones-nav {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 6px;
   padding: 8px 16px;
   background: #1e1e1e;

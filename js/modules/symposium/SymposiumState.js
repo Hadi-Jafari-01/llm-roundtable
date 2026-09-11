@@ -222,11 +222,17 @@ export const FACTORY_GOVERNANCE_ROLES = {
     color: '#10a37f',
     defaultTrigger: 'every_turn',
     systemPrompt: `شما «منشی دیوان و ناظر بی‌طرف اجماع شورا» هستید.
-وظیفه شما بررسی آخرین استدلال‌های مطرح‌شده است.
-بدون تعارف و تعصب، دقیقاً ۳ بخش زیر را استخراج و اعلام کنید:
-۱. [توافقات قطعی]: نقاطی که طرفین عقلانی بر آن مهر تأیید زده‌اند.
-۲. [شکاف‌های لاینحل]: تضادها و گره‌های اساسی که هنوز حل نشده است.
-۳. [پرسش‌های پیش‌برنده]: سوال کلیدی که سخنران بعد باید به آن پاسخ دهد.`
+وظیفه شما بررسی موشکافانه آخرین استدلال‌های مطرح‌شده و ثبت قطعی داده‌ها در دفتر اجماع است.
+بدون تعارف، حاشیه‌پردازی یا داوری شخصی، دقیقاً ۳ بخش زیر را با علامت بولت (-) استخراج و ثبت نمایید:
+
+### ۱. توافقات قطعی:
+- [یک گزاره صریح از توافق عقلانی حاصل‌شده]
+
+### ۲. شکاف‌های لاینحل و نقاط اختلاف:
+- [گره اصلی و تعارض حل‌نشده میان دیدگاه‌ها]
+
+### ۳. پرسش‌های پیش‌برنده و باز:
+- [سؤال کلیدی و چالش‌برانگیز برای نوبت‌های بعد]`
   },
 
   fallacy_watchdog: {
@@ -1231,6 +1237,29 @@ export class SymposiumState {
     this.persistConfig();
   }
 
+  getSupervisorSeats(allCards = []) {
+    const cards = Array.isArray(allCards) && allCards.length ? allCards : [];
+    const activeRoles = (this.governanceCabinet?.activeRoles || []).filter(r => r.isActive !== false);
+    const templates = this.getGovernanceRoleTemplates();
+
+    return activeRoles.map(assign => {
+      const card = cards.find(c => c.id === assign.cardId);
+      const tpl = templates[assign.roleKey] || {};
+      return {
+        assignmentId: assign.id,
+        cardId: assign.cardId,
+        roleKey: assign.roleKey,
+        trigger: assign.trigger,
+        isActive: assign.isActive,
+        name: card?.title || card?.name || 'ناظر شورا',
+        color: card?.color || tpl.color || '#10a37f',
+        roleTitle: tpl.title || assign.roleKey,
+        roleBadge: tpl.badge || '🛡️',
+        description: tpl.description || ''
+      };
+    });
+  }
+
   syncWithCanvasCards(cards = []) {
     const allPersonas = this.getAllPersonas();
     const personaKeys = Object.keys(allPersonas);
@@ -1244,8 +1273,12 @@ export class SymposiumState {
         .filter(Boolean)
     );
 
-    // فقط کارت‌هایی که ناظر نیستند روی سکوی سخنرانی قرار می‌گیرند
-    const debatingCards = cards.filter(c => !activeSupervisorCardIds.has(c.id));
+    // کارت‌هایی که ناظر نیستند روی سکوی سخنرانی قرار می‌گیرند
+    let debatingCards = cards.filter(c => !activeSupervisorCardIds.has(c.id));
+    // محافظت: اگر تمام کارت‌ها ناظر شده باشند، حداقل کارت اول به عنوان صندلی مناظره باقی می‌ماند
+    if (debatingCards.length === 0 && cards.length > 0) {
+      debatingCards = [cards[0]];
+    }
 
     const modelSeats = debatingCards.map((card, idx) => {
       const existing = existingAiSeats.find(s => s.cardId === card.id);
@@ -1767,6 +1800,12 @@ export class SymposiumState {
       this.saveCurrentSessionSnapshot();
       const payload = {
         debateMode: this.debateMode,
+        chairmanCardId: this.chairmanCardId,
+        activeMethodologyKey: this.activeMethodologyKey,
+        customMethodologies: this.customMethodologies,
+        governanceCabinet: this.governanceCabinet,
+        customGovernanceRoles: this.customGovernanceRoles,
+        governanceNotes: this.governanceNotes,
         config: this.config,
         userParticipant: this.userParticipant,
         customPersonas: this.customPersonas,
@@ -1795,6 +1834,20 @@ export class SymposiumState {
       if (raw) {
         const parsed = JSON.parse(raw);
         if (parsed.debateMode) this.debateMode = parsed.debateMode;
+        if (parsed.chairmanCardId) this.chairmanCardId = parsed.chairmanCardId;
+        if (parsed.activeMethodologyKey) this.activeMethodologyKey = parsed.activeMethodologyKey;
+        if (parsed.customMethodologies && typeof parsed.customMethodologies === 'object') {
+          this.customMethodologies = parsed.customMethodologies;
+        }
+        if (parsed.governanceCabinet && typeof parsed.governanceCabinet === 'object') {
+          this.governanceCabinet = parsed.governanceCabinet;
+        }
+        if (parsed.customGovernanceRoles && typeof parsed.customGovernanceRoles === 'object') {
+          this.customGovernanceRoles = parsed.customGovernanceRoles;
+        }
+        if (Array.isArray(parsed.governanceNotes)) {
+          this.governanceNotes = parsed.governanceNotes;
+        }
         if (parsed.config) Object.assign(this.config, parsed.config);
         if (parsed.userParticipant) Object.assign(this.userParticipant, parsed.userParticipant);
         if (parsed.customPersonas && typeof parsed.customPersonas === 'object') {

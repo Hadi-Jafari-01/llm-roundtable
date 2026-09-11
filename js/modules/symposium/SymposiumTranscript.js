@@ -161,27 +161,73 @@ export class SymposiumTranscript {
   createTurnElement(turn) {
     const row = document.createElement('div');
     const isUser = turn.role === 'user';
+    const isGovernance = turn.role === 'governance' || turn.role === 'supervisor';
     const isSeatedUser = Boolean(turn.isSeatedUser);
 
-    row.className = `symposium-turn-row ${isUser ? 'user' : 'model'} ${isSeatedUser ? 'seated-user' : ''}`;
+    row.className = `symposium-turn-row ${isGovernance ? 'governance' : (isUser ? 'user' : 'model')} ${isSeatedUser ? 'seated-user' : ''}`;
     row.id = `turn-${turn.id}`;
 
     const textDir = this.detectTextDirection(turn.text || '');
     const isRTL = textDir === 'rtl';
 
-    // یادداشت‌های نظارتی مرتبط با این نوبت
+    // نشانگر ممیزی نظارتی بدون تکرار متن کامل
     const governanceNotes = Array.isArray(turn.governanceNotes) ? turn.governanceNotes : [];
-    const govNotesHtml = governanceNotes.map(note => `
-      <div class="turn-governance-pill" style="--gov-color: ${note.color || '#10a37f'};" dir="auto">
-        <div class="gov-pill-header">
-          <span class="gov-pill-badge">${note.badge || '🛡️'} ${this.escapeHtml(note.roleTitle || 'یادداشت نظارتی')}</span>
-          <span class="gov-pill-model">توسط ${this.escapeHtml(note.cardName || 'ناظر')} • ${note.timestamp || ''}</span>
-        </div>
-        <div class="gov-pill-text">${this.escapeHtml(note.text)}</div>
+    const govNotesHtml = governanceNotes.length > 0 ? `
+      <div class="turn-governance-pill" style="--gov-color: ${governanceNotes[0].color || '#10a37f'}; padding: 4px 10px; font-size: 10px; opacity: 0.85;" dir="auto">
+        <span class="gov-pill-badge">${governanceNotes[0].badge || '🛡️'} ممیزی‌شده توسط ${this.escapeHtml(governanceNotes[0].roleTitle || 'کابینه نظارت')}</span>
       </div>
-    `).join('');
+    ` : '';
 
-    if (isUser) {
+    if (isGovernance) {
+      const renderedMd = this.renderMarkdown(turn.text || '');
+      const isStillThinking = Boolean(turn.isStreaming && (!turn.text || !turn.text.trim()));
+      const thinkingDir = this.detectTextDirection(turn.thinkingText || '');
+      const thinkingHtml = turn.thinkingText ? `
+        <div class="mirror-reasoning-fold" style="margin-bottom: 8px;">
+          <button type="button" class="reasoning-fold-trigger">
+            <span>🧠 Thinking Process</span>
+            <span>${isStillThinking ? '▲' : '▼'}</span>
+          </button>
+          <div class="reasoning-fold-body" dir="${thinkingDir}" style="display: ${isStillThinking ? 'block' : 'none'};">${this.escapeHtml(turn.thinkingText)}</div>
+        </div>
+      ` : '';
+      const pulseHtml = turn.isStreaming ? `
+        <div class="mirror-streaming-pulse"><span></span><span></span><span></span></div>
+      ` : '';
+
+      row.innerHTML = `
+        <div class="symposium-turn-meta governance-meta">
+          <span class="turn-avatar-badge gov-badge" style="background: ${turn.color || '#10a37f'};">
+            ${turn.badge || '🛡️'}
+          </span>
+          <span class="turn-speaker-badge" style="color: ${turn.color || '#10a37f'};">
+            ${this.escapeHtml(turn.roleTitle || 'کابینه نظارت شورا')}
+          </span>
+          <span class="turn-persona-tag gov-tag">مجری: ${this.escapeHtml(turn.speakerName)}</span>
+          <span class="turn-round-tag">Round ${turn.round || 1} • ${turn.timestamp || ''}</span>
+          <button type="button" class="btn-turn-meta-del btn-delete-turn-chip" data-turn-id="${turn.id}" title="حذف این نظر نظارتی">✕</button>
+        </div>
+
+        <div class="symposium-bubble-card governance-bubble ${isRTL ? 'is-rtl' : 'is-ltr'}" dir="${textDir}" style="--model-color: ${turn.color || '#10a37f'};">
+          <div class="governance-card-banner">
+            <span class="gov-banner-icon">${turn.badge || '🛡️'}</span>
+            <span class="gov-banner-text">ممیزی نظارتی مستقل پیرامون کلام ${this.escapeHtml(turn.targetSpeakerName || 'شورا')}</span>
+          </div>
+          ${thinkingHtml}
+          <div class="symposium-markdown ${isRTL ? 'is-rtl' : 'is-ltr'}">${renderedMd || (turn.isStreaming ? '<p style="color:#9ca3af;font-style:italic;">در حال نگارش ممیزی نظارتی...</p>' : '<p></p>')}</div>
+          ${pulseHtml}
+
+          <div class="symposium-bubble-actions">
+            <button type="button" class="btn-bubble-chip crown-chip btn-crown-chip" data-turn-id="${turn.id}" title="ثبت نکات این نظر نظارتی در دفتر اجماع">
+              <span>💎 Crown to Ledger</span>
+            </button>
+            <button type="button" class="btn-bubble-chip delete-chip btn-delete-turn-chip" data-turn-id="${turn.id}" title="حذف">
+              <span>🗑️ Delete</span>
+            </button>
+          </div>
+        </div>
+      `;
+    } else if (isUser) {
       const speakerBadge = isSeatedUser
         ? `${turn.speakerName} (${turn.personaBadge || '👑 You'})`
         : 'Human Maestro (Observer)';
@@ -197,6 +243,7 @@ export class SymposiumTranscript {
         </div>
         <div class="symposium-bubble-card ${isRTL ? 'is-rtl' : 'is-ltr'}" dir="${textDir}">
           <div>${this.escapeHtml(turn.text)}</div>
+          ${govNotesHtml}
           <div class="symposium-bubble-actions user-actions">
             <button type="button" class="btn-bubble-chip delete-chip btn-delete-turn-chip" data-turn-id="${turn.id}" title="حذف این پیام از تاریخچه میزگرد">
               <span>🗑️ Delete</span>

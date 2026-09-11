@@ -12,11 +12,12 @@ export class SymposiumDais {
       onPassBaton: () => {},
       onConfigureSeat: () => {},
       onToggleMute: () => {},
+      onCallSupervisor: () => {},
       ...callbacks
     };
   }
 
-  render(seats = [], activeIndex = -1, waitingForUser = false, recommendedNextIndex = -1, waitingForMaestro = false, isSpeaking = false) {
+  render(seats = [], activeIndex = -1, waitingForUser = false, recommendedNextIndex = -1, waitingForMaestro = false, isSpeaking = false, supervisors = [], activeSupervisorCardIds = new Set()) {
     if (!this.ribbonEl) return;
     this.ribbonEl.innerHTML = '';
 
@@ -139,6 +140,65 @@ export class SymposiumDais {
 
       this.ribbonEl.appendChild(seatCard);
     });
+
+    // ── بخش کابینه نظارت و ارکان مدیریتی در ریل چپ ──
+    if (supervisors && supervisors.length > 0) {
+      const divider = document.createElement('div');
+      divider.className = 'dais-supervisors-divider';
+      divider.innerHTML = `
+        <span class="supervisors-section-label">🛡️ کابینه نظارت (${supervisors.length})</span>
+      `;
+      this.ribbonEl.appendChild(divider);
+
+      supervisors.forEach(sup => {
+        const isEvaluating = activeSupervisorCardIds.has(sup.cardId);
+        const pod = document.createElement('div');
+        pod.className = `symposium-supervisor-pod ${isEvaluating ? 'evaluating' : ''}`;
+        pod.style.setProperty('--sup-color', sup.color || '#10a37f');
+        pod.title = `ناظر شورا: ${sup.name} (${sup.roleTitle}) - کلیک برای فراخوانی آنی`;
+
+        pod.innerHTML = `
+          <div class="sup-pod-main">
+            <div class="sup-jewel-avatar">
+              <span class="avatar-symbol">${sup.roleBadge || '🛡️'}</span>
+              <span class="sup-status-dot ${isEvaluating ? 'evaluating' : 'idle'}"></span>
+            </div>
+            <div class="seat-details-expandable">
+              <div class="seat-name-row">
+                <span class="seat-name-text" title="${this.escapeHtml(sup.name)}">${this.escapeHtml(sup.name)}</span>
+              </div>
+              <span class="seat-persona-subtext" title="${this.escapeHtml(sup.roleTitle)}">
+                ${this.escapeHtml(sup.roleTitle.split('(')[0].trim())}
+              </span>
+            </div>
+          </div>
+          <div class="seat-tail-cluster">
+            ${isEvaluating ? `
+              <div class="seat-live-wave" title="در حال ممیزی...">
+                <span></span><span></span><span></span>
+              </div>
+            ` : `
+              <button type="button" class="btn-supervisor-call" title="فراخوانی آنی این ناظر (⚡)">
+                <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <span class="btn-call-text">فراخوانی</span>
+              </button>
+            `}
+          </div>
+        `;
+
+        pod.querySelector('.btn-supervisor-call')?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.callbacks.onCallSupervisor?.(sup.assignmentId);
+        });
+
+        pod.addEventListener('click', (e) => {
+          if (e.target.closest('.btn-supervisor-call')) return;
+          this.callbacks.onCallSupervisor?.(sup.assignmentId);
+        });
+
+        this.ribbonEl.appendChild(pod);
+      });
+    }
   }
 
   highlightActiveSeat(activeIndex = -1, waitingForUser = false, recommendedNextIndex = -1, waitingForMaestro = false, isSpeaking = false) {
