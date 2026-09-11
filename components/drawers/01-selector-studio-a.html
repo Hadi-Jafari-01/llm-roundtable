@@ -1,0 +1,115 @@
+    <!-- Module A: Neural DOM Driver Studio -->
+    <div id="selector-studio-backdrop" class="selector-studio-backdrop"></div>
+    <aside id="selector-studio-drawer" class="selector-studio-drawer">
+      <div class="studio-drawer-header">
+        <div class="studio-drawer-title-group">
+          <div class="studio-drawer-gem">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/>
+            </svg>
+          </div>
+          <div>
+            <h2>Neural DOM Driver Studio</h2>
+            <p>Interactive Selector & Interaction Automation Engine</p>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px; padding-right: 36px;">
+          <button id="btn-close-studio-drawer" class="studio-drawer-close" title="Close Drawer (Esc)">✕</button>
+        </div>
+      </div>
+
+      <!-- Profiles Carousel -->
+      <div class="studio-profiles-bar">
+        <div class="studio-profiles-label">
+          <span>Active Driver Profile</span>
+          <span style="font-weight: 500; text-transform: none; color: #a5b4fc;">Live Synced</span>
+        </div>
+        <div class="studio-profiles-scroll" id="studio-profiles-scroll"></div>
+      </div>
+
+      <!-- Scrollable Form Body -->
+      <form id="form-driver-editor" class="studio-drawer-body">
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span>Profile Name</span>
+            </label>
+            <span class="driver-field-badge">Meta</span>
+          </div>
+          <input type="text" id="driver-field-name" class="driver-text-input" placeholder="e.g. ChatGPT (OpenAI)" required />
+        </div>
+
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+              <span>Domain Matcher</span>
+            </label>
+            <span class="driver-field-badge">Regex / Hostnames</span>
+          </div>
+          <input type="text" id="driver-field-domain" class="driver-text-input" placeholder="e.g. chatgpt.com, openai.com" required />
+        </div>
+
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              <span>Chat Input Box Selector</span>
+            </label>
+            <span class="driver-field-badge">CSS</span>
+          </div>
+          <div class="driver-input-row">
+            <input type="text" id="driver-field-input-selector" class="driver-text-input" placeholder="CSS query matching input textarea or div" />
+            <button type="button" class="btn-probe-jewel" data-probe-field="inputSelector">🎯 Probe</button>
+          </div>
+          <div id="probe-status-inputSelector" class="probe-status-row"></div>
+        </div>
+
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              <span>Input Dispatch Strategy</span>
+            </label>
+            <span class="driver-field-badge">Engine</span>
+          </div>
+          <select id="driver-field-input-strategy" class="driver-select-input">
+            <option value="auto">Auto Heuristic (ContentEditable vs Native)</option>
+            <option value="lexical">Lexical / React Synthetic (ChatGPT)</option>
+            <option value="execCommand">ExecCommand InsertText (Claude / Gemini)</option>
+            <option value="native">Native Property Setter (Standard Textarea)</option>
+            <option value="simulatedKeys">Simulated Keyboard Events</option>
+          </select>
+        </div>
+
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              <span>Send / Submit Button Selector</span>
+            </label>
+            <span class="driver-field-badge">CSS</span>
+          </div>
+          <div class="driver-input-row">
+            <input type="text" id="driver-field-submit-selector" class="driver-text-input" placeholder="CSS query matching send button" />
+            <button type="button" class="btn-probe-jewel" data-probe-field="submitSelector">🎯 Probe</button>
+          </div>
+          <div id="probe-status-submitSelector" class="probe-status-row"></div>
+        </div>
+
+        <div class="driver-field-card">
+          <div class="driver-field-top">
+            <label class="driver-field-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+              <span>Submit Mechanism</span>
+            </label>
+            <span class="driver-field-badge">Action</span>
+          </div>
+          <select id="driver-field-submit-mechanism" class="driver-select-input">
+            <option value="click">Synthetic Button Click</option>
+            <option value="enterKey">Keyboard Enter Event (keyCode 13)</option>
+            <option value="formSubmit">Form Submit Event</option>
+          </select>
+        </div>
+

@@ -1,0 +1,77 @@
+    <!-- The Floating Omnibar (#2f2f2f & #212121) -->
+    <div class="omnibar-capsule-island" id="omnibar-island">
+      
+      <!-- Direct Responsive Input Bar -->
+      <div class="omnibar-compact-bar" id="capsule-compact-trigger">
+        <div class="capsule-spark-gem">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M12 2l2.4 7.2L21 12l-6.6 2.8L12 22l-2.4-7.2L3 12l6.6-2.8L12 2z" />
+          </svg>
+        </div>
+        <textarea 
+          id="main-omnibar-input" 
+          class="omnibar-direct-input" 
+          placeholder="Dispatch prompt across active intelligences... (⌘↵ to send)"
+          rows="1"
+          autocomplete="off"
+          spellcheck="false"
+          dir="auto"
+        ></textarea>
+        <div class="capsule-hotkey-tags">
+          <button type="button" id="btn-omnibar-expand-toggle" class="btn-omnibar-tool" title="Expand Studio Mode (⌘K)">
+            <kbd>⌘</kbd><kbd>K</kbd>
+          </button>
+          <button type="button" id="btn-main-omnibar-send" class="btn-direct-send-jewel" title="Dispatch (⌘↵)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Expanded Multi-Line Prompt Studio -->
+      <div class="omnibar-studio-layout hidden" id="capsule-studio">
+        <div class="studio-accessory-strip">
+          <div class="sync-scope-cluster">
+            <button class="sync-scope-btn active" data-sync="all" title="Send to all cards on canvas">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg>
+              <span>All Cards (<span id="total-cards-count">3</span>)</span>
+            </button>
+            <button class="sync-scope-btn" data-sync="focused" title="Send only to focused card">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
+              <span>Focused Pearl</span>
+            </button>
+          </div>
+
+          <div class="studio-bots-ribbon" id="studio-bots-ribbon"></div>
+
+          <button id="btn-collapse-studio" class="btn-collapse-studio" title="Collapse Studio (Escape)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
+          </button>
+        </div>
+
+        <div class="studio-input-row">
+          <textarea 
+            id="studio-prompt-textarea" 
+            class="studio-textarea" 
+            placeholder="Compose prompt for all intelligences... (⌘↵ to send, Esc to collapse)" 
+            rows="1"
+            autocomplete="off"
+            spellcheck="false"
+          ></textarea>
+
+          <div class="studio-actions-dock">
+            <span class="char-counter" id="studio-char-count">0</span>
+            <button id="btn-studio-clear" class="btn-clear-input hidden" title="Clear text">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            
+            <button id="btn-jewel-send" class="btn-dispatch-jewel" title="Dispatch prompt (Cmd/Ctrl + Enter)">
+              <span>Send</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <span class="key-pill"><kbd>⌘</kbd><kbd>↵</kbd></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+

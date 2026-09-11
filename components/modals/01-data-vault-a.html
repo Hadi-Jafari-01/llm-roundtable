@@ -1,0 +1,69 @@
+    <!-- Modal: Universal Data Vault -->
+    <div id="modal-data-vault" class="modal-veil hidden">
+      <div class="modal-card data-vault-modal-card">
+        <div class="vault-header-bar">
+          <div class="vault-title-group">
+            <div class="vault-gem-badge">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+            </div>
+            <div>
+              <h3>صندوق جامع داده‌ها (Universal Data Vault)</h3>
+              <p>پشتیبان‌گیری کامل، انتقال یکپارچه داده‌ها، ایمپورت و اکسپورت تفکیکی تمام بخش‌ها</p>
+            </div>
+          </div>
+          <button id="btn-close-data-vault" class="modal-close-icon" title="بستن (Esc)">✕</button>
+        </div>
+
+        <div class="vault-tabs-nav">
+          <button type="button" class="vault-tab-btn active" data-tab="master">
+            <span>🌟 پشتیبان کامل (Master Backup)</span>
+          </button>
+          <button type="button" class="vault-tab-btn" data-tab="granular">
+            <span>📦 استخراج و بازیابی تفکیکی (Granular)</span>
+          </button>
+          <button type="button" class="vault-tab-btn" data-tab="maintenance">
+            <span>⚙️ نگهداری و بازنشانی (Maintenance)</span>
+          </button>
+        </div>
+
+        <div class="vault-body-content">
+          <div id="vault-tab-master" style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="vault-master-hero">
+              <div class="vault-action-card hero-export">
+                <div class="vault-card-icon" style="background: rgba(16, 185, 129, 0.2); color: #10a37f;">
+                  💾
+                </div>
+                <h4>پشتیبان‌گیری یکپارچه از همه‌چیز</h4>
+                <p>دریافت یک فایل جامع (.omniai.json) شامل تمام بوم و کارت‌ها، درایورهای DOM، سناریوها، پرسوناهای تالار هم‌اندیشی، تمام گفتگوها و جلسات شورا.</p>
+                <button type="button" id="btn-vault-export-master" class="btn-vault-hero-action export">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  <span>دانلود پشتیبان کامل (.omniai.json)</span>
+                </button>
+              </div>
+
+              <div class="vault-action-card hero-import">
+                <div class="vault-card-icon" style="background: #2a2a2a; color: #ececec;">
+                  🔄
+                </div>
+                <h4>بازیابی و درون‌ریزی کامل</h4>
+                <p>بارگذاری فایل پشتیبان جامع برای بازیابی آنی تمام تنظیمات، کارت‌ها، درایورها، چت‌ها و سناریوها در یک کلیک.</p>
+                
+                <div id="vault-master-dropzone" class="vault-dropzone">
+                  <span style="font-size: 20px;">📁</span>
+                  <span style="font-size: 11.5px; color: #f1f5f9; font-weight: 500;">فایل پشتیبان را اینجا بکشید و رها کنید</span>
+                  <span style="font-size: 10px; color: #9ca3af;">یا روی دکمه زیر کلیک نمایید</span>
+                </div>
+
+                <input type="file" id="file-vault-import-master" accept=".json,.omniai.json" style="display: none;" />
+                <button type="button" id="btn-trigger-import-master" class="btn-vault-hero-action import">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  <span>انتخاب فایل و بازیابی همه‌چیز</span>
+                </button>
+              </div>
+            </div>
+          </div>
+

@@ -1,0 +1,124 @@
+    <!-- Module D: The Celestial Council Chamber -->
+    <div id="council-chamber-overlay" class="council-chamber-overlay" aria-label="The Celestial Council">
+      <header class="council-header-bar">
+        <div class="council-brand-group">
+          <div class="council-gem-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 3a9 9 0 0 1 9 9M12 21a9 9 0 0 1-9-9"/>
+              <circle cx="12" cy="12" r="4"/>
+              <polygon points="12 2 15 8 22 9 17 14 18 21 12 18 6 21 7 14 2 9 9 8 12 2" stroke="currentColor" fill="none" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="council-title-stack">
+            <h2>The Celestial Council</h2>
+            <p>تالار شورای افلاک • Autonomous Multi-Model Consensus</p>
+          </div>
+        </div>
+
+        <div class="council-stage-timeline">
+          <div class="council-stage-step active" data-stage="1">
+            <span class="step-dot"></span>
+            <span>1. First Opinions</span>
+          </div>
+          <div class="council-timeline-divider"></div>
+          <div class="council-stage-step" data-stage="2">
+            <span class="step-dot"></span>
+            <span>2. Peer Review</span>
+          </div>
+          <div class="council-timeline-divider"></div>
+          <div class="council-stage-step" data-stage="3">
+            <span class="step-dot"></span>
+            <span>3. Consensus Throne</span>
+          </div>
+        </div>
+
+        <div class="council-header-actions" style="padding-right: 36px;">
+          <input type="file" id="file-council-import" accept=".json" style="display: none;" />
+          <button type="button" id="btn-council-import-json" class="btn-council-action" title="بازیابی جلسه شورا از فایل JSON">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span>Import Session</span>
+          </button>
+          <button type="button" id="btn-council-export-json" class="btn-council-action" title="استخراج کل جلسه شورا به عنوان JSON">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Export JSON</span>
+          </button>
+
+          <div id="council-chairman-header-badge" class="chairman-pill-badge">
+            <span>👑 Chairman</span>
+          </div>
+
+          <button type="button" id="btn-close-council-chamber" class="btn-council-action" title="Close Council (Esc)">✕</button>
+        </div>
+      </header>
+
+      <main class="council-chamber-body">
+        <div id="council-setup-view" class="council-setup-card">
+          <div class="council-query-box">
+            <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #f3f4f6;">
+              Challenge for the Council (پرسش یا چالش مطرح شده):
+            </label>
+            <textarea id="council-query-input" class="council-textarea" placeholder="Pose a complex query or debate for the Council to resolve... (Auto RTL/LTR)" rows="3"></textarea>
+          </div>
+
+          <div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #d1d5db;">
+                Selected Council Members & Chairman:
+              </span>
+              <span style="font-size: 10px; color: #9ca3af;">Choose 2–6 models</span>
+            </div>
+            <div id="council-model-picker-grid" class="council-selection-grid"></div>
+          </div>
+
+          <button type="button" id="btn-convene-council" class="btn-convene-council">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15 8 22 9 17 14 18 21 12 18 6 21 7 14 2 9 9 8 12 2"/></svg>
+            <span>Convene the Celestial Council (تشکیل شورا و آغاز مناظره)</span>
+          </button>
+        </div>
+
+        <div id="council-stage-view" style="display: none; flex-direction: column; gap: 20px;">
+          <div id="council-stage1-container" class="stage-opinions-grid"></div>
+          <div id="council-stage2-container" class="peer-review-matrix" style="display: none;"></div>
+
+          <div id="council-stage3-container" class="consensus-throne-card" style="display: none;">
+            <div class="throne-header">
+              <div class="throne-title-block">
+                <div class="throne-crown-gem">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15 8 22 9 17 14 18 21 12 18 6 21 7 14 2 9 9 8 12 2"/></svg>
+                </div>
+                <div>
+                  <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: #ffffff;">The Consensus Throne (سنتز نهایی و نتیجه قطعی)</h3>
+                  <p id="throne-chairman-name" style="margin: 2px 0 0 0; font-size: 11px; color: #fde68a;">By Council Chairman</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="throne-synthesis-body" class="throne-body" dir="auto"></div>
+
+            <div class="throne-actions-dock">
+              <button type="button" id="btn-council-export-briefing" class="btn-council-action">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                <span>Export Council Briefing (.md)</span>
+              </button>
+              <button type="button" id="btn-council-copy-synthesis" class="btn-council-action" style="background: #2a2a2a; border-color: rgba(255,255,255,0.2); color: #ffffff;">
+                <span>Copy Master Answer</span>
+              </button>
+              <button type="button" id="btn-council-restart" class="btn-council-action" style="margin-left: 10px;">
+                <span>New Session</span>
+              </button>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+            <button type="button" id="btn-council-proceed-stage2" class="btn-council-action" style="display: none; background: #2a2a2a; color: #ffffff; font-weight: 600;">
+              <span>Proceed to Peer Review (مرحله دوم: بررسی همتایان) →</span>
+            </button>
+            <button type="button" id="btn-council-proceed-stage3" class="btn-council-action" style="display: none; background: #10a37f; color: #ffffff; font-weight: 600;">
+              <span>Summon Chairman Synthesis (مرحله سوم: سنتز رئیس شورا) →</span>
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+

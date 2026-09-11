@@ -1,0 +1,114 @@
+      <!-- Logic Sanctum Atelier Drawer -->
+      <div id="sanctum-backdrop" class="sanctum-backdrop"></div>
+      <aside id="logic-sanctum-drawer" class="logic-sanctum-drawer">
+        <div class="sanctum-drawer-header">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:32px;height:32px;border-radius:8px;background:#262626;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:#10a37f;">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="4"/></svg>
+            </div>
+            <div>
+              <h3 style="margin:0;font-size:14px;color:#ffffff;">The Logic Sanctum Atelier</h3>
+              <p style="margin:2px 0 0;font-size:10.5px;color:#9ca3af;">استودیوی جامع ۴ منطقه‌ای: سناریوها، پرسوناها، سکو و موتور دیالکتیک</p>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px; padding-right: 36px;">
+            <input type="file" id="file-sanctum-import" accept=".json" style="display: none;" />
+            <button type="button" id="btn-sanctum-import-all" class="symposium-tool-btn" style="height: 28px; font-size: 10px;">
+              درون‌ریزی 📥
+            </button>
+            <button type="button" id="btn-sanctum-export-all" class="symposium-tool-btn" style="height: 28px; font-size: 10px;">
+              استخراج 📤
+            </button>
+            <button type="button" id="btn-close-sanctum" class="symposium-tool-btn btn-close">✕</button>
+          </div>
+        </div>
+
+        <div class="sanctum-zones-nav">
+          <button type="button" class="sanctum-zone-tab active" data-zone="scenarios">
+            <span>🏛️ سناریوها</span>
+          </button>
+          <button type="button" class="sanctum-zone-tab" data-zone="personas">
+            <span>🎭 پرسوناها</span>
+          </button>
+          <button type="button" class="sanctum-zone-tab" data-zone="dais-floor">
+            <span>🪑 سکو و صندلی‌ها</span>
+          </button>
+          <button type="button" class="sanctum-zone-tab" data-zone="governance">
+            <span>🛡️ کابینه نظارت</span>
+          </button>
+          <button type="button" class="sanctum-zone-tab" data-zone="engine">
+            <span>⚙️ متدولوژی و موتور</span>
+          </button>
+          <button type="button" class="sanctum-zone-tab" data-zone="history">
+            <span>📜 سوابق و جلسات</span>
+          </button>
+        </div>
+
+        <div class="sanctum-drawer-body">
+          <div id="sanctum-zone-scenarios" class="sanctum-zone-panel" style="display: flex;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+              <div>
+                <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #f3f4f6;">سناریوهای جامع میزگرد</span>
+                <p style="margin: 2px 0 0; font-size: 10px; color: #9ca3af;">طراحی و اجرای سناریوهای سفارشی</p>
+              </div>
+              <button type="button" id="btn-show-create-scenario" class="btn-load-scenario" style="width: auto; padding: 4px 12px; margin: 0; background: #262626; border-color: rgba(255,255,255,0.15); color: #ffffff;">
+                <span>+ ساخت سناریوی جدید</span>
+              </button>
+            </div>
+
+            <div id="sanctum-scenario-form-card" class="sanctum-form-card" style="display: none;">
+              <input type="hidden" id="scenario-form-id" value="" />
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span id="scenario-form-heading" style="font-size: 11.5px; font-weight: 700; color: #ffffff;">ساخت سناریوی جدید</span>
+                <button type="button" id="btn-cancel-scenario-form" style="background: none; border: none; color: #9ca3af; cursor: pointer; font-size: 12px;">✕</button>
+              </div>
+
+              <div class="driver-sub-grid">
+                <div>
+                  <label class="driver-sub-label">عنوان سناریو *</label>
+                  <input type="text" id="scenario-form-title" class="driver-text-input" placeholder="عنوان سناریو..." required />
+                </div>
+                <div>
+                  <label class="driver-sub-label">نشان / ایموجی</label>
+                  <input type="text" id="scenario-form-badge" class="driver-text-input" value="🏛️ سناریو" />
+                </div>
+              </div>
+
+              <div>
+                <label class="driver-sub-label">توضیح کوتاه درباره هدف سناریو</label>
+                <input type="text" id="scenario-form-desc" class="driver-text-input" placeholder="شرح ماموریت شورا..." />
+              </div>
+
+              <div class="driver-sub-grid">
+                <div>
+                  <label class="driver-sub-label">متدولوژی و مدل مناظره</label>
+                  <select id="scenario-form-mode" class="driver-select-input" dir="rtl">
+                    <option value="manual">Manual Conductor (دستی با عصای نوبت)</option>
+                    <option value="socratic">Socratic Dialectic (سقراطی)</option>
+                    <option value="round_robin">Orderly Round-Robin (ترتیبی)</option>
+                    <option value="delphi">Delphi Convergence (دلفی)</option>
+                    <option value="autonomous">Fully Autonomous (خودکار)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="driver-sub-label">رنگ تم سناریو</label>
+                  <input type="color" id="scenario-form-color" class="driver-text-input" value="#10a37f" style="padding: 2px 6px; height: 36px; cursor: pointer;" />
+                </div>
+              </div>
+
+              <div>
+                <label class="driver-sub-label">پرومپت یا چالش آغازین سناریو</label>
+                <textarea id="scenario-form-prompt" class="driver-text-input sanctum-directive-editor" placeholder="پرسش یا مسئله‌ای که شورا با آن آغاز می‌شود..." dir="auto"></textarea>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px;">
+                <button type="button" id="btn-dismiss-scenario-form" class="btn-utility-ghost">انصراف</button>
+                <button type="button" id="btn-save-scenario-form" class="btn-save-driver-master" style="width: auto; padding: 0 16px;">
+                  <span>ذخیره سناریو ✓</span>
+                </button>
+              </div>
+            </div>
+
+            <div id="sanctum-scenarios-grid" class="scenario-presets-grid"></div>
+          </div>
+

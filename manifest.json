@@ -56,6 +56,7 @@
         "css/components/*",
         "js/*",
         "js/modules/*",
+        "components/*",
         "manifest.webmanifest"
       ],
       "matches": ["<all_urls>"]

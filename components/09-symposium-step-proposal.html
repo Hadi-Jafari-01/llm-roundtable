@@ -1,0 +1,86 @@
+                <!-- کپسول شناور پیشنهاد نوبت هوش مصنوعی رئیس (Human-Gated Step Proposal) -->
+                <div id="composer-proposal-capsule" class="composer-proposal-capsule hidden">
+                  <div class="proposal-info-wrap">
+                    <div class="proposal-badge-row">
+                      <span class="proposal-gem-icon">👑</span>
+                      <span class="proposal-title-text">پیشنهاد رئیس شورا: نوبت</span>
+                      <span class="proposal-target-pill" id="proposal-target-pill">Claude</span>
+                    </div>
+                    <div class="proposal-mandate-preview" id="proposal-mandate-preview" dir="auto">مأموریت: نقد فرضیه قبلی</div>
+                  </div>
+                  <div class="proposal-actions">
+                    <button type="button" id="btn-approve-ai-proposal" class="btn-approve-proposal" title="تأیید پیشنهاد و ارسال نوبت به مدل">
+                      <span>تأیید و شلیک 🪄</span>
+                    </button>
+                    <button type="button" id="btn-veto-ai-proposal" class="btn-veto-proposal" title="رد پیشنهاد (وتوی تصمیم رئیس توسط انسان)">
+                      <span>وتو ✕</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="composer-top-context-pill" id="composer-speaker-hint">
+                  <span class="dot"></span>
+                  <span id="composer-speaker-name">Next: Human Maestro</span>
+                </div>
+                <div class="composer-input-row">
+                  <textarea id="symposium-prompt-input" class="chatgpt-textarea" placeholder="پیام به میزگرد یا هدایت جریان بحث... (⌘↵ برای ارسال)" rows="1" dir="auto"></textarea>
+                  <div class="composer-actions-right">
+                    <button type="button" id="btn-symposium-ask-advisor" class="btn-composer-icon advisor-btn" title="پرسش از مشاور اختصاصی با توجه به میزگرد (💡)">
+                      💡
+                    </button>
+                    <button type="button" id="btn-symposium-next-turn" class="btn-composer-icon" title="سپردن عصای نوبت به صندلی بعد (🪄)">
+                      🪄
+                    </button>
+                    <button type="button" id="btn-symposium-send-maestro" class="btn-chatgpt-send" title="ارسال پیام (⌘↵)">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="composer-footer-helper">
+                  <span class="composer-shortcut-hint">
+                    <kbd>⌘↵</kbd> ارسال به شورا • <kbd>⌥↵</kbd> یا <kbd>💡</kbd> پرسش از مشاور • <kbd>Shift↵</kbd> خط بعد
+                  </span>
+                  <span style="font-size: 9.5px; opacity: 0.7;">Zero-API Native Dialectic</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside id="symposium-ledger-tray" class="symposium-ledger-tray collapsed">
+          <div class="ledger-tray-header">
+            <div class="ledger-title-group">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15 8 22 9 17 14 18 21 12 18 6 21 7 14 2 9 9 8 12 2"/></svg>
+              <span>Consensus Ledger</span>
+            </div>
+            <span style="font-size: 10px; color: #a5b4fc;">Live Synthesized</span>
+          </div>
+
+          <div class="ledger-tray-body">
+            <div>
+              <div class="ledger-section-title">
+                <span>Confirmed Agreements</span>
+                <span style="color: #10a37f;">🟢</span>
+              </div>
+              <div id="ledger-agreements-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+            </div>
+
+            <div>
+              <div class="ledger-section-title">
+                <span>Critical Divergences</span>
+                <span style="color: #ef4444;">🔴</span>
+              </div>
+              <div id="ledger-divergences-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+            </div>
+
+            <div>
+              <div class="ledger-section-title">
+                <span>Open Hypotheses</span>
+                <span style="color: #60a5fa;">🟣</span>
+              </div>
+              <div id="ledger-questions-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+

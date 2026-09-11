@@ -1,0 +1,46 @@
+      <!-- Inline Seat Inspector Popover -->
+      <div id="seat-inline-inspector" class="seat-inline-inspector" role="dialog" aria-label="Seat Inspector">
+        <div class="inspector-header-bar">
+          <div class="inspector-model-identity">
+            <div id="inspector-model-avatar" class="inspector-avatar-gem">🤖</div>
+            <div class="inspector-title-info">
+              <h4 id="inspector-model-name">Model Name</h4>
+              <p id="inspector-persona-subtitle">The Architect</p>
+            </div>
+          </div>
+          <div class="inspector-header-actions">
+            <span id="inspector-autosave-badge" class="inspector-autosave-badge">ذخیره شد ✓</span>
+            <button type="button" id="btn-close-seat-inspector" class="btn-close-inspector" title="بستن (Esc)">✕</button>
+          </div>
+        </div>
+
+        <div class="inspector-chips-carousel" id="inspector-chips-carousel"></div>
+
+        <div class="inspector-field-group">
+          <label class="inspector-field-label">
+            <span>دستور سیستمی و پرومپت این صندلی (System Directive):</span>
+          </label>
+          <textarea id="inspector-directive-input" class="inspector-directive-textarea" placeholder="دستورالعمل فکری این مدل..." dir="auto"></textarea>
+        </div>
+
+        <div class="inspector-slider-row">
+          <span style="font-size:11px;color:#cbd5e1;font-weight:500;">وزن نفوذ رأی:</span>
+          <input type="range" id="inspector-weight-slider" class="inspector-range-input" min="10" max="250" step="10" value="100" />
+          <span id="inspector-weight-display" class="inspector-weight-value">100%</span>
+        </div>
+
+        <div class="inspector-actions-bar">
+          <button type="button" id="btn-inspector-mute" class="btn-inspector-action mute-btn">
+            🔇 Mute
+          </button>
+          <div style="display:flex;gap:6px;">
+            <button type="button" id="btn-inspector-apply-all" class="btn-inspector-action" title="اعمال به همه صندلی‌ها">
+              اعمال به همه 🌐
+            </button>
+            <button type="button" id="btn-inspector-save-preset" class="btn-inspector-action" style="color:#fde68a;" title="ذخیره به عنوان الگوی آماده">
+              + ذخیره الگو 💾
+            </button>
+          </div>
+        </div>
+      </div>
+

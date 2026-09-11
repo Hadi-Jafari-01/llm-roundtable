@@ -1,0 +1,44 @@
+    <!-- Modal: Add Custom AI Model -->
+    <div id="modal-custom-bot" class="modal-veil hidden">
+      <div class="modal-card">
+        <div class="modal-header-bar">
+          <div class="modal-title-group">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            <h3>Add Custom AI Intelligence</h3>
+          </div>
+          <button class="modal-close-icon" data-close-modal="modal-custom-bot">✕</button>
+        </div>
+
+        <form id="form-custom-bot" class="modal-content-body">
+          <div class="form-field">
+            <label for="custom-bot-name">Intelligence Name</label>
+            <input type="text" id="custom-bot-name" placeholder="e.g. Local Ollama, Phind, Mistral" required />
+          </div>
+
+          <div class="form-field">
+            <label for="custom-bot-url">Web App URL</label>
+            <input type="url" id="custom-bot-url" placeholder="https://chat.mistral.ai or http://localhost:3000" required />
+            <span class="field-tip">DeclarativeNetRequest framing engine removes frame embedding blocks automatically.</span>
+          </div>
+
+          <div class="form-field">
+            <label>Quick Presets</label>
+            <div class="quick-presets-flow">
+              <button type="button" class="quick-bot-chip" data-name="Local Ollama" data-url="http://localhost:11434">Local Ollama</button>
+              <button type="button" class="quick-bot-chip" data-name="Open-WebUI" data-url="http://localhost:8080">Open-WebUI</button>
+              <button type="button" class="quick-bot-chip" data-name="LM Studio" data-url="http://localhost:1234">LM Studio</button>
+              <button type="button" class="quick-bot-chip" data-name="HuggingChat" data-url="https://huggingface.co/chat">HuggingChat</button>
+              <button type="button" class="quick-bot-chip" data-name="vLLM" data-url="http://localhost:8000">vLLM</button>
+            </div>
+          </div>
+
+          <div class="modal-actions-bar">
+            <button type="button" class="action-btn secondary" data-close-modal="modal-custom-bot">Cancel</button>
+            <button type="submit" class="action-btn primary">Add to Infinite Canvas</button>
+          </div>
+        </form>
+      </div>
+    </div>
+

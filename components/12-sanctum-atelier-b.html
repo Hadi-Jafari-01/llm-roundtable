@@ -1,0 +1,66 @@
+          <div id="sanctum-zone-personas" class="sanctum-zone-panel" style="display: none;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+              <div>
+                <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #f3f4f6;">کتابخانه پرسوناهای شناختی</span>
+                <p style="margin: 2px 0 0; font-size: 10px; color: #9ca3af;">تعریف و انتساب نقش‌های فکری و تخصصی</p>
+              </div>
+              <button type="button" id="btn-show-create-persona" class="btn-load-scenario" style="width: auto; padding: 4px 12px; margin: 0; background: #262626; border-color: rgba(255,255,255,0.15); color: #ffffff;">
+                <span>+ ساخت پرسونای جدید</span>
+              </button>
+            </div>
+
+            <div id="sanctum-persona-form-card" class="sanctum-form-card" style="display: none;">
+              <input type="hidden" id="persona-form-id" value="" />
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span id="persona-form-heading" style="font-size: 11.5px; font-weight: 700; color: #ffffff;">ساخت پرسونای جدید</span>
+                <button type="button" id="btn-cancel-persona-form" style="background: none; border: none; color: #9ca3af; cursor: pointer; font-size: 12px;">✕</button>
+              </div>
+
+              <div class="driver-sub-grid">
+                <div>
+                  <label class="driver-sub-label">عنوان و هویت پرسونا *</label>
+                  <input type="text" id="persona-form-title" class="driver-text-input" placeholder="مثال: منتقد کد، معمار..." required />
+                </div>
+                <div>
+                  <label class="driver-sub-label">نشان / ایموجی</label>
+                  <input type="text" id="persona-form-badge" class="driver-text-input" value="🎭 پرسونا" />
+                </div>
+              </div>
+
+              <div>
+                <label class="driver-sub-label">رنگ نشانگر پرسونا</label>
+                <input type="color" id="persona-form-color" class="driver-text-input" value="#10a37f" style="padding: 2px 6px; height: 36px; cursor: pointer;" />
+              </div>
+
+              <div>
+                <label class="driver-sub-label">دستورالعمل سیستمی و مأموریت فکری پرسونا (Directive) *</label>
+                <textarea id="persona-form-directive" class="driver-text-input sanctum-directive-editor" placeholder="دستورالعمل، اولویت‌ها و تخصص..." dir="auto" required></textarea>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px;">
+                <button type="button" id="btn-dismiss-persona-form" class="btn-utility-ghost">انصراف</button>
+                <button type="button" id="btn-save-persona-form" class="btn-save-driver-master" style="width: auto; padding: 0 16px;">
+                  <span>ذخیره پرسونا ✓</span>
+                </button>
+              </div>
+            </div>
+
+            <div id="sanctum-personas-grid" class="persona-presets-grid"></div>
+          </div>
+
+          <div id="sanctum-zone-dais-floor" class="sanctum-zone-panel" style="display: none;">
+            <div class="dais-floor-plan-card">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <span style="font-size: 11.5px; font-weight: 700; color: #f1f5f9;">چیدمان و انتخاب صندلی‌های شورا</span>
+                  <p style="margin: 2px 0 0; font-size: 10px; color: #9ca3af;">روی هر صندلی کلیک کنید تا مشخصات آن در کادر زیر ویرایش شود</p>
+                </div>
+                <span class="driver-field-badge">Chamber Dais</span>
+              </div>
+              <div id="dais-interactive-floor-circle" class="dais-interactive-circle"></div>
+            </div>
+
+            <div class="dais-seat-selector-bar" id="dais-seat-selector-bar"></div>
+            <div id="dais-seat-editor-container" class="dais-seat-editor-card"></div>
+          </div>
+

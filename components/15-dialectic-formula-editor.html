@@ -1,0 +1,102 @@
+              <!-- ویرایشگر فرمول پرومپت دیالکتیک -->
+              <div class="formula-editor-card">
+                <div class="formula-editor-toolbar">
+                  <div class="formula-toolbar-title-group">
+                    <span class="formula-toolbar-icon">⚡</span>
+                    <span class="formula-toolbar-title">اسکلت فرمول پرومپت دیالکتیک</span>
+                    <span id="formula-stats-badge" class="formula-stats-badge">۰ نویسه</span>
+                  </div>
+                  <div class="formula-toolbar-actions">
+                    <button type="button" id="btn-copy-formula" class="btn-formula-tool">
+                      <span>کپی 📋</span>
+                    </button>
+                    <button type="button" id="btn-clear-formula" class="btn-formula-tool reset">
+                      <span>پاک کردن 🗑️</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="formula-textarea-wrapper">
+                  <textarea id="sanctum-template-textarea" class="formula-textarea" placeholder="فرمول دلخواه ساختار پرومپت شورا..." dir="rtl"></textarea>
+                </div>
+
+                <div class="formula-macros-wrapper">
+                  <div class="macros-header-row">
+                    <span class="macros-header-title">ماکروهای پویا (جهت درج در فرمول کلیک کنید):</span>
+                    <span class="macros-hint-pill">Dynamic Injection</span>
+                  </div>
+                  <div id="sanctum-macro-chips" class="macro-chips-flow">
+                    <button type="button" class="macro-chip-btn" data-macro="{{methodology_mandate}}"><code>{{methodology_mandate}}</code> <small>(فرمان گام متدولوژی)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{methodology_step}}"><code>{{methodology_step}}</code> <small>(نام فاز جاری)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{methodology_title}}"><code>{{methodology_title}}</code> <small>(نام متدولوژی)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{speaker_role}}"><code>{{speaker_role}}</code> <small>(نقش مدل)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{user_core_prompt}}"><code>{{user_core_prompt}}</code> <small>(چالش کاربر)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_name}}"><code>{{last_speaker_name}}</code> <small>(گوینده قبلی)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{last_speaker_argument}}"><code>{{last_speaker_argument}}</code> <small>(استدلال قبلی)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{round_context_brief}}"><code>{{round_context_brief}}</code> <small>(سوابق روند)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{consensus_agreements}}"><code>{{consensus_agreements}}</code> <small>(توافقات)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{consensus_gaps}}"><code>{{consensus_gaps}}</code> <small>(نقاط اختلاف)</small></button>
+                    <button type="button" class="macro-chip-btn" data-macro="{{round_number}}"><code>{{round_number}}</code> <small>(شماره دور)</small></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="engine-section-block">
+              <div class="engine-section-header">
+                <span class="engine-section-title">۳. قوانین کلان و دستورالعمل مشترک</span>
+                <span class="engine-section-badge">احکام</span>
+              </div>
+
+              <div class="driver-sub-grid">
+                <div class="driver-field-card" style="padding: 12px 14px;">
+                  <label class="driver-sub-label">سقف تعداد دورهای مناظره (Max Rounds)</label>
+                  <input type="number" id="sanctum-max-rounds" class="driver-text-input" min="1" max="50" value="10" />
+                </div>
+                <div class="driver-field-card" style="padding: 12px 14px;">
+                  <label class="driver-sub-label">مدیریت حجم تاریخچه (Context Distillation)</label>
+                  <select id="sanctum-distill-select" class="driver-select-input" dir="rtl">
+                    <option value="digest">Executive Digest (خلاصه نکات - بهینه‌سازی توکن)</option>
+                    <option value="verbatim">Full Verbatim (ارسال کامل متن‌ها)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="driver-field-card" style="padding: 14px 16px;">
+                <div class="driver-field-top" style="margin-bottom: 6px;">
+                  <label class="driver-field-label">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                    <span>دستورالعمل مشترک اجباری برای تمام مدل‌ها (Global Mandate)</span>
+                  </label>
+                  <div style="display: flex; gap: 6px;">
+                    <button type="button" id="btn-save-current-global-directive-preset" class="btn-custom-bot-link" style="font-size: 11px;">+ ذخیره به عنوان الگوی آماده</button>
+                    <button type="button" id="btn-del-global-directive-preset" class="btn-custom-bot-link" style="color: #f87171; font-size: 11px; display: none;">حذف این الگو</button>
+                  </div>
+                </div>
+                <select id="sanctum-global-directive-preset-select" class="driver-select-input" dir="rtl" style="margin-bottom: 8px;">
+                  <option value="">-- الگوهای ذخیره‌شده دستورالعمل مشترک --</option>
+                </select>
+                <textarea id="sanctum-global-directive" class="driver-text-input sanctum-directive-editor" placeholder="دستوری که به ابتدای پرومپت همه مدل‌ها افزوده می‌شود..." dir="rtl"></textarea>
+              </div>
+
+              <button type="button" id="btn-save-protocols" class="btn-save-driver-master" style="margin-top: 6px;">
+                <span>ذخیره و تثبیت کلیه تنظیمات موتور مناظره ✓</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="sanctum-zone-history" class="sanctum-zone-panel" style="display: none;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+              <div>
+                <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #f3f4f6;">مدیریت سوابق و تاریخچه میزگردها</span>
+                <p style="margin: 2px 0 0; font-size: 10px; color: #9ca3af;">ادامه جلسات قبلی، دریافت گزارشات و آرشیو کامل مذاکرات</p>
+              </div>
+              <button type="button" id="btn-sanctum-new-session" class="btn-load-scenario" style="width: auto; padding: 4px 12px; margin: 0; background: #262626; border-color: rgba(255,255,255,0.15); color: #ffffff;">
+                <span>+ آغاز میزگرد جدید</span>
+              </button>
+            </div>
+            <div id="sanctum-sessions-list" style="display: flex; flex-direction: column; gap: 10px; margin-top: 4px;"></div>
+          </div>
+        </div>
+      </aside>
+

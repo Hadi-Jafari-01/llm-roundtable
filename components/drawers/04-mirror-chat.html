@@ -1,0 +1,65 @@
+    <!-- Module B: The Silk Mirror Sanctuary -->
+    <aside id="mirror-chat-studio" class="mirror-chat-studio">
+      <div id="mirror-resize-handle" class="mirror-resize-handle"></div>
+
+      <div class="mirror-header-bar">
+        <div class="mirror-brand-title">
+          <div class="mirror-spark-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <div class="mirror-title-text">
+            <h3>Silk Mirror Sanctuary</h3>
+            <p id="mirror-target-model-name">AI Intelligence</p>
+          </div>
+        </div>
+
+        <div class="mirror-header-actions" style="padding-right: 36px;">
+          <input type="file" id="file-mirror-import-chat" accept=".json" style="display: none;" />
+          <button id="btn-mirror-export-chat" class="mirror-icon-btn" title="Export Chat (Markdown / JSON)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+          <button id="btn-mirror-import-chat" class="mirror-icon-btn" title="Import Chat (JSON)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </button>
+          <button id="btn-mirror-sync-history" class="mirror-icon-btn" title="Sync / Extract Conversation History">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          </button>
+          <button id="btn-mirror-new-chat" class="mirror-icon-btn" title="Start New Conversation (+)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <button id="btn-close-mirror-studio" class="mirror-icon-btn" title="Close Sanctuary (Esc)">✕</button>
+        </div>
+      </div>
+
+      <div class="mirror-pearl-bar" id="mirror-pearl-bar"></div>
+      <div class="mirror-stream-viewport" id="mirror-stream-viewport"></div>
+
+      <div class="mirror-controls-dock">
+        <div class="mirror-dock-meta">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span id="mirror-char-count">0 chars</span>
+            <button type="button" id="btn-mirror-toggle-stealth" class="mirror-stealth-badge" title="Stealth Human Mode">
+              <span class="stealth-dot"></span>
+              <span id="mirror-stealth-mode-label" class="stealth-label">Human Mode: Active</span>
+            </button>
+          </div>
+          <button type="button" id="btn-mirror-stop" class="btn-stop-streaming-jewel hidden" title="Cancel Response Generation">
+            <span>■</span> Stop Generating
+          </button>
+        </div>
+
+        <div class="mirror-input-box">
+          <textarea id="mirror-prompt-textarea" class="mirror-textarea" placeholder="Message intelligence... (⌘↵ to send)" rows="1"></textarea>
+
+          <div class="mirror-dock-actions">
+            <div class="mirror-dock-left-tools"></div>
+            <button type="button" id="btn-mirror-send" class="btn-mirror-send-jewel" title="Dispatch to active model (Cmd+Enter)">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+

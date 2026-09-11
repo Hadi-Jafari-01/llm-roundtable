@@ -1,0 +1,44 @@
+    <!-- Module C: The Silk Pavilion -->
+    <div id="silk-pavilion-backdrop" class="silk-pavilion-backdrop"></div>
+    <aside id="silk-pavilion-drawer" class="silk-pavilion-drawer" aria-label="Silk Pavilion Chamber">
+      <div class="pavilion-drawer-header">
+        <div class="pavilion-header-title-group">
+          <div class="pavilion-gem-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>
+              <path d="M12 2v20M2 8.5l20 7M2 15.5l20-7"/>
+            </svg>
+          </div>
+          <div>
+            <h2>The Silk Pavilion</h2>
+            <p>Haute Atelier & Central Chamber of Studios</p>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px; padding-right: 36px;">
+          <button id="btn-close-pavilion-drawer" class="pavilion-close-btn" title="Close Pavilion (Esc)">✕</button>
+        </div>
+      </div>
+
+      <div class="pavilion-search-bar">
+        <div class="pavilion-search-wrapper">
+          <svg class="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="pavilion-search-input" class="pavilion-search-input" placeholder="Search studios, tools & accelerators... (Type to filter)" autocomplete="off" spellcheck="false" />
+          <span class="search-kbd-hint"><kbd>Esc</kbd></span>
+        </div>
+      </div>
+
+      <div class="pavilion-drawer-body">
+        <div class="pavilion-section-label">
+          <span>Curated Atelier Chambers</span>
+          <span id="pavilion-studios-count" class="pavilion-counter-pill">2 Studios</span>
+        </div>
+        <div class="pavilion-grid" id="pavilion-studios-grid"></div>
+      </div>
+
+      <div class="pavilion-drawer-footer">
+        <div class="pavilion-footer-stats" id="pavilion-footer-stats"></div>
+      </div>
+    </aside>
+

@@ -1,0 +1,44 @@
+      <!-- Slide-over Sessions History Drawer -->
+      <div id="symposium-history-backdrop" class="symposium-history-backdrop"></div>
+      <aside id="symposium-history-drawer" class="symposium-history-drawer" aria-label="Roundtable Sessions History">
+        <div class="history-drawer-header">
+          <div class="history-header-title-group">
+            <div class="history-header-gem">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
+              </svg>
+            </div>
+            <div class="history-header-text">
+              <h3>سوابق میزگردها</h3>
+              <p>مدیریت جلسات و ادامه مذاکرات پیشین</p>
+            </div>
+          </div>
+          <div class="history-header-actions">
+            <button type="button" id="btn-history-new-session" class="symposium-tool-btn primary-gold" style="height: 28px; font-size: 10.5px;">
+              <span>+ میزگرد جدید</span>
+            </button>
+            <button type="button" id="btn-close-symposium-history" class="symposium-close-btn" title="بستن سوابق (Esc)">✕</button>
+          </div>
+        </div>
+
+        <div class="history-search-bar">
+          <div class="history-search-wrapper">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" id="symposium-history-search" class="history-search-input" placeholder="جستجو در میان میزگردهای پیشین یا متن پیام‌ها..." dir="auto" />
+          </div>
+        </div>
+
+        <div class="history-drawer-body">
+          <div id="symposium-sessions-list" class="sessions-history-stack"></div>
+        </div>
+
+        <div class="history-drawer-footer">
+          <button type="button" id="btn-clear-all-symposium-history" class="btn-utility-ghost" style="color: #f87171; font-size: 10.5px;">
+            <span>پاک‌سازی همه سوابق 🗑️</span>
+          </button>
+        </div>
+      </aside>
+    </div>
+

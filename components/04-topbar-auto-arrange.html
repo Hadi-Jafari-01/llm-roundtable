@@ -1,0 +1,136 @@
+        <!-- Layout Architecture & Auto-Arrange Popover Trigger -->
+        <div class="collapsible-island-wrapper" id="wrapper-layout-menu">
+          <button id="btn-layout-menu" class="nano-jewel-btn" title="Layouts & Auto-Arrange (⌘⇧L)">
+            <svg class="icon-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
+              <rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>
+            </svg>
+            <span>Layout</span>
+            <span class="active-badge-dot" id="auto-arrange-status-dot"></span>
+            <svg class="icon-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </button>
+
+          <div id="auto-arrange-popover" class="spatial-popover-menu dropdown-right hidden">
+            <div class="popover-header">
+              <div class="popover-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+                <span>Auto-Arrangement Engine</span>
+              </div>
+              <span class="popover-badge">Spatial V2</span>
+            </div>
+
+            <div class="popover-section">
+              <span class="section-label">Architecture Preset</span>
+              <div class="layout-presets-grid">
+                <button class="layout-preset-chip active" data-preset="atelier" title="Atelier Dynamic Grid">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                  <span>Grid</span>
+                </button>
+                <button class="layout-preset-chip" data-preset="ribbon" title="Panoramic Horizon Ribbon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="6" height="12" rx="1.5"/><rect x="9" y="6" width="6" height="12" rx="1.5"/><rect x="16" y="6" width="6" height="12" rx="1.5"/></svg>
+                  <span>Ribbon</span>
+                </button>
+                <button class="layout-preset-chip" data-preset="duet" title="Dual Duet Focus">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="8.5" height="14" rx="2"/><rect x="12.5" y="5" width="8.5" height="14" rx="2"/></svg>
+                  <span>Duet</span>
+                </button>
+                <button class="layout-preset-chip" data-preset="hero" title="Hero & Sidebar Focus">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="11" height="16" rx="2"/><rect x="16" y="4" width="5" height="7.5" rx="1.5"/><rect x="16" y="12.5" width="5" height="7.5" rx="1.5"/></svg>
+                  <span>Hero</span>
+                </button>
+                <button class="layout-preset-chip" data-preset="vertical" title="Vertical Columns">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="9.5" y="4" width="5" height="16" rx="1.5"/><rect x="16" y="4" width="5" height="16" rx="1.5"/></svg>
+                  <span>Columns</span>
+                </button>
+                <button class="layout-preset-chip" data-preset="cascade" title="Cascade Staggered Stack">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="12" height="12" rx="2"/><rect x="6" y="6" width="12" height="12" rx="2" stroke-dasharray="2 2"/><rect x="9" y="9" width="12" height="12" rx="2"/></svg>
+                  <span>Cascade</span>
+                </button>
+                <button class="layout-preset-chip desktop-full-preset" data-preset="desktop" title="Full Desktop View (1280×850)">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2"/>
+                    <line x1="8" y1="21" x2="16" y2="21"/>
+                    <line x1="12" y1="17" x2="12" y2="21"/>
+                  </svg>
+                  <span>Full Desktop View</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="popover-section">
+              <label class="toggle-row" for="switch-auto-arrange">
+                <div class="toggle-info">
+                  <span class="toggle-title">Auto-arrange on new tabs</span>
+                  <span class="toggle-sub">Auto-pack cards whenever a new AI tab is opened</span>
+                </div>
+                <input type="checkbox" id="switch-auto-arrange" class="silk-switch" checked />
+              </label>
+            </div>
+
+            <div class="popover-section">
+              <label class="toggle-row" for="switch-auto-fit">
+                <div class="toggle-info">
+                  <span class="toggle-title">Auto-Fit Viewport</span>
+                  <span class="toggle-sub">Zoom to fit all cards into screen after arranging</span>
+                </div>
+                <input type="checkbox" id="switch-auto-fit" class="silk-switch" checked />
+              </label>
+            </div>
+
+            <div class="popover-section">
+              <span class="section-label">Card Spacing / Gap</span>
+              <div class="spacing-preset-group">
+                <button class="spacing-preset-chip" data-spacing="12">
+                  <strong>Compact</strong>
+                  <small>12px</small>
+                </button>
+                <button class="spacing-preset-chip active" data-spacing="24">
+                  <strong>Balanced</strong>
+                  <small>24px</small>
+                </button>
+                <button class="spacing-preset-chip" data-spacing="40">
+                  <strong>Spacious</strong>
+                  <small>40px</small>
+                </button>
+              </div>
+            </div>
+
+            <div class="popover-section">
+              <span class="section-label">Card Sizing Mode</span>
+              <div class="sizing-preset-group">
+                <button class="sizing-preset-chip" data-sizing="desktop" title="Full Desktop View (1280×850)">
+                  <strong>Desktop</strong>
+                  <small>1280×850</small>
+                </button>
+                <button class="sizing-preset-chip active" data-sizing="balanced">
+                  <strong>Balanced</strong>
+                  <small>640×820</small>
+                </button>
+                <button class="sizing-preset-chip" data-sizing="compact">
+                  <strong>Compact</strong>
+                  <small>520×720</small>
+                </button>
+                <button class="sizing-preset-chip" data-sizing="fill">
+                  <strong>Dynamic</strong>
+                  <small>Fill</small>
+                </button>
+              </div>
+            </div>
+
+            <div class="popover-actions">
+              <button id="btn-tidy-up-now" class="popover-action-btn primary" title="Tidy Up Now (⌘⇧L)">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                  <rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>
+                </svg>
+                <span>Tidy Up All Cards</span>
+                <kbd>⌘⇧L</kbd>
+              </button>
+            </div>
+          </div>
+        </div>
+

@@ -1,0 +1,99 @@
+
+    #auto-arrange-popover .layout-preset-chip.desktop-full-preset {
+      grid-column: 1 / -1 !important;
+      flex-direction: row !important;
+      gap: 8px !important;
+      padding: 7px 10px !important;
+    }
+
+    #auto-arrange-popover .layout-preset-chip.desktop-full-preset span {
+      font-size: 11px !important;
+      font-weight: 600 !important;
+    }
+
+    #auto-arrange-popover .spacing-preset-group {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 5px !important;
+    }
+
+    #auto-arrange-popover .sizing-preset-group {
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 5px !important;
+    }
+
+    #auto-arrange-popover .spacing-preset-chip,
+    #auto-arrange-popover .sizing-preset-chip {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      text-align: center !important;
+      gap: 1px !important;
+      padding: 5px 2px !important;
+      min-height: 36px !important;
+      background: #212121 !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-radius: 7px !important;
+      color: #9ca3af !important;
+      cursor: pointer !important;
+      transition: all 0.16s ease !important;
+      font-family: inherit !important;
+      line-height: 1.2 !important;
+      box-sizing: border-box !important;
+    }
+
+    #auto-arrange-popover .spacing-preset-chip strong,
+    #auto-arrange-popover .sizing-preset-chip strong {
+      font-size: 10.5px !important;
+      font-weight: 600 !important;
+      display: block !important;
+    }
+
+    #auto-arrange-popover .spacing-preset-chip small,
+    #auto-arrange-popover .sizing-preset-chip small {
+      font-size: 9px !important;
+      color: #6b7280 !important;
+      display: block !important;
+    }
+
+    #auto-arrange-popover .spacing-preset-chip:hover,
+    #auto-arrange-popover .sizing-preset-chip:hover {
+      background: #282828 !important;
+      border-color: rgba(255, 255, 255, 0.18) !important;
+      color: #f1f5f9 !important;
+    }
+
+    #auto-arrange-popover .spacing-preset-chip.active,
+    #auto-arrange-popover .sizing-preset-chip.active {
+      background: #303030 !important;
+      border-color: rgba(255, 255, 255, 0.25) !important;
+      color: #ffffff !important;
+    }
+
+    #auto-arrange-popover .popover-actions {
+      margin-top: 4px !important;
+      padding-top: 2px !important;
+    }
+
+    #auto-arrange-popover .popover-action-btn.primary {
+      width: 100% !important;
+      height: 36px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 8px !important;
+      background: #10a37f !important;
+      border: none !important;
+      border-radius: 8px !important;
+      color: #ffffff !important;
+      font-size: 12.5px !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      transition: all 0.16s ease !important;
+    }
+
+    #auto-arrange-popover .popover-action-btn.primary:hover {
+      background: #0d8a6a !important;
+    }

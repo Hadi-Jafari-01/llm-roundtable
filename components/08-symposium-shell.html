@@ -1,0 +1,78 @@
+    <!-- Module E: The Silk Symposium Chamber -->
+    <div id="silk-symposium-chamber" class="silk-symposium-overlay" aria-label="The Silk Symposium">
+      <header class="symposium-header-bar">
+        <div class="symposium-header-capsule left">
+          <div class="symposium-gem-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 3v18M3 12h18"/>
+              <circle cx="12" cy="12" r="5"/>
+            </svg>
+          </div>
+          <div class="symposium-title-stack">
+            <h2>The Silk Symposium</h2>
+            <p id="header-active-session-name" title="عنوان میزگرد فعال">تالار هم‌اندیشی و دیالکتیک هوش‌ها</p>
+          </div>
+          <button type="button" id="btn-symposium-new-session" class="symposium-tool-btn primary-gold" title="آغاز یک میزگرد جدید (با ذخیره خودکار میزگرد فعلی)">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
+            <span>+ میزگرد جدید</span>
+          </button>
+          <button type="button" id="btn-header-switch-scenario" class="active-scenario-pill" title="کلیک برای تغییر سناریوی میزگرد">
+            <span class="scenario-gem-dot"></span>
+            <span id="header-active-scenario-title">سناریوهای میزگرد</span>
+            <span style="font-size: 9px; opacity: 0.7;">▼</span>
+          </button>
+        </div>
+
+        <div class="symposium-header-capsule center">
+          <span id="symposium-topology-badge" class="topology-mode-badge">
+            <span class="dot"></span> Manual Conductor
+          </span>
+          <span id="symposium-round-counter" class="round-counter-badge">R1</span>
+          <button type="button" id="btn-symposium-autoplay-toggle" class="btn-header-play-pause" title="تغییر حالت بین نوبت‌دهی دستی و خودکار">
+            ▶️ خودکار
+          </button>
+        </div>
+
+        <div class="symposium-header-capsule right" style="padding-right: 68px;">
+          <input type="file" id="file-symposium-import" accept=".json" style="display: none;" />
+          <button type="button" id="btn-symposium-toggle-user-seat" class="symposium-tool-btn" title="حضور رسمی کاربر در شورا">
+            <span>🪑 Seat Yourself</span>
+          </button>
+          <button type="button" id="btn-symposium-toggle-dais" class="symposium-tool-btn active" title="نمایش/مخفی‌سازی ریل مدل‌ها">
+            <span>Dais Rail</span>
+          </button>
+          <button type="button" id="btn-symposium-toggle-ledger" class="symposium-tool-btn" title="دفتر کل اجماع‌ها">
+            <span>Ledger</span>
+          </button>
+          <button type="button" id="btn-symposium-open-sanctum" class="symposium-tool-btn primary-gold" title="آتلیه جامع تفکر، سناریوها و موتور دیالکتیک">
+            <span>Sanctum</span>
+          </button>
+          <button type="button" id="btn-symposium-import-briefing" class="symposium-tool-btn" title="بازیابی جلسه از فایل JSON">
+            <span>Import</span>
+          </button>
+          <button type="button" id="btn-symposium-export-briefing" class="symposium-tool-btn" title="خروجی مارک‌داون">
+            <span>Export</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="symposium-body-layout">
+        <aside id="symposium-dais-container" class="symposium-dais-left-rail" aria-label="Celestial Models Rail">
+          <div class="dais-rail-header">
+            <span class="rail-title-label">CHAIRS</span>
+            <button type="button" id="btn-symposium-toggle-rail" class="btn-rail-collapse" title="Collapse / Expand Rail">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+          </div>
+          <div id="symposium-dais-ribbon" class="dais-vertical-stack"></div>
+        </aside>
+
+        <section class="symposium-chat-stage">
+          <div id="symposium-transcript-viewport" class="symposium-transcript-viewport">
+            <div class="chat-centered-container"></div>
+          </div>
+
+          <div class="symposium-composer-container">
+            <div class="chat-centered-container">
+              <div class="symposium-chatgpt-composer">

@@ -1,0 +1,78 @@
+            <!-- ۲. موتور متدولوژی و فرمول‌های دیالکتیک یکپارچه (Unified Dialectic Engine) -->
+            <div class="engine-section-block">
+              <div class="engine-section-header">
+                <span class="engine-section-title">۲. موتور متدولوژی و فرمول‌های دیالکتیک (Unified Dialectic Engine)</span>
+                <span class="engine-section-badge">چارچوب دیالکتیک و پرومپت</span>
+              </div>
+              <p class="engine-section-desc">متدولوژی دیالکتیک را برگزینید یا اسکلت فرمول پرومپت را مطابق نیاز سفارشی‌سازی کنید. هر متدولوژی شامل گام‌های متوالی، احکام فازها و اسکلت پرومپت تزریقی است.</p>
+
+              <!-- نوار انتخابگر و ابزارهای متدولوژی -->
+              <div class="driver-field-card" style="padding: 10px 14px;">
+                <div class="driver-field-top" style="margin-bottom: 6px;">
+                  <label class="driver-field-label" style="font-size: 11.5px;">
+                    <span>متدولوژی و فرمول فعال:</span>
+                  </label>
+                  <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <button type="button" id="btn-create-methodology" class="btn-methodology-tool primary" title="طراحی متدولوژی جدید">+ متدولوژی جدید</button>
+                    <button type="button" id="btn-edit-methodology" class="btn-methodology-tool" title="ویرایش متدولوژی انتخابی">✏️ ویرایش</button>
+                    <button type="button" id="btn-duplicate-methodology" class="btn-methodology-tool" title="تکثیر متدولوژی برای سفارشی‌سازی">📋 تکثیر</button>
+                    <button type="button" id="btn-del-methodology" class="btn-methodology-tool danger" style="display: none;" title="حذف این متدولوژی سفارشی">🗑️ حذف</button>
+                  </div>
+                </div>
+                <select id="sanctum-methodology-select" class="driver-select-input" dir="rtl"></select>
+
+                <!-- نوار نانوی فازهای متدولوژی (Dialectic Step Flow Bar) -->
+                <div class="dialectic-steps-flow-container">
+                  <span class="steps-flow-label">چرخه فازهای دیالکتیک این متدولوژی:</span>
+                  <div id="sanctum-steps-flow-bar" class="dialectic-steps-flow-bar"></div>
+                </div>
+              </div>
+
+              <!-- فرم کارتی ساخت و ویرایش متدولوژی (In-Sanctum Drawer Form) -->
+              <div id="sanctum-methodology-form-card" class="sanctum-methodology-form-card" style="display: none;">
+                <input type="hidden" id="methodology-form-id" value="" />
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <span id="methodology-form-heading" style="font-size: 12px; font-weight: 700; color: #ffffff;">ساخت متدولوژی دیالکتیک جدید</span>
+                  <button type="button" id="btn-cancel-methodology-form" style="background: none; border: none; color: #9ca3af; cursor: pointer; font-size: 13px;">✕</button>
+                </div>
+
+                <div class="driver-sub-grid">
+                  <div>
+                    <label class="driver-sub-label">عنوان و نام متدولوژی *</label>
+                    <input type="text" id="methodology-form-title" class="driver-text-input" placeholder="مثال: دیالکتیک انتقادی فرانکفورت..." required />
+                  </div>
+                  <div>
+                    <label class="driver-sub-label">نشانگر / ایموجی</label>
+                    <input type="text" id="methodology-form-badge" class="driver-text-input" value="⚖️ متدولوژی" />
+                  </div>
+                </div>
+
+                <div class="driver-sub-grid">
+                  <div>
+                    <label class="driver-sub-label">رنگ شناسه متدولوژی</label>
+                    <input type="color" id="methodology-form-color" class="driver-text-input" value="#8b5cf6" style="padding: 2px 6px; height: 36px; cursor: pointer;" />
+                  </div>
+                  <div>
+                    <label class="driver-sub-label">فازها و گام‌های متوالی (جدا شده با کاما) *</label>
+                    <input type="text" id="methodology-form-steps" class="driver-text-input" placeholder="مثال: تز، آنتی‌تز، سنتز" value="تز بنیادین, آنتی‌تز رادیکال, سنتز دیالکتیکی" dir="rtl" required />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="driver-sub-label">توضیح و مبنای فلسفی/علمی متدولوژی</label>
+                  <input type="text" id="methodology-form-desc" class="driver-text-input" placeholder="شرح سازوکار این متدولوژی مناظره..." dir="rtl" />
+                </div>
+
+                <div>
+                  <label class="driver-sub-label">فرمول اسکلت پرومپت اختصاصی (اختیاری - در صورت خالی ماندن از فرمول پیش‌فرض استفاده می‌شود)</label>
+                  <textarea id="methodology-form-template" class="driver-text-input sanctum-directive-editor" placeholder="اسکلت پرومپت تزریقی این متدولوژی حاوی ماکروها..." dir="rtl"></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px;">
+                  <button type="button" id="btn-dismiss-methodology-form" class="btn-utility-ghost">انصراف</button>
+                  <button type="button" id="btn-save-methodology-form" class="btn-save-driver-master" style="width: auto; padding: 0 16px;">
+                    <span>ذخیره متدولوژی ✓</span>
+                  </button>
+                </div>
+              </div>
+

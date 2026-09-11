@@ -1,0 +1,61 @@
+        <!-- Studio Tools & Preferences Menu Dropdown Trigger -->
+        <div class="collapsible-island-wrapper" id="wrapper-tools-menu">
+          <button id="btn-tools-menu" class="nano-jewel-btn icon-only" title="Workspace Preferences & Add-ons">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="12" r="1.5"/>
+            </svg>
+          </button>
+          <div id="popover-tools-menu" class="spatial-popover-menu dropdown-right hidden">
+            <button id="menu-item-data-vault" class="popover-menu-item" title="Universal Data Vault (⌘⌥E)">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                Data Vault (Backup & Restore)
+              </span>
+              <kbd>⌘⌥E</kbd>
+            </button>
+            <button id="menu-item-custom-bot" class="popover-menu-item">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                </svg>
+                Add Custom Model URL
+              </span>
+            </button>
+            <button id="menu-item-pwa-install" class="popover-menu-item" title="Open in Standalone Desktop App Window">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+                  <path d="M7 10l5 5 5-5" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Open in Desktop Window
+              </span>
+            </button>
+            <button id="menu-item-shortcuts" class="popover-menu-item">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3m.08 4h.01"/>
+                </svg>
+                Keyboard Shortcuts
+              </span>
+              <kbd>⌘/</kbd>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dedicated Window OS Controls Cluster -->
+        <div class="window-controls-cluster hidden" id="window-controls-cluster">
+          <button id="btn-win-min" class="win-control-btn btn-min" title="Minimize">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <button id="btn-win-max" class="win-control-btn btn-max" title="Maximize / Restore">
+            <svg class="icon-max" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+            <svg class="icon-restore hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="7" width="13" height="13" rx="1.5"/><path d="M4 17V5a1 1 0 0 1 1-1h12"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+

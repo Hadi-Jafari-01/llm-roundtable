@@ -1,0 +1,109 @@
+          <!-- منطقه کابینه نظارت و مدیریت (Supervisory Governance Suite) -->
+          <div id="sanctum-zone-governance" class="sanctum-zone-panel" style="display: none;">
+            <div class="engine-section-block">
+              <div class="engine-section-header" style="display: flex; align-items: center; justify-content: space-between;">
+                <span class="engine-section-title">🛡️ کابینه ناظران و مدیران غیرشرکت‌کننده شورا</span>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <button type="button" id="btn-create-gov-role" class="btn-custom-bot-link" style="font-size: 11px;">+ نقش نظارتی سفارشی</button>
+                  <span class="engine-section-badge">ارکان نظارتی</span>
+                </div>
+              </div>
+              <p class="engine-section-desc">مدل‌های منتسب به این کابینه در صف چرخشی سخنرانان مناظره شرکت نمی‌کنند؛ بلکه در پس‌زمینه به عنوان قاضی بی‌طرف، ویراستار، راستی‌آزمای منطقی یا منشی شورا انجام وظیفه می‌نمایند.</p>
+
+              <!-- لیست الصاق‌های فعال -->
+              <div id="governance-assignments-list" style="display: flex; flex-direction: column; gap: 8px; margin: 8px 0;"></div>
+
+              <!-- فرم الصاق ناظر جدید -->
+              <div class="sanctum-form-card" style="margin-top: 6px; padding: 12px 14px;">
+                <span style="font-size: 11px; font-weight: 700; color: #ffffff;">+ انتساب کارت جدید به نقش نظارتی</span>
+                <div class="driver-sub-grid" style="margin-top: 6px;">
+                  <div>
+                    <label class="driver-sub-label">کارت هوش مصنوعی روی بوم:</label>
+                    <select id="gov-assign-card-select" class="driver-select-input" dir="rtl"></select>
+                  </div>
+                  <div>
+                    <label class="driver-sub-label">نقش نظارتی تخصصی:</label>
+                    <select id="gov-assign-role-select" class="driver-select-input" dir="rtl"></select>
+                  </div>
+                </div>
+                <div class="driver-sub-grid" style="margin-top: 6px;">
+                  <div>
+                    <label class="driver-sub-label">تریگر اجرای ناظر (Trigger Event):</label>
+                    <select id="gov-assign-trigger-select" class="driver-select-input" dir="rtl">
+                      <option value="every_turn">پس از هر پیام (Live Every Turn)</option>
+                      <option value="on_divergence">در صورت بروز اختلاف و تعارض (On Dispute)</option>
+                      <option value="end_of_round">در پایان هر راند (Round Synthesis)</option>
+                      <option value="manual_call">صرفاً با فراخوانی دستی (Manual On Demand)</option>
+                    </select>
+                  </div>
+                  <div style="display: flex; align-items: flex-end;">
+                    <button type="button" id="btn-add-gov-assignment" class="btn-save-driver-master" style="height: 38px;">
+                      <span>الصاق به کابینه نظارت 🛡️</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="sanctum-zone-engine" class="sanctum-zone-panel" style="display: none;">
+            <!-- ۱. دوشاخه‌سازی قطعی متدولوژی شورا -->
+            <div class="engine-section-block">
+              <div class="engine-section-header">
+                <span class="engine-section-title">۱. دوشاخه بنیادین متدولوژی شورا (Dual-Paradigm Engine)</span>
+                <span class="engine-section-badge">پارادایم شورا</span>
+              </div>
+              <p class="engine-section-desc">روش هدایت جلسه را مشخص کنید: مدیریت کاملاً دستی توسط انسان یا ریاست خودگردان مدل بر اساس متدولوژی علمی.</p>
+
+              <!-- سوییچ دوشاخه -->
+              <div class="dual-paradigm-switcher-grid">
+                <label class="paradigm-radio-card" for="radio-mode-manual">
+                  <input type="radio" name="debate-paradigm" id="radio-mode-manual" value="manual" checked />
+                  <div class="paradigm-card-content">
+                    <div class="paradigm-card-header">
+                      <span class="paradigm-icon">👑</span>
+                      <strong class="paradigm-title">مدیریت دستی انسان (Human Maestro)</strong>
+                    </div>
+                    <p class="paradigm-desc">کاربر انسان ریاست مطلق جلسه را بر عهده دارد. نوبت بعدی، اعطای عصای نوبت (🪄) و اعلام پایان صرفاً با کلیک مستقیم انسان انجام می‌شود.</p>
+                  </div>
+                </label>
+
+                <label class="paradigm-radio-card" for="radio-mode-ai-chairman">
+                  <input type="radio" name="debate-paradigm" id="radio-mode-ai-chairman" value="ai_chairman" />
+                  <div class="paradigm-card-content">
+                    <div class="paradigm-card-header">
+                      <span class="paradigm-icon">⚖️</span>
+                      <strong class="paradigm-title">ریاست هوشمند مدل (AI Chairman Conductor)</strong>
+                    </div>
+                    <p class="paradigm-desc">یکی از مدل‌ها به عنوان رئیس برگزیده شده و شورا را طبق یک متدولوژی علمی (مانند دیالکتیک هگلی یا دادگاه پوپر) هدایت می‌کند.</p>
+                  </div>
+                </label>
+              </div>
+
+              <!-- تنظیمات مربوط به حالت ریاست هوش مصنوعی -->
+              <div id="ai-chairman-settings-block" class="sanctum-form-card" style="display: none; margin-top: 10px;">
+                <div class="driver-sub-grid">
+                  <div>
+                    <label class="driver-sub-label">تعیین رئیس شورا (Chairman AI):</label>
+                    <select id="sanctum-chairman-card-picker" class="driver-select-input" dir="rtl"></select>
+                  </div>
+                  <div>
+                    <label class="driver-sub-label">تأخیر نوبت‌ها (ms)</label>
+                    <div class="driver-input-row">
+                      <input type="number" id="sanctum-flow-delay" class="driver-text-input" min="500" max="10000" step="200" value="2400" />
+                      <span class="unit-tag">ms</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- گیتینگ گام‌به‌گام با تأیید انسان -->
+                <label class="toggle-row" for="sanctum-step-approval-check" style="margin-top: 10px; padding: 6px 8px; background: #262626; border-radius: 8px;">
+                  <div class="toggle-info">
+                    <span class="toggle-title">تأیید دستی هر گام توسط انسان (Human-Gated Step Approval)</span>
+                    <span class="toggle-sub">رئیس شورا نوبت و مأموریت بعدی را پیشنهاد می‌دهد اما شلیک نهایی پس از کلیک شما انجام می‌گیرد.</span>
+                  </div>
+                  <input type="checkbox" id="sanctum-step-approval-check" class="silk-switch" checked />
+                </label>
+              </div>
+            </div>
+
