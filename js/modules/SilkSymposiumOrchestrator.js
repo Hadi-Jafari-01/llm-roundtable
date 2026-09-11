@@ -270,6 +270,9 @@ export class SilkSymposiumOrchestrator {
       onItemDeleted: (cat, idx) => {
         this.symposiumState.removeLedgerItem(cat, idx);
         this.ledgerView.render(this.symposiumState.ledger);
+      },
+      onLedgerUpdated: () => {
+        this.symposiumState.persistConfig();
       }
     });
   }
@@ -1282,6 +1285,16 @@ export class SilkSymposiumOrchestrator {
       (signals.agreements || []).forEach(item => this.symposiumState.addLedgerItem('agreements', item));
       (signals.divergences || []).forEach(item => this.symposiumState.addLedgerItem('divergences', item));
       (signals.openQuestions || []).forEach(item => this.symposiumState.addLedgerItem('openQuestions', item));
+
+      // اگر اختلافی ثبت شد، به ناظران مربوطه هشدار بده
+      if (signals.divergences && signals.divergences.length > 0) {
+        this.turnSequencer.triggerGovernanceEvaluation('on_divergence', {
+          seat,
+          text,
+          speakerName: seat.name,
+          divergences: signals.divergences
+        });
+      }
     }
 
     this.renderAll();
@@ -1360,13 +1373,34 @@ export class SilkSymposiumOrchestrator {
     const turn = this.symposiumState.transcript.find(t => t.id === turnId);
     if (!turn) return;
 
-    const speaker = turn.speakerName || 'مدل';
-    const textSnippet = turn.text.replace(/[\n\r]+/g, ' ').trim().slice(0, 160);
-    const itemText = `${speaker}: ${textSnippet}`;
-    const added = this.symposiumState.addLedgerItem('agreements', itemText);
-    if (added) {
+    const speaker = turn.speakerName || (turn.role === 'governance' ? (turn.roleTitle || 'ناظر شورا') : 'مدل');
+    const signals = this.ledgerView.extractSignalsFromText(turn.text, speaker);
+
+    let addedCount = 0;
+    if (signals && (signals.agreements.length || signals.divergences.length || signals.openQuestions.length)) {
+      signals.agreements.forEach(item => {
+        if (this.symposiumState.addLedgerItem('agreements', item)) addedCount++;
+      });
+      signals.divergences.forEach(item => {
+        if (this.symposiumState.addLedgerItem('divergences', item)) addedCount++;
+      });
+      signals.openQuestions.forEach(item => {
+        if (this.symposiumState.addLedgerItem('openQuestions', item)) addedCount++;
+      });
+    }
+
+    // اگر پیام هیچ سرفصل نشانه‌گذاری‌شده‌ای نداشت، به عنوان یک توافق خلاصه تمیز ثبت شود
+    if (addedCount === 0 && turn.text) {
+      const cleanSnippet = turn.text.replace(/[\n\r]+/g, ' ').replace(/^[\s\-•*#\])[(]+/, '').trim().slice(0, 320);
+      const itemText = `${speaker}: ${cleanSnippet}`;
+      if (this.symposiumState.addLedgerItem('agreements', itemText)) addedCount++;
+    }
+
+    if (addedCount > 0) {
       this.ledgerView.render(this.symposiumState.ledger);
-      this.showToast('نکته به عنوان توافق قطعی در دفتر اجماع تاج‌گذاری شد 💎');
+      this.showToast(`نکات این پیام (${addedCount} مورد توافق/اختلاف/پرسش) در دفتر اجماع ثبت شد 💎`);
+    } else {
+      this.showToast('نکات این پیام قبلاً در دفتر اجماع ثبت شده‌اند.');
     }
   }
 
@@ -1995,8 +2029,12 @@ ${userInquiry}
 """`;
     }
 
-    promptText += `\n\nدستور صریح:
-تحلیل، ممیزی، مغالطات، یا وضعیت اجماع را مستقیماً، دقیق و بدون تعارف در حداکثر ۲ تا ۳ بند ارائه دهید.`;
+    promptText += `\n\nدستور صریح ساختاربندی پاسخ:
+پاسخ خود را مستقیماً، شفاف و بدون تعارف در خطوط جداگانه با تیترهای زیر بنویسید:
+[توافقات قطعی]
+[شکاف‌های لاینحل]
+[پرسش‌های پیش‌برنده]
+(توجه الزامی: هیچ بخشی را حذف نکنید و آنها را در یک خط پشت سر هم نچسبانید).`;
 
     this.dispatchToCard(assignment.cardId, promptText);
 
