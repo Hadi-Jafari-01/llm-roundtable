@@ -1,0 +1,43 @@
+{
+  "session_id": "",
+  "started": "",
+  "files_read": {
+    "newtab.html": {
+      "count": 4,
+      "tokens": 0,
+      "first_read": "2026-09-11T22:57:29.746Z"
+    },
+    "manifest.json": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-09-11T22:57:40.834Z"
+    },
+    "js/app.js": {
+      "count": 2,
+      "tokens": 0,
+      "first_read": "2026-09-11T22:57:54.323Z"
+    }
+  },
+  "files_written": [
+    {
+      "file": "js/boot.js",
+      "at": "2026-09-11T23:00:24.120Z"
+    },
+    {
+      "file": "manifest.json",
+      "at": "2026-09-11T23:00:54.822Z"
+    },
+    {
+      "file": "js/boot.js",
+      "at": "2026-09-11T23:03:16.925Z"
+    }
+  ],
+  "edit_counts": {
+    "js/boot.js": 2,
+    "manifest.json": 1
+  },
+  "anatomy_hits": 0,
+  "anatomy_misses": 3,
+  "repeated_reads_warned": 4,
+  "cerebrum_warnings": 0
+}
