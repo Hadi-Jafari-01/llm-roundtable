@@ -179,6 +179,7 @@ export class SymposiumTranscript {
     ` : '';
 
     if (isGovernance) {
+      const isQAAdvisor = turn.roleKey === 'user_advisor';
       const renderedMd = this.renderMarkdown(turn.text || '');
       const isStillThinking = Boolean(turn.isStreaming && (!turn.text || !turn.text.trim()));
       const thinkingDir = this.detectTextDirection(turn.thinkingText || '');
@@ -195,30 +196,39 @@ export class SymposiumTranscript {
         <div class="mirror-streaming-pulse"><span></span><span></span><span></span></div>
       ` : '';
 
+      const bannerText = isQAAdvisor
+        ? `پاسخ مشاور اختصاصی (${this.escapeHtml(turn.speakerName)}) با توجه به مذاکرات میزگرد`
+        : `ممیزی نظارتی مستقل پیرامون کلام ${this.escapeHtml(turn.targetSpeakerName || 'شورا')}`;
+      const bannerIcon = isQAAdvisor ? '💡' : (turn.badge || '🛡️');
+      const bannerColor = isQAAdvisor ? '#38bdf8' : (turn.color || '#10a37f');
+      const placeholderLoading = isQAAdvisor
+        ? 'مشاور در حال تحلیل میزگرد و تدوین پاسخ به سوال شماست...'
+        : 'در حال نگارش ممیزی نظارتی...';
+
       row.innerHTML = `
         <div class="symposium-turn-meta governance-meta">
-          <span class="turn-avatar-badge gov-badge" style="background: ${turn.color || '#10a37f'};">
-            ${turn.badge || '🛡️'}
+          <span class="turn-avatar-badge gov-badge" style="background: ${bannerColor};">
+            ${bannerIcon}
           </span>
-          <span class="turn-speaker-badge" style="color: ${turn.color || '#10a37f'};">
-            ${this.escapeHtml(turn.roleTitle || 'کابینه نظارت شورا')}
+          <span class="turn-speaker-badge" style="color: ${bannerColor};">
+            ${isQAAdvisor ? `مشاور اختصاصی: ${this.escapeHtml(turn.speakerName)}` : this.escapeHtml(turn.roleTitle || 'کابینه نظارت شورا')}
           </span>
-          <span class="turn-persona-tag gov-tag">مجری: ${this.escapeHtml(turn.speakerName)}</span>
+          <span class="turn-persona-tag gov-tag">${isQAAdvisor ? 'پاسخگوی کاربر' : `مجری: ${this.escapeHtml(turn.speakerName)}`}</span>
           <span class="turn-round-tag">Round ${turn.round || 1} • ${turn.timestamp || ''}</span>
-          <button type="button" class="btn-turn-meta-del btn-delete-turn-chip" data-turn-id="${turn.id}" title="حذف این نظر نظارتی">✕</button>
+          <button type="button" class="btn-turn-meta-del btn-delete-turn-chip" data-turn-id="${turn.id}" title="حذف این پاسخ">✕</button>
         </div>
 
-        <div class="symposium-bubble-card governance-bubble ${isRTL ? 'is-rtl' : 'is-ltr'}" dir="${textDir}" style="--model-color: ${turn.color || '#10a37f'};">
-          <div class="governance-card-banner">
-            <span class="gov-banner-icon">${turn.badge || '🛡️'}</span>
-            <span class="gov-banner-text">ممیزی نظارتی مستقل پیرامون کلام ${this.escapeHtml(turn.targetSpeakerName || 'شورا')}</span>
+        <div class="symposium-bubble-card governance-bubble ${isRTL ? 'is-rtl' : 'is-ltr'}" dir="${textDir}" style="--model-color: ${bannerColor};">
+          <div class="governance-card-banner" style="color: ${bannerColor};">
+            <span class="gov-banner-icon">${bannerIcon}</span>
+            <span class="gov-banner-text">${bannerText}</span>
           </div>
           ${thinkingHtml}
-          <div class="symposium-markdown ${isRTL ? 'is-rtl' : 'is-ltr'}">${renderedMd || (turn.isStreaming ? '<p style="color:#9ca3af;font-style:italic;">در حال نگارش ممیزی نظارتی...</p>' : '<p></p>')}</div>
+          <div class="symposium-markdown ${isRTL ? 'is-rtl' : 'is-ltr'}">${renderedMd || (turn.isStreaming ? `<p style="color:#9ca3af;font-style:italic;">${placeholderLoading}</p>` : '<p></p>')}</div>
           ${pulseHtml}
 
           <div class="symposium-bubble-actions">
-            <button type="button" class="btn-bubble-chip crown-chip btn-crown-chip" data-turn-id="${turn.id}" title="ثبت نکات این نظر نظارتی در دفتر اجماع">
+            <button type="button" class="btn-bubble-chip crown-chip btn-crown-chip" data-turn-id="${turn.id}" title="ثبت نکات این نظر در دفتر اجماع">
               <span>💎 Crown to Ledger</span>
             </button>
             <button type="button" class="btn-bubble-chip delete-chip btn-delete-turn-chip" data-turn-id="${turn.id}" title="حذف">

@@ -1622,6 +1622,30 @@
   box-shadow: 0 0 10px rgba(16, 163, 127, 0.4);
 }
 
+.btn-composer-icon.advisor-btn {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+}
+
+.btn-composer-icon.advisor-btn:hover {
+  background: rgba(56, 189, 248, 0.3);
+  border-color: #38bdf8;
+  color: #ffffff;
+  transform: scale(1.06);
+}
+
+.btn-supervisor-call.advisor-call {
+  background: rgba(56, 189, 248, 0.18) !important;
+  border-color: rgba(56, 189, 248, 0.45) !important;
+  color: #38bdf8 !important;
+}
+
+.btn-supervisor-call.advisor-call:hover {
+  background: #38bdf8 !important;
+  color: #090a10 !important;
+}
+
 .btn-chatgpt-send {
   width: 32px;
   height: 32px;

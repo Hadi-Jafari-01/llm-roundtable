@@ -214,6 +214,23 @@ export const FACTORY_METHODOLOGIES = {
 
 /* ── ۲. مخزن تمپلیت‌های نقش‌های کابینه نظارت و مدیریت (Governance Roles) ── */
 export const FACTORY_GOVERNANCE_ROLES = {
+  user_advisor: {
+    id: 'user_advisor',
+    title: 'مشاور اختصاصی و پاسخگوی کاربر (Personal Advisor & Roundtable Oracle)',
+    description: 'پاسخگویی مستقیم، تحلیلی و جامع به پرسش‌ها و مشورت‌های کاربر انسان با تسلط کامل بر تمام مذاکرات، ادوار و استدلال‌های میزگرد.',
+    badge: '💡 مشاور من',
+    color: '#38bdf8',
+    defaultTrigger: 'manual_call',
+    isDirectAnswer: true,
+    systemPrompt: `شما «مشاور اختصاصی، دستیار امین و پاسخگوی وفادار کاربر انسان (استاد انسان / Human Maestro)» در این میزگرد نخبگانی هستید.
+وظیفه انحصاری شما این است که به پرسش‌ها، ابهامات، مشورت‌ها و درخواست‌های کاربر به کامل‌ترین، عمیق‌ترین و بهترین شکل ممکن پاسخ دهید.
+
+احکام راهبردی شما:
+۱. اشراف کامل بر میزگرد: در پاسخ به پرسش کاربر، تمام استدلال‌ها، داده‌ها، توافقات، تضادها و کدهای مطرح‌شده توسط مدل‌های دیگر را به عنوان کانتکست و پیش‌زمینه تحلیل در نظر بگیرید.
+۲. موضع‌گیری مستقل و خیرخواهانه برای کاربر: اگر مدل‌ها اشتباه کرده‌اند صریحاً به کاربر بگویید؛ اگر نکته پنهانی هست که کاربر باید بداند آشکار کنید؛ بهترین پیشنهاد یا راه‌حل را مستقیماً به کاربر ارائه دهید.
+۳. پاسخ مستقیم و طبیعی: پاسخ را مستقیماً، ساختاریافته، شفاف، مستدل و بدون قالب‌های کلیشه‌ای بنویسید (نیاز به زدن تیترهای تحمیلی مانند توافقات قطعی یا شکاف‌ها نیست مگر آنکه خود کاربر خواسته باشد).`
+  },
+
   consensus_notary: {
     id: 'consensus_notary',
     title: 'منشی دیوان و سنترالایزر اجماع (Consensus Notary & Ledger Keeper)',
@@ -1276,7 +1293,9 @@ export class SymposiumState {
 
   getSupervisorSeats(allCards = []) {
     const cards = Array.isArray(allCards) && allCards.length ? allCards : [];
-    const activeRoles = (this.governanceCabinet?.activeRoles || []).filter(r => r.isActive !== false);
+    const activeRoles = (this.governanceCabinet?.activeRoles || [])
+      .filter(r => r.isActive !== false)
+      .filter(assign => cards.some(c => c.id === assign.cardId));
     const templates = this.getGovernanceRoleTemplates();
 
     return activeRoles.map(assign => {
@@ -1292,7 +1311,8 @@ export class SymposiumState {
         color: card?.color || tpl.color || '#10a37f',
         roleTitle: tpl.title || assign.roleKey,
         roleBadge: tpl.badge || '🛡️',
-        description: tpl.description || ''
+        description: tpl.description || '',
+        isDirectAnswer: Boolean(tpl.isDirectAnswer)
       };
     });
   }

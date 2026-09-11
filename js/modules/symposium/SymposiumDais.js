@@ -152,15 +152,24 @@ export class SymposiumDais {
 
       supervisors.forEach(sup => {
         const isEvaluating = activeSupervisorCardIds.has(sup.cardId);
+        const isAdvisor = sup.roleKey === 'user_advisor' || Boolean(sup.isDirectAnswer);
         const pod = document.createElement('div');
-        pod.className = `symposium-supervisor-pod ${isEvaluating ? 'evaluating' : ''}`;
-        pod.style.setProperty('--sup-color', sup.color || '#10a37f');
-        pod.title = `ناظر شورا: ${sup.name} (${sup.roleTitle}) - کلیک برای فراخوانی آنی`;
+        pod.className = `symposium-supervisor-pod ${isEvaluating ? 'evaluating' : ''} ${isAdvisor ? 'advisor-pod' : ''}`;
+        pod.style.setProperty('--sup-color', sup.color || (isAdvisor ? '#38bdf8' : '#10a37f'));
+        pod.title = isAdvisor
+          ? `مشاور اختصاصی شما: ${sup.name} - پاسخگوی سوالات بر اساس میزگرد (کلیک برای پرسش)`
+          : `ناظر شورا: ${sup.name} (${sup.roleTitle}) - کلیک برای فراخوانی آنی`;
+
+        const callBtnTitle = isAdvisor
+          ? 'پرسش از مشاور اختصاصی بر اساس مباحث میزگرد (💡)'
+          : 'فراخوانی آنی این ناظر (⚡)';
+        const callBtnText = isAdvisor ? 'پرسش' : 'فراخوانی';
+        const callBtnIcon = isAdvisor ? '💡' : `<svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`;
 
         pod.innerHTML = `
           <div class="sup-pod-main">
             <div class="sup-jewel-avatar">
-              <span class="avatar-symbol">${sup.roleBadge || '🛡️'}</span>
+              <span class="avatar-symbol">${sup.roleBadge || (isAdvisor ? '💡' : '🛡️')}</span>
               <span class="sup-status-dot ${isEvaluating ? 'evaluating' : 'idle'}"></span>
             </div>
             <div class="seat-details-expandable">
@@ -174,13 +183,13 @@ export class SymposiumDais {
           </div>
           <div class="seat-tail-cluster">
             ${isEvaluating ? `
-              <div class="seat-live-wave" title="در حال ممیزی...">
+              <div class="seat-live-wave" title="${isAdvisor ? 'در حال پاسخگویی...' : 'در حال ممیزی...'}">
                 <span></span><span></span><span></span>
               </div>
             ` : `
-              <button type="button" class="btn-supervisor-call" title="فراخوانی آنی این ناظر (⚡)">
-                <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                <span class="btn-call-text">فراخوانی</span>
+              <button type="button" class="btn-supervisor-call ${isAdvisor ? 'advisor-call' : ''}" title="${callBtnTitle}">
+                ${isAdvisor ? '<span>💡</span>' : callBtnIcon}
+                <span class="btn-call-text">${callBtnText}</span>
               </button>
             `}
           </div>

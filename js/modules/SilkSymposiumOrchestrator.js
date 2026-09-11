@@ -80,6 +80,7 @@ export class SilkSymposiumOrchestrator {
     this.composerSpeakerHint = document.getElementById('composer-speaker-hint');
     this.composerSpeakerName = document.getElementById('composer-speaker-name');
     this.inputPrompt = document.getElementById('symposium-prompt-input');
+    this.btnAskAdvisor = document.getElementById('btn-symposium-ask-advisor');
     this.btnSendMaestro = document.getElementById('btn-symposium-send-maestro');
     this.btnNextTurn = document.getElementById('btn-symposium-next-turn');
     this.btnAutoplayToggle = document.getElementById('btn-symposium-autoplay-toggle');
@@ -766,6 +767,11 @@ export class SilkSymposiumOrchestrator {
     });
 
     this.inputPrompt?.addEventListener('keydown', (e) => {
+      if (e.altKey && e.key === 'Enter') {
+        e.preventDefault();
+        this.handleAskAdvisor();
+        return;
+      }
       if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
         e.preventDefault();
         if (this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO_APPROVAL') {
@@ -1232,7 +1238,7 @@ export class SilkSymposiumOrchestrator {
           text: govTask.govTurn.text
         });
 
-        if (govTask.govTurn.targetTurnId) {
+        if (govTask.assignment.roleKey !== 'user_advisor' && govTask.govTurn.targetTurnId) {
           const targetTurn = this.symposiumState.transcript.find(t => t.id === govTask.govTurn.targetTurnId);
           if (targetTurn) {
             if (!Array.isArray(targetTurn.governanceNotes)) targetTurn.governanceNotes = [];
@@ -1240,15 +1246,20 @@ export class SilkSymposiumOrchestrator {
           }
         }
 
-        const signals = this.ledgerView.extractSignalsFromText(govTask.govTurn.text, govTask.govTurn.speakerName);
-        if (signals) {
-          (signals.agreements || []).forEach(item => this.symposiumState.addLedgerItem('agreements', item));
-          (signals.divergences || []).forEach(item => this.symposiumState.addLedgerItem('divergences', item));
-          (signals.openQuestions || []).forEach(item => this.symposiumState.addLedgerItem('openQuestions', item));
+        if (govTask.assignment.roleKey !== 'user_advisor') {
+          const signals = this.ledgerView.extractSignalsFromText(govTask.govTurn.text, govTask.govTurn.speakerName);
+          if (signals) {
+            (signals.agreements || []).forEach(item => this.symposiumState.addLedgerItem('agreements', item));
+            (signals.divergences || []).forEach(item => this.symposiumState.addLedgerItem('divergences', item));
+            (signals.openQuestions || []).forEach(item => this.symposiumState.addLedgerItem('openQuestions', item));
+          }
         }
 
         this.activeGovernanceStreams.delete(data.cardId);
-        this.showToast(`نظر نظارتی «${govTask.template.badge || '🛡️'} ${govTask.template.title.split('(')[0].trim()}» ثبت گردید ✓`);
+        const roleLabel = govTask.assignment.roleKey === 'user_advisor'
+          ? `پاسخ مشاور اختصاصی (${govTask.govTurn.speakerName}) دریافت شد 💡`
+          : `نظر نظارتی «${govTask.template.badge || '🛡️'} ${govTask.template.title.split('(')[0].trim()}» ثبت گردید ✓`;
+        this.showToast(roleLabel);
         this.renderAll();
       }
       return;
@@ -1915,7 +1926,62 @@ export class SilkSymposiumOrchestrator {
     this.renderAll();
   }
 
-  handleCallSupervisor(assignmentId) {
+  handleAskAdvisor() {
+    const activeRoles = this.symposiumState.governanceCabinet?.activeRoles || [];
+    let advisorAssign = activeRoles.find(r => r.roleKey === 'user_advisor' && r.isActive !== false);
+
+    if (!advisorAssign) {
+      const cards = this.stateStore?.getCards() || [];
+      if (cards.length === 0) {
+        alert('هیچ کارتی روی بوم باز نیست.');
+        return;
+      }
+
+      const inactiveAdvisor = activeRoles.find(r => r.roleKey === 'user_advisor');
+      if (inactiveAdvisor) {
+        inactiveAdvisor.isActive = true;
+        advisorAssign = inactiveAdvisor;
+      } else {
+        const currentDebaters = this.symposiumState.seats.filter(s => !s.isUser);
+        let candidateCard = null;
+
+        if (currentDebaters.length > 2) {
+          const lastDebater = currentDebaters[currentDebaters.length - 1];
+          candidateCard = cards.find(c => c.id === lastDebater.cardId);
+        } else {
+          candidateCard = cards[cards.length - 1];
+        }
+
+        if (!candidateCard) candidateCard = cards[0];
+
+        const cardName = candidateCard.title || candidateCard.name || 'مدل';
+        const confirmMsg = `مدلی برای نقش «مشاور اختصاصی کاربر» الصاق نشده است.\nآیا مایلید مدل «${cardName}» به عنوان مشاور اختصاصی شما در کابینه نظارت فعال شود؟`;
+        if (!confirm(confirmMsg)) {
+          this.openSanctum('governance');
+          return;
+        }
+
+        advisorAssign = this.symposiumState.addActiveGovernanceRole(candidateCard.id, 'user_advisor', 'manual_call');
+        this.syncSeats();
+        this.renderAll();
+        this.showToast(`مدل «${cardName}» به عنوان مشاور اختصاصی شما الصاق شد 💡`);
+      }
+    }
+
+    if (!advisorAssign) return;
+
+    let userQuestion = (this.inputPrompt?.value || '').trim();
+    if (!userQuestion) {
+      const card = this.stateStore.getCard(advisorAssign.cardId);
+      const cardName = card ? (card.title || card.name) : 'مشاور';
+      userQuestion = prompt(`پرسش خود را از مشاور اختصاصی (${cardName}) با توجه به مباحث میزگرد مطرح کنید:`);
+      if (!userQuestion || !userQuestion.trim()) return;
+    }
+
+    this.handleCallSupervisor(advisorAssign.id, userQuestion);
+  }
+
+  handleCallSupervisor(assignmentId, overrideQuestion = null) {
     const activeRoles = this.symposiumState.governanceCabinet?.activeRoles || [];
     const assign = activeRoles.find(r => r.id === assignmentId || r.cardId === assignmentId);
     if (!assign) return;
@@ -1928,6 +1994,49 @@ export class SilkSymposiumOrchestrator {
     const templates = this.symposiumState.getGovernanceRoleTemplates();
     const tpl = templates[assign.roleKey];
     if (!tpl) return;
+
+    const card = this.stateStore.getCard(assign.cardId);
+    const cardName = card ? (card.title || card.name) : 'ناظر شورا';
+
+    if (assign.roleKey === 'user_advisor' || tpl.isDirectAnswer) {
+      let userQuestion = overrideQuestion || (this.inputPrompt?.value || '').trim();
+      if (!userQuestion) {
+        userQuestion = prompt(`پرسش خود را از مشاور اختصاصی (${cardName}) با توجه به مباحث میزگرد بنویسید:`);
+        if (!userQuestion || !userQuestion.trim()) return;
+      }
+
+      if (this.inputPrompt && this.inputPrompt.value) {
+        this.inputPrompt.value = '';
+        this.inputPrompt.style.height = 'auto';
+      }
+
+      const qTurnId = `turn_u_${Date.now()}`;
+      this.symposiumState.addTurn({
+        id: qTurnId,
+        role: 'user',
+        isSeatedUser: false,
+        speakerName: 'Human Maestro',
+        color: '#f59e0b',
+        text: `[پرسش از مشاور اختصاصی (${cardName})]:\n${userQuestion.trim()}`,
+        round: this.symposiumState.roundIndex,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+
+      this.handleGovernanceTriggered({
+        assignment: assign,
+        template: tpl,
+        triggerType: 'manual_call',
+        turnContext: {
+          text: userQuestion.trim(),
+          userInquiry: userQuestion.trim(),
+          speakerName: 'استاد انسان',
+          turnId: qTurnId
+        }
+      });
+
+      this.showToast(`پرسش شما به مشاور اختصاصی (${cardName}) ارسال شد 💡`);
+      return;
+    }
 
     const turns = this.symposiumState.transcript.filter(t => !t.isStreaming && t.role !== 'governance');
     const lastTurn = turns[turns.length - 1];
@@ -1958,6 +2067,7 @@ export class SilkSymposiumOrchestrator {
 
     const turns = this.symposiumState.transcript.filter(t => !t.isStreaming && t.role !== 'governance');
     const lastTurn = turns[turns.length - 1];
+    const isQAAdvisor = assignment.roleKey === 'user_advisor' || Boolean(template.isDirectAnswer);
     const textToExamine = turnContext.text || lastTurn?.text || this.symposiumState.userCorePrompt || '';
     const targetSpeaker = turnContext.speakerName || lastTurn?.speakerName || (this.symposiumState.userCorePrompt ? 'کاربر' : 'شورا');
     const targetTurnId = turnContext.turnId || lastTurn?.id || 'last';
@@ -1974,8 +2084,8 @@ export class SilkSymposiumOrchestrator {
       return;
     }
 
-    const userInquiry = (this.inputPrompt?.value || '').trim();
-    if (userInquiry && triggerType === 'manual_call') {
+    const userInquiry = turnContext.userInquiry || (this.inputPrompt?.value || '').trim();
+    if (userInquiry && triggerType === 'manual_call' && this.inputPrompt?.value) {
       this.inputPrompt.value = '';
       this.inputPrompt.style.height = 'auto';
     }
@@ -1985,12 +2095,12 @@ export class SilkSymposiumOrchestrator {
       role: 'governance',
       roleKey: assignment.roleKey,
       roleTitle: template.title,
-      badge: template.badge || '🛡️',
-      color: template.color || '#10a37f',
+      badge: template.badge || (isQAAdvisor ? '💡' : '🛡️'),
+      color: template.color || (isQAAdvisor ? '#38bdf8' : '#10a37f'),
       speakerName: card.title || card.name,
       cardId: assignment.cardId,
       targetTurnId: targetTurnId,
-      targetSpeakerName: targetSpeaker,
+      targetSpeakerName: isQAAdvisor ? 'استاد انسان' : targetSpeaker,
       text: '',
       thinkingText: '',
       isThinking: false,
@@ -2009,7 +2119,47 @@ export class SilkSymposiumOrchestrator {
 
     this.renderAll();
 
-    let promptText = `[حکم نظارتی ویژه شورای نخبگان - نقش شما: ${template.title}]:
+    let promptText = '';
+    if (isQAAdvisor) {
+      const recentTurns = turns.slice(-12);
+      const discussionContext = recentTurns.map(t => {
+        let label = t.speakerName || 'سخنران';
+        if (t.role === 'governance') label = `ناظر شورا (${t.roleTitle || label})`;
+        else if (t.role === 'user') label = 'استاد انسان (کاربر)';
+        return `[${label}]:\n${t.text}`;
+      }).join('\n\n---\n\n');
+
+      const agreements = (this.symposiumState.ledger.agreements || []).join('\n• ');
+      const divergences = (this.symposiumState.ledger.divergences || []).join('\n• ');
+
+      promptText = `[نقش و هویت انحصاری شما: ${template.title}]:
+${assignment.customPrompt || template.systemPrompt}
+
+══════════════════════════════════════════════════════════════════
+[موضوع و چالش بنیادین میزگرد]:
+"""
+${this.symposiumState.userCorePrompt || 'مباحثه دیالکتیک و هم‌اندیشی چند هوش'}
+"""
+
+[سوابق و مذاکرات انجام‌شده تا این لحظه در میزگرد]:
+${discussionContext || 'هنوز گفتگویی در شورا شکل نگرفته است.'}
+
+[توافقات ثبت‌شده در دفتر اجماع]:
+${agreements ? '• ' + agreements : 'هنوز توافقی ثبت نشده است.'}
+
+[نقاط چالش و شکاف‌های حل‌نشده]:
+${divergences ? '• ' + divergences : 'هنوز اختلافی ثبت نشده است.'}
+══════════════════════════════════════════════════════════════════
+
+[پرسش مستقیم و اختصاصی کاربر انسان (استاد انسان) از شما]:
+"""
+${textToExamine}
+"""
+
+دستور صریح پاسخگویی:
+با اشراف کامل بر تمام بحث‌ها، استدلال‌ها، کدها و مواضع مطرح‌شده در میزگرد، مستقیماً، جامع، شفاف و با بالاترین کیفیت ممکن به این پرسش کاربر پاسخ دهید. راهکار، مقایسه تحلیلی و جمع‌بندی تخصصی خود را به دور از هرگونه کلیشه ارائه کنید.`;
+    } else {
+      promptText = `[حکم نظارتی ویژه شورای نخبگان - نقش شما: ${template.title}]:
 ${assignment.customPrompt || template.systemPrompt}
 
 موضوع محوری میزگرد:
@@ -2022,19 +2172,20 @@ ${this.symposiumState.userCorePrompt || 'مباحثه دیالکتیک'}
 ${textToExamine}
 """`;
 
-    if (userInquiry) {
-      promptText += `\n\nپرسش یا تأکید اختصاصی استاد انسان از ناظر:
+      if (userInquiry) {
+        promptText += `\n\nپرسش یا تأکید اختصاصی استاد انسان از ناظر:
 """
 ${userInquiry}
 """`;
-    }
+      }
 
-    promptText += `\n\nدستور صریح ساختاربندی پاسخ:
+      promptText += `\n\nدستور صریح ساختاربندی پاسخ:
 پاسخ خود را مستقیماً، شفاف و بدون تعارف در خطوط جداگانه با تیترهای زیر بنویسید:
 [توافقات قطعی]
 [شکاف‌های لاینحل]
 [پرسش‌های پیش‌برنده]
 (توجه الزامی: هیچ بخشی را حذف نکنید و آنها را در یک خط پشت سر هم نچسبانید).`;
+    }
 
     this.dispatchToCard(assignment.cardId, promptText);
 
