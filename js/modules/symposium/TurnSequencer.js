@@ -1,11 +1,8 @@
 /**
- * OmniAI Hub — The Silk Symposium Turn-Sequencing Engine
- * Autonomous turn-taking coordinator implementing 5 distinct deliberation topologies:
- *   1. Manual Conductor (نوبت‌دهی دستی با عصای ابریشمی)
- *   2. Orderly Round-Robin (حلقه نوبتی ساختاریافته)
- *   3. Socratic Dialectic (مناظره سقراطی مبتنی بر تقابل پرسوناها)
- *   4. Delphi Convergence (همگرایی دلفی)
- *   5. Fully Autonomous Flow (جریان ارگانیک خودگردان)
+ * OmniAI Hub — The Silk Symposium Dual-Paradigm Turn-Sequencing Engine
+ * Manages strictly 2 fundamental deliberation paradigms:
+ *   1. Human Maestro Conductor (حاکمیت مطلق و نوبت‌دهی دستی انسان)
+ *   2. AI Chairman / Autonomous Conductor (ریاست هوشمند مدل بر اساس متدولوژی با گیت تأیید گام‌به‌گام)
  */
 
 export class TurnSequencer {
@@ -15,11 +12,15 @@ export class TurnSequencer {
       onSeatDispatched: () => {},
       onUserTurnPrompted: () => {},
       onTurnFinished: () => {},
+      onAITurnProposed: () => {},
+      onProposalApproved: () => {},
+      onProposalVetoed: () => {},
       onRoundAdvanced: () => {},
       onSessionPaused: () => {},
       onSessionResumed: () => {},
       onSessionCompleted: () => {},
       onSessionWaitingForMaestro: () => {},
+      onGovernanceTriggered: () => {},
       ...callbacks
     };
 
@@ -88,9 +89,11 @@ export class TurnSequencer {
       isFinished
     });
 
-    // Progression logic: Seamless coordination with Manual Turn-Taking
+    // فراخوانی بررسی‌های کابینه نظارت (Governance Cabinet) پس از پایان هر نوبت
+    this.triggerGovernanceEvaluation('every_turn', { seat: activeSeat, text });
+
+    // ۱. در حالت مدیریت کاملاً دستی انسان (Human Maestro)
     if (this.state.debateMode === 'manual') {
-      // Manual conductor halts cleanly after each speech, calculating the recommended next chair
       this.state.sessionStatus = 'WAITING_FOR_MAESTRO';
       const recommendedNext = this.state.calculateRecommendedNextSpeaker();
       this.state.recommendedNextSpeakerIndex = recommendedNext;
@@ -102,20 +105,41 @@ export class TurnSequencer {
       return;
     }
 
-    if (this.state.sessionStatus !== 'ACTIVE') return;
+    // ۲. در حالت ریاست هوش مصنوعی (AI Chairman Conductor)
+    if (this.state.debateMode === 'ai_chairman') {
+      if (this.state.sessionStatus !== 'ACTIVE') return;
 
-    // Schedule next turn in automated flow
-    clearTimeout(this.autoAdvanceTimer);
-    const delay = this.state.config.autoAdvanceDelayMs || 2400;
-    this.autoAdvanceTimer = setTimeout(() => {
-      this.advanceNext();
-    }, delay);
+      const proposal = this.calculateNextChairmanProposal();
+      if (!proposal) {
+        this.pause();
+        this.callbacks.onSessionCompleted();
+        return;
+      }
+
+      // اگر تأیید گام‌به‌گام فعال باشد، نوبت متوقف شده و کارت پیشنهاد به انسان نمایش داده می‌شود
+      if (this.state.config.aiStepApprovalRequired) {
+        this.state.sessionStatus = 'WAITING_FOR_MAESTRO_APPROVAL';
+        this.state.proposedTurn = proposal;
+        this.callbacks.onAITurnProposed(proposal);
+        return;
+      }
+
+      // در غیر این صورت با تأخیر خودکار پیش می‌رود
+      clearTimeout(this.autoAdvanceTimer);
+      const delay = this.state.config.autoAdvanceDelayMs || 2400;
+      this.autoAdvanceTimer = setTimeout(() => {
+        this.dispatchTurn(proposal.nextSeatIndex, proposal.proposedMandate);
+      }, delay);
+      return;
+    }
+
+    if (this.state.sessionStatus !== 'ACTIVE') return;
   }
 
   advanceNext() {
     if (!this.state.seats || this.state.seats.length === 0) return;
 
-    // If in manual mode, dispatch the recommended or active speaker index
+    // مدیریت دستی یا انتظار برای دستور انسان
     if (this.state.debateMode === 'manual' || this.state.sessionStatus === 'WAITING_FOR_MAESTRO') {
       const nextIdx = (typeof this.state.recommendedNextSpeakerIndex === 'number' && this.state.recommendedNextSpeakerIndex >= 0)
         ? this.state.recommendedNextSpeakerIndex
@@ -127,16 +151,108 @@ export class TurnSequencer {
       return;
     }
 
-    if (this.state.sessionStatus !== 'ACTIVE') return;
+    // ریاست هوش مصنوعی
+    if (this.state.debateMode === 'ai_chairman') {
+      const proposal = this.calculateNextChairmanProposal();
+      if (!proposal) {
+        this.pause();
+        this.callbacks.onSessionCompleted();
+        return;
+      }
 
-    const nextIndex = this.calculateNextSpeakerIndex();
-    if (nextIndex === -1) {
-      this.pause();
-      this.callbacks.onSessionCompleted();
+      if (this.state.config.aiStepApprovalRequired) {
+        this.state.sessionStatus = 'WAITING_FOR_MAESTRO_APPROVAL';
+        this.state.proposedTurn = proposal;
+        this.callbacks.onAITurnProposed(proposal);
+        return;
+      }
+
+      this.state.sessionStatus = 'ACTIVE';
+      this.callbacks.onSessionResumed();
+      this.dispatchTurn(proposal.nextSeatIndex, proposal.proposedMandate);
       return;
     }
+  }
 
-    this.dispatchTurn(nextIndex);
+  approveProposedTurn(overrideMandate = null) {
+    if (!this.state.proposedTurn) return false;
+    const { nextSeatIndex, proposedMandate } = this.state.proposedTurn;
+    const mandateToUse = overrideMandate !== null ? overrideMandate : proposedMandate;
+
+    this.state.proposedTurn = null;
+    this.state.sessionStatus = 'ACTIVE';
+    this.callbacks.onProposalApproved({ nextSeatIndex, mandateToUse });
+    this.callbacks.onSessionResumed();
+
+    this.dispatchTurn(nextSeatIndex, mandateToUse);
+    return true;
+  }
+
+  vetoProposedTurn() {
+    if (!this.state.proposedTurn) return false;
+    const vetoed = this.state.proposedTurn;
+    this.state.proposedTurn = null;
+    this.state.sessionStatus = 'WAITING_FOR_MAESTRO';
+
+    this.callbacks.onProposalVetoed(vetoed);
+    this.callbacks.onSessionWaitingForMaestro({
+      seatIndex: this.state.activeSpeakerIndex,
+      seat: this.state.seats[this.state.activeSpeakerIndex]
+    });
+    return true;
+  }
+
+  calculateNextChairmanProposal() {
+    const { seats, activeSpeakerIndex, roundIndex } = this.state;
+    const count = seats.length;
+    if (count === 0) return null;
+
+    const methodology = this.state.getActiveMethodology();
+    const stepSeq = methodology.stepSequence || ['thesis', 'antithesis', 'synthesis'];
+    const currentStepKey = stepSeq[((roundIndex - 1) * count + Math.max(0, activeSpeakerIndex + 1)) % stepSeq.length];
+    const mandate = methodology.stepInstructions?.[currentStepKey] || methodology.description;
+
+    let nextIdx = (activeSpeakerIndex + 1) % count;
+    let checked = 0;
+    while (seats[nextIdx]?.isMuted && checked < count) {
+      nextIdx = (nextIdx + 1) % count;
+      checked++;
+    }
+
+    if (nextIdx <= activeSpeakerIndex) {
+      this.advanceRound();
+    }
+
+    const nextSeat = seats[nextIdx];
+    return {
+      nextSeatIndex: nextIdx,
+      nextSeat,
+      stepKey: currentStepKey,
+      proposedMandate: mandate,
+      reason: `متدولوژی «${methodology.title.split('(')[0].trim()}» نیازمند گام [${currentStepKey}] توسط ${nextSeat?.name || 'مدل بعدی'} است.`,
+      methodologyTitle: methodology.title
+    };
+  }
+
+  triggerGovernanceEvaluation(triggerType, turnContext = {}) {
+    if (!this.state.governanceCabinet?.enabled) return;
+    const activeRoles = this.state.governanceCabinet.activeRoles || [];
+    const templates = this.state.getGovernanceRoleTemplates();
+
+    activeRoles.forEach(roleAssignment => {
+      if (!roleAssignment.isActive) return;
+      if (roleAssignment.trigger === triggerType || roleAssignment.trigger === 'every_turn') {
+        const tpl = templates[roleAssignment.roleKey];
+        if (tpl) {
+          this.callbacks.onGovernanceTriggered({
+            assignment: roleAssignment,
+            template: tpl,
+            triggerType,
+            turnContext
+          });
+        }
+      }
+    });
   }
 
   dispatchTurn(seatIndex, immediateContext = '') {

@@ -1299,9 +1299,29 @@
           <div class="symposium-composer-container">
             <div class="chat-centered-container">
               <div class="symposium-chatgpt-composer">
+                <!-- کپسول شناور پیشنهاد نوبت هوش مصنوعی رئیس (Human-Gated Step Proposal) -->
+                <div id="composer-proposal-capsule" class="composer-proposal-capsule hidden">
+                  <div class="proposal-info-wrap">
+                    <div class="proposal-badge-row">
+                      <span class="proposal-gem-icon">👑</span>
+                      <span class="proposal-title-text">پیشنهاد رئیس شورا: نوبت</span>
+                      <span class="proposal-target-pill" id="proposal-target-pill">Claude</span>
+                    </div>
+                    <div class="proposal-mandate-preview" id="proposal-mandate-preview" dir="auto">مأموریت: نقد فرضیه قبلی</div>
+                  </div>
+                  <div class="proposal-actions">
+                    <button type="button" id="btn-approve-ai-proposal" class="btn-approve-proposal" title="تأیید پیشنهاد و ارسال نوبت به مدل">
+                      <span>تأیید و شلیک 🪄</span>
+                    </button>
+                    <button type="button" id="btn-veto-ai-proposal" class="btn-veto-proposal" title="رد پیشنهاد (وتوی تصمیم رئیس توسط انسان)">
+                      <span>وتو ✕</span>
+                    </button>
+                  </div>
+                </div>
+
                 <div class="composer-top-context-pill" id="composer-speaker-hint">
                   <span class="dot"></span>
-                  <span id="composer-speaker-name">Next: Auto Conductor</span>
+                  <span id="composer-speaker-name">Next: Human Maestro</span>
                 </div>
                 <div class="composer-input-row">
                   <textarea id="symposium-prompt-input" class="chatgpt-textarea" placeholder="پیام به میزگرد یا هدایت جریان بحث... (⌘↵ برای ارسال)" rows="1" dir="auto"></textarea>
@@ -1441,10 +1461,13 @@
             <span>🎭 پرسوناها</span>
           </button>
           <button type="button" class="sanctum-zone-tab" data-zone="dais-floor">
-            <span>🪑 سکو و جایگاه کاربر</span>
+            <span>🪑 سکو و صندلی‌ها</span>
+          </button>
+          <button type="button" class="sanctum-zone-tab" data-zone="governance">
+            <span>🛡️ کابینه نظارت</span>
           </button>
           <button type="button" class="sanctum-zone-tab" data-zone="engine">
-            <span>⚙️ موتور دیالکتیک</span>
+            <span>⚙️ متدولوژی و موتور</span>
           </button>
           <button type="button" class="sanctum-zone-tab" data-zone="history">
             <span>📜 سوابق و جلسات</span>
@@ -1585,46 +1608,117 @@
             <div id="dais-seat-editor-container" class="dais-seat-editor-card"></div>
           </div>
 
-          <div id="sanctum-zone-engine" class="sanctum-zone-panel" style="display: none;">
+          <!-- منطقه کابینه نظارت و مدیریت (Supervisory Governance Suite) -->
+          <div id="sanctum-zone-governance" class="sanctum-zone-panel" style="display: none;">
             <div class="engine-section-block">
               <div class="engine-section-header">
-                <span class="engine-section-title">۱. متدولوژی و الگوی جریان مذاکره</span>
-                <span class="engine-section-badge">جریان مذاکره</span>
+                <span class="engine-section-title">🛡️ کابینه ناظران و مدیران غیرشرکت‌کننده شورا</span>
+                <span class="engine-section-badge">ارکان نظارتی</span>
               </div>
-              <p class="engine-section-desc">متدولوژی نوبت‌دهی و گردش بحث شورا:</p>
+              <p class="engine-section-desc">مدل‌های منتسب به این کابینه در صف چرخشی سخنرانان مناظره شرکت نمی‌کنند؛ بلکه در پس‌زمینه به عنوان قاضی بی‌طرف، ویراستار، راستی‌آزمای منطقی یا منشی شورا انجام وظیفه می‌نمایند.</p>
 
-              <div class="driver-field-card" style="padding: 10px 14px;">
+              <!-- لیست الصاق‌های فعال -->
+              <div id="governance-assignments-list" style="display: flex; flex-direction: column; gap: 8px; margin: 8px 0;"></div>
+
+              <!-- فرم الصاق ناظر جدید -->
+              <div class="sanctum-form-card" style="margin-top: 6px; padding: 12px 14px;">
+                <span style="font-size: 11px; font-weight: 700; color: #ffffff;">+ انتساب کارت جدید به نقش نظارتی</span>
+                <div class="driver-sub-grid" style="margin-top: 6px;">
+                  <div>
+                    <label class="driver-sub-label">کارت هوش مصنوعی روی بوم:</label>
+                    <select id="gov-assign-card-select" class="driver-select-input" dir="rtl"></select>
+                  </div>
+                  <div>
+                    <label class="driver-sub-label">نقش نظارتی تخصصی:</label>
+                    <select id="gov-assign-role-select" class="driver-select-input" dir="rtl"></select>
+                  </div>
+                </div>
+                <div class="driver-sub-grid" style="margin-top: 6px;">
+                  <div>
+                    <label class="driver-sub-label">تریگر اجرای ناظر (Trigger Event):</label>
+                    <select id="gov-assign-trigger-select" class="driver-select-input" dir="rtl">
+                      <option value="every_turn">پس از هر پیام (Live Every Turn)</option>
+                      <option value="on_divergence">در صورت بروز اختلاف و تعارض (On Dispute)</option>
+                      <option value="end_of_round">در پایان هر راند (Round Synthesis)</option>
+                      <option value="manual_call">صرفاً با فراخوانی دستی (Manual On Demand)</option>
+                    </select>
+                  </div>
+                  <div style="display: flex; align-items: flex-end;">
+                    <button type="button" id="btn-add-gov-assignment" class="btn-save-driver-master" style="height: 38px;">
+                      <span>الصاق به کابینه نظارت 🛡️</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="sanctum-zone-engine" class="sanctum-zone-panel" style="display: none;">
+            <!-- ۱. دوشاخه‌سازی قطعی متدولوژی شورا -->
+            <div class="engine-section-block">
+              <div class="engine-section-header">
+                <span class="engine-section-title">۱. دوشاخه بنیادین متدولوژی شورا (Dual-Paradigm Engine)</span>
+                <span class="engine-section-badge">پارادایم شورا</span>
+              </div>
+              <p class="engine-section-desc">روش هدایت جلسه را مشخص کنید: مدیریت کاملاً دستی توسط انسان یا ریاست خودگردان مدل بر اساس متدولوژی علمی.</p>
+
+              <!-- سوییچ دوشاخه -->
+              <div class="dual-paradigm-switcher-grid">
+                <label class="paradigm-radio-card" for="radio-mode-manual">
+                  <input type="radio" name="debate-paradigm" id="radio-mode-manual" value="manual" checked />
+                  <div class="paradigm-card-content">
+                    <div class="paradigm-card-header">
+                      <span class="paradigm-icon">👑</span>
+                      <strong class="paradigm-title">مدیریت دستی انسان (Human Maestro)</strong>
+                    </div>
+                    <p class="paradigm-desc">کاربر انسان ریاست مطلق جلسه را بر عهده دارد. نوبت بعدی، اعطای عصای نوبت (🪄) و اعلام پایان صرفاً با کلیک مستقیم انسان انجام می‌شود.</p>
+                  </div>
+                </label>
+
+                <label class="paradigm-radio-card" for="radio-mode-ai-chairman">
+                  <input type="radio" name="debate-paradigm" id="radio-mode-ai-chairman" value="ai_chairman" />
+                  <div class="paradigm-card-content">
+                    <div class="paradigm-card-header">
+                      <span class="paradigm-icon">⚖️</span>
+                      <strong class="paradigm-title">ریاست هوشمند مدل (AI Chairman Conductor)</strong>
+                    </div>
+                    <p class="paradigm-desc">یکی از مدل‌ها به عنوان رئیس برگزیده شده و شورا را طبق یک متدولوژی علمی (مانند دیالکتیک هگلی یا دادگاه پوپر) هدایت می‌کند.</p>
+                  </div>
+                </label>
+              </div>
+
+              <!-- تنظیمات مربوط به حالت ریاست هوش مصنوعی -->
+              <div id="ai-chairman-settings-block" class="sanctum-form-card" style="display: none; margin-top: 10px;">
                 <div class="driver-field-top" style="margin-bottom: 6px;">
-                  <label class="driver-sub-label" style="margin: 0;">الگوهای ذخیره‌شده جریان مذاکره:</label>
+                  <label class="driver-sub-label" style="margin: 0;">متدولوژی مناظره علمی انتخابی:</label>
                   <div style="display: flex; gap: 6px;">
-                    <button type="button" id="btn-save-current-flow-preset" class="btn-custom-bot-link" style="font-size: 11px;">+ ذخیره الگوی جدید</button>
-                    <button type="button" id="btn-del-flow-preset" class="btn-custom-bot-link" style="color: #f87171; font-size: 11px; display: none;">حذف این الگو</button>
+                    <button type="button" id="btn-create-methodology" class="btn-custom-bot-link" style="font-size: 11px;">+ متدولوژی جدید</button>
                   </div>
                 </div>
-                <select id="sanctum-flow-presets-select" class="driver-select-input" dir="rtl">
-                  <option value="">-- الگوهای سفارشی ذخیره‌شده جریان مذاکره --</option>
-                </select>
-              </div>
+                <select id="sanctum-methodology-select" class="driver-select-input" dir="rtl"></select>
 
-              <div class="driver-sub-grid">
-                <div>
-                  <label class="driver-sub-label">هسته ساختار نوبت‌دهی</label>
-                  <select id="sanctum-topology-select" class="driver-select-input" dir="rtl">
-                    <option value="manual">Manual Conductor (دستی با عصای نوبت)</option>
-                    <option value="round_robin">Orderly Round-Robin (ترتیبی)</option>
-                    <option value="socratic">Socratic Dialectic (سقراطی)</option>
-                    <option value="delphi">Delphi Convergence (دلفی)</option>
-                    <option value="random">Dynamic Random (تصادفی)</option>
-                    <option value="autonomous">Fully Autonomous Flow (خودکار)</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="driver-sub-label">تأخیر خودکار بین نوبت‌ها (ms)</label>
-                  <div class="driver-input-row">
-                    <input type="number" id="sanctum-flow-delay" class="driver-text-input" min="500" max="10000" step="200" value="2400" />
-                    <span class="unit-tag">ms</span>
+                <div class="driver-sub-grid" style="margin-top: 8px;">
+                  <div>
+                    <label class="driver-sub-label">تعیین رئیس شورا (Chairman AI):</label>
+                    <select id="sanctum-chairman-card-picker" class="driver-select-input" dir="rtl"></select>
+                  </div>
+                  <div>
+                    <label class="driver-sub-label">تأخیر نوبت‌ها (ms)</label>
+                    <div class="driver-input-row">
+                      <input type="number" id="sanctum-flow-delay" class="driver-text-input" min="500" max="10000" step="200" value="2400" />
+                      <span class="unit-tag">ms</span>
+                    </div>
                   </div>
                 </div>
+
+                <!-- گیتینگ گام‌به‌گام با تأیید انسان -->
+                <label class="toggle-row" for="sanctum-step-approval-check" style="margin-top: 10px; padding: 6px 8px; background: #262626; border-radius: 8px;">
+                  <div class="toggle-info">
+                    <span class="toggle-title">تأیید دستی هر گام توسط انسان (Human-Gated Step Approval)</span>
+                    <span class="toggle-sub">رئیس شورا نوبت و مأموریت بعدی را پیشنهاد می‌دهد اما شلیک نهایی پس از کلیک شما انجام می‌گیرد.</span>
+                  </div>
+                  <input type="checkbox" id="sanctum-step-approval-check" class="silk-switch" checked />
+                </label>
               </div>
             </div>
 

@@ -169,6 +169,18 @@ export class SymposiumTranscript {
     const textDir = this.detectTextDirection(turn.text || '');
     const isRTL = textDir === 'rtl';
 
+    // یادداشت‌های نظارتی مرتبط با این نوبت
+    const governanceNotes = Array.isArray(turn.governanceNotes) ? turn.governanceNotes : [];
+    const govNotesHtml = governanceNotes.map(note => `
+      <div class="turn-governance-pill" style="--gov-color: ${note.color || '#10a37f'};" dir="auto">
+        <div class="gov-pill-header">
+          <span class="gov-pill-badge">${note.badge || '🛡️'} ${this.escapeHtml(note.roleTitle || 'یادداشت نظارتی')}</span>
+          <span class="gov-pill-model">توسط ${this.escapeHtml(note.cardName || 'ناظر')} • ${note.timestamp || ''}</span>
+        </div>
+        <div class="gov-pill-text">${this.escapeHtml(note.text)}</div>
+      </div>
+    `).join('');
+
     if (isUser) {
       const speakerBadge = isSeatedUser
         ? `${turn.speakerName} (${turn.personaBadge || '👑 You'})`
@@ -229,6 +241,7 @@ export class SymposiumTranscript {
           ${thinkingHtml}
           <div class="symposium-markdown ${isRTL ? 'is-rtl' : 'is-ltr'}">${renderedMd}</div>
           ${pulseHtml}
+          ${govNotesHtml}
 
           <div class="symposium-bubble-actions">
             <button type="button" class="btn-bubble-chip btn-challenge-chip" data-turn-id="${turn.id}" title="Prompt next speaker to counter or scrutinize this claim">

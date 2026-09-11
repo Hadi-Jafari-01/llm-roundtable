@@ -30,11 +30,15 @@ export class SilkSymposiumOrchestrator {
       onSeatDispatched: (data) => this.handleSeatDispatched(data),
       onUserTurnPrompted: (data) => this.handleUserTurnPrompted(data),
       onTurnFinished: (data) => this.handleTurnFinished(data),
+      onAITurnProposed: (data) => this.handleAITurnProposed(data),
+      onProposalApproved: () => this.clearProposalCapsule(),
+      onProposalVetoed: () => this.handleProposalVetoed(),
       onRoundAdvanced: () => this.updateHeaderStats(),
       onSessionPaused: () => this.updateHeaderStats(),
       onSessionResumed: () => this.updateHeaderStats(),
       onSessionCompleted: () => this.handleSessionCompleted(),
-      onSessionWaitingForMaestro: () => this.renderAll()
+      onSessionWaitingForMaestro: () => this.renderAll(),
+      onGovernanceTriggered: (data) => this.handleGovernanceTriggered(data)
     });
 
     this.currentSanctumZone = 'scenarios';
@@ -78,6 +82,13 @@ export class SilkSymposiumOrchestrator {
     this.btnNextTurn = document.getElementById('btn-symposium-next-turn');
     this.btnAutoplayToggle = document.getElementById('btn-symposium-autoplay-toggle');
 
+    // کپسول ویژه پیشنهاد نوبت هوش مصنوعی رئیس (Human-in-the-loop Step Approval)
+    this.composerProposalCapsule = document.getElementById('composer-proposal-capsule');
+    this.proposalTargetPill = document.getElementById('proposal-target-pill');
+    this.proposalMandatePreview = document.getElementById('proposal-mandate-preview');
+    this.btnApproveAIProposal = document.getElementById('btn-approve-ai-proposal');
+    this.btnVetoAIProposal = document.getElementById('btn-veto-ai-proposal');
+
     // Left Rail Container
     this.leftRail = document.getElementById('symposium-dais-container');
 
@@ -105,9 +116,30 @@ export class SilkSymposiumOrchestrator {
       scenarios: document.getElementById('sanctum-zone-scenarios'),
       personas: document.getElementById('sanctum-zone-personas'),
       daisFloor: document.getElementById('sanctum-zone-dais-floor'),
+      governance: document.getElementById('sanctum-zone-governance'),
       engine: document.getElementById('sanctum-zone-engine'),
       history: document.getElementById('sanctum-zone-history')
     };
+
+    // منطقه جدید: کابینه نظارت و مدیریت (Governance Cabinet Zone)
+    this.governanceAssignmentsList = document.getElementById('governance-assignments-list');
+    this.govCardSelect = document.getElementById('gov-assign-card-select');
+    this.govRoleSelect = document.getElementById('gov-assign-role-select');
+    this.govTriggerSelect = document.getElementById('gov-assign-trigger-select');
+    this.btnAddGovAssignment = document.getElementById('btn-add-gov-assignment');
+    this.govRoleTemplatesGrid = document.getElementById('governance-role-templates-grid');
+    this.btnCreateGovRole = document.getElementById('btn-create-gov-role');
+
+    // کنترل‌های دوگانه بنیادین در منطقه ۴ (Engine)
+    this.radioModeManual = document.getElementById('radio-mode-manual');
+    this.radioModeAIChairman = document.getElementById('radio-mode-ai-chairman');
+    this.aiChairmanSettingsBlock = document.getElementById('ai-chairman-settings-block');
+    this.methodologySelect = document.getElementById('sanctum-methodology-select');
+    this.btnCreateMethodology = document.getElementById('btn-create-methodology');
+    this.btnEditMethodology = document.getElementById('btn-edit-methodology');
+    this.btnDelMethodology = document.getElementById('btn-del-methodology');
+    this.checkStepApproval = document.getElementById('sanctum-step-approval-check');
+    this.chairmanCardPicker = document.getElementById('sanctum-chairman-card-picker');
 
     // Zone 1: Scenarios Grid & Builder Form
     this.scenariosGrid = document.getElementById('sanctum-scenarios-grid');
@@ -571,8 +603,95 @@ export class SilkSymposiumOrchestrator {
     });
 
     // Send and Next Turn Baton Handlers
+    // تایید و وتوی پیشنهاد نوبت رئیس شورا
+    this.btnApproveAIProposal?.addEventListener('click', () => {
+      const overrideText = (this.inputPrompt?.value || '').trim();
+      this.turnSequencer.approveProposedTurn(overrideText || null);
+      if (overrideText) {
+        this.inputPrompt.value = '';
+        this.inputPrompt.style.height = 'auto';
+      }
+    });
+
+    this.btnVetoAIProposal?.addEventListener('click', () => {
+      this.turnSequencer.vetoProposedTurn();
+    });
+
+    // سوییچ دوگانه متدولوژی شورا (Manual vs AI Chairman)
+    this.radioModeManual?.addEventListener('change', () => {
+      if (this.radioModeManual.checked) {
+        this.symposiumState.debateMode = 'manual';
+        this.updateDualParadigmUI();
+        this.updateHeaderStats();
+        this.showToast('حالت شورا: مدیریت کاملاً دستی انسان (Human Maestro) 👑');
+      }
+    });
+
+    this.radioModeAIChairman?.addEventListener('change', () => {
+      if (this.radioModeAIChairman.checked) {
+        this.symposiumState.debateMode = 'ai_chairman';
+        this.updateDualParadigmUI();
+        this.updateHeaderStats();
+        this.showToast('حالت شورا: ریاست هوشمند مدل هوش مصنوعی (AI Chairman) ⚖️');
+      }
+    });
+
+    this.checkStepApproval?.addEventListener('change', () => {
+      this.symposiumState.config.aiStepApprovalRequired = Boolean(this.checkStepApproval.checked);
+      this.symposiumState.persistConfig();
+      this.showToast(this.checkStepApproval.checked ? 'تأیید گام‌به‌گام نوبت‌ها فعال شد ✓' : 'نوبت‌دهی خودکار بدون توقف فعال شد ⚡');
+    });
+
+    this.methodologySelect?.addEventListener('change', () => {
+      const key = this.methodologySelect.value;
+      if (key) {
+        this.symposiumState.applyMethodology(key);
+        this.loadProtocolsIntoEditor();
+        this.updateHeaderStats();
+        this.showToast('متدولوژی مناظره به‌روز شد ✓');
+      }
+    });
+
+    this.chairmanCardPicker?.addEventListener('change', () => {
+      const cardId = this.chairmanCardPicker.value;
+      if (cardId) {
+        this.symposiumState.setChairman(cardId);
+        this.syncSeats();
+        this.renderAll();
+        this.showToast('رئیس جدید شورا منصوب شد 👑');
+      }
+    });
+
+    // افزودن عضو به کابینه نظارت
+    this.btnAddGovAssignment?.addEventListener('click', () => {
+      const cardId = this.govCardSelect?.value;
+      const roleKey = this.govRoleSelect?.value;
+      const trigger = this.govTriggerSelect?.value || 'every_turn';
+
+      if (!cardId) {
+        alert('لطفاً یک کارت هوش مصنوعی از روی بوم برای ایفای نقش نظارتی انتخاب کنید.');
+        return;
+      }
+      if (!roleKey) {
+        alert('لطفاً یک نقش نظارتی انتخاب نمایید.');
+        return;
+      }
+
+      const assigned = this.symposiumState.addActiveGovernanceRole(cardId, roleKey, trigger);
+      if (assigned) {
+        this.syncSeats();
+        this.renderAll();
+        this.renderGovernanceCabinetZone();
+        this.showToast('ناظر جدید به کابینه مدیریت الصاق گردید 🛡️');
+      }
+    });
+
     this.btnSendMaestro?.addEventListener('click', () => this.handleUserInputSubmit());
     this.btnNextTurn?.addEventListener('click', () => {
+      if (this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO_APPROVAL') {
+        this.turnSequencer.approveProposedTurn();
+        return;
+      }
       const inputVal = (this.inputPrompt?.value || '').trim();
       if (inputVal) {
         if (!this.symposiumState.userCorePrompt) {
@@ -597,7 +716,11 @@ export class SilkSymposiumOrchestrator {
     this.inputPrompt?.addEventListener('keydown', (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
         e.preventDefault();
-        this.handleUserInputSubmit();
+        if (this.symposiumState.sessionStatus === 'WAITING_FOR_MAESTRO_APPROVAL') {
+          this.turnSequencer.approveProposedTurn();
+        } else {
+          this.handleUserInputSubmit();
+        }
       }
     });
 
@@ -1620,6 +1743,184 @@ export class SilkSymposiumOrchestrator {
 
   // ── Logic Sanctum Atelier Engine ──
 
+  handleAITurnProposed({ nextSeat, proposedMandate, reason }) {
+    if (!this.composerProposalCapsule) return;
+    this.composerProposalCapsule.classList.remove('hidden');
+
+    if (this.proposalTargetPill) {
+      this.proposalTargetPill.textContent = nextSeat ? nextSeat.name : 'مدل بعدی';
+      this.proposalTargetPill.style.color = nextSeat?.color || '#10a37f';
+    }
+    if (this.proposalMandatePreview) {
+      this.proposalMandatePreview.textContent = `${reason || ''}\nفرمان: ${proposedMandate}`;
+    }
+
+    this.updateComposerSpeakerHint();
+    this.composerBox?.classList.add('proposal-waiting');
+  }
+
+  clearProposalCapsule() {
+    this.composerProposalCapsule?.classList.add('hidden');
+    this.composerBox?.classList.remove('proposal-waiting');
+    this.updateComposerSpeakerHint();
+  }
+
+  handleProposalVetoed() {
+    this.clearProposalCapsule();
+    this.showToast('پیشنهاد رئیس شورا توسط انسان وتو شد ✕. شما می‌توانید گوینده بعد را دستی تعیین کنید.');
+    this.renderAll();
+  }
+
+  async handleGovernanceTriggered({ assignment, template, triggerType, turnContext }) {
+    const card = this.stateStore.getCard(assignment.cardId);
+    if (!card) return;
+
+    const turns = this.symposiumState.transcript.filter(t => !t.isStreaming);
+    const lastTurn = turns[turns.length - 1];
+    const textToExamine = turnContext.text || lastTurn?.text || '';
+
+    const promptText = `[حکم نظارتی برای ${card.title || card.name} - نقش: ${template.title}]:
+${assignment.customPrompt || template.systemPrompt}
+
+متن استدلال مورد بررسی:
+"""
+${textToExamine}
+"""
+
+دستور: نظر نظارتی تخصصی، ممیزی، مغالطات، یا ثبت اجماع را مستقیماً در حداکثر ۲ تا ۳ بند صادر کنید.`;
+
+    this.dispatchToCard(assignment.cardId, promptText);
+  }
+
+  updateDualParadigmUI() {
+    const isManual = this.symposiumState.debateMode === 'manual';
+    if (this.radioModeManual) this.radioModeManual.checked = isManual;
+    if (this.radioModeAIChairman) this.radioModeAIChairman.checked = !isManual;
+
+    if (this.aiChairmanSettingsBlock) {
+      this.aiChairmanSettingsBlock.style.display = isManual ? 'none' : 'flex';
+    }
+    if (this.checkStepApproval) {
+      this.checkStepApproval.checked = Boolean(this.symposiumState.config.aiStepApprovalRequired);
+    }
+    this.renderMethodologySelect();
+    this.renderChairmanCardPicker();
+  }
+
+  renderMethodologySelect() {
+    if (!this.methodologySelect) return;
+    const methodologies = this.symposiumState.getMethodologies();
+    const curKey = this.symposiumState.activeMethodologyKey;
+
+    this.methodologySelect.innerHTML = Object.keys(methodologies).map(k => {
+      const m = methodologies[k];
+      return `<option value="${k}" ${k === curKey ? 'selected' : ''}>${m.badge || '⚖️'} ${m.title}</option>`;
+    }).join('');
+  }
+
+  renderChairmanCardPicker() {
+    if (!this.chairmanCardPicker) return;
+    const cards = this.stateStore?.getCards() || [];
+    const curChairmanId = this.symposiumState.chairmanCardId;
+
+    this.chairmanCardPicker.innerHTML = `<option value="">-- انتخاب مدل به عنوان رئیس شورا --</option>` +
+      cards.map(c => `<option value="${c.id}" ${c.id === curChairmanId ? 'selected' : ''}>👑 ${c.title || c.name}</option>`).join('');
+  }
+
+  renderGovernanceCabinetZone() {
+    if (!this.governanceAssignmentsList) return;
+    const activeRoles = this.symposiumState.governanceCabinet?.activeRoles || [];
+    const templates = this.symposiumState.getGovernanceRoleTemplates();
+    const cards = this.stateStore?.getCards() || [];
+
+    // پر کردن لیست انتخاب کارت ناظر
+    if (this.govCardSelect) {
+      this.govCardSelect.innerHTML = `<option value="">-- انتخاب کارت بوم برای نظارت --</option>` +
+        cards.map(c => `<option value="${c.id}">🖥️ ${c.title || c.name}</option>`).join('');
+    }
+
+    // پر کردن لیست قالب‌های نقش نظارتی
+    if (this.govRoleSelect) {
+      this.govRoleSelect.innerHTML = `<option value="">-- انتخاب نقش تخصصی نظارت --</option>` +
+        Object.keys(templates).map(k => `<option value="${k}">${templates[k].badge || '🛡️'} ${templates[k].title}</option>`).join('');
+    }
+
+    // رندر کارت‌های منتسب فعال
+    if (activeRoles.length === 0) {
+      this.governanceAssignmentsList.innerHTML = `
+        <div style="padding: 16px; text-align: center; color: #9ca3af; font-size: 11px; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.1);">
+          هیچ عضوی به کابینه نظارت الصاق نشده است. با انتخاب کارت و نقش از کادر زیر، ناظران مستقل را فعال کنید.
+        </div>
+      `;
+    } else {
+      this.governanceAssignmentsList.innerHTML = activeRoles.map(assign => {
+        const card = cards.find(c => c.id === assign.cardId);
+        const tpl = templates[assign.roleKey] || {};
+        const triggerLabels = {
+          every_turn: 'پس از هر پیام',
+          on_divergence: 'هنگام بروز اختلاف',
+          end_of_round: 'پایان هر راند',
+          manual_call: 'فراخوانی دستی'
+        };
+
+        return `
+          <div class="governance-assignment-card" style="--role-color: ${tpl.color || '#10a37f'};">
+            <div class="gov-assign-left">
+              <span class="gov-assign-badge">${tpl.badge || '🛡️'}</span>
+              <div class="gov-assign-info">
+                <strong>${this.escapeHtml(tpl.title || assign.roleKey)}</strong>
+                <span>کارت مجری: <em>${this.escapeHtml(card?.title || 'مدل')}</em> • تریگر: <strong>${triggerLabels[assign.trigger] || assign.trigger}</strong></span>
+              </div>
+            </div>
+            <div class="gov-assign-actions">
+              <button type="button" class="btn-gov-toggle ${assign.isActive ? 'active' : ''}" data-assign-id="${assign.id}">
+                ${assign.isActive ? 'فعال 🟢' : 'غیرفعال ⚪'}
+              </button>
+              <button type="button" class="btn-gov-call" data-assign-id="${assign.id}" title="فراخوانی آنی این ناظر">
+                فراخوانی آنی ⚡
+              </button>
+              <button type="button" class="btn-del-scenario btn-remove-gov" data-assign-id="${assign.id}" title="حذف از کابینه">✕</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      this.governanceAssignmentsList.querySelectorAll('.btn-gov-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.symposiumState.toggleActiveGovernanceRole(btn.dataset.assignId);
+          this.syncSeats();
+          this.renderGovernanceCabinetZone();
+        });
+      });
+
+      this.governanceAssignmentsList.querySelectorAll('.btn-remove-gov').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.symposiumState.removeActiveGovernanceRole(btn.dataset.assignId);
+          this.syncSeats();
+          this.renderAll();
+          this.renderGovernanceCabinetZone();
+          this.showToast('عضو نظارتی حذف شد.');
+        });
+      });
+
+      this.governanceAssignmentsList.querySelectorAll('.btn-gov-call').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const assign = activeRoles.find(r => r.id === btn.dataset.assignId);
+          if (assign) {
+            const tpl = templates[assign.roleKey];
+            this.handleGovernanceTriggered({
+              assignment: assign,
+              template: tpl,
+              triggerType: 'manual_call',
+              turnContext: {}
+            });
+            this.showToast(`ناظر «${tpl.badge} ${tpl.title.split('(')[0]}» فراخوانی شد ⚡`);
+          }
+        });
+      });
+    }
+  }
+
   openSanctum(zone = 'scenarios') {
     this.sanctumDrawer?.classList.add('open');
     this.sanctumBackdrop?.classList.add('open');
@@ -1629,6 +1930,8 @@ export class SilkSymposiumOrchestrator {
     this.renderScenariosGrid();
     this.renderPersonasGrid();
     this.renderDaisFloorPlan();
+    this.renderGovernanceCabinetZone();
+    this.updateDualParadigmUI();
     this.loadProtocolsIntoEditor();
     this.renderSessionsList();
 
@@ -1649,16 +1952,15 @@ export class SilkSymposiumOrchestrator {
     if (this.sanctumPanels.scenarios) this.sanctumPanels.scenarios.style.display = zoneKey === 'scenarios' ? 'flex' : 'none';
     if (this.sanctumPanels.personas) this.sanctumPanels.personas.style.display = zoneKey === 'personas' ? 'flex' : 'none';
     if (this.sanctumPanels.daisFloor) this.sanctumPanels.daisFloor.style.display = zoneKey === 'dais-floor' ? 'flex' : 'none';
+    if (this.sanctumPanels.governance) this.sanctumPanels.governance.style.display = zoneKey === 'governance' ? 'flex' : 'none';
     if (this.sanctumPanels.engine) this.sanctumPanels.engine.style.display = zoneKey === 'engine' ? 'flex' : 'none';
     if (this.sanctumPanels.history) this.sanctumPanels.history.style.display = zoneKey === 'history' ? 'flex' : 'none';
 
-    if (zoneKey === 'scenarios') {
-      this.renderScenariosGrid();
-    } else if (zoneKey === 'personas') {
-      this.renderPersonasGrid();
-    } else if (zoneKey === 'history') {
-      this.renderSessionsList();
-    }
+    if (zoneKey === 'scenarios') this.renderScenariosGrid();
+    else if (zoneKey === 'personas') this.renderPersonasGrid();
+    else if (zoneKey === 'governance') this.renderGovernanceCabinetZone();
+    else if (zoneKey === 'engine') this.updateDualParadigmUI();
+    else if (zoneKey === 'history') this.renderSessionsList();
   }
 
   // ── Scenario Builder & Grid ──

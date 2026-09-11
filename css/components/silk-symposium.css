@@ -1009,6 +1009,316 @@
   box-shadow: 0 0 18px rgba(245, 158, 11, 0.25);
 }
 
+/* ── کپسول ویژه پیشنهاد نوبت هوش مصنوعی رئیس (Human-in-the-Loop Step Gating) ── */
+.composer-proposal-capsule {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #262626;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.15);
+  border-radius: 14px;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  animation: proposalPopIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.composer-proposal-capsule.hidden {
+  display: none !important;
+}
+
+@keyframes proposalPopIn {
+  from { opacity: 0; transform: translateY(6px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.proposal-info-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.proposal-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.proposal-gem-icon {
+  font-size: 13px;
+}
+
+.proposal-title-text {
+  font-weight: 600;
+  color: #fde68a;
+}
+
+.proposal-target-pill {
+  font-size: 10.5px;
+  font-weight: 600;
+  background: #333333;
+  padding: 1px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.proposal-mandate-preview {
+  font-size: 11px;
+  color: #d1d5db;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 520px;
+}
+
+.proposal-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.btn-approve-proposal {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: #10a37f;
+  border: 1px solid #10a37f;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  font-family: inherit;
+}
+
+.btn-approve-proposal:hover {
+  background: #0d8a6a;
+  transform: scale(1.02);
+}
+
+.btn-veto-proposal {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  font-family: inherit;
+}
+
+.btn-veto-proposal:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #ffffff;
+}
+
+/* ── سوییچ کارت‌های دوگانه متدولوژی (Dual-Paradigm Switcher) ── */
+.dual-paradigm-switcher-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.paradigm-radio-card {
+  position: relative;
+  display: flex;
+  background: #212121;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  user-select: none;
+}
+
+.paradigm-radio-card input[type="radio"] {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  accent-color: #10a37f;
+}
+
+.paradigm-radio-card:hover {
+  background: #262626;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.paradigm-radio-card:has(input:checked) {
+  background: #282828;
+  border-color: #10a37f;
+  box-shadow: 0 0 12px rgba(16, 163, 127, 0.2);
+}
+
+.paradigm-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.paradigm-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.paradigm-icon {
+  font-size: 16px;
+}
+
+.paradigm-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f3f4f6;
+}
+
+.paradigm-desc {
+  margin: 0;
+  font-size: 10.5px;
+  color: #9ca3af;
+  line-height: 1.45;
+}
+
+/* ── کابینه نظارت و مدیریت (Governance Cabinet Styles) ── */
+.governance-assignment-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #212121;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: 3px solid var(--role-color, #10a37f);
+  border-radius: 8px;
+  padding: 10px 12px;
+  transition: all 0.16s ease;
+}
+
+.governance-assignment-card:hover {
+  background: #262626;
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.gov-assign-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.gov-assign-badge {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.gov-assign-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.gov-assign-info strong {
+  font-size: 12px;
+  color: #ffffff;
+}
+
+.gov-assign-info span {
+  font-size: 10px;
+  color: #9ca3af;
+}
+
+.gov-assign-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.btn-gov-toggle {
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #2a2a2a;
+  color: #d1d5db;
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-gov-toggle.active {
+  background: rgba(16, 163, 127, 0.2);
+  border-color: #10a37f;
+  color: #10a37f;
+}
+
+.btn-gov-call {
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #333333;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fde68a;
+  font-size: 10px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-gov-call:hover {
+  background: #3d3d3d;
+  color: #ffffff;
+}
+
+/* ── یادداشت‌های نظارتی در بدنه ترنسکریپت ── */
+.turn-governance-pill {
+  margin: 6px 0 2px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #1c1c1c;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: 3px solid var(--gov-color, #10a37f);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gov-pill-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 10px;
+}
+
+.gov-pill-badge {
+  font-weight: 600;
+  color: var(--gov-color, #10a37f);
+}
+
+.gov-pill-model {
+  color: #6b7280;
+  font-family: ui-monospace, monospace;
+}
+
+.gov-pill-text {
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: #d1d5db;
+}
+
 .composer-top-context-pill {
   display: inline-flex;
   align-items: center;

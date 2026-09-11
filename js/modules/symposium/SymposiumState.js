@@ -5,43 +5,501 @@
  * and multi-session roundtable history.
  */
 
-/* ── نقش‌های کاربر (User Role Presets - خالی، تماماً قابل ساخت توسط کاربر) ── */
-export const USER_ROLE_PRESETS = {};
+/* ── ۱. مخزن تمپلیت‌های متدولوژی مناظره (Methodology Templates) ── */
+export const FACTORY_METHODOLOGIES = {
+  hegelian_triad: {
+    id: 'hegelian_triad',
+    title: 'سه‌گانه دیالکتیک هگلی (Hegelian Triad: Thesis-Antithesis-Synthesis)',
+    description: 'گردش دورها به گونه‌ای است که مدل اول تز (Thesis) را طرح می‌کند، مدل دوم موظف به خلق قوی‌ترین آنتی‌تز (Antithesis) است، و مدل سوم یا رئیس موظف به استخراج سنتز (Synthesis) و رفع تناقض است.',
+    badge: '⚖️ هگل',
+    color: '#8b5cf6',
+    stepSequence: ['thesis', 'antithesis', 'synthesis'],
+    stepInstructions: {
+      thesis: 'شما در مقام واضع «تز بنیادین (Thesis)» موظفید روشن‌ترین، مستدل‌ترین و جسورانه‌ترین گزاره را پیرامون مسئله طرح نمایید.',
+      antithesis: 'شما در مقام طراح «آنتی‌تز رادیکال (Antithesis)» موظفید تناقضات درونی، نقاط شکست و فرضیات غیرقابل اثبات تز سخنران قبلی را آشکار ساخته و موضع مقابل را مستقر کنید.',
+      synthesis: 'شما در مقام «معمار سنتز دیالکتیکی (Synthesis)» موظفید فراتر از تقابل دو موضع قبلی رفته، هسته حقیقی هر دو را حفظ و در یک نظریه/راهکار متعالی‌تر یکپارچه سازید.'
+    },
+    template: `{{speaker_role}}
 
-/* ── پرسوناهای شناختی (Cognitive Archetypes - خالی، تماماً قابل ساخت توسط کاربر) ── */
-export const COGNITIVE_PERSONAS = {};
+شما در متدولوژی دیالکتیک هگلی (دور {{round_number}}) در جایگاه ویژه زیر قرار دارید:
+[مأموریت این نوبت شما]:
+{{methodology_mandate}}
 
-/* ── الگوهای فرمول‌های پرومپت (Dialectic Templates - خالی، تماماً قابل ساخت توسط کاربر) ── */
-export const DIALECTIC_PROMPT_TEMPLATES = {};
-
-/* ── فرمول خام و پایه‌ای برای زمان عدم وجود الگو ── */
-export const DEFAULT_DIALECTIC_TEMPLATE = `{{speaker_role}}
-
+مسئله محوری شورا:
+"""
 {{user_core_prompt}}
+"""
 
-{{round_context_brief}}`;
+موضع پیشین مطرح‌شده توسط {{last_speaker_name}}:
+"""
+{{last_speaker_argument}}
+"""
 
-/* ── الگوهای آماده برای دستور کلی شورا (خالی، تماماً قابل ساخت توسط کاربر) ── */
+سوابق دیالکتیکی ادوار قبل:
+{{round_context_brief}}
+
+دستورالعمل اجرایی:
+۱. از تعارفات کلامی بپرهیزید و بی‌درنگ وارد استدلال شوید.
+۲. با تمام قوا مأموریت هگلی انتسابی به خود را محقق کنید.
+۳. در پایان یک گزاره برای ثبت در دفتر اجماع ارائه دهید.`
+  },
+
+  popperian_falsification: {
+    id: 'popperian_falsification',
+    title: 'دادگاه ابطال‌پذیری کارل پوپر (Popperian Falsification Agora)',
+    description: 'هیچ نظری معتبر دانسته نمی‌شود مگر آنکه بی‌رحمانه‌ترین سناریوهای شکست، موارد نقض (Edge Cases) و آزمون‌های تجربی سخت بر آن تحمیل شده و تاب آورده باشد.',
+    badge: '🔨 پوپر',
+    color: '#ef4444',
+    stepSequence: ['conjecture', 'falsification_attack', 'corroboration'],
+    stepInstructions: {
+      conjecture: 'یک حدس علمی و فرضیه شجاعانه (Bold Conjecture) با قابلیت آزمون‌پذیری تجربی و پیش‌بینی‌پذیر ارائه دهید.',
+      falsification_attack: 'به عنوان مدعی‌العموم ابطال‌پذیری، سناریوی دقیق شکست، یک مورد نقض تجربی (Counter-example) یا باگ پنهان فرضیه قبلی را اثبات کنید.',
+      corroboration: 'در برابر آزمون ابطال مقاومت کنید؛ نشان دهید فرضیه در چه شرایط تحدیدشده‌ای همچنان صادق است یا آن را اصلاح بنیادین کنید.'
+    },
+    template: `{{speaker_role}}
+
+شما در دادگاه سنجش ابطال‌پذیری کارل پوپر (دور {{round_number}}) حضور دارید.
+[مأموریت فلسفی این نوبت]:
+{{methodology_mandate}}
+
+مسئله یا گزاره تحت داوری:
+"""
+{{user_core_prompt}}
+"""
+
+آخرین موضع مطرح‌شده توسط {{last_speaker_name}}:
+"""
+{{last_speaker_argument}}
+"""
+
+سوابق آزمون‌های پیشین:
+{{round_context_brief}}
+
+احکام الزامی:
+- گزاره‌های توتولوژیک (همگوان)، غیرقابل ابطال یا مبهم مردود هستند.
+- صریحاً مشخص کنید چه مشاهده یا داده‌ای می‌تواند نظریه شما یا همکارتان را کاملاً ابطال نماید.`
+  },
+
+  delphi_convergence: {
+    id: 'delphi_convergence',
+    title: 'همگرایی و تعدیل تدریجی دلفی (Delphi Strategic Convergence)',
+    description: 'نوبت‌گردان نظرات چندگانه را جمع‌آوری، نقاط پراکندگی را استخراج و در هر دور از اعضا می‌خواهد با دلایل ریاضی و منطقی مواضع خود را به سمت راهکار نهایی تعدیل کنند.',
+    badge: '🎯 دلفی',
+    color: '#10a37f',
+    stepSequence: ['variance_mapping', 'rational_adjustment', 'consensus_crystallization'],
+    stepInstructions: {
+      variance_mapping: 'نقشه‌برداری از ابعاد پراکندگی و سناریوهای متباعد با برآورد احتمالات و ضریب اطمینان.',
+      rational_adjustment: 'بررسی ادله همکاران و تعدیل معقول مواضع خود بر پایه داده‌های متقن‌تر و رفع تعصبات فکری.',
+      consensus_crystallization: 'تبلور اجماع استراتژیک، یکپارچه‌سازی متغیرها در فرمول نهایی و حذف ابهامات باقیمانده.'
+    },
+    template: `{{speaker_role}}
+
+شما در فرآیند همگرایی استراتژیک دلفی (دور {{round_number}}) شرکت دارید.
+[مأموریت این گام]:
+{{methodology_mandate}}
+
+مسئله بنیادین مورد مذاکره:
+"""
+{{user_core_prompt}}
+"""
+
+وضعیت نقاط توافق و شکاف‌ها:
+توافقات: {{consensus_agreements}}
+شکاف‌ها: {{consensus_gaps}}
+
+آخرین موضع:
+{{last_speaker_name}}: """{{last_speaker_argument}}"""
+
+دستورالعمل:
+فاصله میان دیدگاه خود و دیگران را بسنجید و با رویکردی عقلانی و داده‌محور، یک گام مشخص به سمت همگرایی و اجماع بردارید.`
+  },
+
+  red_blue_adversarial: {
+    id: 'red_blue_adversarial',
+    title: 'شبیه‌سازی اتاق جنگ تیم سرخ / تیم آبی (Red Team / Blue Team Adversarial)',
+    description: 'یک جبهه به عنوان طراح استراتژی/کد/معماری و جبهه دیگر به عنوان مهاجم خستگی‌ناپذیر برای کشف حفره‌های امنیتی، استدلالی یا اجرایی.',
+    badge: '⚔️ اتاق جنگ',
+    color: '#f59e0b',
+    stepSequence: ['blue_defense', 'red_attack', 'purple_hardening'],
+    stepInstructions: {
+      blue_defense: 'تیم آبی (Blue Team): ارائه معماری مستحکم، نقشه عملیاتی جامع و اقدامات حفاظتی/مهندسی.',
+      red_attack: 'تیم سرخ (Red Team): نقش مهاجم متخاصم؛ کشف بردار نفوذ، سناریوی بحران، آسیب‌پذیری بحرانی یا فلج سیستم.',
+      purple_hardening: 'تیم بنفش (Purple Team): رفع رخنه کشف‌شده، ایمن‌سازی راهکار و ارتقای استاندارد معماری دفاعی.'
+    },
+    template: `{{speaker_role}}
+
+شما در محیط شبیه‌سازی اتاق جنگ استراتژیک (دور {{round_number}}) مستقرید.
+[نقش و مأموریت تاکتیکی این نوبت]:
+{{methodology_mandate}}
+
+صورت مسئله و هدف عملیات:
+"""
+{{user_core_prompt}}
+"""
+
+آخرین اقدام حریف ({{last_speaker_name}}):
+"""
+{{last_speaker_argument}}
+"""
+
+دستور عملیاتی:
+بدون تعارفات دیپلماتیک، حمله یا دفاع فنی خود را با ارقام، شواهد یا کدهای دقیق به خط بیاورید.`
+  },
+
+  socratic_elenchus: {
+    id: 'socratic_elenchus',
+    title: 'بازجویی و مامایی سقراطی (Socratic Elenctic Interrogation)',
+    description: 'نوبت‌گردان گزاره‌های قطعی را با پرسش‌های خردکننده پیرامون پیش‌فرض‌های تعریف‌نشده (Unstated Assumptions) به چالش می‌کشد تا جهل مرکب را آشکار و تعاریف را پالایش کند.',
+    badge: '🏛️ سقراط',
+    color: '#06b6d4',
+    stepSequence: ['definition_claim', 'elenchus_probe', 'aporia_maieutics'],
+    stepInstructions: {
+      definition_claim: 'تعریف دقیق و منقح از ماهیت پدیده مورد بحث با تعیین دقیق جنس و فصل منطقی.',
+      elenchus_probe: 'استیضاح سقراطی: پرسیدن سوالاتی که نشان دهد تعریف فوق در فلان حالت خاص منجر به تناقض آشکار می‌شود.',
+      aporia_maieutics: 'مامایی معنا از دل حیرت (Aporia): پی‌ریزی تعریفی عمیق‌تر که تناقض آشکارشده را مرتفع سازد.'
+    },
+    template: `{{speaker_role}}
+
+شما در محفل استیضاح دیالکتیکی سقراط (دور {{round_number}}) حضور یافته‌اید.
+[فرمان سقراطی برای این نوبت]:
+{{methodology_mandate}}
+
+موضوع پژوهش:
+"""
+{{user_core_prompt}}
+"""
+
+مدعای {{last_speaker_name}}:
+"""
+{{last_speaker_argument}}
+"""
+
+احکام:
+۱. پیش‌فرض‌های ناگفته را کالبدشکافی کنید.
+۲. با طرح یک مثال نقض یا تناقض منطقی، استحکام مدعا را به آزمایش بگذارید.
+۳. در پایان یک پرسش اساسی طرح نمایید.`
+  },
+
+  first_principles: {
+    id: 'first_principles',
+    title: 'کالبدشکافی از اصول اولیه فیزیک و ایلان ماسک (First-Principles Axiomatic Audit)',
+    description: 'ممنوعیت مطلق استناد به عرف یا تجربه دیگران؛ شکستن مسئله به بنیادی‌ترین حقایق غیرقابل انکار و بازسازی راهکار از نقطه صفر.',
+    badge: '⚛️ اصول اول',
+    color: '#3b82f6',
+    stepSequence: ['axiomatic_deconstruction', 'ground_zero_reconstruction', 'limit_optimization'],
+    stepInstructions: {
+      axiomatic_deconstruction: 'تجزیه کامل مسئله به قوانین پایه‌ای فیزیک، ریاضیات یا حقایق بدیهی و کنار گذاشتن روال‌های متداول.',
+      ground_zero_reconstruction: 'بازسازی راهکار از نقطه صفر صرفاً بر پایه حقایق اولیه اثبات‌شده، فارغ از عرف بازار یا پیشینیان.',
+      limit_optimization: 'بهینه‌سازی برداری تا رسیدن به حد نهایی فیزیکی/ترمودینامیکی مسئله.'
+    },
+    template: `{{speaker_role}}
+
+شما در اتاق ممیزی از اصول اولیه (First Principles - دور {{round_number}}) نشسته‌اید.
+[مأموریت این گام]:
+{{methodology_mandate}}
+
+مسئله محوری:
+"""
+{{user_core_prompt}}
+"""
+
+موضع مطرح‌شده:
+{{last_speaker_name}}: """{{last_speaker_argument}}"""
+
+قوانین قطعی:
+- استدلال از روی قیاس (Reasoning by Analogy) یا تکیه بر «معمولاً اینطور انجام می‌شود» اکیداً باطل است.
+- فقط بر حقایق بنیادین تکیه کنید و محاسبات اولیه خود را شفاف نشان دهید.`
+  }
+};
+
+/* ── ۲. مخزن تمپلیت‌های نقش‌های کابینه نظارت و مدیریت (Governance Roles) ── */
+export const FACTORY_GOVERNANCE_ROLES = {
+  consensus_notary: {
+    id: 'consensus_notary',
+    title: 'منشی دیوان و سنترالایزر اجماع (Consensus Notary & Ledger Keeper)',
+    description: 'پس از هر پیام یا دور، متن را کالبدشکافی کرده و بدون اظهار نظر شخصی، گزاره‌های توافق‌شده قطعی، شکاف‌های لاینحل، و سوالات باز را تفکیک و در Ledger ثبت می‌کند.',
+    badge: '📜 منشی اجماع',
+    color: '#10a37f',
+    defaultTrigger: 'every_turn',
+    systemPrompt: `شما «منشی دیوان و ناظر بی‌طرف اجماع شورا» هستید.
+وظیفه شما بررسی آخرین استدلال‌های مطرح‌شده است.
+بدون تعارف و تعصب، دقیقاً ۳ بخش زیر را استخراج و اعلام کنید:
+۱. [توافقات قطعی]: نقاطی که طرفین عقلانی بر آن مهر تأیید زده‌اند.
+۲. [شکاف‌های لاینحل]: تضادها و گره‌های اساسی که هنوز حل نشده است.
+۳. [پرسش‌های پیش‌برنده]: سوال کلیدی که سخنران بعد باید به آن پاسخ دهد.`
+  },
+
+  fallacy_watchdog: {
+    id: 'fallacy_watchdog',
+    title: 'دیده‌بان مغالطات منطقی و سوگیری شناختی (Logical Fallacy & Bias Watchdog)',
+    description: 'استدلال‌ها را از منظر مغالطات مشهور (حمله به شخص، تعمیم شتاب‌زده، مغالطه پهلوان‌پنبه، دور باطل، انحراف بحث) رصد کرده و در صورت کشف تخلف، یادداشت هشدار قرمز به شورا الصاق می‌کند.',
+    badge: '🛡️ دیده‌بان مغالطه',
+    color: '#f59e0b',
+    defaultTrigger: 'every_turn',
+    systemPrompt: `شما «دیده‌بان عالی سلامت منطقی و مغالطه‌سنج شورا» هستید.
+وظیفه شما اسکن متن اخیر برای کشف مغالطات است (مانند Ad Hominem، Straw Man، False Dilemma، Begging the Question، Post Hoc، و غیره).
+اگر استدلال معتبر است بنویسید: «[استدلال معتبر و فاقد مغالطه آشکار]».
+اگر خطایی وجود دارد با ذکر نوع مغالطه، جمله مورد دار را نقد و هشدار دیپلماتیک صادر نمایید.`
+  },
+
+  fact_auditor: {
+    id: 'fact_auditor',
+    title: 'مفتش واقعیت و راستی‌آزمای فکت‌ها (Empirical Fact & Reality Auditor)',
+    description: 'ادعاهای آماری، تاریخی، توابع کد، نام کتابخانه‌ها و ارقام را راستی‌آزمایی کرده و در صورت توهم مدل‌ها (Hallucination)، پرچم قرمز بالا می‌برد.',
+    badge: '🔍 راستی‌آزمای فکت',
+    color: '#0ea5e9',
+    defaultTrigger: 'every_turn',
+    systemPrompt: `شما «مفتش ارشد فکت‌ها و راستی‌آزمای تجربی شورا» هستید.
+وظیفه: راستی‌آزمایی هرگونه ادعای تجربی، نام کتابخانه، متد کدنویسی، آمار ریاضی و شواهد تاریخی در پیام اخیر.
+در صورتی که داده‌ای نادرست، قدیمی یا توهم‌آمیز (Hallucinated) است، پرچم برافرازید و اصلاحیه دقیق علمی آن را بیان کنید.`
+  },
+
+  dialectic_arbitrator: {
+    id: 'dialectic_arbitrator',
+    title: 'حَکَم صلح و تنش‌زدایی شناختی (Dialectic Arbitrator & Tension Calibrator)',
+    description: 'هرگاه مناظره به تکرار بی‌حاصل، جدال کلامی یا انسداد برسد، مداخله کرده و چارچوب را با تغییر سوال یا شکستن بن‌بست بازآرایی می‌کند.',
+    badge: '⚖️ حَکَم دیالکتیک',
+    color: '#8b5cf6',
+    defaultTrigger: 'on_divergence',
+    systemPrompt: `شما «حَکَم صلح فکری و داور دیالکتیکی شورا» هستید.
+هرگاه اعضا در دور باطل یا نزاع لفظی بر سر تعاریف گرفتار شدند، مداخله کنید. ریشه نزاع را مشخص کرده و با طرح یک «مسئله جایگزین و زاویه سازنده نوین»، بن‌بست شورا را بشکنید.`
+  },
+
+  executive_synthesizer: {
+    id: 'executive_synthesizer',
+    title: 'معمار سنتز نهایی و نتیجه‌گیری اجرایی (Executive Synthesizer)',
+    description: 'در فاز پایانی، تمام صورت‌جلسه را تبدیل به یک سند اجرایی مدون، بدون تناقض، حاوی معماری، کد یا طرح اقدام (Action Plan) می‌نماید.',
+    badge: '👑 معمار سنتز',
+    color: '#ec4899',
+    defaultTrigger: 'end_of_round',
+    systemPrompt: `شما «معمار ارشد تدوین و سنتز نهایی شورا» هستید.
+وظیفه: ترکیب تمام توافقات و داده‌های مذاکره در یک سند اجرایی فوق‌العاده قوی، بدون حشو و زوائد، همراه با نقشه راه عملیاتی، کدهای لازم و تصمیمات قطعی اتخاذشده.`
+  }
+};
+
+/* ── ۳. مخزن تمپلیت‌های فرمول‌های پرومپت تزریقی (Injection Formulas) ── */
+export const FACTORY_INJECTION_FORMULAS = {
+  socratic_scrutiny: {
+    id: 'socratic_scrutiny',
+    title: 'فرمول استیضاح سقراطی (Socratic Scrutiny Formula)',
+    description: 'تمرکز بر استخراج فرضیات ناگفته، کشف ضعف استدلال سخنران قبلی و ارائه زاویه دید عمیق.',
+    template: `{{speaker_role}}
+
+شما در دور {{round_number}} از میزگرد نخبگانی «The Silk Symposium» حضور دارید.
+
+مسئله بنیادین شورا:
+"""
+{{user_core_prompt}}
+"""
+
+آخرین موضع مطرح‌شده توسط {{last_speaker_name}}:
+"""
+{{last_speaker_argument}}
+"""
+
+سوابق فشرده ادوار پیشین:
+{{round_context_brief}}
+
+ساختار الزامی پاسخ شما:
+۱. موشکافی فرضیات ناگفته (Unstated Assumptions) در استدلال {{last_speaker_name}}.
+۲. ارائه تز نوین و راهکار عمیق شما از منظر پرسونای تخصصی‌تان.
+۳. ثبت در دفتر اجماع:
+- هم‌نظر هستیم که: [یک گزاره کوتاه توافق‌شده]
+- نقطه اختلاف: [گره لاینحل فعلی]
+- پرسش پیش‌برنده: [یک سوال برای سخنران بعد]`
+  },
+
+  premortem_disaster: {
+    id: 'premortem_disaster',
+    title: 'فرمول مهندسی معکوس و سناریوی فاجعه (Premortem / Disaster Analysis)',
+    description: 'فرض کنید راه‌حل سخنران قبلی در مقیاس عملیاتی با شکست فاجعه‌بار مواجه شده؛ علت‌یابی و ارائه پادزهر.',
+    template: `{{speaker_role}}
+
+فرمان دور {{round_number}} (سناریوی پیش‌مرگ - Premortem):
+فرض کنید راهکار پیشنهادی {{last_speaker_name}} در عمل پیاده‌سازی شده و منجر به یک شکست مطلق، سقوط معماری و خسارت عظیم گردیده است.
+
+مسئله شورا:
+"""
+{{user_core_prompt}}
+"""
+
+ایده مطرح‌شده توسط {{last_speaker_name}}:
+"""
+{{last_speaker_argument}}
+"""
+
+مأموریت شما:
+۱. کالبدشکافی علت شکست فاجعه‌بار این ایده (ریسک‌های نامرئی، مقیاس‌پذیری، آسیب‌پذیری‌ها).
+۲. ارائه بازطراحی تاب‌آور و ضد شکننده (Antifragile) از زاویه دید خود.
+۳. یک اصل غیرقابل تخطی برای مصون ماندن از شکست ثبت کنید.`
+  },
+
+  actionable_code: {
+    id: 'actionable_code',
+    title: 'فرمول تزریق کد و راهکار عملیاتی (Actionable Code & Proof-of-Concept)',
+    description: 'ممنوعیت تئوری‌بافی محض؛ هر پاسخ باید حاوی کد کامل، معماری فنی یا فرمول تست‌پذیر باشد.',
+    template: `{{speaker_role}}
+
+دستور دور {{round_number}} (راهکار عملیاتی و کد واقعی):
+مذاکرات تئوریک به اندازه کافی انجام شده است؛ اکنون وقت پیاده‌سازی ملموس است.
+
+مسئله محوری:
+"""
+{{user_core_prompt}}
+"""
+
+زمینه و ایده پیشین:
+{{last_speaker_name}}: """{{last_speaker_argument}}"""
+
+الزامات پاسخ:
+۱. تحلیل فنی کوتاه از گره مهندسی مسئله.
+۲. ارائه قطعه کد کامل، تمیز، کامنت‌گذاری‌شده و تست‌پذیر (یا فرمول دقیق محاسباتی).
+۳. بیان پیچیدگی زمانی/فضایی، متغیرهای کلیدی و پیش‌نیازهای اجرایی.`
+  },
+
+  peer_review_standard: {
+    id: 'peer_review_standard',
+    title: 'فرمول داوری همتا آکادمیک (Peer-Review Standard)',
+    description: 'ساختار استاندارد ژورنال‌های علمی: خلاصه ادعا، نقاط قوت، محدودیت‌های منطقی، اصلاحیه پیشنهادی.',
+    template: `{{speaker_role}}
+
+داوری علمی همتا (دور {{round_number}}):
+موضع {{last_speaker_name}} را به عنوان یک مقاله پژوهشی مورد ممیزی دقیق قرار دهید.
+
+مسئله:
+"""
+{{user_core_prompt}}
+"""
+
+مدعای همکار:
+"""
+{{last_speaker_argument}}
+"""
+
+ساختار گزارش داوری شما:
+۱. خلاصه مدعا و نقاط قوت متدولوژیک آن.
+۲. حفره‌های استدلالی، مغالطات احتمالی یا خلأ آماری.
+۳. پیشنهاد مشخص برای ارتقای فرضیه و همگرایی علمی با سایر اعضا.`
+  }
+};
+
+/* ── فرمول پیش‌فرض خام ── */
+export const DEFAULT_DIALECTIC_TEMPLATE = FACTORY_INJECTION_FORMULAS.socratic_scrutiny.template;
+
+/* ── پرسوناهای شناختی پیش‌فرض (Cognitive Archetypes) ── */
+export const COGNITIVE_PERSONAS = {
+  architect: {
+    id: 'architect',
+    title: 'The System Architect (معمار سیستم و زیرساخت)',
+    badge: '🏛️ معمار',
+    color: '#6366f1',
+    directive: 'شما به عنوان معمار ارشد، مسئله را از دیدگاه پایداری، مقیاس‌پذیری، طراحی ماژولار و سادگی ساختاری تحلیل کنید. از راه‌حل‌های کوتاه‌مدت پرهیز کنید.'
+  },
+  epistemologist: {
+    id: 'epistemologist',
+    title: 'The Epistemologist (فیلسوف و منطق‌دان نقاد)',
+    badge: '🦉 معرفت‌شناس',
+    color: '#ec4899',
+    directive: 'شما به عنوان فیلسوف نقاد، تعاریف بنیادین را بازبینی کرده و مغالطات و سوگیری‌های شناختی پنهان در کلام دیگران را به چالش بکشید.'
+  },
+  pragmatist: {
+    id: 'pragmatist',
+    title: 'The Pragmatic Engineer (مهندس عمل‌گرا و توسعه‌دهنده)',
+    badge: '⚙️ عمل‌گرا',
+    color: '#10a37f',
+    directive: 'شما بر کارایی، هزینه اجرا، محدودیت‌های واقعی زمان و منابع تمرکز دارید. همواره بپرسید «این راهکار در عمل چگونه کار خواهد کرد؟»'
+  },
+  devil_advocate: {
+    id: 'devil_advocate',
+    title: "The Devil's Advocate (وکیل‌مدافع شیطان و شکاک رادیکال)",
+    badge: '🔥 شکاک',
+    color: '#ef4444',
+    directive: 'وظیفه شما حمله به اجماع زودرس است. قوی‌ترین استدلال‌ها را علیه ایده‌ای که مورد پذیرش همگانی قرار گرفته به کار بگیرید.'
+  },
+  strategist: {
+    id: 'strategist',
+    title: 'The Game Strategist (استراتژیست نظریه بازی‌ها)',
+    badge: '♟️ استراتژیست',
+    color: '#f59e0b',
+    directive: 'شما مسئله را از منظر بازیگران متعدد، انگیزه‌ها، منافع متضاد و تعادل نش (Nash Equilibrium) مورد ارزیابی قرار می‌دهید.'
+  }
+};
+
+/* ── سناریوهای استاندارد شورا ── */
+export const SYMPOSIUM_SCENARIOS = {
+  architecture_paradox: {
+    id: 'architecture_paradox',
+    title: 'انتخاب معماری نهایی سیستم و حل پارادوکس فنی',
+    description: 'مناظره بر سر معماری نرم‌افزار، مقیاس‌پذیری در برابر سادگی، و انتخاب فناوری‌های محوری.',
+    badge: '🏛️ سناریو',
+    color: '#6366f1',
+    debateMode: 'manual',
+    methodologyKey: 'hegelian_triad',
+    formulaKey: 'actionable_code',
+    initialPrompt: 'می‌خواهیم برای سامانه پردازش بلادرنگ خود میان معماری میکروسرویس رویدادمحور و مونولیت ماژولار با عملکرد فوق‌العاده بالا تصمیم‌گیری کنیم. معیارها: هزینه نگهداری، پایداری و زمان پاسخگویی زیر ۱۰ میلی‌ثانیه.'
+  },
+  ai_consciousness_debate: {
+    id: 'ai_consciousness_debate',
+    title: 'آگاهی، اخلاق و خطرات بنیادین هوش مصنوعی عمومی (AGI)',
+    description: 'کالبدشکافی فلسفی پیرامون ماهیت درک هوش مصنوعی، تراز بودن ارزش‌ها و مهار ابرهوشمندی.',
+    badge: '🧠 سناریو',
+    color: '#ec4899',
+    debateMode: 'ai_chairman',
+    methodologyKey: 'socratic_elenchus',
+    formulaKey: 'socratic_scrutiny',
+    initialPrompt: 'آیا پردازش زبان طبیعی مبتنی بر شبکه عصبی ترنسفورمر می‌تواند متضمن نوعی از پدیدارشناسی یا آگاهی بنیادین باشد؟ پیامدهای معرفت‌شناختی و اخلاقی آن برای انسان چیست؟'
+  },
+  premortem_strategy: {
+    id: 'premortem_strategy',
+    title: 'تحلیل استراتژیک پیش‌مرگ و سناریوهای فاجعه محصول',
+    description: 'کشف نقاط کور استراتژی ورود به بازار و رخنه‌های امنیتی/اقتصادی پیش از عرضه.',
+    badge: '🛡️ سناریو',
+    color: '#f59e0b',
+    debateMode: 'ai_chairman',
+    methodologyKey: 'red_blue_adversarial',
+    formulaKey: 'premortem_disaster',
+    initialPrompt: 'محصول استراتژیک جدید ما با موفقیت پیاده‌سازی شده اما ۵ سال بعد به صورت کامل ورشکست و نابود شده است. چه عوامل غافلگیرکننده‌ای عامل این سقوط بوده‌اند؟'
+  }
+};
+
+export const USER_ROLE_PRESETS = {};
+export const DIALECTIC_PROMPT_TEMPLATES = FACTORY_INJECTION_FORMULAS;
 export const GLOBAL_DIRECTIVE_PRESETS = {};
-
-/* ── مخزن سناریوهای جامع (خالی، تماماً قابل ساخت توسط کاربر) ── */
-export const SYMPOSIUM_SCENARIOS = {};
-
-/* ── الگوهای جریان مذاکره و متدولوژی نوبت‌دهی (خالی، تماماً قابل ساخت توسط کاربر) ── */
 export const FLOW_TOPOLOGY_PRESETS = {};
 
 export class SymposiumState {
   constructor() {
-    this.sessionStatus = 'IDLE'; // 'IDLE' | 'ACTIVE' | 'PAUSED' | 'WAITING_FOR_USER' | 'WAITING_FOR_MAESTRO'
-    this.debateMode = 'manual'; // Default to manual conductor for total user control
+    this.sessionStatus = 'IDLE'; // 'IDLE' | 'ACTIVE' | 'PAUSED' | 'WAITING_FOR_USER' | 'WAITING_FOR_MAESTRO' | 'WAITING_FOR_MAESTRO_APPROVAL'
+    
+    // دوگانه بنیادین متدولوژی: 'manual' (مدیریت دستی انسان) یا 'ai_chairman' (ریاست هوش مصنوعی)
+    this.debateMode = 'manual';
+    
+    this.chairmanCardId = null; // آیدی کارت برگزیده به عنوان رئیس شورا
     this.roundIndex = 1;
     this.userCorePrompt = '';
     this.activeSpeakerIndex = -1;
     this.recommendedNextSpeakerIndex = -1;
     this.isSpeakerStreaming = false;
-    this.activeScenarioKey = '';
+    this.activeScenarioKey = 'architecture_paradox';
 
-    // Custom user-defined persona presets (Templates)
+    // مخزن متدولوژی‌های مناظره و متدولوژی فعال
+    this.customMethodologies = {};
+    this.activeMethodologyKey = 'hegelian_triad';
+
+    // ساختار کابینه نظارت و مدیریت (Supervisory Governance Suite)
+    this.governanceCabinet = {
+      enabled: true,
+      activeRoles: [
+        // { id: 'gov_1', cardId: '...', roleKey: 'fallacy_watchdog', trigger: 'every_turn', isActive: true }
+      ]
+    };
+    this.customGovernanceRoles = {};
+    this.governanceNotes = []; // یادداشت‌های نظارتی ثبت‌شده در طول شورا
+
+    // کپسول نوبت پیشنهادی هوش مصنوعی رئیس (برای تایید گام‌به‌گام)
+    this.proposedTurn = null; // { nextSeatIndex, nextSeat, proposedMandate, reason, methodologyTitle }
+
+    // Custom user-defined persona presets
     this.customPersonas = {};
 
     // Custom user-defined scenarios
@@ -53,10 +511,7 @@ export class SymposiumState {
     // Custom user-defined global directives
     this.customGlobalDirectives = {};
 
-    // Custom user-defined flow/topology presets
-    this.customTopologies = {};
-
-    // Per-card persistent customization cache (cardId -> CustomizationObject)
+    // Per-card persistent customization cache
     this.seatCustomizations = {};
 
     // User's Dais participation model (Seated Participant vs External Observer)
@@ -88,13 +543,181 @@ export class SymposiumState {
       autoAdvanceDelayMs: 2400,
       contextDistillation: 'digest', // 'digest' | 'verbatim'
       promptTemplate: DEFAULT_DIALECTIC_TEMPLATE,
-      activeTemplateKey: '',
+      activeTemplateKey: 'socratic_scrutiny',
       globalDirective: '',
       activeGlobalDirectiveKey: '',
-      autoSynthesizeOnFinish: false
+      autoSynthesizeOnFinish: false,
+      aiStepApprovalRequired: true // گیتینگ تایید دستی انسان برای گام‌های هوش مصنوعی
     };
 
     this.loadPersistedConfig();
+  }
+
+  // ── متدولوژی‌ها (Methodologies CRUD) ──
+
+  getMethodologies() {
+    return {
+      ...FACTORY_METHODOLOGIES,
+      ...(this.customMethodologies || {})
+    };
+  }
+
+  getActiveMethodology() {
+    const methodologies = this.getMethodologies();
+    return methodologies[this.activeMethodologyKey] || methodologies.hegelian_triad;
+  }
+
+  applyMethodology(key) {
+    const methodologies = this.getMethodologies();
+    if (methodologies[key]) {
+      this.activeMethodologyKey = key;
+      if (methodologies[key].template) {
+        this.config.promptTemplate = methodologies[key].template;
+      }
+      this.persistConfig();
+      return true;
+    }
+    return false;
+  }
+
+  saveCustomMethodology(data) {
+    if (!data || !data.title) return null;
+    const id = data.id || `methodology_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+    const newMethodology = {
+      id,
+      title: data.title.trim(),
+      description: data.description ? data.description.trim() : '',
+      badge: data.badge ? data.badge.trim() : '⚖️ متدولوژی',
+      color: data.color || '#8b5cf6',
+      stepSequence: Array.isArray(data.stepSequence) && data.stepSequence.length ? data.stepSequence : ['thesis', 'antithesis', 'synthesis'],
+      stepInstructions: data.stepInstructions || {},
+      template: data.template ? data.template.trim() : DEFAULT_DIALECTIC_TEMPLATE,
+      isCustom: true,
+      lastModified: Date.now()
+    };
+    if (!this.customMethodologies) this.customMethodologies = {};
+    this.customMethodologies[id] = newMethodology;
+    this.persistConfig();
+    return newMethodology;
+  }
+
+  deleteCustomMethodology(id) {
+    if (this.customMethodologies && this.customMethodologies[id]) {
+      delete this.customMethodologies[id];
+      if (this.activeMethodologyKey === id) {
+        this.activeMethodologyKey = 'hegelian_triad';
+      }
+      this.persistConfig();
+      return true;
+    }
+    return false;
+  }
+
+  // ── کابینه نظارت و مدیریت (Governance Cabinet CRUD) ──
+
+  getGovernanceRoleTemplates() {
+    return {
+      ...FACTORY_GOVERNANCE_ROLES,
+      ...(this.customGovernanceRoles || {})
+    };
+  }
+
+  saveCustomGovernanceRole(data) {
+    if (!data || !data.title) return null;
+    const id = data.id || `gov_role_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+    const newRole = {
+      id,
+      title: data.title.trim(),
+      description: data.description ? data.description.trim() : '',
+      badge: data.badge ? data.badge.trim() : '🛡️ ناظر',
+      color: data.color || '#10a37f',
+      defaultTrigger: data.defaultTrigger || 'every_turn',
+      systemPrompt: data.systemPrompt ? data.systemPrompt.trim() : '',
+      isCustom: true,
+      lastModified: Date.now()
+    };
+    if (!this.customGovernanceRoles) this.customGovernanceRoles = {};
+    this.customGovernanceRoles[id] = newRole;
+    this.persistConfig();
+    return newRole;
+  }
+
+  deleteCustomGovernanceRole(id) {
+    if (this.customGovernanceRoles && this.customGovernanceRoles[id]) {
+      delete this.customGovernanceRoles[id];
+      this.persistConfig();
+      return true;
+    }
+    return false;
+  }
+
+  addActiveGovernanceRole(cardId, roleKey, trigger = null) {
+    if (!cardId || !roleKey) return null;
+    const templates = this.getGovernanceRoleTemplates();
+    const tpl = templates[roleKey];
+    if (!tpl) return null;
+
+    if (!this.governanceCabinet) this.governanceCabinet = { enabled: true, activeRoles: [] };
+    if (!Array.isArray(this.governanceCabinet.activeRoles)) this.governanceCabinet.activeRoles = [];
+
+    // حذف نقش قبلی احتمالی همین کارت
+    this.governanceCabinet.activeRoles = this.governanceCabinet.activeRoles.filter(r => r.cardId !== cardId);
+
+    const assignment = {
+      id: `gov_assign_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+      cardId,
+      roleKey,
+      trigger: trigger || tpl.defaultTrigger || 'every_turn',
+      isActive: true,
+      customPrompt: tpl.systemPrompt || '',
+      assignedAt: Date.now()
+    };
+
+    this.governanceCabinet.activeRoles.push(assignment);
+    this.persistConfig();
+    return assignment;
+  }
+
+  removeActiveGovernanceRole(assignmentId) {
+    if (this.governanceCabinet && Array.isArray(this.governanceCabinet.activeRoles)) {
+      this.governanceCabinet.activeRoles = this.governanceCabinet.activeRoles.filter(r => r.id !== assignmentId && r.cardId !== assignmentId);
+      this.persistConfig();
+      return true;
+    }
+    return false;
+  }
+
+  toggleActiveGovernanceRole(assignmentId, active = null) {
+    if (this.governanceCabinet && Array.isArray(this.governanceCabinet.activeRoles)) {
+      const target = this.governanceCabinet.activeRoles.find(r => r.id === assignmentId || r.cardId === assignmentId);
+      if (target) {
+        target.isActive = active !== null ? Boolean(active) : !target.isActive;
+        this.persistConfig();
+        return target;
+      }
+    }
+    return null;
+  }
+
+  addGovernanceNote(noteData) {
+    if (!noteData || !noteData.text) return null;
+    const note = {
+      id: `gov_note_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+      roleKey: noteData.roleKey || 'general',
+      roleTitle: noteData.roleTitle || 'یادداشت نظارتی',
+      badge: noteData.badge || '🛡️',
+      color: noteData.color || '#10a37f',
+      turnId: noteData.turnId || null,
+      cardId: noteData.cardId || null,
+      cardName: noteData.cardName || 'ناظر شورا',
+      text: noteData.text.trim(),
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      createdAt: Date.now()
+    };
+    if (!this.governanceNotes) this.governanceNotes = [];
+    this.governanceNotes.push(note);
+    this.persistConfig();
+    return note;
   }
 
   // ── Multi-Session History Management ──
@@ -613,16 +1236,29 @@ export class SymposiumState {
     const personaKeys = Object.keys(allPersonas);
     const existingAiSeats = this.seats.filter(s => !s.isUser);
 
-    const modelSeats = cards.map((card, idx) => {
+    // جداسازی مدل‌های انتسابی به کابینه نظارت: این مدل‌ها عضو مناظره نیستند و وارد صف چرخشی سخنرانان نمی‌شوند
+    const activeSupervisorCardIds = new Set(
+      (this.governanceCabinet?.activeRoles || [])
+        .filter(r => r.isActive !== false)
+        .map(r => r.cardId)
+        .filter(Boolean)
+    );
+
+    // فقط کارت‌هایی که ناظر نیستند روی سکوی سخنرانی قرار می‌گیرند
+    const debatingCards = cards.filter(c => !activeSupervisorCardIds.has(c.id));
+
+    const modelSeats = debatingCards.map((card, idx) => {
       const existing = existingAiSeats.find(s => s.cardId === card.id);
       const cachedCustom = this.seatCustomizations[card.id];
+      const isChairman = card.id === this.chairmanCardId;
 
       if (existing) {
         return {
           ...existing,
           name: card.title || card.name || existing.name || 'AI Intelligence',
           color: card.color || existing.color || '#c084fc',
-          cardId: card.id
+          cardId: card.id,
+          isChairman
         };
       }
 
@@ -642,11 +1278,12 @@ export class SymposiumState {
           weight: cachedCustom.weight ?? 100,
           status: 'idle',
           isMuted: Boolean(cachedCustom.isMuted),
+          isChairman,
           turnCount: 0
         };
       }
 
-      const assignedKey = personaKeys.length > 0 ? personaKeys[idx % personaKeys.length] : 'custom';
+      const assignedKey = personaKeys.length > 0 ? personaKeys[idx % personaKeys.length] : 'architect';
       const persona = allPersonas[assignedKey];
 
       return {
@@ -664,6 +1301,7 @@ export class SymposiumState {
         weight: 100,
         status: 'idle',
         isMuted: false,
+        isChairman,
         turnCount: 0
       };
     });
@@ -675,11 +1313,24 @@ export class SymposiumState {
       this.seats = modelSeats;
     }
 
+    // انتساب رئیس خودکار در صورتی که کارتی به عنوان رئیس تعیین نشده باشد
+    if (!this.chairmanCardId && modelSeats.length > 0) {
+      this.setChairman(modelSeats[0].cardId);
+    }
+
     if (this.sessionStatus !== 'IDLE' && this.activeSpeakerIndex >= this.seats.length) {
       this.activeSpeakerIndex = 0;
     }
 
     return this.seats;
+  }
+
+  setChairman(cardId) {
+    this.chairmanCardId = cardId;
+    this.seats.forEach(s => {
+      s.isChairman = (s.cardId === cardId);
+    });
+    this.persistConfig();
   }
 
   createUserSeatObject() {
@@ -953,16 +1604,21 @@ export class SymposiumState {
     this.saveCurrentSessionSnapshot();
     const payload = {
       schema: 'OmniAI_Silk_Symposium',
-      version: '2.0.0',
+      version: '3.0.0',
       exportedAt: Date.now(),
-      debateMode: this.debateMode,
+      debateMode: this.debateMode === 'ai_chairman' ? 'ai_chairman' : 'manual',
+      chairmanCardId: this.chairmanCardId,
+      activeMethodologyKey: this.activeMethodologyKey,
+      customMethodologies: this.customMethodologies,
+      governanceCabinet: this.governanceCabinet,
+      customGovernanceRoles: this.customGovernanceRoles,
+      governanceNotes: this.governanceNotes,
       config: this.config,
       userParticipant: this.userParticipant,
       customPersonas: this.customPersonas,
       customScenarios: this.customScenarios,
       customPromptTemplates: this.customPromptTemplates,
       customGlobalDirectives: this.customGlobalDirectives,
-      customTopologies: this.customTopologies,
       seatCustomizations: this.seatCustomizations,
       activeScenarioKey: this.activeScenarioKey,
       currentSessionId: this.currentSessionId
@@ -990,7 +1646,30 @@ export class SymposiumState {
         throw new Error('داده‌های فایل پشتیبان تالار هم‌اندیشی نامعتبر است.');
       }
 
-      if (data.debateMode) this.debateMode = data.debateMode;
+      // تطبیق حالت‌ها به دوگانه قطعی
+      if (data.debateMode === 'ai_chairman') {
+        this.debateMode = 'ai_chairman';
+      } else {
+        this.debateMode = 'manual';
+      }
+
+      if (data.chairmanCardId) this.chairmanCardId = data.chairmanCardId;
+      if (data.activeMethodologyKey) this.activeMethodologyKey = data.activeMethodologyKey;
+
+      if (data.customMethodologies && typeof data.customMethodologies === 'object') {
+        this.customMethodologies = { ...this.customMethodologies, ...data.customMethodologies };
+      }
+
+      if (data.governanceCabinet && typeof data.governanceCabinet === 'object') {
+        this.governanceCabinet = { ...this.governanceCabinet, ...data.governanceCabinet };
+      }
+      if (data.customGovernanceRoles && typeof data.customGovernanceRoles === 'object') {
+        this.customGovernanceRoles = { ...this.customGovernanceRoles, ...data.customGovernanceRoles };
+      }
+      if (Array.isArray(data.governanceNotes)) {
+        this.governanceNotes = [...this.governanceNotes, ...data.governanceNotes];
+      }
+
       if (data.config && typeof data.config === 'object') Object.assign(this.config, data.config);
       if (data.userParticipant && typeof data.userParticipant === 'object') Object.assign(this.userParticipant, data.userParticipant);
 
@@ -1005,9 +1684,6 @@ export class SymposiumState {
       }
       if (data.customGlobalDirectives && typeof data.customGlobalDirectives === 'object') {
         this.customGlobalDirectives = { ...this.customGlobalDirectives, ...data.customGlobalDirectives };
-      }
-      if (data.customTopologies && typeof data.customTopologies === 'object') {
-        this.customTopologies = { ...this.customTopologies, ...data.customTopologies };
       }
       if (data.seatCustomizations && typeof data.seatCustomizations === 'object') {
         this.seatCustomizations = { ...this.seatCustomizations, ...data.seatCustomizations };
