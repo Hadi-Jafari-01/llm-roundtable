@@ -1036,6 +1036,9 @@ export class SilkSymposiumOrchestrator {
     });
 
     const lastTurn = this.symposiumState.transcript[this.symposiumState.transcript.length - 1];
+    if (isFinished && lastTurn) {
+      lastTurn.isStreaming = false;
+    }
     this.transcriptView.updateStreamingTurn(lastTurn);
 
     if (isFinished) {

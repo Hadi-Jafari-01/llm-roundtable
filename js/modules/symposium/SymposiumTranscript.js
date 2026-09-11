@@ -67,6 +67,8 @@ export class SymposiumTranscript {
 
       const foldTrigger = e.target.closest('.reasoning-fold-trigger');
       if (foldTrigger) {
+        const foldWrap = foldTrigger.closest('.mirror-reasoning-fold');
+        if (foldWrap) foldWrap.dataset.userToggled = 'true';
         const foldBody = foldTrigger.parentElement?.querySelector('.reasoning-fold-body');
         if (foldBody) {
           const isClosed = foldBody.style.display === 'none';
@@ -192,13 +194,15 @@ export class SymposiumTranscript {
       `;
     } else {
       const renderedMd = this.renderMarkdown(turn.text || '');
+      const isStillThinking = Boolean(turn.isStreaming && (!turn.text || !turn.text.trim()));
+      const thinkingDir = this.detectTextDirection(turn.thinkingText || '');
       const thinkingHtml = turn.thinkingText ? `
         <div class="mirror-reasoning-fold" style="margin-bottom: 8px;">
           <button type="button" class="reasoning-fold-trigger">
             <span>🧠 Thinking Process</span>
-            <span>▼</span>
+            <span>${isStillThinking ? '▲' : '▼'}</span>
           </button>
-          <div class="reasoning-fold-body" dir="${this.detectTextDirection(turn.thinkingText)}">${this.escapeHtml(turn.thinkingText)}</div>
+          <div class="reasoning-fold-body" dir="${thinkingDir}" style="display: ${isStillThinking ? 'block' : 'none'};">${this.escapeHtml(turn.thinkingText)}</div>
         </div>
       ` : '';
 
@@ -266,6 +270,48 @@ export class SymposiumTranscript {
       mdContainer.setAttribute('dir', textDir);
       mdContainer.classList.toggle('is-rtl', textDir === 'rtl');
       mdContainer.classList.toggle('is-ltr', textDir === 'ltr');
+    }
+
+    if (turn.thinkingText && bubble) {
+      let reasoningFold = bubble.querySelector('.mirror-reasoning-fold');
+      const thinkingDir = this.detectTextDirection(turn.thinkingText || '');
+      const isThinkingFinished = !turn.isStreaming || Boolean(turn.text && turn.text.trim().length > 0);
+
+      if (!reasoningFold) {
+        reasoningFold = document.createElement('div');
+        reasoningFold.className = 'mirror-reasoning-fold';
+        reasoningFold.style.marginBottom = '8px';
+        reasoningFold.innerHTML = `
+          <button type="button" class="reasoning-fold-trigger">
+            <span>🧠 Thinking Process</span>
+            <span>${isThinkingFinished ? '▼' : '▲'}</span>
+          </button>
+          <div class="reasoning-fold-body" dir="${thinkingDir}" style="display: ${isThinkingFinished ? 'none' : 'block'};"></div>
+        `;
+        bubble.prepend(reasoningFold);
+      }
+
+      const foldBody = reasoningFold.querySelector('.reasoning-fold-body');
+      const foldArrow = reasoningFold.querySelector('.reasoning-fold-trigger span:last-child');
+      if (foldBody) {
+        foldBody.textContent = turn.thinkingText;
+        foldBody.setAttribute('dir', thinkingDir);
+        foldBody.classList.toggle('is-rtl', thinkingDir === 'rtl');
+
+        if (!reasoningFold.dataset.userToggled) {
+          if (isThinkingFinished) {
+            foldBody.style.display = 'none';
+            if (foldArrow) foldArrow.textContent = '▼';
+          } else {
+            foldBody.style.display = 'block';
+            if (foldArrow) foldArrow.textContent = '▲';
+          }
+        }
+      }
+    }
+
+    if (!turn.isStreaming) {
+      row.querySelector('.mirror-streaming-pulse')?.remove();
     }
 
     this.scrollToBottom();
