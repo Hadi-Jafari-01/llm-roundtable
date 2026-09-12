@@ -347,18 +347,70 @@
 
 /* Markdown Rendering */
 .mirror-markdown-content p {
-  margin: 0 0 10px 0;
+  margin: 0 0 14px 0 !important;
+  line-height: 1.85 !important;
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
   unicode-bidi: plaintext;
 }
 .mirror-markdown-content p:last-child {
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
 }
 
 .mirror-markdown-content p[dir="rtl"],
 .mirror-markdown-content .is-rtl {
   direction: rtl !important;
   text-align: right !important;
-  line-height: 1.82;
+  line-height: 1.85 !important;
+}
+
+.mirror-markdown-content ul,
+.mirror-markdown-content ol {
+  margin: 8px 0 14px 0 !important;
+  padding: 0 0 0 20px !important;
+}
+
+.mirror-markdown-content[dir="rtl"] ul,
+.mirror-markdown-content.is-rtl ul,
+.mirror-markdown-content[dir="rtl"] ol,
+.mirror-markdown-content.is-rtl ol,
+.mirror-markdown-content ul[dir="rtl"],
+.mirror-markdown-content ul.is-rtl,
+.mirror-markdown-content ol[dir="rtl"],
+.mirror-markdown-content ol.is-rtl {
+  padding: 0 20px 0 0 !important;
+}
+
+.mirror-markdown-content li {
+  margin: 4px 0 !important;
+  padding: 2px 0 !important;
+  line-height: 1.75 !important;
+  word-break: break-word !important;
+}
+
+.mirror-markdown-content li[dir="rtl"],
+.mirror-markdown-content li.is-rtl {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.mirror-markdown-content blockquote {
+  margin: 10px 0 14px 0 !important;
+  padding: 8px 14px !important;
+  border-left: 3px solid rgba(255, 255, 255, 0.2) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-radius: 0 6px 6px 0 !important;
+  color: #cbd5e1 !important;
+  line-height: 1.75 !important;
+}
+
+.mirror-markdown-content blockquote[dir="rtl"],
+.mirror-markdown-content blockquote.is-rtl {
+  border-left: none !important;
+  border-right: 3px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 6px 0 0 6px !important;
+  direction: rtl !important;
+  text-align: right !important;
 }
 
 /* Code Blocks */

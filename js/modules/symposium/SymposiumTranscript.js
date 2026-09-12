@@ -416,8 +416,32 @@ export class SymposiumTranscript {
   renderMarkdown(raw) {
     if (!raw) return '<p></p>';
     let out = raw;
+
+    // 1. Line endings normalization
+    out = out.replace(/\r\n?/g, '\n');
+
+    // 2. Pre-processing pass: Unglue consensus headers attached to sentences without newlines
+    const consensusTagsPattern = /(\*{0,2}(?:[۰-۹\d]+[\.\-]\s*)?\[\s*(?:توافقات قطعی|توافقات|نقاط اشتراک|نقطه اشتراک|هم‌نظر هستیم که|هم‌نظریم که|اشتراکات|شکاف‌های لاینحل|شکاف‌ها|نقاط اختلاف|نقطه اختلاف|اختلافات|مواضع متعارض|مخالفت اساسی|نقاط چالش|چالش با|موارد اختلاف|تضادها|معضلات|مغالطه|دیده‌بان مغالطه|خطای منطقی|تحلیل مغالطه|پرسش‌های پیش‌برنده|پرسش پیش‌برنده|پرسش‌های بی‌پاسخ|پرسش بی‌پاسخ|پرسش‌های باز|پرسش باز|سوالات پیش‌برنده|سوال پیش‌برنده|سوالات بی‌پاسخ|سوال بی‌پاسخ|فرضیه مطرح|سوال کلیدی|پرسش کلیدی|consensus|agreements?|confirmed agreements?|we agree that|divergences?|points? of contention|disagreements?|unresolved gaps?|critical divergences?|open questions?|unresolved questions?|hypotheses|open hypotheses)\s*\]\*{0,2})/gi;
+
+    out = out.replace(new RegExp(`([^\\n\\s])\\s*${consensusTagsPattern.source}`, 'gi'), '$1\n\n$2\n');
+    out = out.replace(new RegExp(`${consensusTagsPattern.source}\\s*([:：]?)\\s*([^\\n\\s])`, 'gi'), '$1$2\n$3');
+
+    // Detach numbered items attached to punctuation (e.g., "است.۱. گزینه اول")
+    out = out.replace(/([.!?؛:])\s*([۰-۹\d]+[\.\-]\s+)/g, '$1\n\n$2');
+
+    // Detach bullet items attached to sentences
+    out = out.replace(/([.!?؛:])\s+([•\-*]\s+[^\n])/g, '$1\n\n$2');
+
     const codeBlocks = [];
 
+    // 3. Convert any existing HTML <pre><code> to markdown code fences
+    out = out.replace(/<pre[^>]*><code(?:\s+class="([^"]*)")?[^>]*>([\s\S]*?)<\/code><\/pre>/gi, (m, cls, code) => {
+      const langMatch = (cls || '').match(/(?:language|lang)-([a-zA-Z0-9_-]+)/i);
+      const lang = langMatch ? langMatch[1] : '';
+      return `\n\`\`\`${lang}\n${code}\n\`\`\`\n`;
+    });
+
+    // 4. Isolate code blocks into protected tokens
     out = out.replace(/```([a-zA-Z0-9_#-]*)[ \t]*\n?([\s\S]*?)```/g, (match, lang, code) => {
       const token = `%%SYMPOSIUM_CODE_${codeBlocks.length}%%`;
       const language = (lang || 'code').trim().toLowerCase();
@@ -435,27 +459,65 @@ export class SymposiumTranscript {
       return `\n\n${token}\n\n`;
     });
 
+    // 5. Inline code
     out = out.replace(/`([^`\n]+)`/g, (m, c) => `<code class="inline-code" dir="ltr">${this.escapeHtml(c)}</code>`);
-    out = out.replace(/^### (.*$)/gim, (m, h) => `<h5 style="margin:8px 0 4px;color:#ddd6fe;">${h}</h5>`);
-    out = out.replace(/^## (.*$)/gim, (m, h) => `<h4 style="margin:10px 0 6px;color:#ddd6fe;">${h}</h4>`);
-    out = out.replace(/^# (.*$)/gim, (m, h) => `<h3 style="margin:12px 0 6px;color:#ddd6fe;">${h}</h3>`);
-    out = out.replace(/^\s*>\s+(.*$)/gim, (m, q) => `<blockquote>${q}</blockquote>`);
-    out = out.replace(/^\s*[-*•]\s+(.*$)/gim, (m, item) => `<li>${item}</li>`);
+
+    // 6. Headings with directional typography
+    out = out.replace(/^### (.*$)/gim, (m, h) => {
+      const dir = this.detectTextDirection(h);
+      return `<h5 dir="${dir}" class="${dir === 'rtl' ? 'is-rtl' : 'is-ltr'}" style="margin:8px 0 4px;color:#ddd6fe;">${h}</h5>`;
+    });
+    out = out.replace(/^## (.*$)/gim, (m, h) => {
+      const dir = this.detectTextDirection(h);
+      return `<h4 dir="${dir}" class="${dir === 'rtl' ? 'is-rtl' : 'is-ltr'}" style="margin:10px 0 6px;color:#ddd6fe;">${h}</h4>`;
+    });
+    out = out.replace(/^# (.*$)/gim, (m, h) => {
+      const dir = this.detectTextDirection(h);
+      return `<h3 dir="${dir}" class="${dir === 'rtl' ? 'is-rtl' : 'is-ltr'}" style="margin:12px 0 6px;color:#ddd6fe;">${h}</h3>`;
+    });
+
+    // 7. Blockquotes
+    out = out.replace(/^\s*>\s+(.*$)/gim, (m, q) => {
+      const dir = this.detectTextDirection(q);
+      return `<blockquote dir="${dir}" class="${dir === 'rtl' ? 'is-rtl' : 'is-ltr'}">${q}</blockquote>`;
+    });
+
+    // 8. List items
+    out = out.replace(/^\s*[-*•]\s+(.*$)/gim, (m, item) => {
+      const dir = this.detectTextDirection(item);
+      return `<li dir="${dir}" class="${dir === 'rtl' ? 'is-rtl' : 'is-ltr'}">${item}</li>`;
+    });
+
+    // 9. Bold and Italic formatting
     out = out.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
     out = out.replace(/\*([^*]+)\*/g, '<em>$1</em>');
 
-    const paragraphs = out.split(/\n\n+/).map(p => {
-      const trimmed = p.trim();
+    // 10. Robust Paragraph and List Grouping
+    const rawBlocks = out.split(/\n\n+/);
+    const processedBlocks = rawBlocks.map(block => {
+      const trimmed = block.trim();
       if (!trimmed) return '';
+
       if (codeBlocks.some(cb => cb.token === trimmed)) return trimmed;
-      if (trimmed.startsWith('<h') || trimmed.startsWith('<blockquote') || trimmed.startsWith('<li')) {
+
+      if (trimmed.includes('<li')) {
+        const lines = trimmed.split('\n').map(l => l.trim()).filter(Boolean);
+        const allListOrHeader = lines.every(l => l.startsWith('<li') || l.startsWith('<h') || l.startsWith('<blockquote'));
+        if (allListOrHeader) {
+          const listDir = this.detectTextDirection(trimmed);
+          return `<ul dir="${listDir}" class="${listDir === 'rtl' ? 'is-rtl' : 'is-ltr'}">${trimmed.replace(/\n/g, '')}</ul>`;
+        }
+      }
+
+      if (trimmed.startsWith('<h') || trimmed.startsWith('<blockquote')) {
         return trimmed.replace(/\n/g, '<br/>');
       }
+
       const dir = this.detectTextDirection(trimmed);
       return `<p dir="${dir}" class="${dir === 'rtl' ? 'is-rtl' : 'is-ltr'}">${trimmed.replace(/\n/g, '<br/>')}</p>`;
     }).filter(Boolean);
 
-    let finalHtml = paragraphs.join('');
+    let finalHtml = processedBlocks.join('');
     codeBlocks.forEach(cb => {
       finalHtml = finalHtml.split(cb.token).join(cb.html);
     });

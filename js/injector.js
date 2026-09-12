@@ -611,12 +611,14 @@
     const stripReasoning = options.preserveReasoning !== true;
     const reasoningSelectors = stripReasoning ? `, ${REASONING_CONTAINER_FILTER}` : '';
 
+    // 1. Remove non-content and noise elements (buttons, toolbars, feedback, SVGs, reasoning folds)
     clone.querySelectorAll(
       'button, svg, [role="button"], [class*="copy"], [class*="toolbar"], ' +
       '[class*="actions"], [class*="feedback"], .sr-only, [aria-hidden="true"]' +
       reasoningSelectors
     ).forEach(el => el.remove());
 
+    // 2. Convert code blocks <pre><code> to markdown triple backtick fences
     clone.querySelectorAll('pre').forEach(pre => {
       const codeEl = pre.querySelector('code') || pre;
       let lang = '';
@@ -640,6 +642,7 @@
       pre.replaceWith(document.createTextNode(codeFence));
     });
 
+    // 3. Convert inline <code> to backticks
     clone.querySelectorAll('code').forEach(code => {
       const inlineText = (code.textContent || '').trim();
       if (inlineText && !inlineText.includes('`')) {
@@ -647,8 +650,79 @@
       }
     });
 
-    let text = (clone.innerText || clone.textContent || '').trim();
-    text = text.replace(/\n{3,}/g, '\n\n');
+    // 4. Explicitly convert <br> and <hr>
+    clone.querySelectorAll('br').forEach(br => {
+      br.replaceWith(document.createTextNode('\n'));
+    });
+    clone.querySelectorAll('hr').forEach(hr => {
+      hr.replaceWith(document.createTextNode('\n\n---\n\n'));
+    });
+
+    // 5. Headings conversion with markdown prefix and paragraph separation
+    const headingLevels = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+    headingLevels.forEach((tag, idx) => {
+      const prefix = '#'.repeat(idx + 1) + ' ';
+      clone.querySelectorAll(tag).forEach(h => {
+        h.before(document.createTextNode(`\n\n${prefix}`));
+        h.after(document.createTextNode('\n\n'));
+      });
+    });
+
+    // 6. Blockquotes
+    clone.querySelectorAll('blockquote').forEach(bq => {
+      bq.before(document.createTextNode('\n\n> '));
+      bq.after(document.createTextNode('\n\n'));
+    });
+
+    // 7. List items with bullets and line boundaries
+    clone.querySelectorAll('li').forEach(li => {
+      const liText = (li.textContent || '').trim();
+      const hasBulletAlready = /^([•*\-]|(?:[۰-۹\d]+[\.\-]))\s+/i.test(liText);
+      const bulletPrefix = hasBulletAlready ? '' : '• ';
+      li.before(document.createTextNode(`\n${bulletPrefix}`));
+      li.after(document.createTextNode('\n'));
+    });
+
+    // 8. Explicit paragraph and block div spacing (prevents WHATWG detached innerText collapsing)
+    clone.querySelectorAll('p').forEach(p => {
+      p.before(document.createTextNode('\n\n'));
+      p.after(document.createTextNode('\n\n'));
+    });
+
+    clone.querySelectorAll('div').forEach(div => {
+      div.before(document.createTextNode('\n\n'));
+      div.after(document.createTextNode('\n\n'));
+    });
+
+    clone.querySelectorAll('tr').forEach(tr => {
+      tr.before(document.createTextNode('\n'));
+      tr.after(document.createTextNode('\n'));
+    });
+
+    // 9. Extract raw text with all injected boundaries
+    let text = clone.textContent || '';
+    text = text.replace(/\r\n?/g, '\n');
+
+    // 10. Unglue consensus tags (Persian & English) if glued directly to sentence ends
+    const consensusTagsPattern = /(\*{0,2}\[\s*(?:توافقات قطعی|توافقات|نقاط اشتراک|نقطه اشتراک|هم‌نظر هستیم که|هم‌نظریم که|اشتراکات|شکاف‌های لاینحل|شکاف‌ها|نقاط اختلاف|نقطه اختلاف|اختلافات|مواضع متعارض|مخالفت اساسی|نقاط چالش|چالش با|موارد اختلاف|تضادها|معضلات|مغالطه|دیده‌بان مغالطه|خطای منطقی|تحلیل مغالطه|پرسش‌های پیش‌برنده|پرسش پیش‌برنده|پرسش‌های بی‌پاسخ|پرسش بی‌پاسخ|پرسش‌های باز|پرسش باز|سوالات پیش‌برنده|سوال پیش‌برنده|سوالات بی‌پاسخ|سوال بی‌پاسخ|فرضیه مطرح|سوال کلیدی|پرسش کلیدی|consensus|agreements?|confirmed agreements?|we agree that|divergences?|points? of contention|disagreements?|unresolved gaps?|critical divergences?|open questions?|unresolved questions?|hypotheses|open hypotheses)\s*\]\*{0,2})/gi;
+
+    text = text.replace(new RegExp(`([^\\n\\s])\\s*${consensusTagsPattern.source}`, 'gi'), '$1\n\n$2');
+    text = text.replace(new RegExp(`${consensusTagsPattern.source}\\s*([:：]?)\\s*([^\\n\\s])`, 'gi'), '$1$2\n$3');
+
+    // Detach numbered items attached to punctuation (e.g. "پذیرفته است.۱. گزینه اول")
+    text = text.replace(/([.!?؛:])\s*([۰-۹\d]+[\.\-]\s+)/g, '$1\n\n$2');
+
+    // Detach bullet items attached to sentences
+    text = text.replace(/([.!?؛:])\s+([•\-*]\s+[^\n])/g, '$1\n\n$2');
+
+    // Trim trailing line spaces while preserving vertical line breaks
+    text = text
+      .split('\n')
+      .map(line => line.trimEnd())
+      .join('\n');
+
+    // Collapse 3+ newlines to standard double newline (\n\n)
+    text = text.replace(/\n{3,}/g, '\n\n').trim();
     return text;
   }
 

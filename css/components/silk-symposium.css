@@ -916,18 +916,70 @@
 
 /* Markdown & Code Blocks */
 .symposium-markdown p {
-  margin: 0 0 10px 0;
+  margin: 0 0 14px 0 !important;
+  line-height: 1.85 !important;
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
   unicode-bidi: plaintext;
 }
 .symposium-markdown p:last-child {
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
 }
 
 .symposium-markdown p[dir="rtl"],
 .symposium-markdown .is-rtl {
   direction: rtl !important;
   text-align: right !important;
-  line-height: 1.82;
+  line-height: 1.85 !important;
+}
+
+.symposium-markdown ul,
+.symposium-markdown ol {
+  margin: 8px 0 14px 0 !important;
+  padding: 0 0 0 20px !important;
+}
+
+.symposium-markdown[dir="rtl"] ul,
+.symposium-markdown.is-rtl ul,
+.symposium-markdown[dir="rtl"] ol,
+.symposium-markdown.is-rtl ol,
+.symposium-markdown ul[dir="rtl"],
+.symposium-markdown ul.is-rtl,
+.symposium-markdown ol[dir="rtl"],
+.symposium-markdown ol.is-rtl {
+  padding: 0 20px 0 0 !important;
+}
+
+.symposium-markdown li {
+  margin: 4px 0 !important;
+  padding: 2px 0 !important;
+  line-height: 1.75 !important;
+  word-break: break-word !important;
+}
+
+.symposium-markdown li[dir="rtl"],
+.symposium-markdown li.is-rtl {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.symposium-markdown blockquote {
+  margin: 10px 0 14px 0 !important;
+  padding: 8px 14px !important;
+  border-left: 3px solid rgba(255, 255, 255, 0.2) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-radius: 0 6px 6px 0 !important;
+  color: #cbd5e1 !important;
+  line-height: 1.75 !important;
+}
+
+.symposium-markdown blockquote[dir="rtl"],
+.symposium-markdown blockquote.is-rtl {
+  border-left: none !important;
+  border-right: 3px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 6px 0 0 6px !important;
+  direction: rtl !important;
+  text-align: right !important;
 }
 
 .symposium-code-box {

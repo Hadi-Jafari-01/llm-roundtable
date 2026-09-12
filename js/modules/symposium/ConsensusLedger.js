@@ -110,7 +110,7 @@ export class ConsensusLedger {
     const cleanSnippet = (raw) => {
       if (!raw) return '';
       return raw
-        .replace(/^[\s\d.،\-•*#\])[(]+/, '')
+        .replace(/^[\s\d۰-۹.،\-•*#\])[(]+/, '')
         .replace(/\*\*|__|`/g, '')
         .replace(/^[:\-–—\s\]]+/, '')
         .replace(/^[\[(][^\])]*[\])][\s:：\-–—]*/, '')
@@ -120,7 +120,7 @@ export class ConsensusLedger {
 
     const isValidItem = (str) => {
       if (!str || str.length < 6 || str.length > 1500) return false;
-      if (/^(یک گزاره|نقطه|پرسش|سؤال|هم‌نظر|توافق|چالش|موردی ثبت نشده|ندارد|یافت نشد)\b/i.test(str) && str.length < 30) return false;
+      if (/^(یک گزاره|نقطه|پرسش|سؤال|هم‌نظر|توافق|چالش|موردی ثبت نشده|ندارد|یافت نشد)\b/i.test(str) && str.length < 40) return false;
       return true;
     };
 
@@ -131,19 +131,30 @@ export class ConsensusLedger {
       if (!list.includes(full)) list.push(full);
     };
 
-    // نشانگرهای سه‌گانه
+    // 1. Preliminary cleanup pass to unglue Persian/English bracket tags attached to sentences
+    let normalized = text.replace(/\r\n?/g, '\n');
+
+    const consensusTagsPattern = /(\*{0,2}(?:[۰-۹\d]+[\.\-]\s*)?\[\s*(?:توافقات قطعی|توافقات|نقاط اشتراک|نقطه اشتراک|هم‌نظر هستیم که|هم‌نظریم که|اشتراکات|شکاف‌های لاینحل|شکاف‌ها|نقاط اختلاف|نقطه اختلاف|اختلافات|مواضع متعارض|مخالفت اساسی|نقاط چالش|چالش با|موارد اختلاف|تضادها|معضلات|مغالطه|دیده‌بان مغالطه|خطای منطقی|تحلیل مغالطه|پرسش‌های پیش‌برنده|پرسش پیش‌برنده|پرسش‌های بی‌پاسخ|پرسش بی‌پاسخ|پرسش‌های باز|پرسش باز|سوالات پیش‌برنده|سوال پیش‌برنده|سوالات بی‌پاسخ|سوال بی‌پاسخ|فرضیه مطرح|سوال کلیدی|پرسش کلیدی|consensus|agreements?|confirmed agreements?|we agree that|divergences?|points? of contention|disagreements?|unresolved gaps?|critical divergences?|open questions?|unresolved questions?|hypotheses|open hypotheses)\s*\]\*{0,2})/gi;
+
+    normalized = normalized.replace(new RegExp(`([^\\n\\s])\\s*${consensusTagsPattern.source}`, 'gi'), '$1\n\n$2');
+    normalized = normalized.replace(new RegExp(`${consensusTagsPattern.source}\\s*([:：]?)\\s*([^\\n\\s])`, 'gi'), '$1$2\n$3');
+
+    normalized = normalized.replace(/([.!?؛:])\s*([۰-۹\d]+[\.\-]\s+)/g, '$1\n\n$2');
+    normalized = normalized.replace(/([.!?؛:]|[^\n\s])\s+([•\-*]\s+[^\n])/g, '$1\n$2');
+
+    // 2. نشانگرهای سه‌گانه
     const markers = [
       {
         type: 'agreement',
-        regex: /(?:\[\s*(?:توافقات قطعی|توافقات|نقاط اشتراک|نقطه اشتراک|هم‌نظر هستیم که|هم‌نظریم که|اشتراکات|consensus|agreements|we agree that)\s*\]|(?:\*\*|###?\s*)?(?:[۰-۹\d]+[\.\-]\s*)?(?:توافقات قطعی|توافقات|نقاط اشتراک|نقطه اشتراک|هم‌نظر هستیم که|هم‌نظریم که|اشتراکات|موارد مورد توافق|consensus|agreements|we agree that)(?:\*\*)?[\s:：\]\)]+)/gi
+        regex: /(?:\[\s*(?:توافقات قطعی|توافقات|نقاط اشتراک|نقطه اشتراک|هم‌نظر هستیم که|هم‌نظریم که|اشتراکات|consensus|agreements?|confirmed agreements?|we agree that)\s*\]|(?:\*\*|###?\s*)?(?:[۰-۹\d]+[\.\-]\s*)?(?:توافقات قطعی|توافقات|نقاط اشتراک|نقطه اشتراک|هم‌نظر هستیم که|هم‌نظریم که|اشتراکات|موارد مورد توافق|consensus|agreements?|confirmed agreements?|we agree that)(?:\*\*)?[\s:：\]\)]+)/gi
       },
       {
         type: 'divergence',
-        regex: /(?:\[\s*(?:شکاف‌های لاینحل|شکاف‌ها|نقاط اختلاف|نقطه اختلاف|اختلافات|مواضع متعارض|مخالفت اساسی|نقاط چالش|چالش با|موارد اختلاف|تضادها|معضلات|مغالطه|دیده‌بان مغالطه|خطای منطقی|تحلیل مغالطه|divergences?|points? of contention|disagreements?|unresolved gaps?)\s*\]|(?:\*\*|###?\s*)?(?:[۰-۹\d]+[\.\-]\s*)?(?:شکاف‌های لاینحل|شکاف‌ها|نقاط اختلاف|نقطه اختلاف|اختلافات|مواضع متعارض|مخالفت اساسی|نقاط چالش|چالش با|موارد اختلاف|تضادها|معضلات|مغالطه شناسایی‌شده|خطای منطقی|divergences?|points? of contention|fundamental disagreement|unresolved gaps?|disagreements?)(?:\*\*)?[\s:：\]\)]+)/gi
+        regex: /(?:\[\s*(?:شکاف‌های لاینحل|شکاف‌ها|نقاط اختلاف|نقطه اختلاف|اختلافات|مواضع متعارض|مخالفت اساسی|نقاط چالش|چالش با|موارد اختلاف|تضادها|معضلات|مغالطه|دیده‌بان مغالطه|خطای منطقی|تحلیل مغالطه|divergences?|points? of contention|disagreements?|unresolved gaps?|critical divergences?)\s*\]|(?:\*\*|###?\s*)?(?:[۰-۹\d]+[\.\-]\s*)?(?:شکاف‌های لاینحل|شکاف‌ها|نقاط اختلاف|نقطه اختلاف|اختلافات|مواضع متعارض|مخالفت اساسی|نقاط چالش|چالش با|موارد اختلاف|تضادها|معضلات|مغالطه شناسایی‌شده|خطای منطقی|divergences?|points? of contention|fundamental disagreement|unresolved gaps?|disagreements?|critical divergences?)(?:\*\*)?[\s:：\]\)]+)/gi
       },
       {
         type: 'question',
-        regex: /(?:\[\s*(?:پرسش‌های پیش‌برنده|پرسش پیش‌برنده|پرسش‌های بی‌پاسخ|پرسش بی‌پاسخ|پرسش‌های باز|پرسش باز|سوالات پیش‌برنده|سوال پیش‌برنده|سوالات بی‌پاسخ|سوال بی‌پاسخ|فرضیه مطرح|سوال کلیدی|پرسش کلیدی|open questions?|unresolved questions?|hypotheses)\s*\]|(?:\*\*|###?\s*)?(?:[۰-۹\d]+[\.\-]\s*)?(?:پرسش‌های پیش‌برنده|پرسش پیش‌برنده|پرسش‌های بی‌پاسخ|پرسش بی‌پاسخ|پرسش‌های باز|پرسش باز|سوالات پیش‌برنده|سوال پیش‌برنده|سوالات بی‌پاسخ|سوال بی‌پاسخ|فرضیه مطرح|سوال کلیدی|پرسش کلیدی|open questions?|unresolved questions?|hypotheses)(?:\*\*)?[\s:：\]\)]+)/gi
+        regex: /(?:\[\s*(?:پرسش‌های پیش‌برنده|پرسش پیش‌برنده|پرسش‌های بی‌پاسخ|پرسش بی‌پاسخ|پرسش‌های باز|پرسش باز|سوالات پیش‌برنده|سوال پیش‌برنده|سوالات بی‌پاسخ|سوال بی‌پاسخ|فرضیه مطرح|سوال کلیدی|پرسش کلیدی|open questions?|unresolved questions?|hypotheses|open hypotheses)\s*\]|(?:\*\*|###?\s*)?(?:[۰-۹\d]+[\.\-]\s*)?(?:پرسش‌های پیش‌برنده|پرسش پیش‌برنده|پرسش‌های بی‌پاسخ|پرسش بی‌پاسخ|پرسش‌های باز|پرسش باز|سوالات پیش‌برنده|سوال پیش‌برنده|سوالات بی‌پاسخ|سوال بی‌پاسخ|فرضیه مطرح|سوال کلیدی|پرسش کلیدی|open questions?|unresolved questions?|hypotheses|open hypotheses)(?:\*\*)?[\s:：\]\)]+)/gi
       }
     ];
 
@@ -152,7 +163,7 @@ export class ConsensusLedger {
     markers.forEach(m => {
       let match;
       m.regex.lastIndex = 0;
-      while ((match = m.regex.exec(text)) !== null) {
+      while ((match = m.regex.exec(normalized)) !== null) {
         occurrences.push({
           type: m.type,
           index: match.index,
@@ -166,32 +177,37 @@ export class ConsensusLedger {
     if (occurrences.length > 0) {
       for (let i = 0; i < occurrences.length; i++) {
         const current = occurrences[i];
-        const nextIndex = (i + 1 < occurrences.length) ? occurrences[i + 1].index : text.length;
-        const segment = text.slice(current.index + current.length, nextIndex).trim();
+        const nextIndex = (i + 1 < occurrences.length) ? occurrences[i + 1].index : normalized.length;
+        const segment = normalized.slice(current.index + current.length, nextIndex).trim();
 
         if (!segment) continue;
 
         const targetList = current.type === 'agreement' ? agreements : (current.type === 'divergence' ? divergences : openQuestions);
 
         // بررسی اینکه آیا سگمنت حاوی چند بولت است یا پاراگراف پیوسته
-        const lines = segment.split('\n').map(l => l.trim()).filter(Boolean);
-        const bulletLines = lines.filter(l => /^[\d\-•*]/.test(l));
-
-        if (bulletLines.length > 0) {
-          bulletLines.forEach(bl => addUnique(targetList, bl));
+        const bulletSplit = segment.split(/(?:^|\n)(?=[•\-*]\s+|(?:[۰-۹\d]+[\.\-]\s+))/).map(s => s.trim()).filter(Boolean);
+        if (bulletSplit.length > 1) {
+          bulletSplit.forEach(item => addUnique(targetList, item));
         } else {
-          addUnique(targetList, segment);
+          const lines = segment.split('\n').map(l => l.trim()).filter(Boolean);
+          const bulletLines = lines.filter(l => /^[\d۰-۹\-•*]/.test(l));
+
+          if (bulletLines.length > 0) {
+            bulletLines.forEach(bl => addUnique(targetList, bl));
+          } else {
+            addUnique(targetList, segment);
+          }
         }
       }
     } else {
       // فال‌بک سطربه‌سطر در صورت عدم تطابق تگ‌های سگمنتی
-      const lines = text.split('\n');
+      const lines = normalized.split('\n');
       let currentSection = null;
 
       const headerPatterns = {
-        agreement: /(?:توافقات قطعی|توافقات|نقاط اشتراک|نقطه اشتراک|هم‌نظر هستیم که|هم‌نظریم که|اشتراکات|consensus|agreements)/i,
-        divergence: /(?:شکاف‌های لاینحل|شکاف‌ها|نقاط اختلاف|نقطه اختلاف|اختلافات|مواضع متعارض|نقاط چالش|تضادها|معضلات|divergence|disagreement)/i,
-        question: /(?:پرسش‌های پیش‌برنده|پرسش پیش‌برنده|پرسش‌های بی‌پاسخ|پرسش بی‌پاسخ|سوالات پیش‌برنده|سوال کلیدی|پرسش کلیدی|open question)/i
+        agreement: /(?:توافقات قطعی|توافقات|نقاط اشتراک|نقطه اشتراک|هم‌نظر هستیم که|هم‌نظریم که|اشتراکات|consensus|agreements?|confirmed agreements?|we agree that)/i,
+        divergence: /(?:شکاف‌های لاینحل|شکاف‌ها|نقاط اختلاف|نقطه اختلاف|اختلافات|مواضع متعارض|نقاط چالش|تضادها|معضلات|divergences?|disagreements?|points? of contention|critical divergences?)/i,
+        question: /(?:پرسش‌های پیش‌برنده|پرسش پیش‌برنده|پرسش‌های بی‌پاسخ|پرسش بی‌پاسخ|سوالات پیش‌برنده|سوال کلیدی|پرسش کلیدی|open questions?|unresolved questions?|hypotheses)/i
       };
 
       for (let line of lines) {

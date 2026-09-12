@@ -1,11 +1,27 @@
 {
   "session_id": "session-12da96f0-698f-41f8-80d6-1a9fc96cb6ad",
   "started": "2026-09-12T05:55:19.860Z",
-  "files_read": {},
+  "files_read": {
+    "js/modules/SilkSymposiumOrchestrator.js": {
+      "count": 2,
+      "tokens": 37152,
+      "first_read": "2026-09-12T07:42:47.215Z"
+    },
+    "js/modules/symposium/TurnSequencer.js": {
+      "count": 1,
+      "tokens": 3307,
+      "first_read": "2026-09-12T07:42:54.931Z"
+    },
+    "js/modules/symposium/SymposiumState.js": {
+      "count": 2,
+      "tokens": 23796,
+      "first_read": "2026-09-12T07:44:15.653Z"
+    }
+  },
   "files_written": [],
   "edit_counts": {},
-  "anatomy_hits": 0,
+  "anatomy_hits": 3,
   "anatomy_misses": 0,
-  "repeated_reads_warned": 0,
+  "repeated_reads_warned": 2,
   "cerebrum_warnings": 0
 }
