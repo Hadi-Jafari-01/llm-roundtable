@@ -1324,6 +1324,9 @@ export class SilkSymposiumOrchestrator {
 
     const { text, isThinking, thinkingText, isFinished } = data;
 
+    // Reset TurnSequencer watchdog timer because model is actively communicating (reasoning or streaming tokens)
+    this.turnSequencer?.kickWatchdog?.(60000);
+
     this.symposiumState.updateStreamingTurn({
       text: text !== undefined ? text : undefined,
       isThinking: isThinking !== undefined ? isThinking : undefined,
@@ -2272,7 +2275,7 @@ ${userInquiry}
         this.activeGovernanceStreams.delete(assignment.cardId);
         this.renderAll();
       }
-    }, 45000);
+    }, 75000);
   }
 
   updateDualParadigmUI() {

@@ -590,8 +590,17 @@
     return { inputEl, submitBtn };
   }
 
-  function extractStructuredContent(element) {
+  const REASONING_CONTAINER_FILTER = '.ds-think, [class*="think-content"], [class*="thought"], [class*="reasoning"], details.thought, expandable-thought, ms-thought-chunk, [data-turn-role="Thought"], [data-testid*="thought"], [data-testid*="thinking"], div.thinking-content, .thought-container, [aria-label*="Thinking" i]';
+
+  function extractStructuredContent(element, options = {}) {
     if (!element) return '';
+
+    // If caller did not explicitly request preserving reasoning, and the target element itself is a reasoning container, return empty
+    if (!options.preserveReasoning) {
+      if (element.matches?.(REASONING_CONTAINER_FILTER) || element.closest?.(REASONING_CONTAINER_FILTER)) {
+        return '';
+      }
+    }
 
     if (!element.children || element.children.length === 0) {
       return (element.innerText || element.textContent || '').trim();
@@ -599,9 +608,13 @@
 
     const clone = element.cloneNode(true);
 
+    const stripReasoning = options.preserveReasoning !== true;
+    const reasoningSelectors = stripReasoning ? `, ${REASONING_CONTAINER_FILTER}` : '';
+
     clone.querySelectorAll(
       'button, svg, [role="button"], [class*="copy"], [class*="toolbar"], ' +
-      '[class*="actions"], [class*="feedback"], .sr-only, [aria-hidden="true"]'
+      '[class*="actions"], [class*="feedback"], .sr-only, [aria-hidden="true"]' +
+      reasoningSelectors
     ).forEach(el => el.remove());
 
     clone.querySelectorAll('pre').forEach(pre => {
@@ -642,12 +655,17 @@
   function extractConversationHistory(targetCardId, driver) {
     const userSel = driver?.userBubbleSelector || '[data-message-author-role="user"], [data-testid*="user"]';
     const botSel = driver?.responseContainerSelector || '[data-message-author-role="assistant"], [data-testid*="assistant"]';
+    const reasoningSel = driver?.reasoningSelector || REASONING_CONTAINER_FILTER;
 
     let userNodes = [];
     let botNodes = [];
 
     try { userNodes = Array.from(document.querySelectorAll(userSel)); } catch (_) {}
-    try { botNodes = Array.from(document.querySelectorAll(botSel)); } catch (_) {}
+    try {
+      botNodes = Array.from(document.querySelectorAll(botSel)).filter(el => {
+        return !el.matches?.(REASONING_CONTAINER_FILTER) && !el.closest?.(REASONING_CONTAINER_FILTER);
+      });
+    } catch (_) {}
 
     const allElements = [];
     userNodes.forEach(node => allElements.push({ node, role: 'user' }));
@@ -662,12 +680,21 @@
 
     const messages = [];
     allElements.forEach((item, idx) => {
+      let thinkingText = '';
+      if (item.role === 'assistant') {
+        const reasoningEl = item.node.querySelector?.(reasoningSel);
+        if (reasoningEl) {
+          thinkingText = extractStructuredContent(reasoningEl, { preserveReasoning: true });
+        }
+      }
+
       const text = extractStructuredContent(item.node);
       if (text && text.length > 0) {
         messages.push({
           id: `hist_${item.role}_${idx}_${Date.now()}`,
           role: item.role,
           text,
+          thinkingText: thinkingText || undefined,
           time: 'Synced'
         });
       }
@@ -689,50 +716,95 @@
     stopStreamingScraper();
 
     const responseSelector = driver?.streamingTokenSelector || driver?.responseContainerSelector || 'div.markdown, div.prose, [data-message-author-role="assistant"]';
-    const reasoningSelector = driver?.reasoningSelector || 'div[class*="thought"], div[class*="think"], div.ds-think';
-    const stopSelector = driver?.stopSelector || 'button[aria-label*="Stop" i], button[data-testid="stop-button"], button[aria-label*="توقف" i]';
+    const reasoningSelector = driver?.reasoningSelector || 'div[class*="thought"], div[class*="think"], div.ds-think, [data-testid*="thought"], [data-testid*="thinking"], expandable-thought';
+    const stopSelector = driver?.stopSelector || 'div[role="button"][aria-label*="Stop" i], button[data-testid="stop-button"], button[aria-label*="Stop" i], button[aria-label*="توقف" i], div.ds-icon-button:has(svg rect), button:has(rect)';
 
-    let initialCount = 0;
-    try {
-      initialCount = document.querySelectorAll(responseSelector).length;
-    } catch (_) {}
-
-    let hasStarted = false;
-
-    const scrapeAndRelay = (isFinished = false) => {
-      let currentResponseElements = [];
+    const getValidResponseElements = () => {
       try {
-        currentResponseElements = document.querySelectorAll(responseSelector);
-      } catch (_) {}
-
-      let stopBtn = null;
-      try {
-        stopBtn = document.querySelector(stopSelector);
-      } catch (_) {}
-
-      let latestResponseEl = null;
-      if (currentResponseElements.length > initialCount) {
-        latestResponseEl = currentResponseElements[currentResponseElements.length - 1];
-      } else if (initialCount === 0 && currentResponseElements.length > 0) {
-        latestResponseEl = currentResponseElements[currentResponseElements.length - 1];
+        const all = Array.from(document.querySelectorAll(responseSelector));
+        return all.filter(el => {
+          if (el.matches?.(REASONING_CONTAINER_FILTER)) return false;
+          if (el.closest?.(REASONING_CONTAINER_FILTER)) return false;
+          return true;
+        });
+      } catch (_) {
+        return [];
       }
+    };
 
-      const text = latestResponseEl ? extractStructuredContent(latestResponseEl) : '';
-      const html = latestResponseEl ? latestResponseEl.innerHTML : '';
-
-      let thinkingText = '';
-      let isThinking = false;
+    const isStopButtonActive = () => {
       try {
-        const reasoningEls = document.querySelectorAll(reasoningSelector);
-        if (reasoningEls.length > 0) {
-          const latestReasoning = reasoningEls[reasoningEls.length - 1];
-          thinkingText = (latestReasoning.innerText || latestReasoning.textContent || '').trim();
-          isThinking = !text && thinkingText.length > 0;
+        const btns = document.querySelectorAll(stopSelector);
+        for (const btn of btns) {
+          if (isButtonReady(btn)) return true;
         }
       } catch (_) {}
 
-      if (currentResponseElements.length > initialCount || stopBtn || thinkingText) {
+      // Fallback check for active streaming indicator, cursor or running state
+      try {
+        const indicators = document.querySelectorAll(
+          '[data-is-streaming="true"], .result-streaming, .ds-cursor, span[class*="cursor"], ' +
+          'button[data-testid="stop-button"], button[aria-label*="Stop" i], button[aria-label*="توقف" i]'
+        );
+        for (const ind of indicators) {
+          if (ind.tagName === 'BUTTON') {
+            if (isButtonReady(ind)) return true;
+          } else if (ind.offsetParent !== null) {
+            return true;
+          }
+        }
+      } catch (_) {}
+
+      return false;
+    };
+
+    let initialCount = getValidResponseElements().length;
+    let hasStarted = false;
+    let hasThinkingStarted = false;
+    let hasResponseStarted = false;
+    let transitionGraceCount = 0;
+
+    const scrapeAndRelay = (isFinished = false) => {
+      const currentValidElements = getValidResponseElements();
+
+      let latestResponseEl = null;
+      if (currentValidElements.length > initialCount) {
+        latestResponseEl = currentValidElements[currentValidElements.length - 1];
+      } else if (initialCount === 0 && currentValidElements.length > 0) {
+        latestResponseEl = currentValidElements[currentValidElements.length - 1];
+      }
+
+      let text = latestResponseEl ? extractStructuredContent(latestResponseEl) : '';
+      let html = latestResponseEl ? latestResponseEl.innerHTML : '';
+
+      let thinkingText = '';
+      try {
+        const reasoningEls = Array.from(document.querySelectorAll(reasoningSelector));
+        if (reasoningEls.length > 0) {
+          const latestReasoning = reasoningEls[reasoningEls.length - 1];
+          thinkingText = extractStructuredContent(latestReasoning, { preserveReasoning: true });
+        }
+      } catch (_) {}
+
+      if (thinkingText) {
+        hasThinkingStarted = true;
+      }
+      if (text && text.trim().length > 0) {
+        hasResponseStarted = true;
+      }
+
+      const stopBtnActive = isStopButtonActive();
+      if (currentValidElements.length > initialCount || stopBtnActive || thinkingText || text) {
         hasStarted = true;
+      }
+
+      // isThinking is strictly true ONLY when thinkingText exists and the main response text has not arrived yet
+      const isThinking = Boolean(thinkingText && (!text || text.trim().length === 0));
+
+      // Safety Fallback: If terminating after generous timeout and no text was produced, keep thinkingText to prevent freezing
+      if (isFinished && !text && thinkingText) {
+        console.warn('[OmniAI Hub] Model produced only reasoning without final text. Providing graceful fallback.');
+        text = thinkingText;
       }
 
       if (text || thinkingText || isFinished) {
@@ -758,9 +830,38 @@
       }
     };
 
-    streamObserver = new MutationObserver(() => {
+    const scheduleInactivityCheck = () => {
       clearTimeout(streamInactivityTimer);
 
+      // Adaptive timeout: If thinking has started but final answer tokens haven't arrived yet,
+      // allow 6000ms pause to bridge the 1.5 - 4.5s transition gap. Once response is streaming, use 5000ms.
+      const timeoutMs = (hasThinkingStarted && !hasResponseStarted) ? 6000 : 5000;
+
+      streamInactivityTimer = setTimeout(() => {
+        const stopActive = isStopButtonActive();
+
+        // 1. If stop button or streaming indicator is STILL active, NEVER mark finished!
+        if (stopActive) {
+          scheduleInactivityCheck();
+          return;
+        }
+
+        // 2. If thinking started, but answer tokens haven't started yet:
+        // Give transition grace attempts (up to 4 attempts = ~14 seconds max transition wait)
+        if (hasThinkingStarted && !hasResponseStarted && transitionGraceCount < 4) {
+          transitionGraceCount++;
+          scheduleInactivityCheck();
+          return;
+        }
+
+        // 3. If generation started and is now idle with no stop button active
+        if (hasStarted) {
+          scrapeAndRelay(true);
+        }
+      }, timeoutMs);
+    };
+
+    streamObserver = new MutationObserver(() => {
       if (!streamThrottleTimer) {
         streamThrottleTimer = setTimeout(() => {
           streamThrottleTimer = null;
@@ -768,16 +869,7 @@
         }, 50);
       }
 
-      streamInactivityTimer = setTimeout(() => {
-        let currentStopBtn = null;
-        try {
-          currentStopBtn = document.querySelector(stopSelector);
-        } catch (_) {}
-
-        if (hasStarted && (!currentStopBtn || currentStopBtn.disabled)) {
-          scrapeAndRelay(true);
-        }
-      }, 2200);
+      scheduleInactivityCheck();
     });
 
     streamObserver.observe(document.body, {
@@ -786,11 +878,14 @@
       characterData: true
     });
 
+    scheduleInactivityCheck();
+
+    // Absolute fallback safety timeout (180s for deep reasoning models)
     setTimeout(() => {
       if (streamObserver) {
         scrapeAndRelay(true);
       }
-    }, 60000);
+    }, 180000);
   }
 
   function stopStreamingScraper() {

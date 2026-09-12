@@ -567,27 +567,50 @@ export class MirrorChatStudio {
       }
     }
 
-    // Safety timeout: prevent UI lock if model takes over 50s without streaming
+    // Safety timeout: prevent UI lock if model takes over 75s without responding
     if (this.generationSafetyTimer) clearTimeout(this.generationSafetyTimer);
     this.generationSafetyTimer = setTimeout(() => {
       if (this.isGenerating) {
         if (this.currentStreamingTurn) {
           this.currentStreamingTurn.isStreaming = false;
-          if (!this.currentStreamingTurn.text) {
+          if (!this.currentStreamingTurn.text && this.currentStreamingTurn.thinkingText) {
+            this.currentStreamingTurn.text = this.currentStreamingTurn.thinkingText;
+          } else if (!this.currentStreamingTurn.text) {
             this.currentStreamingTurn.text = '✓ Prompt dispatched to model card.';
           }
         }
-      this.currentStreamingTurn = null;
-      this.setGenerating(false);
-      this.renderConversation();
-      this.persistConversations();
-    }
-  }, 45000);
+        this.currentStreamingTurn = null;
+        this.setGenerating(false);
+        this.renderConversation();
+        this.persistConversations();
+      }
+    }, 75000);
   }
 
   handleStreamChunk(data) {
     const { cardId, text, html, isThinking, thinkingText, isFinished } = data;
     if (cardId && this.activeCardId && cardId !== this.activeCardId) return;
+
+    // Refresh generation safety timer as long as chunks (thinking or answer tokens) arrive
+    if (this.generationSafetyTimer) {
+      clearTimeout(this.generationSafetyTimer);
+      this.generationSafetyTimer = setTimeout(() => {
+        if (this.isGenerating) {
+          if (this.currentStreamingTurn) {
+            this.currentStreamingTurn.isStreaming = false;
+            if (!this.currentStreamingTurn.text && this.currentStreamingTurn.thinkingText) {
+              this.currentStreamingTurn.text = this.currentStreamingTurn.thinkingText;
+            } else if (!this.currentStreamingTurn.text) {
+              this.currentStreamingTurn.text = '✓ Prompt dispatched to model card.';
+            }
+          }
+          this.currentStreamingTurn = null;
+          this.setGenerating(false);
+          this.renderConversation();
+          this.persistConversations();
+        }
+      }, 60000);
+    }
 
     if (!this.currentStreamingTurn) {
       const history = this.conversations.get(this.activeCardId) || [];
@@ -786,23 +809,35 @@ export class MirrorChatStudio {
     if (this.currentStreamingTurn.thinkingText) {
       let reasoningFold = turnEl.querySelector('.mirror-reasoning-fold');
       const thinkingDirection = this.detectTextDirection(this.currentStreamingTurn.thinkingText || '');
+      const isThinkingFinished = !this.currentStreamingTurn.isStreaming || Boolean(this.currentStreamingTurn.text && this.currentStreamingTurn.text.trim().length > 0);
 
       if (!reasoningFold) {
         reasoningFold = document.createElement('div');
         reasoningFold.className = 'mirror-reasoning-fold';
         reasoningFold.innerHTML = `
           <button type="button" class="reasoning-fold-trigger">
-            <span>🧠 Thinking Process</span><span>▼</span>
+            <span>🧠 Thinking Process</span><span>${isThinkingFinished ? '▼' : '▲'}</span>
           </button>
-          <div class="reasoning-fold-body" dir="${thinkingDirection}"></div>
+          <div class="reasoning-fold-body" dir="${thinkingDirection}" style="display: ${isThinkingFinished ? 'none' : 'block'};"></div>
         `;
         bubble?.prepend(reasoningFold);
       }
       const body = reasoningFold.querySelector('.reasoning-fold-body');
+      const foldArrow = reasoningFold.querySelector('.reasoning-fold-trigger span:last-child');
       if (body) {
         body.textContent = this.currentStreamingTurn.thinkingText;
         body.setAttribute('dir', thinkingDirection);
         body.classList.toggle('is-rtl', thinkingDirection === 'rtl');
+
+        if (!reasoningFold.dataset.userToggled) {
+          if (isThinkingFinished) {
+            body.style.display = 'none';
+            if (foldArrow) foldArrow.textContent = '▼';
+          } else {
+            body.style.display = 'block';
+            if (foldArrow) foldArrow.textContent = '▲';
+          }
+        }
       }
     }
 

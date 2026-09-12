@@ -311,7 +311,18 @@ export class TurnSequencer {
         console.warn('[TurnSequencer] Speaker watchdog timeout triggered. Advancing.');
         this.completeTurn('(Response turn timed out)', true);
       }
-    }, 50000);
+    }, 75000);
+  }
+
+  kickWatchdog(timeoutMs = 60000) {
+    if (!this.state.isSpeakerStreaming) return;
+    clearTimeout(this.safetyTimer);
+    this.safetyTimer = setTimeout(() => {
+      if (this.state.isSpeakerStreaming) {
+        console.warn('[TurnSequencer] Speaker watchdog timeout triggered after streaming inactivity. Advancing.');
+        this.completeTurn('(Response turn timed out)', true);
+      }
+    }, timeoutMs);
   }
 
   calculateNextSpeakerIndex() {

@@ -31,8 +31,8 @@ export const FACTORY_DRIVER_PRESETS = {
     inputStrategy: 'lexical', // lexical | execCommand | native | simulatedKeys | auto
     submitSelector: 'button[data-testid="send-button"], button[data-testid="fruitjuice-send-button"], button[aria-label*="Send" i], button[aria-label*="ارسال" i], button:has(svg[data-icon="arrow-up"])',
     submitMechanism: 'click',
-    responseContainerSelector: 'div[data-message-author-role="assistant"], article[data-testid*="conversation-turn"]:has([data-message-author-role="assistant"]), div.agent-turn, div[class*="agent-turn"]',
-    streamingTokenSelector: 'div[data-message-author-role="assistant"] div.markdown, article[data-testid*="conversation-turn"]:has([data-message-author-role="assistant"]) .markdown, div[data-message-author-role="assistant"], .markdown',
+    responseContainerSelector: 'div[data-message-author-role="assistant"] div.markdown:not([data-testid*="thought"] *):not([class*="thought"] *):not([class*="reasoning"] *), article[data-testid*="conversation-turn"]:has([data-message-author-role="assistant"]) .markdown:not([data-testid*="thought"] *), div[data-message-author-role="assistant"], div.agent-turn, div[class*="agent-turn"]',
+    streamingTokenSelector: 'div[data-message-author-role="assistant"] div.markdown:not([data-testid*="thought"] *):not([class*="thought"] *):not([class*="reasoning"] *), article[data-testid*="conversation-turn"]:has([data-message-author-role="assistant"]) .markdown:not([data-testid*="thought"] *), .markdown:not([data-testid*="thought"] *):not([class*="thought"] *):not([class*="reasoning"] *)',
     stopSelector: 'button[data-testid="stop-button"], button[aria-label*="Stop" i], button[aria-label*="توقف" i]',
     newChatSelector: 'a[data-testid="create-new-chat-button"], a[href="/"], button[aria-label*="New chat" i]',
     reasoningSelector: 'div[data-testid*="thought"], div.thought-content, div[class*="reasoning"], div[class*="thought"]',
@@ -48,11 +48,11 @@ export const FACTORY_DRIVER_PRESETS = {
     inputStrategy: 'execCommand',
     submitSelector: 'button[aria-label*="Send" i], button.send-button, button.send-button-container, button[aria-label*="ارسال" i]',
     submitMechanism: 'click',
-    responseContainerSelector: 'message-content, .model-response-text, div.response-container, div[class*="model-response"]',
-    streamingTokenSelector: '.model-response-text, message-content .markdown, div.response-container-content, message-content',
+    responseContainerSelector: 'message-content:not(expandable-thought *):not(.thought-container *), .model-response-text:not(expandable-thought *), div.response-container, div[class*="model-response"]',
+    streamingTokenSelector: '.model-response-text:not(expandable-thought *):not(.thought-container *), message-content .markdown:not(expandable-thought *), div.response-container-content:not(expandable-thought *), message-content:not(expandable-thought *)',
     stopSelector: 'button[aria-label*="Stop" i], button.stop-button',
     newChatSelector: 'button[aria-label*="New chat" i], a[aria-label*="New chat" i], .side-nav-button',
-    reasoningSelector: 'expandable-thought, .thought-container, [aria-label*="Thinking" i]',
+    reasoningSelector: 'expandable-thought, .thought-container, [aria-label*="Thinking" i], div[class*="thought"]',
     userBubbleSelector: 'user-query, .user-query-container'
   },
   deepseek: {
@@ -63,11 +63,11 @@ export const FACTORY_DRIVER_PRESETS = {
     color: '#0ea5e9',
     inputSelector: 'textarea#chat-input, textarea[placeholder*="DeepSeek" i], textarea',
     inputStrategy: 'native',
-    submitSelector: 'div[role="button"][aria-label*="Send" i], button[aria-label*="Send" i], div[class*="send-btn"], div[class*="sendBtn"], div.ds-icon-button',
+    submitSelector: 'div[role="button"][aria-label*="Send" i], button[aria-label*="Send" i], div[class*="send-btn"], div[class*="sendBtn"], div.ds-icon-button, button[type="submit"]',
     submitMechanism: 'click',
-    responseContainerSelector: 'div.ds-markdown, div[class*="chat-message"]:not([class*="user"]), div[class*="assistant"]',
-    streamingTokenSelector: 'div.ds-markdown',
-    stopSelector: 'div[role="button"][aria-label*="Stop" i], button[aria-label*="Stop" i]',
+    responseContainerSelector: 'div.ds-markdown:not(.ds-think *):not([class*="think"] *), div[class*="chat-message"]:not([class*="user"])',
+    streamingTokenSelector: 'div.ds-markdown:not(.ds-think *):not([class*="think"] *)',
+    stopSelector: 'div[role="button"][aria-label*="Stop" i], button[aria-label*="Stop" i], div.ds-icon-button:has(svg rect), button:has(rect), div[class*="stop-button"], button[class*="stop-button"]',
     newChatSelector: 'div[class*="new-chat"], button[class*="new-chat"]',
     reasoningSelector: 'div.ds-think, div[class*="think-content"], div[class*="thought"]',
     userBubbleSelector: 'div[class*="chat-message"][class*="user"], div.ds-user-content'
@@ -116,8 +116,8 @@ export const FACTORY_DRIVER_PRESETS = {
     inputStrategy: 'native',
     submitSelector: 'button.send-button, .message-input-right-button-send button, button[type="submit"], button[aria-label*="Send" i]',
     submitMechanism: 'click',
-    responseContainerSelector: 'div[class*="assistant"], div.message-item:not(.user), div[class*="chat-message"]:not([class*="user"])',
-    streamingTokenSelector: 'div.markdown-body, div[class*="markdown"], div[class*="content"]',
+    responseContainerSelector: 'div[class*="assistant"]:not([class*="thinking"] *):not([class*="thought"] *), div.message-item:not(.user):not([class*="thinking"] *), div[class*="chat-message"]:not([class*="user"])',
+    streamingTokenSelector: 'div.markdown-body:not([class*="thinking"] *):not([class*="thought"] *):not([class*="reasoning"] *), div[class*="markdown"]:not([class*="thinking"] *):not([class*="thought"] *), div[class*="content"]:not([class*="thinking"] *)',
     stopSelector: 'button.stop-button, button[aria-label*="Stop" i], button:has(svg.stop-icon)',
     newChatSelector: 'button.new-chat-button, button[aria-label*="New chat" i], a[href="/"]',
     reasoningSelector: 'div[class*="thought"], div[class*="thinking"], div[class*="reasoning"]',
@@ -150,8 +150,8 @@ export const FACTORY_DRIVER_PRESETS = {
     inputStrategy: 'native',
     submitSelector: 'button.run-button[aria-label="Run"], button.run-button, button[aria-label*="Run" i]',
     submitMechanism: 'click',
-    responseContainerSelector: 'ms-chat-turn:has([data-turn-role="Model"]), ms-chat-turn[data-turn-role="Model"], ms-chat-turn',
-    streamingTokenSelector: 'ms-chat-turn .markdown, ms-chat-turn [class*="content"], ms-chat-turn',
+    responseContainerSelector: 'ms-chat-turn:has([data-turn-role="Model"]):not(:has([data-turn-role="Thought"])), ms-chat-turn[data-turn-role="Model"], ms-chat-turn',
+    streamingTokenSelector: 'ms-chat-turn .markdown:not(ms-thought-chunk *):not([data-turn-role="Thought"] *), ms-chat-turn [class*="content"]:not(ms-thought-chunk *), ms-chat-turn',
     stopSelector: 'button.run-button.running, button[aria-label*="Stop" i], button[aria-label*="Cancel" i]',
     newChatSelector: 'button[aria-label*="New prompt" i], a[href*="/prompts/new"], a[href="/"]',
     reasoningSelector: 'div[class*="thought"], ms-thought-chunk, [data-turn-role="Thought"]',
@@ -167,8 +167,8 @@ export const FACTORY_DRIVER_PRESETS = {
     inputStrategy: 'native',
     submitSelector: 'button[type="submit"], button[data-testid="send-button"], button.send-button, button[aria-label*="Send" i]',
     submitMechanism: 'click',
-    responseContainerSelector: 'div[class*="assistant"], div[data-testid*="bot"], div.message-row:not(.user)',
-    streamingTokenSelector: 'div.markdown, div.prose, [data-message-content]',
+    responseContainerSelector: 'div[class*="assistant"]:not(details.thought *):not([class*="thought"] *), div[data-testid*="bot"]:not(details.thought *), div.message-row:not(.user)',
+    streamingTokenSelector: 'div.markdown:not(details.thought *):not([class*="thought"] *), div.prose:not(details.thought *), [data-message-content]:not(details.thought *)',
     stopSelector: 'button[aria-label*="Stop" i], button.stop-button',
     newChatSelector: 'button[aria-label*="Clear" i], button[aria-label*="New" i], a[href="/"]',
     reasoningSelector: 'details.thought, div[class*="thought"], div[class*="thinking"]',
@@ -184,11 +184,11 @@ export const FACTORY_DRIVER_PRESETS = {
     inputStrategy: 'execCommand',
     submitSelector: 'button[aria-label*="Send" i], button[data-testid="send-button"], fieldset button:last-child, button[aria-label*="ارسال" i], button:has(svg)',
     submitMechanism: 'click',
-    responseContainerSelector: 'div[data-is-streaming], div.font-claude-message, div[data-testid*="chat-message-assistant"], div.font-claude-response',
-    streamingTokenSelector: 'div.font-claude-message, div[data-is-streaming="true"], div.prose, div.font-claude-response',
+    responseContainerSelector: 'div.font-claude-message:not([data-testid*="thinking"] *):not([class*="thinking"] *), div[data-is-streaming]:not([data-testid*="thinking"] *), div[data-testid*="chat-message-assistant"]:not([data-testid*="thinking"] *), div.font-claude-response',
+    streamingTokenSelector: 'div.font-claude-message:not([data-testid*="thinking"] *):not([class*="thinking"] *), div[data-is-streaming="true"]:not([data-testid*="thinking"] *), div.prose:not([data-testid*="thinking"] *), div.font-claude-response:not([data-testid*="thinking"] *)',
     stopSelector: 'button[aria-label*="Stop" i], button[aria-label*="Cancel" i], button[aria-label*="توقف" i]',
     newChatSelector: 'a[href="/new"], button[aria-label*="Start new chat" i], a[aria-label*="New chat" i]',
-    reasoningSelector: 'div[data-testid*="thinking"], div.thinking-content',
+    reasoningSelector: 'div[data-testid*="thinking"], div.thinking-content, [class*="thinking"]',
     userBubbleSelector: 'div[data-testid*="chat-message-user"], div.font-user-message'
   },
   mistral: {
@@ -218,11 +218,11 @@ export const FACTORY_DRIVER_PRESETS = {
     inputStrategy: 'auto',
     submitSelector: 'button[type="submit"], button[aria-label*="send" i], button[aria-label*="submit" i], button[aria-label*="ارسال" i]',
     submitMechanism: 'click',
-    responseContainerSelector: 'div.markdown, div[class*="message"]:not([class*="user"]), div.prose',
-    streamingTokenSelector: 'div.markdown, div.prose, [data-message-content]',
-    stopSelector: 'button[aria-label*="stop" i], button[title*="stop" i]',
+    responseContainerSelector: 'div.markdown:not(.reasoning *):not([class*="thought"] *):not([class*="think"] *):not(details *), div[class*="message"]:not([class*="user"]):not(.reasoning *), div.prose:not(.reasoning *)',
+    streamingTokenSelector: 'div.markdown:not(.reasoning *):not([class*="thought"] *):not([class*="think"] *):not(details *), div.prose:not(.reasoning *):not(details *), [data-message-content]:not(.reasoning *)',
+    stopSelector: 'button[aria-label*="stop" i], button[title*="stop" i], button[data-testid*="stop" i]',
     newChatSelector: 'button[aria-label*="new" i], a[aria-label*="new" i]',
-    reasoningSelector: 'details, summary, .reasoning, div[class*="thought"]',
+    reasoningSelector: 'details, summary, .reasoning, div[class*="thought"], div[class*="think"]',
     userBubbleSelector: '[data-message-author-role="user"], .user-message, div[class*="user"]'
   }
 };
@@ -285,6 +285,26 @@ class DomDriverRegistry {
 
         if (stored && typeof stored === 'object') {
           this.drivers = { ...FACTORY_DRIVER_PRESETS, ...stored };
+
+          // Migration: upgrade any stale preset selectors that lack reasoning protection
+          Object.keys(FACTORY_DRIVER_PRESETS).forEach(k => {
+            const factory = FACTORY_DRIVER_PRESETS[k];
+            const current = this.drivers[k];
+            if (current && factory) {
+              const isStale = (
+                k === 'deepseek' && (current.streamingTokenSelector === 'div.ds-markdown' || !current.streamingTokenSelector?.includes(':not'))
+              ) || (
+                factory.streamingTokenSelector.includes(':not') && !current.streamingTokenSelector?.includes(':not')
+              );
+
+              if (isStale) {
+                current.streamingTokenSelector = factory.streamingTokenSelector;
+                current.responseContainerSelector = factory.responseContainerSelector;
+                current.stopSelector = factory.stopSelector;
+                current.reasoningSelector = factory.reasoningSelector;
+              }
+            }
+          });
         }
       }
     } catch (err) {
