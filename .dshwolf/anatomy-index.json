@@ -1,0 +1,1456 @@
+{
+  "version": 1,
+  "scannedAt": 1789191334083,
+  "totalFiles": 80,
+  "totalLines": 17343,
+  "dirs": [
+    {
+      "path": "",
+      "files": 80,
+      "lines": 17343,
+      "bytes": 1009928
+    },
+    {
+      "path": "backup",
+      "files": 4,
+      "lines": 1364,
+      "bytes": 68052
+    },
+    {
+      "path": "components",
+      "files": 26,
+      "lines": 2025,
+      "bytes": 116800
+    },
+    {
+      "path": "components/drawers",
+      "files": 6,
+      "lines": 490,
+      "bytes": 27303
+    },
+    {
+      "path": "components/modals",
+      "files": 4,
+      "lines": 332,
+      "bytes": 17976
+    },
+    {
+      "path": "css",
+      "files": 18,
+      "lines": 5062,
+      "bytes": 179674
+    },
+    {
+      "path": "css/components",
+      "files": 15,
+      "lines": 4765,
+      "bytes": 172318
+    },
+    {
+      "path": "icons",
+      "files": 5,
+      "lines": 62,
+      "bytes": 3028
+    },
+    {
+      "path": "js",
+      "files": 23,
+      "lines": 8626,
+      "bytes": 636222
+    },
+    {
+      "path": "js/modules",
+      "files": 19,
+      "lines": 7303,
+      "bytes": 515520
+    },
+    {
+      "path": "js/modules/symposium",
+      "files": 5,
+      "lines": 1376,
+      "bytes": 152203
+    }
+  ],
+  "files": [
+    {
+      "path": "backup/DOMs-1.json",
+      "size": 18874,
+      "lines": 385,
+      "lang": "json",
+      "tokens": 4719,
+      "mtimeMs": 1789069970903.7253,
+      "skipped": false,
+      "summary": "{",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "backup/omniai_dom_drivers_1788974204581.json",
+      "size": 12025,
+      "lines": 246,
+      "lang": "json",
+      "tokens": 3007,
+      "mtimeMs": 1788974231297.039,
+      "skipped": false,
+      "summary": "{",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "backup/omniai_dom_drivers_1788975449602.json",
+      "size": 12060,
+      "lines": 247,
+      "lang": "json",
+      "tokens": 3015,
+      "mtimeMs": 1788975458723.3914,
+      "skipped": false,
+      "summary": "{",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "backup/omniai_master_backup_2026-09-09_1788996753822.omniai.json",
+      "size": 25093,
+      "lines": 486,
+      "lang": "json",
+      "tokens": 6274,
+      "mtimeMs": 1789063757813.6597,
+      "skipped": false,
+      "summary": "{",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/01-chrome-sensors.html",
+      "size": 655,
+      "lines": 13,
+      "lang": "html",
+      "tokens": 164,
+      "mtimeMs": 1789167790755.7783,
+      "skipped": false,
+      "summary": "<div class=\"nano-nav-sensor\" id=\"nano-nav-sensor\"></div>",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/02-topbar-left-zone.html",
+      "size": 3531,
+      "lines": 72,
+      "lang": "html",
+      "tokens": 883,
+      "mtimeMs": 1789167790755.7783,
+      "skipped": false,
+      "summary": "<header class=\"top-nano-nav\" id=\"top-nav\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/03-topbar-center-zone.html",
+      "size": 1792,
+      "lines": 33,
+      "lang": "html",
+      "tokens": 448,
+      "mtimeMs": 1789167790757.521,
+      "skipped": false,
+      "summary": "<div class=\"nav-cluster center tabs-stage\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/04-topbar-auto-arrange.html",
+      "size": 8431,
+      "lines": 136,
+      "lang": "html",
+      "tokens": 2108,
+      "mtimeMs": 1789167790757.521,
+      "skipped": false,
+      "summary": "<div class=\"collapsible-island-wrapper\" id=\"wrapper-layout-menu\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/05-topbar-tools-menu.html",
+      "size": 3501,
+      "lines": 61,
+      "lang": "html",
+      "tokens": 876,
+      "mtimeMs": 1789167790759.0332,
+      "skipped": false,
+      "summary": "<div class=\"collapsible-island-wrapper\" id=\"wrapper-tools-menu\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/06-canvas-viewport.html",
+      "size": 358,
+      "lines": 8,
+      "lang": "html",
+      "tokens": 90,
+      "mtimeMs": 1789167790759.0332,
+      "skipped": false,
+      "summary": "<main id=\"spatial-viewport\" class=\"spatial-viewport\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/07-omnibar-capsule.html",
+      "size": 3777,
+      "lines": 77,
+      "lang": "html",
+      "tokens": 945,
+      "mtimeMs": 1789167790775.1165,
+      "skipped": false,
+      "summary": "<div class=\"omnibar-capsule-island\" id=\"omnibar-island\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/08-symposium-shell.html",
+      "size": 4382,
+      "lines": 78,
+      "lang": "html",
+      "tokens": 1096,
+      "mtimeMs": 1789167790778.5837,
+      "skipped": false,
+      "summary": "<div id=\"silk-symposium-chamber\" class=\"silk-symposium-overlay\" aria-label=\"The Silk Symposium\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/09-symposium-step-proposal.html",
+      "size": 4618,
+      "lines": 86,
+      "lang": "html",
+      "tokens": 1155,
+      "mtimeMs": 1789167790780.3335,
+      "skipped": false,
+      "summary": "<div id=\"composer-proposal-capsule\" class=\"composer-proposal-capsule hidden\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/10-symposium-seat-inspector.html",
+      "size": 2353,
+      "lines": 46,
+      "lang": "html",
+      "tokens": 589,
+      "mtimeMs": 1789167790782.0642,
+      "skipped": false,
+      "summary": "<div id=\"seat-inline-inspector\" class=\"seat-inline-inspector\" role=\"dialog\" aria-label=\"Seat Inspector\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/11-sanctum-atelier-a.html",
+      "size": 6805,
+      "lines": 114,
+      "lang": "html",
+      "tokens": 1702,
+      "mtimeMs": 1789167790784.0806,
+      "skipped": false,
+      "summary": "<div id=\"sanctum-backdrop\" class=\"sanctum-backdrop\"></div>",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/12-sanctum-atelier-b.html",
+      "size": 4117,
+      "lines": 66,
+      "lang": "html",
+      "tokens": 1030,
+      "mtimeMs": 1789167790784.0806,
+      "skipped": false,
+      "summary": "<div id=\"sanctum-zone-personas\" class=\"sanctum-zone-panel\" style=\"display: none;\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/13-governance-suite.html",
+      "size": 6997,
+      "lines": 109,
+      "lang": "html",
+      "tokens": 1750,
+      "mtimeMs": 1789167790785.838,
+      "skipped": false,
+      "summary": "<div id=\"sanctum-zone-governance\" class=\"sanctum-zone-panel\" style=\"display: none;\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/14-dialectic-engine.html",
+      "size": 5505,
+      "lines": 78,
+      "lang": "html",
+      "tokens": 1377,
+      "mtimeMs": 1789167790787.5762,
+      "skipped": false,
+      "summary": "<div class=\"engine-section-block\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/15-dialectic-formula-editor.html",
+      "size": 7515,
+      "lines": 102,
+      "lang": "html",
+      "tokens": 1879,
+      "mtimeMs": 1789167790789.316,
+      "skipped": false,
+      "summary": "<div class=\"formula-editor-card\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/16-council-chamber.html",
+      "size": 7184,
+      "lines": 124,
+      "lang": "html",
+      "tokens": 1796,
+      "mtimeMs": 1789167790792.7942,
+      "skipped": false,
+      "summary": "<div id=\"council-chamber-overlay\" class=\"council-chamber-overlay\" aria-label=\"The Celestial Council\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/drawers/01-selector-studio-a.html",
+      "size": 6312,
+      "lines": 115,
+      "lang": "html",
+      "tokens": 1578,
+      "mtimeMs": 1789167790760.7861,
+      "skipped": false,
+      "summary": "<div id=\"selector-studio-backdrop\" class=\"selector-studio-backdrop\"></div>",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/drawers/02-selector-studio-b.html",
+      "size": 5292,
+      "lines": 90,
+      "lang": "html",
+      "tokens": 1323,
+      "mtimeMs": 1789167790760.7861,
+      "skipped": false,
+      "summary": "<div class=\"driver-field-card\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/drawers/03-selector-studio-c.html",
+      "size": 7460,
+      "lines": 132,
+      "lang": "html",
+      "tokens": 1865,
+      "mtimeMs": 1789167790773.361,
+      "skipped": false,
+      "summary": "<div class=\"driver-field-card kinematics-master-card\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/drawers/04-mirror-chat.html",
+      "size": 3937,
+      "lines": 65,
+      "lang": "html",
+      "tokens": 985,
+      "mtimeMs": 1789167790775.1165,
+      "skipped": false,
+      "summary": "<aside id=\"mirror-chat-studio\" class=\"mirror-chat-studio\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/drawers/05-silk-pavilion.html",
+      "size": 2099,
+      "lines": 44,
+      "lang": "html",
+      "tokens": 525,
+      "mtimeMs": 1789167790778.5837,
+      "skipped": false,
+      "summary": "<div id=\"silk-pavilion-backdrop\" class=\"silk-pavilion-backdrop\"></div>",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/drawers/06-sessions-history.html",
+      "size": 2203,
+      "lines": 44,
+      "lang": "html",
+      "tokens": 551,
+      "mtimeMs": 1789167790791.0557,
+      "skipped": false,
+      "summary": "<div id=\"symposium-history-backdrop\" class=\"symposium-history-backdrop\"></div>",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/modals/01-data-vault-a.html",
+      "size": 4016,
+      "lines": 69,
+      "lang": "html",
+      "tokens": 1004,
+      "mtimeMs": 1789167790792.7942,
+      "skipped": false,
+      "summary": "<div id=\"modal-data-vault\" class=\"modal-veil hidden\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/modals/02-data-vault-b.html",
+      "size": 7228,
+      "lines": 138,
+      "lang": "html",
+      "tokens": 1807,
+      "mtimeMs": 1789167790796.2734,
+      "skipped": false,
+      "summary": "<div id=\"vault-tab-granular\" style=\"display: none; flex-direction: column; gap: 10px;\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/modals/03-custom-model.html",
+      "size": 2456,
+      "lines": 44,
+      "lang": "html",
+      "tokens": 614,
+      "mtimeMs": 1789167790796.2734,
+      "skipped": false,
+      "summary": "<div id=\"modal-custom-bot\" class=\"modal-veil hidden\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "components/modals/04-keyboard-shortcuts.html",
+      "size": 4276,
+      "lines": 81,
+      "lang": "html",
+      "tokens": 1069,
+      "mtimeMs": 1789167790798.0159,
+      "skipped": false,
+      "summary": "<div id=\"modal-shortcuts\" class=\"modal-veil hidden\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "css/components/auto-arrange-popover.css",
+      "size": 3127,
+      "lines": 94,
+      "lang": "css",
+      "tokens": 782,
+      "mtimeMs": 1789167638029.2551,
+      "skipped": false,
+      "summary": ".spatial-popover-menu {",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "css/components/auto-arrange-presets.css",
+      "size": 3264,
+      "lines": 107,
+      "lang": "css",
+      "tokens": 816,
+      "mtimeMs": 1789167638030.2654,
+      "skipped": false,
+      "summary": "display: grid !important;",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "css/components/auto-arrange-sizing.css",
+      "size": 3264,
+      "lines": 99,
+      "lang": "css",
+      "tokens": 816,
+      "mtimeMs": 1789167638030.2654,
+      "skipped": false,
+      "summary": "grid-column: 1 / -1 !important;",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "css/components/council-chamber.css",
+      "size": 12313,
+      "lines": 575,
+      "lang": "css",
+      "tokens": 3079,
+      "mtimeMs": 1789066358453.9773,
+      "skipped": false,
+      "summary": "OmniAI Hub — The Celestial Council Chamber (تالار شورای افلاک)",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "css/components/data-vault.css",
+      "size": 7528,
+      "lines": 368,
+      "lang": "css",
+      "tokens": 1882,
+      "mtimeMs": 1788998001736.473,
+      "skipped": false,
+      "summary": "OmniAI Hub — Universal Data Vault & Backup Studio Stylesheet",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "css/components/mirror-chat.css",
+      "size": 12719,
+      "lines": 587,
+      "lang": "css",
+      "tokens": 3180,
+      "mtimeMs": 1789068303265.942,
+      "skipped": false,
+      "summary": "OmniAI Hub — The Silk Mirror Sanctuary (Native Unified Chat Studio)",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "css/components/modals.css",
+      "size": 4001,
+      "lines": 216,
+      "lang": "css",
+      "tokens": 1001,
+      "mtimeMs": 1789065256287.655,
+      "skipped": false,
+      "summary": ".modal-veil {",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "css/components/nav-bar.css",
+      "size": 21634,
+      "lines": 991,
+      "lang": "css",
+      "tokens": 5409,
+      "mtimeMs": 1789116597808.1357,
+      "skipped": false,
+      "summary": "1. Root Top Nano-Horizon Bar",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "css/components/omnibar.css",
+      "size": 9668,
+      "lines": 455,
+      "lang": "css",
+      "tokens": 2417,
+      "mtimeMs": 1789066165196.7866,
+      "skipped": false,
+      "summary": ".omnibar-capsule-island {",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "css/components/pane.css",
+      "size": 3588,
+      "lines": 174,
+      "lang": "css",
+      "tokens": 897,
+      "mtimeMs": 1789065551053.7256,
+      "skipped": false,
+      "summary": ".spatial-card {",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "css/components/radar.css",
+      "size": 1037,
+      "lines": 50,
+      "lang": "css",
+      "tokens": 260,
+      "mtimeMs": 1788998001508.9912,
+      "skipped": false,
+      "summary": ".spatial-radar-card {",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "css/components/selector-studio.css",
+      "size": 12742,
+      "lines": 589,
+      "lang": "css",
+      "tokens": 3186,
+      "mtimeMs": 1789065256289.0962,
+      "skipped": false,
+      "summary": "OmniAI Hub — Neural DOM Driver Studio (#171717 / #212121)",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "css/components/silk-pavilion.css",
+      "size": 8559,
+      "lines": 414,
+      "lang": "css",
+      "tokens": 2140,
+      "mtimeMs": 1788998001673.7388,
+      "skipped": false,
+      "summary": "OmniAI Hub — The Silk Pavilion (Atelier Studio Chamber)",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "css/components/silk-symposium.css",
+      "size": 67807,
+      "lines": 0,
+      "lang": "css",
+      "tokens": 16952,
+      "mtimeMs": 1789145964822.969,
+      "skipped": true,
+      "summary": "[file too large]",
+      "symbols": []
+    },
+    {
+      "path": "css/components/window-controls.css",
+      "size": 1067,
+      "lines": 46,
+      "lang": "css",
+      "tokens": 267,
+      "mtimeMs": 1789167638027.5159,
+      "skipped": false,
+      "summary": "html, body {",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "css/layout.css",
+      "size": 1948,
+      "lines": 94,
+      "lang": "css",
+      "tokens": 487,
+      "mtimeMs": 1789116437344.1252,
+      "skipped": false,
+      "summary": ".app-root {",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "css/reset.css",
+      "size": 2290,
+      "lines": 105,
+      "lang": "css",
+      "tokens": 573,
+      "mtimeMs": 1789066090621.4602,
+      "skipped": false,
+      "summary": "box-sizing: border-box;",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "css/tokens.css",
+      "size": 3118,
+      "lines": 98,
+      "lang": "css",
+      "tokens": 780,
+      "mtimeMs": 1789063446356.1743,
+      "skipped": false,
+      "summary": ":root {",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "icons/generate_icons.js",
+      "size": 1148,
+      "lines": 31,
+      "lang": "js",
+      "tokens": 287,
+      "mtimeMs": 1788955783427.7654,
+      "skipped": false,
+      "summary": "const fs = require('fs');",
+      "symbols": [
+        "fs",
+        "path",
+        "generateDummyPng",
+        "pngHeader"
+      ],
+      "symbolLines": [
+        {
+          "name": "fs",
+          "line": 6,
+          "endLine": 7,
+          "tokens": 14
+        },
+        {
+          "name": "path",
+          "line": 7,
+          "endLine": 10,
+          "tokens": 33
+        },
+        {
+          "name": "generateDummyPng",
+          "line": 10,
+          "endLine": 12,
+          "tokens": 39
+        },
+        {
+          "name": "pngHeader",
+          "line": 12,
+          "endLine": 31,
+          "tokens": 187
+        }
+      ]
+    },
+    {
+      "path": "icons/icon.svg",
+      "size": 1646,
+      "lines": 31,
+      "lang": "text",
+      "tokens": 412,
+      "mtimeMs": 1788955996188.952,
+      "skipped": false,
+      "summary": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 128 128\" width=\"128\" height=\"128\">",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "icons/icon128.png",
+      "size": 78,
+      "lines": 0,
+      "lang": "binary",
+      "tokens": 20,
+      "mtimeMs": 1788954295804.1294,
+      "skipped": true,
+      "summary": "[binary]",
+      "symbols": []
+    },
+    {
+      "path": "icons/icon16.png",
+      "size": 78,
+      "lines": 0,
+      "lang": "binary",
+      "tokens": 20,
+      "mtimeMs": 1788954295800.1528,
+      "skipped": true,
+      "summary": "[binary]",
+      "symbols": []
+    },
+    {
+      "path": "icons/icon48.png",
+      "size": 78,
+      "lines": 0,
+      "lang": "binary",
+      "tokens": 20,
+      "mtimeMs": 1788954295804.1294,
+      "skipped": true,
+      "summary": "[binary]",
+      "symbols": []
+    },
+    {
+      "path": "js/app.js",
+      "size": 69895,
+      "lines": 0,
+      "lang": "js",
+      "tokens": 17474,
+      "mtimeMs": 1789116597815.1553,
+      "skipped": true,
+      "summary": "[file too large]",
+      "symbols": []
+    },
+    {
+      "path": "js/background.js",
+      "size": 4328,
+      "lines": 113,
+      "lang": "js",
+      "tokens": 1082,
+      "mtimeMs": 1788977694174.0251,
+      "skipped": false,
+      "summary": "chrome.runtime.onInstalled.addListener(async () => {",
+      "symbols": [
+        "runtimeApi",
+        "actionApi"
+      ],
+      "symbolLines": [
+        {
+          "name": "runtimeApi",
+          "line": 16,
+          "endLine": 18,
+          "tokens": 44
+        },
+        {
+          "name": "actionApi",
+          "line": 21,
+          "endLine": 23,
+          "tokens": 53
+        }
+      ]
+    },
+    {
+      "path": "js/boot.js",
+      "size": 3599,
+      "lines": 85,
+      "lang": "js",
+      "tokens": 900,
+      "mtimeMs": 1789167796871.9602,
+      "skipped": false,
+      "summary": "const PARTIALS = [",
+      "symbols": [
+        "PARTIALS",
+        "COMPONENTS_DIR",
+        "renderBootFailure",
+        "loadPartials",
+        "host"
+      ],
+      "symbolLines": [
+        {
+          "name": "PARTIALS",
+          "line": 15,
+          "endLine": 42,
+          "tokens": 222
+        },
+        {
+          "name": "COMPONENTS_DIR",
+          "line": 44,
+          "endLine": 44,
+          "tokens": 17
+        },
+        {
+          "name": "renderBootFailure",
+          "line": 47,
+          "endLine": 62,
+          "tokens": 276
+        },
+        {
+          "name": "loadPartials",
+          "line": 65,
+          "endLine": 74,
+          "tokens": 112
+        },
+        {
+          "name": "host",
+          "line": 76,
+          "endLine": 76,
+          "tokens": 11
+        }
+      ]
+    },
+    {
+      "path": "js/injector.js",
+      "size": 42880,
+      "lines": 1125,
+      "lang": "js",
+      "tokens": 10720,
+      "mtimeMs": 1789116597817.2942,
+      "skipped": false,
+      "summary": "(() => {",
+      "symbols": [
+        "getDriverMerged",
+        "setNativeValue",
+        "setContentEditableValue",
+        "applyInputStrategy",
+        "dispatchHumanClick",
+        "clickElement",
+        "dispatchEnterKey",
+        "isButtonReady",
+        "typeChunkIntoElement",
+        "backspaceOneChar",
+        "calculateKeystrokeDelay",
+        "simulateHumanCadenceTyping",
+        "simulateHumanBurstTyping",
+        "simulateHumanPaste",
+        "showInjectionBadge",
+        "locateElementsWithDriver"
+      ],
+      "symbolLines": [
+        {
+          "name": "getDriverMerged",
+          "line": 48,
+          "endLine": 57,
+          "tokens": 74
+        },
+        {
+          "name": "setNativeValue",
+          "line": 57,
+          "endLine": 83,
+          "tokens": 243
+        },
+        {
+          "name": "setContentEditableValue",
+          "line": 83,
+          "endLine": 126,
+          "tokens": 333
+        },
+        {
+          "name": "applyInputStrategy",
+          "line": 126,
+          "endLine": 144,
+          "tokens": 169
+        },
+        {
+          "name": "dispatchHumanClick",
+          "line": 144,
+          "endLine": 204,
+          "tokens": 662
+        },
+        {
+          "name": "clickElement",
+          "line": 204,
+          "endLine": 210,
+          "tokens": 57
+        },
+        {
+          "name": "dispatchEnterKey",
+          "line": 210,
+          "endLine": 227,
+          "tokens": 126
+        },
+        {
+          "name": "isButtonReady",
+          "line": 227,
+          "endLine": 242,
+          "tokens": 156
+        },
+        {
+          "name": "typeChunkIntoElement",
+          "line": 242,
+          "endLine": 303,
+          "tokens": 548
+        },
+        {
+          "name": "backspaceOneChar",
+          "line": 303,
+          "endLine": 333,
+          "tokens": 271
+        },
+        {
+          "name": "calculateKeystrokeDelay",
+          "line": 333,
+          "endLine": 361,
+          "tokens": 228
+        },
+        {
+          "name": "simulateHumanCadenceTyping",
+          "line": 361,
+          "endLine": 387,
+          "tokens": 272
+        },
+        {
+          "name": "simulateHumanBurstTyping",
+          "line": 387,
+          "endLine": 426,
+          "tokens": 331
+        },
+        {
+          "name": "simulateHumanPaste",
+          "line": 426,
+          "endLine": 433,
+          "tokens": 77
+        },
+        {
+          "name": "showInjectionBadge",
+          "line": 433,
+          "endLine": 473,
+          "tokens": 366
+        },
+        {
+          "name": "locateElementsWithDriver",
+          "line": 473,
+          "endLine": 1125,
+          "tokens": 6357
+        }
+      ]
+    },
+    {
+      "path": "js/modules/CouncilOrchestrator.js",
+      "size": 31786,
+      "lines": 867,
+      "lang": "js",
+      "tokens": 7947,
+      "mtimeMs": 1789116597817.2942,
+      "skipped": false,
+      "summary": "Exports GREEK_CODENAMES, CouncilOrchestrator",
+      "symbols": [
+        "GREEK_CODENAMES",
+        "CouncilOrchestrator"
+      ],
+      "symbolLines": [
+        {
+          "name": "GREEK_CODENAMES",
+          "line": 14,
+          "endLine": 23,
+          "tokens": 51
+        },
+        {
+          "name": "CouncilOrchestrator",
+          "line": 25,
+          "endLine": 867,
+          "tokens": 7734
+        }
+      ]
+    },
+    {
+      "path": "js/modules/DataVaultManager.js",
+      "size": 16250,
+      "lines": 417,
+      "lang": "js",
+      "tokens": 4063,
+      "mtimeMs": 1789063445147.5906,
+      "skipped": false,
+      "summary": "Exports DataVaultManager",
+      "symbols": [
+        "DataVaultManager"
+      ],
+      "symbolLines": [
+        {
+          "name": "DataVaultManager",
+          "line": 9,
+          "endLine": 417,
+          "tokens": 3986
+        }
+      ]
+    },
+    {
+      "path": "js/modules/DomDriverRegistry.js",
+      "size": 20869,
+      "lines": 468,
+      "lang": "js",
+      "tokens": 5218,
+      "mtimeMs": 1789063441115.4456,
+      "skipped": false,
+      "summary": "Exports STORAGE_KEY_DOM_DRIVERS, DEFAULT_HUMAN_KINEMATICS, FACTORY_DRIVER_PRESETS, domDriverRegistry",
+      "symbols": [
+        "STORAGE_KEY_DOM_DRIVERS",
+        "DEFAULT_HUMAN_KINEMATICS",
+        "FACTORY_DRIVER_PRESETS",
+        "DomDriverRegistry",
+        "domDriverRegistry"
+      ],
+      "symbolLines": [
+        {
+          "name": "STORAGE_KEY_DOM_DRIVERS",
+          "line": 7,
+          "endLine": 7,
+          "tokens": 14
+        },
+        {
+          "name": "DEFAULT_HUMAN_KINEMATICS",
+          "line": 9,
+          "endLine": 21,
+          "tokens": 100
+        },
+        {
+          "name": "FACTORY_DRIVER_PRESETS",
+          "line": 23,
+          "endLine": 228,
+          "tokens": 3327
+        },
+        {
+          "name": "DomDriverRegistry",
+          "line": 230,
+          "endLine": 466,
+          "tokens": 1702
+        },
+        {
+          "name": "domDriverRegistry",
+          "line": 468,
+          "endLine": 468,
+          "tokens": 13
+        }
+      ]
+    },
+    {
+      "path": "js/modules/EventBus.js",
+      "size": 813,
+      "lines": 37,
+      "lang": "js",
+      "tokens": 204,
+      "mtimeMs": 1788956437699.963,
+      "skipped": false,
+      "summary": "Exports globalBus",
+      "symbols": [
+        "EventBus",
+        "globalBus"
+      ],
+      "symbolLines": [
+        {
+          "name": "EventBus",
+          "line": 5,
+          "endLine": 37,
+          "tokens": 181
+        },
+        {
+          "name": "globalBus",
+          "line": 37,
+          "endLine": 37,
+          "tokens": 10
+        }
+      ]
+    },
+    {
+      "path": "js/modules/LayoutEngine.js",
+      "size": 12074,
+      "lines": 371,
+      "lang": "js",
+      "tokens": 3019,
+      "mtimeMs": 1789116597817.2942,
+      "skipped": false,
+      "summary": "Exports LayoutEngine",
+      "symbols": [
+        "LayoutEngine"
+      ],
+      "symbolLines": [
+        {
+          "name": "LayoutEngine",
+          "line": 6,
+          "endLine": 372,
+          "tokens": 2978
+        }
+      ]
+    },
+    {
+      "path": "js/modules/MirrorChatStudio.js",
+      "size": 35842,
+      "lines": 962,
+      "lang": "js",
+      "tokens": 8961,
+      "mtimeMs": 1789116597817.2942,
+      "skipped": false,
+      "summary": "Exports MirrorChatStudio",
+      "symbols": [
+        "MirrorChatStudio"
+      ],
+      "symbolLines": [
+        {
+          "name": "MirrorChatStudio",
+          "line": 10,
+          "endLine": 962,
+          "tokens": 8866
+        }
+      ]
+    },
+    {
+      "path": "js/modules/ModelRegistry.js",
+      "size": 5307,
+      "lines": 141,
+      "lang": "js",
+      "tokens": 1327,
+      "mtimeMs": 1789063441130.2043,
+      "skipped": false,
+      "summary": "Exports MODEL_REGISTRY, STANDARD_CARD_WIDTH, STANDARD_CARD_HEIGHT, createCardInstance, INITIAL_CANVAS_PRESETS",
+      "symbols": [
+        "MODEL_REGISTRY",
+        "STANDARD_CARD_WIDTH",
+        "STANDARD_CARD_HEIGHT",
+        "createCardInstance",
+        "INITIAL_CANVAS_PRESETS"
+      ],
+      "symbolLines": [
+        {
+          "name": "MODEL_REGISTRY",
+          "line": 5,
+          "endLine": 105,
+          "tokens": 1028
+        },
+        {
+          "name": "STANDARD_CARD_WIDTH",
+          "line": 107,
+          "endLine": 107,
+          "tokens": 8
+        },
+        {
+          "name": "STANDARD_CARD_HEIGHT",
+          "line": 108,
+          "endLine": 108,
+          "tokens": 9
+        },
+        {
+          "name": "createCardInstance",
+          "line": 110,
+          "endLine": 134,
+          "tokens": 180
+        },
+        {
+          "name": "INITIAL_CANVAS_PRESETS",
+          "line": 136,
+          "endLine": 141,
+          "tokens": 72
+        }
+      ]
+    },
+    {
+      "path": "js/modules/OmnibarController.js",
+      "size": 6971,
+      "lines": 222,
+      "lang": "js",
+      "tokens": 1743,
+      "mtimeMs": 1789065078139.6675,
+      "skipped": false,
+      "summary": "Exports OmnibarController",
+      "symbols": [
+        "OmnibarController"
+      ],
+      "symbolLines": [
+        {
+          "name": "OmnibarController",
+          "line": 8,
+          "endLine": 222,
+          "tokens": 1690
+        }
+      ]
+    },
+    {
+      "path": "js/modules/PaneComponent.js",
+      "size": 8982,
+      "lines": 221,
+      "lang": "js",
+      "tokens": 2246,
+      "mtimeMs": 1788953112360.3042,
+      "skipped": false,
+      "summary": "Exports PaneComponent",
+      "symbols": [
+        "PaneComponent"
+      ],
+      "symbolLines": [
+        {
+          "name": "PaneComponent",
+          "line": 9,
+          "endLine": 222,
+          "tokens": 2177
+        }
+      ]
+    },
+    {
+      "path": "js/modules/SelectorStudioDrawer.js",
+      "size": 19469,
+      "lines": 494,
+      "lang": "js",
+      "tokens": 4868,
+      "mtimeMs": 1789116597817.2942,
+      "skipped": false,
+      "summary": "Exports SelectorStudioDrawer",
+      "symbols": [
+        "SelectorStudioDrawer"
+      ],
+      "symbolLines": [
+        {
+          "name": "SelectorStudioDrawer",
+          "line": 10,
+          "endLine": 494,
+          "tokens": 4784
+        }
+      ]
+    },
+    {
+      "path": "js/modules/SilkPavilionDrawer.js",
+      "size": 12736,
+      "lines": 336,
+      "lang": "js",
+      "tokens": 3184,
+      "mtimeMs": 1788996220962.7385,
+      "skipped": false,
+      "summary": "Exports SilkPavilionDrawer",
+      "symbols": [
+        "SilkPavilionDrawer"
+      ],
+      "symbolLines": [
+        {
+          "name": "SilkPavilionDrawer",
+          "line": 10,
+          "endLine": 336,
+          "tokens": 3086
+        }
+      ]
+    },
+    {
+      "path": "js/modules/SilkSymposiumOrchestrator.js",
+      "size": 148440,
+      "lines": 0,
+      "lang": "js",
+      "tokens": 37110,
+      "mtimeMs": 1789145964775.4673,
+      "skipped": true,
+      "summary": "[file too large]",
+      "symbols": []
+    },
+    {
+      "path": "js/modules/StateStore.js",
+      "size": 21279,
+      "lines": 727,
+      "lang": "js",
+      "tokens": 5320,
+      "mtimeMs": 1789116597822.0215,
+      "skipped": false,
+      "summary": "Exports stateStore",
+      "symbols": [
+        "StateStore",
+        "stateStore"
+      ],
+      "symbolLines": [
+        {
+          "name": "StateStore",
+          "line": 8,
+          "endLine": 725,
+          "tokens": 5263
+        },
+        {
+          "name": "stateStore",
+          "line": 727,
+          "endLine": 727,
+          "tokens": 9
+        }
+      ]
+    },
+    {
+      "path": "js/modules/WorkspaceCanvas.js",
+      "size": 22499,
+      "lines": 664,
+      "lang": "js",
+      "tokens": 5625,
+      "mtimeMs": 1789116597822.0215,
+      "skipped": false,
+      "summary": "Exports WorkspaceCanvas",
+      "symbols": [
+        "WorkspaceCanvas"
+      ],
+      "symbolLines": [
+        {
+          "name": "WorkspaceCanvas",
+          "line": 9,
+          "endLine": 664,
+          "tokens": 5555
+        }
+      ]
+    },
+    {
+      "path": "js/modules/symposium/ConsensusLedger.js",
+      "size": 10322,
+      "lines": 244,
+      "lang": "js",
+      "tokens": 2581,
+      "mtimeMs": 1789143710763.4722,
+      "skipped": false,
+      "summary": "Exports ConsensusLedger",
+      "symbols": [
+        "ConsensusLedger"
+      ],
+      "symbolLines": [
+        {
+          "name": "ConsensusLedger",
+          "line": 7,
+          "endLine": 244,
+          "tokens": 2529
+        }
+      ]
+    },
+    {
+      "path": "js/modules/symposium/SymposiumDais.js",
+      "size": 12667,
+      "lines": 266,
+      "lang": "js",
+      "tokens": 3167,
+      "mtimeMs": 1789144036154.835,
+      "skipped": false,
+      "summary": "Exports SymposiumDais",
+      "symbols": [
+        "SymposiumDais"
+      ],
+      "symbolLines": [
+        {
+          "name": "SymposiumDais",
+          "line": 7,
+          "endLine": 266,
+          "tokens": 3097
+        }
+      ]
+    },
+    {
+      "path": "js/modules/symposium/SymposiumState.js",
+      "size": 95182,
+      "lines": 0,
+      "lang": "js",
+      "tokens": 23796,
+      "mtimeMs": 1789145964762.468,
+      "skipped": true,
+      "summary": "[file too large]",
+      "symbols": []
+    },
+    {
+      "path": "js/modules/symposium/SymposiumTranscript.js",
+      "size": 21230,
+      "lines": 474,
+      "lang": "js",
+      "tokens": 5308,
+      "mtimeMs": 1789144036169.8633,
+      "skipped": false,
+      "summary": "Exports SymposiumTranscript",
+      "symbols": [
+        "SymposiumTranscript"
+      ],
+      "symbolLines": [
+        {
+          "name": "SymposiumTranscript",
+          "line": 12,
+          "endLine": 474,
+          "tokens": 5167
+        }
+      ]
+    },
+    {
+      "path": "js/modules/symposium/TurnSequencer.js",
+      "size": 12802,
+      "lines": 392,
+      "lang": "js",
+      "tokens": 3201,
+      "mtimeMs": 1789142950817.9082,
+      "skipped": false,
+      "summary": "Exports TurnSequencer",
+      "symbols": [
+        "TurnSequencer"
+      ],
+      "symbolLines": [
+        {
+          "name": "TurnSequencer",
+          "line": 8,
+          "endLine": 392,
+          "tokens": 3119
+        }
+      ]
+    },
+    {
+      "path": "manifest.json",
+      "size": 1882,
+      "lines": 75,
+      "lang": "json",
+      "tokens": 471,
+      "mtimeMs": 1789167654790.033,
+      "skipped": false,
+      "summary": "Infinite 2D spatial AI workspace. Run ChatGPT, Gemini, DeepSeek, Grok, Z.ai, Qwen, Kimi.ai, Google AI Studio, Arena.ai, Claude, and Mistral…",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "manifest.webmanifest",
+      "size": 754,
+      "lines": 32,
+      "lang": "text",
+      "tokens": 189,
+      "mtimeMs": 1788957453155.052,
+      "skipped": false,
+      "summary": "{",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "newtab.html",
+      "size": 1815,
+      "lines": 39,
+      "lang": "html",
+      "tokens": 454,
+      "mtimeMs": 1789167647687.7595,
+      "skipped": false,
+      "summary": "<!DOCTYPE html>",
+      "symbols": [],
+      "symbolLines": []
+    },
+    {
+      "path": "rules.json",
+      "size": 1701,
+      "lines": 58,
+      "lang": "json",
+      "tokens": 426,
+      "mtimeMs": 1789063443010.5056,
+      "skipped": false,
+      "summary": "[",
+      "symbols": [],
+      "symbolLines": []
+    }
+  ]
+}

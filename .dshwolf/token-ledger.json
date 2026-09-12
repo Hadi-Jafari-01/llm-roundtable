@@ -1,7 +1,7 @@
 {
   "version": 1,
   "lifetime": {
-    "total_sessions": 1
+    "total_sessions": 5
   },
   "sessions": [
     {
@@ -9,6 +9,30 @@
       "agent": "deepseek-flash",
       "measured_tokens": 114200,
       "at": "2026-09-11T23:09:51.638Z"
+    },
+    {
+      "session_id": "session-3ad66f4a-deb5-4eb5-b137-619b898fb580",
+      "agent": "deepseek-flash",
+      "measured_tokens": 1975,
+      "at": "2026-09-12T05:33:03.214Z"
+    },
+    {
+      "session_id": "session-5892ff5b-8d2b-4cbc-ad22-a48e0056ca6b",
+      "agent": "deepseek-flash",
+      "measured_tokens": 8199,
+      "at": "2026-09-12T05:37:25.763Z"
+    },
+    {
+      "session_id": "session-b1ba9310-de1d-4c8d-a9c5-d65a92ab230b",
+      "agent": "deepseek-flash",
+      "measured_tokens": 38520,
+      "at": "2026-09-12T05:40:07.491Z"
+    },
+    {
+      "session_id": "session-068f1efa-e51b-4856-b75a-3322e04cd639",
+      "agent": "deepseek-flash",
+      "measured_tokens": 2376,
+      "at": "2026-09-12T05:51:42.796Z"
     }
   ]
 }

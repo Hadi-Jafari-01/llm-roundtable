@@ -1,4 +1,12 @@
 {
   "version": 1,
-  "bugs": []
+  "bugs": [
+    {
+      "id": "bug-1-mtxyhero",
+      "error_message": "dsh failed to boot: SyntaxError: Unexpected token '\\uFEFF' ... is not valid JSON at readProfileManifest (dsh-app-boot/lib/index.js:754)",
+      "fix": "PowerShell 5.1 `Set-Content -Encoding utf8` writes a UTF-8 BOM. Rewrite the JSON with [System.IO.File]::WriteAllText(path, raw, (New-Object System.Text.UTF8Encoding($false))) or use -Encoding utf8NoBOM on PowerShell 7+.",
+      "file": "%USERPROFILE%\\.dsh\\profiles\\web\\package.json",
+      "at": "2026-09-12T05:40:00.900Z"
+    }
+  ]
 }
